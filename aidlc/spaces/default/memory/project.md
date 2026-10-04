@@ -66,3 +66,4 @@
 
 <!-- Project-specific corrections from human feedback. -->
 <!-- Format: NEVER/ALWAYS [behavior] (learned [date]) -->
+- 개발자 1명은 현재 인력 현황이며 기능 범위를 제한하는 제약으로 사용하지 않는다. 필요한 기능 개발과 운영을 1명이 충분히 수행할 수 있는 구조를 설계 목표로 삼는다. 인원 수를 이유로 필요한 기능을 자동 축소하지 않으며, 후속 설계·구현에서 개발·운영 부담과 목표 달성 여부를 검증한다. (learned 2026-10-04) <!-- cid:261004-feature:feasibility:c4c36ca8f93ed7cb84f9ce41501469f7d39feb7888c10a92c922a78587507597 -->
