@@ -1,0 +1,662 @@
+{
+  "stage": "code-generation",
+  "unit": "u2-identity-enterprise-access",
+  "version": 1,
+  "writes": [
+    {
+      "path": ".github/workflows/u1-validation.yml"
+    },
+    {
+      "path": ".gitignore"
+    },
+    {
+      "path": "apps/api/src/application.ts"
+    },
+    {
+      "path": "apps/api/src/authentication.ts"
+    },
+    {
+      "path": "apps/api/src/main.ts"
+    },
+    {
+      "path": "apps/api/src/observation.ts"
+    },
+    {
+      "path": "apps/api/src/operations.ts"
+    },
+    {
+      "path": "apps/api/src/u2-authentication.ts"
+    },
+    {
+      "path": "apps/api/src/u2-operations.ts"
+    },
+    {
+      "path": "apps/api/src/u2-routes.ts"
+    },
+    {
+      "path": "apps/customer-web/next.config.mjs"
+    },
+    {
+      "path": "apps/staff-web/next.config.mjs"
+    },
+    {
+      "path": "apps/worker/src/main.ts"
+    },
+    {
+      "path": "Dockerfile"
+    },
+    {
+      "path": "docs/u2/coverage-scope.md"
+    },
+    {
+      "path": "docs/u2/modules.md"
+    },
+    {
+      "path": "docs/u2/pilot-verification-change.md"
+    },
+    {
+      "path": "docs/u2/runtime-profile.json"
+    },
+    {
+      "path": "docs/u2/secret-exposures.json"
+    },
+    {
+      "path": "docs/u2/security-exceptions.json"
+    },
+    {
+      "path": "docs/u2/verification.md"
+    },
+    {
+      "path": "infra/cdk/src/compute.ts"
+    },
+    {
+      "path": "infra/cdk/src/profile.ts"
+    },
+    {
+      "path": "infra/cdk/src/runtime-binding.ts"
+    },
+    {
+      "path": "infra/cdk/src/stack.ts"
+    },
+    {
+      "path": "infra/cdk/src/storage.ts"
+    },
+    {
+      "path": "package.json"
+    },
+    {
+      "path": "packages/contracts/schemas/u2-access-additions-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/u2-operations-v1.json"
+    },
+    {
+      "path": "packages/contracts/src/index.ts"
+    },
+    {
+      "path": "packages/contracts/src/registry.ts"
+    },
+    {
+      "path": "packages/contracts/src/schema.ts"
+    },
+    {
+      "path": "packages/contracts/src/u2-declarations.ts"
+    },
+    {
+      "path": "packages/contracts/src/u2-types.ts"
+    },
+    {
+      "path": "packages/core/src/administrator-restoration.ts"
+    },
+    {
+      "path": "packages/core/src/authorization-fence.ts"
+    },
+    {
+      "path": "packages/core/src/authorization.ts"
+    },
+    {
+      "path": "packages/core/src/current-customer-scopes.ts"
+    },
+    {
+      "path": "packages/core/src/customer-contexts.ts"
+    },
+    {
+      "path": "packages/core/src/emergency-recovery.ts"
+    },
+    {
+      "path": "packages/core/src/enrollment-authority.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-access-state.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-access.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-invitations.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-memberships.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-organisation.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-query.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-role-revisions.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-roles.ts"
+    },
+    {
+      "path": "packages/core/src/identity-challenges.ts"
+    },
+    {
+      "path": "packages/core/src/identity-codes.ts"
+    },
+    {
+      "path": "packages/core/src/identity-consumer.ts"
+    },
+    {
+      "path": "packages/core/src/identity-factor.ts"
+    },
+    {
+      "path": "packages/core/src/identity-provider.ts"
+    },
+    {
+      "path": "packages/core/src/identity-security-events.ts"
+    },
+    {
+      "path": "packages/core/src/identity-session.ts"
+    },
+    {
+      "path": "packages/core/src/identity-state.ts"
+    },
+    {
+      "path": "packages/core/src/identity-work.ts"
+    },
+    {
+      "path": "packages/core/src/identity.ts"
+    },
+    {
+      "path": "packages/core/src/index.ts"
+    },
+    {
+      "path": "packages/core/src/notice-source.ts"
+    },
+    {
+      "path": "packages/core/src/party-claim-context.ts"
+    },
+    {
+      "path": "packages/core/src/pending-notification.ts"
+    },
+    {
+      "path": "packages/core/src/purpose-verifier.ts"
+    },
+    {
+      "path": "packages/core/src/queue.ts"
+    },
+    {
+      "path": "packages/core/src/recovery-case.ts"
+    },
+    {
+      "path": "packages/core/src/recovery-codes.ts"
+    },
+    {
+      "path": "packages/core/src/recovery-completion.ts"
+    },
+    {
+      "path": "packages/core/src/recovery-handoff.ts"
+    },
+    {
+      "path": "packages/core/src/recovery-hold.ts"
+    },
+    {
+      "path": "packages/core/src/recovery-verification.ts"
+    },
+    {
+      "path": "packages/core/src/scope-compatibility.ts"
+    },
+    {
+      "path": "packages/core/src/scope-v2.ts"
+    },
+    {
+      "path": "packages/core/src/staff-access.ts"
+    },
+    {
+      "path": "packages/core/src/verified-person.ts"
+    },
+    {
+      "path": "packages/core/src/worker-consumer.ts"
+    },
+    {
+      "path": "packages/core/src/worker-relay.ts"
+    },
+    {
+      "path": "packages/core/src/worker-state.ts"
+    },
+    {
+      "path": "packages/core/src/worker-traversal.ts"
+    },
+    {
+      "path": "packages/core/src/worker.ts"
+    },
+    {
+      "path": "packages/integrations/src/cognito-recovery.ts"
+    },
+    {
+      "path": "packages/integrations/src/identity-capabilities.ts"
+    },
+    {
+      "path": "packages/integrations/src/index.ts"
+    },
+    {
+      "path": "packages/integrations/src/runtime-configuration.ts"
+    },
+    {
+      "path": "packages/integrations/src/runtime-store.ts"
+    },
+    {
+      "path": "packages/integrations/src/sqs.ts"
+    },
+    {
+      "path": "packages/integrations/src/worker-batch.ts"
+    },
+    {
+      "path": "packages/persistence/models/u2-v1.json"
+    },
+    {
+      "path": "packages/persistence/src/data-source.ts"
+    },
+    {
+      "path": "packages/persistence/src/http-auth-intents.ts"
+    },
+    {
+      "path": "packages/persistence/src/index.ts"
+    },
+    {
+      "path": "packages/persistence/src/model-attribute.ts"
+    },
+    {
+      "path": "packages/persistence/src/model-catalog.ts"
+    },
+    {
+      "path": "packages/persistence/src/protected-store.ts"
+    },
+    {
+      "path": "packages/persistence/src/protected-transaction.ts"
+    },
+    {
+      "path": "packages/persistence/src/protected-write.ts"
+    },
+    {
+      "path": "packages/persistence/src/purpose-secret-vault.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-migration.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-security-policy.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-types.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery.ts"
+    },
+    {
+      "path": "packages/persistence/src/u2-migration.ts"
+    },
+    {
+      "path": "packages/persistence/src/u2-model-catalog.ts"
+    },
+    {
+      "path": "packages/persistence/src/u2-model-decoder.ts"
+    },
+    {
+      "path": "packages/persistence/src/u2-recovery-payload.ts"
+    },
+    {
+      "path": "packages/persistence/src/u2-repository.ts"
+    },
+    {
+      "path": "packages/persistence/src/u2-security-state.ts"
+    },
+    {
+      "path": "packages/ui/src/bff.ts"
+    },
+    {
+      "path": "packages/ui/src/client.ts"
+    },
+    {
+      "path": "packages/ui/src/index.ts"
+    },
+    {
+      "path": "packages/ui/src/invitation-acceptance.tsx"
+    },
+    {
+      "path": "packages/ui/src/login.tsx"
+    },
+    {
+      "path": "packages/ui/src/member-panel.tsx"
+    },
+    {
+      "path": "packages/ui/src/portal.tsx"
+    },
+    {
+      "path": "packages/ui/src/recovery-claim.tsx"
+    },
+    {
+      "path": "packages/ui/src/recovery-status.tsx"
+    },
+    {
+      "path": "packages/ui/src/staff-role-panel.tsx"
+    },
+    {
+      "path": "packages/ui/src/ui-types.ts"
+    },
+    {
+      "path": "scripts/u1/performance-statistics.ts"
+    },
+    {
+      "path": "scripts/u1/profile-ui.ts"
+    },
+    {
+      "path": "scripts/u2/bootstrap-ci.ts"
+    },
+    {
+      "path": "scripts/u2/check.ts"
+    },
+    {
+      "path": "scripts/u2/ci-full-proof.ts"
+    },
+    {
+      "path": "scripts/u2/coverage-aggregate.ts"
+    },
+    {
+      "path": "scripts/u2/coverage-evidence.ts"
+    },
+    {
+      "path": "scripts/u2/performance.ts"
+    },
+    {
+      "path": "scripts/u2/prepare-test-databases.ts"
+    },
+    {
+      "path": "scripts/u2/recovery.ts"
+    },
+    {
+      "path": "scripts/u2/release-validation.ts"
+    },
+    {
+      "path": "scripts/u2/run-u1-regression.ts"
+    },
+    {
+      "path": "scripts/u2/runtime-security-report.ts"
+    },
+    {
+      "path": "scripts/u2/runtime-source.ts"
+    },
+    {
+      "path": "scripts/u2/security.ts"
+    },
+    {
+      "path": "scripts/u2/synth.ts"
+    },
+    {
+      "path": "scripts/u2/verification-profile.ts"
+    },
+    {
+      "path": "tests/project/vitest.u1.coverage.config.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/performance-orders.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/reset.ts"
+    },
+    {
+      "path": "tests/u1/integration/business-flow.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/models.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/performance-statistics.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/skeleton.spec.ts"
+    },
+    {
+      "path": "tests/u2/e2e/invitation-flow.spec.ts"
+    },
+    {
+      "path": "tests/u2/e2e/recovery-party.spec.ts"
+    },
+    {
+      "path": "tests/u2/e2e/staff-boundary.spec.ts"
+    },
+    {
+      "path": "tests/u2/fixtures/clock.ts"
+    },
+    {
+      "path": "tests/u2/fixtures/coverage-export.json"
+    },
+    {
+      "path": "tests/u2/fixtures/databases.ts"
+    },
+    {
+      "path": "tests/u2/fixtures/enterprise.ts"
+    },
+    {
+      "path": "tests/u2/fixtures/http.ts"
+    },
+    {
+      "path": "tests/u2/fixtures/identity.ts"
+    },
+    {
+      "path": "tests/u2/fixtures/local-service.ts"
+    },
+    {
+      "path": "tests/u2/fixtures/pc.ts"
+    },
+    {
+      "path": "tests/u2/fixtures/provider.ts"
+    },
+    {
+      "path": "tests/u2/fixtures/queue.ts"
+    },
+    {
+      "path": "tests/u2/fixtures/reset.ts"
+    },
+    {
+      "path": "tests/u2/integration/administrator-restoration.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/authority-race.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/handoff-race.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/handoff-recovery.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/hold-transitions.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/http-access.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/http-identity.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/http-primary-ac.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/information-projection.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/invitation-race.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/membership-role-race.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/migration-compatibility.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/postgres-models.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/protected-state.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/provider-unknown.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/recovery-completion.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/recovery-concurrency.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/repository.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/runtime-security.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/secret-lifecycle.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/worker-boundaries.spec.ts"
+    },
+    {
+      "path": "tests/u2/playwright.config.ts"
+    },
+    {
+      "path": "tests/u2/unit/access-state-ui.spec.tsx"
+    },
+    {
+      "path": "tests/u2/unit/administrator.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/authorization.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/bff-purpose.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/ci-report-gates.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/contracts.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/coverage-aggregate.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/emergency-recovery.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/enrollment-authority.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/expired-work.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/handoff.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/http-contracts.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/identity-worker.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/infrastructure.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/invitations.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/memberships.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/mixed-sqs-batch.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/models.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/party-context.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/profile-ui.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/provider-capabilities.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/purpose-ui.spec.tsx"
+    },
+    {
+      "path": "tests/u2/unit/purpose-verifier.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/recovery-completion.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/recovery-hold.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/recovery-payload.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/recovery-verification.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/resource-budget.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/role-revisions.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/saved-code-recovery.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/scope-compatibility.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/scopes.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/secret-vault.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/tooling.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/u1-regression-output.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/verified-person.spec.ts"
+    },
+    {
+      "path": "tests/u2/vitest.coverage.config.ts"
+    },
+    {
+      "path": "tests/u2/vitest.integration.config.ts"
+    },
+    {
+      "path": "tests/u2/vitest.unit.config.ts"
+    },
+    {
+      "path": "tsconfig.json"
+    }
+  ]
+}
+

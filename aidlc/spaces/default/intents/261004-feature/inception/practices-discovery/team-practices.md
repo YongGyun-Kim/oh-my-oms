@@ -1,9 +1,6 @@
-# Team-Level Rules
+# 팀 개발·운영 관행
 
-> This team's affirmed practices and corrections. Loaded after `org.md` as
-> strict-additive guidance; contradictions with broader policy are rejected.
-> Populated by the practices-discovery affirmation gate. Edit at the gate,
-> not directly.
+> Q1–Q8 답변과 별도 `Looks correct` 요약 확인을 반영한 최종 통합본이다. 관행 승인·메모리 승격은 별도 절차이며, 아래 검사의 설치·실행이나 배포 완료를 뜻하지 않는다.
 
 ## Way of Working
 
@@ -26,10 +23,6 @@
 - 비밀 유입, 코드 취약 패턴(SAST), 의존성 취약점, CDK·생성 인프라 보안 설정, 격리된 검증 환경과 합성 데이터를 사용하는 실행 중 서비스 보안 검사를 필수 계획에 포함한다. [Q7]
 - 언어·구조가 정해진 뒤 도구·대상·실행 시점·차단 기준을 구체화하고 실제 적용 전에 확인한다. 검사 실패·누락은 Way of Working의 차단 원칙을 따른다. 아직 검사가 구현되거나 통과한 상태로 표시하지 않는다. [Q7–Q8]
 
-## Guard Policy
-
-<!-- Affirmed by the team. Mode: strict, relaxed, or off. Strict here holds for every intent and cannot be changed from chat. A section under the retired Change Control heading, written by an earlier release, is still read. -->
-
 ## Deployment
 
 - 우리는 `main` 병합 후 검증 환경(staging)에 자동 배포하고, 운영 환경(production)은 개발자 본인이 검사·핵심 동작 결과를 확인해 승인한 후 배포한다. [Q5]
@@ -41,14 +34,12 @@
 - 기존 코드 표준은 없다. 우리는 선정할 언어의 관례를 따르고 포매터·린터 설정을 저장소에서 버전 관리해 로컬과 CI에서 동일하게 검사한다. 필수 검사 실패 시 병합을 보류한다. [Q6·Q8]
 - 오류 처리·파일 배치·모듈 의존 규칙과 구체적인 도구는 후속 설계에서 정한다. 검토자의 특정 구조·오류 표현 방식 제안을 이미 선택된 표준으로 취급하지 않는다. [Q6]
 
-## Forbidden
+## Sources
 
-<!-- Team-specific forbidden patterns -->
+- [인터뷰와 요약 확인](practices-discovery-questions.md): Q1–Q8 및 `Looks correct`.
+- [근거 및 검토 의견 처리](evidence.md): 상위 결정·세 지원 검토·후속 책임 연결.
 
-## Mandated
+## Assumptions & Open Questions
 
-<!-- Team-specific mandates -->
-
-## Corrections
-
-<!-- Self-learning loop appends here. -->
+- 미정 도구·시점·보안 차단선·정기 검사 주기와 실제 동작 검증 방법은 [후속 결정표](evidence.md)의 담당 역할과 단계에서 확정한다.
+- 이 문서는 현재 실행 실적이나 HB 조건 해소의 증거가 아니다.

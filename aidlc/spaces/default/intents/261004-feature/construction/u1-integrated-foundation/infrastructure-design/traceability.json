@@ -1,0 +1,730 @@
+{
+  "stage": "infrastructure-design",
+  "unit": "u1-integrated-foundation",
+  "meaning": "OK는 인프라/검증 책임의 설계 추적 연결이며 실제 구현·시험/배포·지원/성능·복구 달성의 증명이 아니다. 후보/미확인 값은 IG/ND-RG 선행조건으로 차단한다.",
+  "summary_authorization_id": "df87afeb608a3fa26d3d3efe5dcc10fdbd2744ae10b6dcbbc0643cfcf24a1cad",
+  "upstream_ids": [
+    "NFR6.1",
+    "NFR6.2",
+    "NFR6.3",
+    "NFR6.4",
+    "NFR6.5",
+    "NFR1.1",
+    "NFR1.2",
+    "NFR1.3",
+    "NFR1.4",
+    "NFR1.5",
+    "NFR1.6",
+    "NFR1.7",
+    "NFR1.8",
+    "NFR1.9",
+    "NFR1.10",
+    "NFR1.11",
+    "NFR11.1",
+    "NFR11.2",
+    "NFR11.3",
+    "NFR14.1",
+    "NFR14.2",
+    "NFR14.3",
+    "NFR13.1",
+    "NFR7.1",
+    "NFR7.2",
+    "NFR7.3",
+    "NFR7.4",
+    "NFR7.5",
+    "NFR2.1",
+    "NFR3.1",
+    "NFR3.2",
+    "NFR3.3",
+    "NFR3.4",
+    "NFR4.1",
+    "NFR4.2",
+    "NFR4.3",
+    "NFR4.4",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR5.3",
+    "NFR8.1",
+    "NFR8.2",
+    "NFR2.2",
+    "NFR2.3",
+    "NFR10.1",
+    "NFR10.2",
+    "NFR10.3",
+    "NFR10.4",
+    "NFR5.4",
+    "NFR4.5",
+    "NFR9.1",
+    "NFR9.2",
+    "NFR9.3",
+    "NFR9.4",
+    "NFR12.1",
+    "NFR12.2",
+    "NFR12.3",
+    "NFR12.4",
+    "NFR13.2",
+    "NFR13.3",
+    "NFR13.4",
+    "NFR13.5"
+  ],
+  "coverage": [
+    {
+      "id": "NFR6.1",
+      "status": "OK",
+      "target": "infrastructure-specification.md#capacity-and-cost — NI-10; monitoring-design.md#metrics-and-kpis — MO-01",
+      "requirement": "정상 부하의 허용 조회는 p95 ≤1초다.",
+      "owner": "U1 조회/전송 기반; U2–U7 제공자 확장·U10 전체 시험",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR6.2",
+      "status": "OK",
+      "target": "infrastructure-specification.md#capacity-and-cost — NI-10; monitoring-design.md#metrics-and-kpis — MO-01",
+      "requirement": "정상 부하의 변경 응답은 p95 ≤2초다.",
+      "owner": "U1 명령/Receipt; 업무 소유자 후속 결과",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR6.3",
+      "status": "OK",
+      "target": "infrastructure-specification.md#capacity-and-cost — NI-10; monitoring-design.md#metrics-and-kpis — MO-01",
+      "requirement": "정상 부하 유효 요청의 기술 오류율은 ≤0.1%다.",
+      "owner": "U1 분류/측정 기반; U10 검증",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR6.4",
+      "status": "OK",
+      "target": "cicd-pipeline.md#validation-and-operations-handoff — CI-06",
+      "requirement": "성능 보고서는 재현 가능한 분모·분포·시험 조건을 보존한다.",
+      "owner": "U1 측정 값; U10 전체 프로필; ND-OQ04",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR6.5",
+      "status": "OK",
+      "target": "infrastructure-specification.md#capacity-and-cost — NI-10; monitoring-design.md#metrics-and-kpis — MO-01",
+      "requirement": "화면 최초 표시·비동기 완료와 자원 예산은 HTTP 응답 목표와 별도로 정한다.",
+      "owner": "U1/U8/U9/U10 및 각 업무; ND-OQ02–04",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR1.1",
+      "status": "OK",
+      "target": "infrastructure-specification.md#network-and-trust-boundaries — NI-01–04; infrastructure-specification.md#infrastructure-services — Cognito/PG/Secrets; cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "모든 사람의 업무 세션은 실제 MFA 확인을 필요로 한다.",
+      "owner": "U1 최소 신원 경계; U2 전체 복구; ND-OQ01",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR1.2",
+      "status": "OK",
+      "target": "infrastructure-specification.md#network-and-trust-boundaries — NI-01–04; infrastructure-specification.md#infrastructure-services — Cognito/PG/Secrets; cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "신원·audience·현재 권한은 신뢰된 서버 문맥으로 구성한다.",
+      "owner": "U1 문맥/전송·U2 원본; 각 업무 실행 소유자",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR1.3",
+      "status": "OK",
+      "target": "infrastructure-specification.md#network-and-trust-boundaries — NI-01–04; infrastructure-specification.md#infrastructure-services — Cognito/PG/Secrets; cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "주문의 원래 조직 문맥과 현재 접근 범위를 함께 검증한다.",
+      "owner": "U1/U2 범위 평가·각 업무; FD R-01 매핑",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR1.4",
+      "status": "OK",
+      "target": "infrastructure-specification.md#network-and-trust-boundaries — NI-01–04; infrastructure-specification.md#infrastructure-services — Cognito/PG/Secrets; cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "직원 인증·UI·API의 모든 접근 경로는 승인 망/원격 PC 조건을 만족한다.",
+      "owner": "U1/U2/U9; Infra 경계; ND-OQ01",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR1.5",
+      "status": "OK",
+      "target": "infrastructure-specification.md#network-and-trust-boundaries — NI-01–04; infrastructure-specification.md#infrastructure-services — Cognito/PG/Secrets; cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "서버가 유휴/절대 만료와 세션 무효화를 적용한다.",
+      "owner": "U1/U2 세션·U8/U9 화면; ND-OQ01",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR1.6",
+      "status": "OK",
+      "target": "infrastructure-specification.md#network-and-trust-boundaries — NI-01–04; infrastructure-specification.md#infrastructure-services — Cognito/PG/Secrets; cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "브라우저 전송은 세션/CSRF·origin·목적 경계를 보호한다.",
+      "owner": "U1/U2/U8/U9; ND-OQ01–02",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR1.7",
+      "status": "OK",
+      "target": "infrastructure-specification.md#network-and-trust-boundaries — NI-01–04; infrastructure-specification.md#infrastructure-services — Cognito/PG/Secrets; cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "승인 정책은 확인된 사람 원본과 업무별 규칙으로 판정한다.",
+      "owner": "U1 최소·U2/U3/U6 업무별 확장; ND-OQ01",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR1.8",
+      "status": "OK",
+      "target": "infrastructure-specification.md#network-and-trust-boundaries — NI-01–04; infrastructure-specification.md#infrastructure-services — Cognito/PG/Secrets; cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "Next/HTTP/조회 캐시와 오류는 현재 권한 밖 자료를 노출하지 않는다.",
+      "owner": "U1/U8/U9/UI/API; ND-OQ02",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR1.9",
+      "status": "OK",
+      "target": "infrastructure-specification.md#network-and-trust-boundaries — NI-01–04; infrastructure-specification.md#infrastructure-services — Cognito/PG/Secrets; cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "worker는 등록된 실행 목적과 검증된 원본으로만 업무 문맥을 구성한다.",
+      "owner": "U1 worker 기반·각 업무 소유자; ND-OQ03",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR1.10",
+      "status": "OK",
+      "target": "infrastructure-specification.md#network-and-trust-boundaries — NI-01–04; infrastructure-specification.md#infrastructure-services — Cognito/PG/Secrets; cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "진행 조회·진단·외부 결과는 최소 권한/신뢰 경계를 따른다.",
+      "owner": "U1 조회/작업 기반·U7/U10 및 각 외부 어댑터",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR1.11",
+      "status": "OK",
+      "target": "infrastructure-specification.md#network-and-trust-boundaries — NI-01–04; infrastructure-specification.md#infrastructure-services — Cognito/PG/Secrets; cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "민감 자료 전송/저장과 서비스 자격은 접근 경계를 보존한다.",
+      "owner": "U1 기본 경계·Infra; ND-OQ01/05",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR11.1",
+      "status": "OK",
+      "target": "infrastructure-specification.md#persistence-and-recovery — NI-08; monitoring-design.md#logs-and-tracing — MO-03/07; infrastructure-specification.md#verification-and-readiness — IG-06/08",
+      "requirement": "고객·주문·계약과 포함 로그/백업은 한국 내에 저장한다.",
+      "owner": "U1 설정·전체 제공자/Infra; ND-OQ05",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR11.2",
+      "status": "OK",
+      "target": "infrastructure-specification.md#persistence-and-recovery — NI-08; monitoring-design.md#logs-and-tracing — MO-03/07; infrastructure-specification.md#verification-and-readiness — IG-06/08",
+      "requirement": "보관/삭제/정정은 자료 종류·참조/중복 보호·복구 목표와 함께 정한다.",
+      "owner": "데이터/업무 확인자·U1/각 owner/Infra; ND-OQ05",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR11.3",
+      "status": "OK",
+      "target": "infrastructure-specification.md#persistence-and-recovery — NI-08; monitoring-design.md#logs-and-tracing — MO-03/07; infrastructure-specification.md#verification-and-readiness — IG-06/08",
+      "requirement": "업무 근거 이력과 운영 telemetry를 분리해 최소화한다.",
+      "owner": "U1/U10·각 owner; ND-OQ05/06",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR14.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#required-checks-and-reports — CI-01/02/03; infrastructure-specification.md#verification-and-readiness — IG-02/03",
+      "requirement": "비밀·SAST·의존성·CDK/생성 인프라·격리 실행 보안 검사는 필수다.",
+      "owner": "U1 기반·CI·U10 운영; ND-OQ07",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR14.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#required-checks-and-reports — CI-01/02/03; infrastructure-specification.md#verification-and-readiness — IG-02/03",
+      "requirement": "보안 예외와 실제 비밀 노출은 근거/수명/대응 이력을 남긴다.",
+      "owner": "개발/보안 책임·U10; ND-OQ07",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR14.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#required-checks-and-reports — CI-01/02/03; infrastructure-specification.md#verification-and-readiness — IG-02/03",
+      "requirement": "선택 기술의 지원·취약점·호환 근거를 코드 전에 고정한다.",
+      "owner": "U1/NFR Design/CI; ND-OQ07",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR13.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#required-checks-and-reports — CI-01/02/03; infrastructure-specification.md#verification-and-readiness — IG-02/03",
+      "requirement": "전송 입력/출력은 실제 canonical 계약으로 실행 중 검증한다.",
+      "owner": "U1 계약/검증 기반·각 provider/consumer",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR7.1",
+      "status": "OK",
+      "target": "infrastructure-specification.md#capacity-and-cost — NI-10; cicd-pipeline.md#validation-and-operations-handoff — CI-06",
+      "requirement": "기준 자료는 합성 기업100·고객계정1000·직원시험계정10·상품10000·주문100000이다.",
+      "owner": "U1 데이터 생성/기반·각 owner/U10",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR7.2",
+      "status": "OK",
+      "target": "infrastructure-specification.md#capacity-and-cost — NI-10; cicd-pipeline.md#validation-and-operations-handoff — CI-06",
+      "requirement": "정상 부하는 활동 세션100·총20req/s·30분·조회80%/변경20%다.",
+      "owner": "U1 기반·U10 전체 시험; ND-OQ04",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR7.3",
+      "status": "OK",
+      "target": "infrastructure-specification.md#capacity-and-cost — NI-10; cicd-pipeline.md#validation-and-operations-handoff — CI-06",
+      "requirement": "집중 부하는 같은 비율100req/s·5분이며 이후20req/s로 낮춘다.",
+      "owner": "U1 pressure handling·U10 검증",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR7.4",
+      "status": "OK",
+      "target": "infrastructure-specification.md#capacity-and-cost — NI-10; cicd-pipeline.md#validation-and-operations-handoff — CI-06",
+      "requirement": "확장/제한은 측정한 자원·작업 적체와 정확성 조건에 근거한다.",
+      "owner": "U1·각 owner/Infra; ND-OQ03–04",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR7.5",
+      "status": "OK",
+      "target": "infrastructure-specification.md#capacity-and-cost — NI-10; cicd-pipeline.md#validation-and-operations-handoff — CI-06",
+      "requirement": "과부하/자원 부족은 유효한 실패·지속 접수·진행 조회 의미를 보존한다.",
+      "owner": "U1/U8/U9·업무/Infra; ND-OQ03–04",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "OK",
+      "target": "monitoring-design.md#slis-and-slos — MO-01/06",
+      "requirement": "업무별 연속30일 가용성 SLO는 계획 중단 포함99.9% 이상이다.",
+      "owner": "U1 관측 기반·U10 실제30일; ND-OQ06",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR3.1",
+      "status": "OK",
+      "target": "infrastructure-specification.md#persistence-and-recovery — NI-05–09; cicd-pipeline.md#rollback-and-failure-handling — CI-05/06",
+      "requirement": "필수 복구 시험은 앱/worker 종료·저장 구성요소 고장/전환·배포 실패·논리 손상/오삭제·단일 AZ 일시 장애다.",
+      "owner": "U1 복구 진입/자료·Infra/U10; ND-OQ03",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR3.2",
+      "status": "OK",
+      "target": "infrastructure-specification.md#persistence-and-recovery — NI-05–09; cicd-pipeline.md#rollback-and-failure-handling — CI-05/06",
+      "requirement": "파괴 재난과 리전/외부 장기 장애는 필수 시험 결과와 명확히 구분한다.",
+      "owner": "개발/사용자·Infra/U10; ND-OQ03/05",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR3.3",
+      "status": "OK",
+      "target": "infrastructure-specification.md#persistence-and-recovery — NI-05–09; cicd-pipeline.md#rollback-and-failure-handling — CI-05/06",
+      "requirement": "복구 완료는 프로세스 재시작/health 응답보다 핵심 업무·정확성 검증을 필요로 한다.",
+      "owner": "U1 검증 훅·U10 운영; ND-OQ03/06",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR3.4",
+      "status": "OK",
+      "target": "infrastructure-specification.md#persistence-and-recovery — NI-05–09; cicd-pipeline.md#rollback-and-failure-handling — CI-05/06",
+      "requirement": "논리 손상/오삭제의 복구는 이후 성공 접수와 정정 근거를 보존한다.",
+      "owner": "U1 persistence·각 owner/Infra/U10; ND-OQ03/05",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR4.1",
+      "status": "OK",
+      "target": "infrastructure-specification.md#persistence-and-recovery — NI-05–09; cicd-pipeline.md#rollback-and-failure-handling — CI-05/06",
+      "requirement": "성공 접수 응답은 필요한 업무 원본·Receipt·이력·작업/사실의 지속 커밋 확인 뒤에만 가능하다.",
+      "owner": "U1 persistence·모든 쓰기 owner; ND-OQ03",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR4.2",
+      "status": "OK",
+      "target": "infrastructure-specification.md#persistence-and-recovery — NI-05–09; cicd-pipeline.md#rollback-and-failure-handling — CI-05/06",
+      "requirement": "응답 유실/timeout 뒤 같은 식별자로 결과를 대조하고 중복 효과를 방지한다.",
+      "owner": "U1/각 owner; ND-OQ03",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR4.3",
+      "status": "OK",
+      "target": "infrastructure-specification.md#persistence-and-recovery — NI-05–09; cicd-pipeline.md#rollback-and-failure-handling — CI-05/06",
+      "requirement": "복구한 성공 접수 데이터의 RPO 목표는 정의한 장애 범위에서0이다.",
+      "owner": "U1 대조 자료·각 owner/U10; ND-OQ03",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR4.4",
+      "status": "OK",
+      "target": "infrastructure-specification.md#persistence-and-recovery — NI-05–09; cicd-pipeline.md#rollback-and-failure-handling — CI-05/06",
+      "requirement": "worker 소비 효과·처리 표지·후속 사실/작업은 같은 논리 원자성으로 연결한다.",
+      "owner": "U1 worker·각 owner; ND-OQ03",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR5.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#deployment-strategy-and-compatibility — CI-04/05/06; infrastructure-specification.md#persistence-and-recovery — NI-05–09",
+      "requirement": "정확성8영역을 정해진 정상·실패·중복·동시·배포·복구 시험에서 검증한다.",
+      "owner": "U1 및 U2–U7; U10 전체 대조",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR5.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#deployment-strategy-and-compatibility — CI-04/05/06; infrastructure-specification.md#persistence-and-recovery — NI-05–09",
+      "requirement": "기술 오류율·과부하·계획 중단으로 정확성 위반을 허용하지 않는다.",
+      "owner": "U1 계약 의미·각 owner/U10",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#deployment-strategy-and-compatibility — CI-04/05/06; infrastructure-specification.md#persistence-and-recovery — NI-05–09",
+      "requirement": "동시 승인/변경·버전 전환·되돌림은 원본/권한/이력의 불변조건을 보존한다.",
+      "owner": "U1·각 owner/배포; FD R-01·ND-OQ03",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR8.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#deployment-strategy-and-compatibility — CI-04/05/06; infrastructure-specification.md#persistence-and-recovery — NI-05–09",
+      "requirement": "필요한 계획 점검은 KST 평일20–22시·회당중단≤10분·연속30일누적≤20분이다.",
+      "owner": "U1 통지 원인·U7/U10 운영",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR8.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#deployment-strategy-and-compatibility — CI-04/05/06; infrastructure-specification.md#persistence-and-recovery — NI-05–09",
+      "requirement": "점검 초과 예상/실패는 배포 중단·복구·지연 안내와 연결한다.",
+      "owner": "U1/배포/Infra/U10; ND-OQ03",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR2.2",
+      "status": "OK",
+      "target": "monitoring-design.md#slis-and-slos — MO-01/06; monitoring-design.md#dashboard-specifications — C19/MO-07",
+      "requirement": "가용성 계측은 실제 허용 업무를 audience·업무별로 관측한다.",
+      "owner": "U1 metrics·U10; ND-OQ06",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR2.3",
+      "status": "OK",
+      "target": "monitoring-design.md#slis-and-slos — MO-01/06; monitoring-design.md#dashboard-specifications — C19/MO-07",
+      "requirement": "대시보드는 연속30일/원인별 중단과 실제 증거 범위를 보여 준다.",
+      "owner": "U1 값 공급·U10 dashboard; ND-OQ06",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR10.1",
+      "status": "OK",
+      "target": "monitoring-design.md#independent-delivery-and-acknowledgement — MO-02–05",
+      "requirement": "자동 복구 시도 시작부터 개발자 업무 메신저·이메일 통지를 생성한다.",
+      "owner": "U1 사실/작업·U10/외부 통지 경로; ND-OQ06",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR10.2",
+      "status": "OK",
+      "target": "monitoring-design.md#independent-delivery-and-acknowledgement — MO-02–05",
+      "requirement": "복구 실패/수동 판단 필요는 즉시 긴급 알림으로 연결한다.",
+      "owner": "U10/U7 제공자·ND-OQ06",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR10.3",
+      "status": "OK",
+      "target": "monitoring-design.md#independent-delivery-and-acknowledgement — MO-02–05",
+      "requirement": "OMS/API/worker 중단에도 복구 알림 경로를 검증한다.",
+      "owner": "U1 diagnostic facts·Infra/U10; ND-OQ06",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR10.4",
+      "status": "OK",
+      "target": "monitoring-design.md#independent-delivery-and-acknowledgement — MO-02–05",
+      "requirement": "작업 backlog·기술 실패·권한 거절·provider 미확인은 구별해 관측한다.",
+      "owner": "U1 worker/조회·각 owner/U10; ND-OQ03/06",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR5.4",
+      "status": "OK",
+      "target": "monitoring-design.md#logs-and-tracing — MO-01/07; infrastructure-specification.md#verification-and-readiness — IG-03",
+      "requirement": "업무 추적은 원본/개정/행위자/근거/정정 관계를 유지한다.",
+      "owner": "U1·각 owner/U10; FD R-02·ND-OQ03",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR4.5",
+      "status": "OK",
+      "target": "monitoring-design.md#slis-and-slos — MO-01/06; monitoring-design.md#dashboard-specifications — C19/MO-07",
+      "requirement": "복구 대조 자료는 접근 통제된 읽기 증거로 제공한다.",
+      "owner": "U1 C19 자료·각 owner/U10; ND-OQ03/05",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR9.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#source-and-release-identity — CI-01–07; infrastructure-specification.md#verification-and-readiness — IG-01–08",
+      "requirement": "정상일 반복 기술 운영 사람 작업은≤30분/일이다.",
+      "owner": "U1 자동화 진입·U10 실제 운영",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#source-and-release-identity — CI-01–07; infrastructure-specification.md#verification-and-readiness — IG-01–08",
+      "requirement": "일반 배포 사람 작업은≤15분/회다.",
+      "owner": "U1 build/deploy 기반·CI/배포/U10",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR9.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#source-and-release-identity — CI-01–07; infrastructure-specification.md#verification-and-readiness — IG-01–08",
+      "requirement": "대표 장애의 한 사람 복구 작업은≤30분이며 전체 RTO와 별도 기록한다.",
+      "owner": "U1 복구 인터페이스·Infra/U10·실제 업무 확인자",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR9.4",
+      "status": "OK",
+      "target": "infrastructure-specification.md#deployment — ECS4역할",
+      "requirement": "선택한 스택은 공유된 업무 핵심과4개 배포 역할을 유지한다.",
+      "owner": "U1 기반·모든 확장 Unit; Q3–Q6",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR12.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "첫 제품은 한국어·KRW·한국 시각이며 영어(미국) 확장 방향을 보존한다.",
+      "owner": "U1 최소 화면/계약·U8/U9·각 업무",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR12.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "고객/직원 화면은1280 CSS px 이상 PC를 대상으로 한다.",
+      "owner": "U1 최소 화면·U8/U9 전체 UI",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR12.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "브라우저는 출시 시점 고객 Chrome/Edge/Safari/Firefox, 직원 Chrome/Edge의 최신·직전 안정 버전을 검증한다.",
+      "owner": "U1 최소·U8/U9·Build and Test",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR12.4",
+      "status": "OK",
+      "target": "cicd-pipeline.md#required-checks-and-reports — CI-02",
+      "requirement": "WCAG2.2 AA는 전체 적용 가능한 업무 흐름의 설계/검증 목표다.",
+      "owner": "U1 최소·U8/U9 전체 흐름",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR13.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#source-and-release-identity — CI-01–07; infrastructure-specification.md#verification-and-readiness — IG-01–08",
+      "requirement": "test-after·Standard 단위/통합 시험과 제품 코드 라인 커버리지≥80%를 적용한다.",
+      "owner": "U1 작성 코드·각 확장 Unit/Build and Test",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR13.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#source-and-release-identity — CI-01–07; infrastructure-specification.md#verification-and-readiness — IG-01–08",
+      "requirement": "로컬/CI 같은 포매터·린터·타입/계약/필수 검사와 보고서를 사용한다.",
+      "owner": "U1/CI·Build and Test; ND-OQ07",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR13.4",
+      "status": "OK",
+      "target": "cicd-pipeline.md#source-and-release-identity — CI-01–07; infrastructure-specification.md#verification-and-readiness — IG-01–08",
+      "requirement": "실제 버전/패키지는 지원·보안·계약 호환 근거를 확보해 고정한다.",
+      "owner": "U1/NFR Design·Infra; ND-OQ01–07",
+      "upstream": "../nfr-design/traceability.json"
+    },
+    {
+      "id": "NFR13.5",
+      "status": "OK",
+      "target": "cicd-pipeline.md#source-and-release-identity — CI-01–07; infrastructure-specification.md#verification-and-readiness — IG-01–08",
+      "requirement": "UI/API/worker와 대기 원본의 호환 전환/되돌림을 검증한다.",
+      "owner": "U1 공통 등록·각 provider/consumer/배포",
+      "upstream": "../nfr-design/traceability.json"
+    }
+  ],
+  "parent_coverage": [
+    {
+      "id": "NFR1",
+      "status": "OK",
+      "children": [
+        "NFR1.1",
+        "NFR1.2",
+        "NFR1.3",
+        "NFR1.4",
+        "NFR1.5",
+        "NFR1.6",
+        "NFR1.7",
+        "NFR1.8",
+        "NFR1.9",
+        "NFR1.10",
+        "NFR1.11"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR2",
+      "status": "OK",
+      "children": [
+        "NFR2.1",
+        "NFR2.2",
+        "NFR2.3"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR3",
+      "status": "OK",
+      "children": [
+        "NFR3.1",
+        "NFR3.2",
+        "NFR3.3",
+        "NFR3.4"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR4",
+      "status": "OK",
+      "children": [
+        "NFR4.1",
+        "NFR4.2",
+        "NFR4.3",
+        "NFR4.4",
+        "NFR4.5"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR5",
+      "status": "OK",
+      "children": [
+        "NFR5.1",
+        "NFR5.2",
+        "NFR5.3",
+        "NFR5.4"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR6",
+      "status": "OK",
+      "children": [
+        "NFR6.1",
+        "NFR6.2",
+        "NFR6.3",
+        "NFR6.4",
+        "NFR6.5"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR7",
+      "status": "OK",
+      "children": [
+        "NFR7.1",
+        "NFR7.2",
+        "NFR7.3",
+        "NFR7.4",
+        "NFR7.5"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR8",
+      "status": "OK",
+      "children": [
+        "NFR8.1",
+        "NFR8.2"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR9",
+      "status": "OK",
+      "children": [
+        "NFR9.1",
+        "NFR9.2",
+        "NFR9.3",
+        "NFR9.4"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR10",
+      "status": "OK",
+      "children": [
+        "NFR10.1",
+        "NFR10.2",
+        "NFR10.3",
+        "NFR10.4"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR11",
+      "status": "OK",
+      "children": [
+        "NFR11.1",
+        "NFR11.2",
+        "NFR11.3"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR12",
+      "status": "OK",
+      "children": [
+        "NFR12.1",
+        "NFR12.2",
+        "NFR12.3",
+        "NFR12.4"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR13",
+      "status": "OK",
+      "children": [
+        "NFR13.1",
+        "NFR13.2",
+        "NFR13.3",
+        "NFR13.4",
+        "NFR13.5"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    },
+    {
+      "id": "NFR14",
+      "status": "OK",
+      "children": [
+        "NFR14.1",
+        "NFR14.2",
+        "NFR14.3"
+      ],
+      "target": "62개 세부 NFR의 인프라/CI/관측 연결"
+    }
+  ]
+}

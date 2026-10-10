@@ -1,0 +1,544 @@
+{
+  "stage": "user-stories",
+  "upstream_ids": [
+    "FR1",
+    "FR2",
+    "FR3",
+    "FR4",
+    "FR5",
+    "FR6",
+    "FR7",
+    "FR8",
+    "FR9",
+    "FR10",
+    "FR11",
+    "FR12",
+    "FR13",
+    "FR14",
+    "FR15",
+    "FR16",
+    "FR1.1",
+    "FR1.2",
+    "FR1.3",
+    "FR2.1",
+    "FR2.2",
+    "FR2.3",
+    "FR2.4",
+    "FR3.1",
+    "FR3.2",
+    "FR3.3",
+    "FR4.1",
+    "FR4.2",
+    "FR4.3",
+    "FR5.1",
+    "FR5.2",
+    "FR5.3",
+    "FR5.4",
+    "FR6.1",
+    "FR6.2",
+    "FR6.3",
+    "FR7.1",
+    "FR7.2",
+    "FR7.3",
+    "FR7.4",
+    "FR8.1",
+    "FR8.2",
+    "FR8.3",
+    "FR8.4",
+    "FR8.5",
+    "FR9.1",
+    "FR9.2",
+    "FR9.3",
+    "FR9.4",
+    "FR10.1",
+    "FR10.2",
+    "FR10.3",
+    "FR10.4",
+    "FR11.1",
+    "FR11.2",
+    "FR11.3",
+    "FR11.4",
+    "FR11.5",
+    "FR12.1",
+    "FR12.2",
+    "FR12.3",
+    "FR13.1",
+    "FR13.2",
+    "FR13.3",
+    "FR13.4",
+    "FR14.1",
+    "FR14.2",
+    "FR14.3",
+    "FR15.1",
+    "FR15.2",
+    "FR15.3",
+    "FR15.4",
+    "FR16.1",
+    "FR16.2",
+    "NFR1",
+    "NFR2",
+    "NFR3",
+    "NFR4",
+    "NFR5",
+    "NFR6",
+    "NFR7",
+    "NFR8",
+    "NFR9",
+    "NFR10",
+    "NFR11",
+    "NFR12",
+    "NFR13",
+    "NFR14"
+  ],
+  "coverage": [
+    {
+      "id": "FR1",
+      "status": "OK",
+      "target": "US1.1, US1.2, US1.3, US1.10"
+    },
+    {
+      "id": "FR2",
+      "status": "OK",
+      "target": "US1.4, US1.5"
+    },
+    {
+      "id": "FR3",
+      "status": "OK",
+      "target": "US1.6, US2.6, US6.3, US6.4, US8.12"
+    },
+    {
+      "id": "FR4",
+      "status": "OK",
+      "target": "US2.1, US2.2, US2.3, US3.5"
+    },
+    {
+      "id": "FR5",
+      "status": "OK",
+      "target": "US3.1, US3.6"
+    },
+    {
+      "id": "FR6",
+      "status": "OK",
+      "target": "US3.2, US3.3, US3.4"
+    },
+    {
+      "id": "FR7",
+      "status": "OK",
+      "target": "US2.4, US2.5, US2.6, US2.7"
+    },
+    {
+      "id": "FR8",
+      "status": "OK",
+      "target": "US4.1, US4.2, US4.3, US4.4, US4.5, US4.6, US5.5, US6.1"
+    },
+    {
+      "id": "FR9",
+      "status": "OK",
+      "target": "US5.1, US5.2, US5.3, US5.4, US5.5, US5.6, US5.7"
+    },
+    {
+      "id": "FR10",
+      "status": "OK",
+      "target": "US6.1, US6.2, US6.3, US6.4, US6.5, US6.6"
+    },
+    {
+      "id": "FR11",
+      "status": "OK",
+      "target": "US7.1, US7.2, US7.3, US7.4, US7.5, US7.6, US7.7"
+    },
+    {
+      "id": "FR12",
+      "status": "OK",
+      "target": "US7.8"
+    },
+    {
+      "id": "FR13",
+      "status": "OK",
+      "target": "US8.1, US8.2, US8.3, US8.4, US8.5, US8.6, US8.10, US8.11"
+    },
+    {
+      "id": "FR14",
+      "status": "OK",
+      "target": "US6.2, US8.8, US8.9, US8.12"
+    },
+    {
+      "id": "FR15",
+      "status": "OK",
+      "target": "US5.7, US6.6, US8.7, US8.10, US9.4"
+    },
+    {
+      "id": "FR16",
+      "status": "OK",
+      "target": "US1.7, US1.8, US1.9"
+    },
+    {
+      "id": "FR1.1",
+      "status": "OK",
+      "target": "US1.1, US1.2"
+    },
+    {
+      "id": "FR1.2",
+      "status": "OK",
+      "target": "US1.2, US1.3"
+    },
+    {
+      "id": "FR1.3",
+      "status": "OK",
+      "target": "US1.10"
+    },
+    {
+      "id": "FR2.1",
+      "status": "OK",
+      "target": "US1.5"
+    },
+    {
+      "id": "FR2.2",
+      "status": "OK",
+      "target": "US1.4"
+    },
+    {
+      "id": "FR2.3",
+      "status": "OK",
+      "target": "US1.5"
+    },
+    {
+      "id": "FR2.4",
+      "status": "OK",
+      "target": "US1.4"
+    },
+    {
+      "id": "FR3.1",
+      "status": "OK",
+      "target": "US1.6, US8.12"
+    },
+    {
+      "id": "FR3.2",
+      "status": "OK",
+      "target": "US2.6"
+    },
+    {
+      "id": "FR3.3",
+      "status": "OK",
+      "target": "US6.3, US6.4"
+    },
+    {
+      "id": "FR4.1",
+      "status": "OK",
+      "target": "US2.1"
+    },
+    {
+      "id": "FR4.2",
+      "status": "OK",
+      "target": "US2.2, US2.3"
+    },
+    {
+      "id": "FR4.3",
+      "status": "OK",
+      "target": "US3.5"
+    },
+    {
+      "id": "FR5.1",
+      "status": "OK",
+      "target": "US3.1"
+    },
+    {
+      "id": "FR5.2",
+      "status": "OK",
+      "target": "US3.1"
+    },
+    {
+      "id": "FR5.3",
+      "status": "OK",
+      "target": "US3.6"
+    },
+    {
+      "id": "FR5.4",
+      "status": "OK",
+      "target": "US3.1"
+    },
+    {
+      "id": "FR6.1",
+      "status": "OK",
+      "target": "US3.2"
+    },
+    {
+      "id": "FR6.2",
+      "status": "OK",
+      "target": "US3.2, US3.3"
+    },
+    {
+      "id": "FR6.3",
+      "status": "OK",
+      "target": "US3.4"
+    },
+    {
+      "id": "FR7.1",
+      "status": "OK",
+      "target": "US2.4"
+    },
+    {
+      "id": "FR7.2",
+      "status": "OK",
+      "target": "US2.5"
+    },
+    {
+      "id": "FR7.3",
+      "status": "OK",
+      "target": "US2.6"
+    },
+    {
+      "id": "FR7.4",
+      "status": "OK",
+      "target": "US2.7"
+    },
+    {
+      "id": "FR8.1",
+      "status": "OK",
+      "target": "US4.1, US4.2"
+    },
+    {
+      "id": "FR8.2",
+      "status": "OK",
+      "target": "US4.3, US4.4"
+    },
+    {
+      "id": "FR8.3",
+      "status": "OK",
+      "target": "US5.5, US6.1"
+    },
+    {
+      "id": "FR8.4",
+      "status": "OK",
+      "target": "US4.5"
+    },
+    {
+      "id": "FR8.5",
+      "status": "OK",
+      "target": "US4.6"
+    },
+    {
+      "id": "FR9.1",
+      "status": "OK",
+      "target": "US5.1, US5.2, US5.3, US5.7"
+    },
+    {
+      "id": "FR9.2",
+      "status": "OK",
+      "target": "US5.3, US5.4"
+    },
+    {
+      "id": "FR9.3",
+      "status": "OK",
+      "target": "US5.5"
+    },
+    {
+      "id": "FR9.4",
+      "status": "OK",
+      "target": "US5.1, US5.2, US5.6"
+    },
+    {
+      "id": "FR10.1",
+      "status": "OK",
+      "target": "US6.1, US6.2, US6.6"
+    },
+    {
+      "id": "FR10.2",
+      "status": "OK",
+      "target": "US6.3"
+    },
+    {
+      "id": "FR10.3",
+      "status": "OK",
+      "target": "US6.4"
+    },
+    {
+      "id": "FR10.4",
+      "status": "OK",
+      "target": "US6.5"
+    },
+    {
+      "id": "FR11.1",
+      "status": "OK",
+      "target": "US7.1, US7.2, US7.4"
+    },
+    {
+      "id": "FR11.2",
+      "status": "OK",
+      "target": "US7.3, US7.4"
+    },
+    {
+      "id": "FR11.3",
+      "status": "OK",
+      "target": "US7.4, US7.5"
+    },
+    {
+      "id": "FR11.4",
+      "status": "OK",
+      "target": "US7.6"
+    },
+    {
+      "id": "FR11.5",
+      "status": "OK",
+      "target": "US7.7"
+    },
+    {
+      "id": "FR12.1",
+      "status": "OK",
+      "target": "US7.8"
+    },
+    {
+      "id": "FR12.2",
+      "status": "OK",
+      "target": "US7.8"
+    },
+    {
+      "id": "FR12.3",
+      "status": "OK",
+      "target": "US7.8"
+    },
+    {
+      "id": "FR13.1",
+      "status": "OK",
+      "target": "US8.1, US8.2, US8.3"
+    },
+    {
+      "id": "FR13.2",
+      "status": "OK",
+      "target": "US8.1, US8.2, US8.3, US8.10"
+    },
+    {
+      "id": "FR13.3",
+      "status": "OK",
+      "target": "US8.4"
+    },
+    {
+      "id": "FR13.4",
+      "status": "OK",
+      "target": "US8.5, US8.6, US8.11"
+    },
+    {
+      "id": "FR14.1",
+      "status": "OK",
+      "target": "US6.2, US8.8, US8.12"
+    },
+    {
+      "id": "FR14.2",
+      "status": "OK",
+      "target": "US8.9"
+    },
+    {
+      "id": "FR14.3",
+      "status": "OK",
+      "target": "US8.9"
+    },
+    {
+      "id": "FR15.1",
+      "status": "OK",
+      "target": "US5.7, US6.6"
+    },
+    {
+      "id": "FR15.2",
+      "status": "OK",
+      "target": "US8.7"
+    },
+    {
+      "id": "FR15.3",
+      "status": "OK",
+      "target": "US5.7, US6.6, US8.7, US8.10"
+    },
+    {
+      "id": "FR15.4",
+      "status": "OK",
+      "target": "US8.10, US9.4"
+    },
+    {
+      "id": "FR16.1",
+      "status": "OK",
+      "target": "US1.7"
+    },
+    {
+      "id": "FR16.2",
+      "status": "OK",
+      "target": "US1.8, US1.9"
+    },
+    {
+      "id": "NFR1",
+      "status": "OK",
+      "target": "US1.7, US8.12"
+    },
+    {
+      "id": "NFR2",
+      "status": "Deferred",
+      "target": "observability-setup",
+      "reason": "US9.6이 관측 평가 결과를 정의한다. 업무별 측정 지점·주기·부분 장애 규칙과 연속 30일 실측 증거는 observability-setup에서 구체화하며 단기 장애 시험으로 대체하지 않는다."
+    },
+    {
+      "id": "NFR3",
+      "status": "Deferred",
+      "target": "nfr-requirements",
+      "reason": "장애 범위·재난 제외·야간 지원과 30분 복구 검증 프로필을 구체화한다. US9.2는 업무 목표이며 실증 완료가 아니다."
+    },
+    {
+      "id": "NFR4",
+      "status": "Deferred",
+      "target": "nfr-design",
+      "reason": "논리 오염·오삭제를 포함한 성공 접수 RPO 0과 RTO의 동시 달성 설계·증거를 확정한다."
+    },
+    {
+      "id": "NFR5",
+      "status": "Deferred",
+      "target": "build-and-test",
+      "reason": "8개 정확성 영역의 통합·중복·동시 처리·장애 시험을 수행한다. 스토리별 기준 연결은 전체 시험 통과를 뜻하지 않는다."
+    },
+    {
+      "id": "NFR6",
+      "status": "Deferred",
+      "target": "performance-validation",
+      "reason": "확정된 시험 위치·네트워크·요청 구성에서 p95와 기술 오류율을 검증한다."
+    },
+    {
+      "id": "NFR7",
+      "status": "Deferred",
+      "target": "performance-validation",
+      "reason": "합성 데이터·정상/집중 부하·5분 회복 및 10분 유지 프로필을 시험한다."
+    },
+    {
+      "id": "NFR8",
+      "status": "OK",
+      "target": "US9.3"
+    },
+    {
+      "id": "NFR9",
+      "status": "OK",
+      "target": "US9.2, US9.3, US9.7"
+    },
+    {
+      "id": "NFR10",
+      "status": "OK",
+      "target": "US9.1"
+    },
+    {
+      "id": "NFR11",
+      "status": "OK",
+      "target": "US9.5"
+    },
+    {
+      "id": "NFR12",
+      "status": "Deferred",
+      "target": "refined-mockups",
+      "reason": "PC 우선 고객 모바일·직원 PC 전용과 한국어/KRW/한국 시간·접근성 및 미정 브라우저/해상도를 구체화한다."
+    },
+    {
+      "id": "NFR13",
+      "status": "Deferred",
+      "target": "build-and-test",
+      "reason": "test-after·Standard·80% 커버리지와 필수 검증 실패/누락 차단을 구현 증거로 확인한다."
+    },
+    {
+      "id": "NFR14",
+      "status": "Deferred",
+      "target": "ci-pipeline",
+      "reason": "보안 검사 도구·대상·차단선·주기를 정해 필수 검사와 예외 기록을 파이프라인에 연결한다."
+    }
+  ]
+}

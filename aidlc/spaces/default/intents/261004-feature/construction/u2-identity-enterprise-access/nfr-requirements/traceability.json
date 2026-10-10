@@ -1,0 +1,92 @@
+{
+  "stage": "nfr-requirements",
+  "unit": "u2-identity-enterprise-access",
+  "upstream_ids": [
+    "NFR1",
+    "NFR2",
+    "NFR3",
+    "NFR4",
+    "NFR5",
+    "NFR6",
+    "NFR7",
+    "NFR8",
+    "NFR9",
+    "NFR10",
+    "NFR11",
+    "NFR12",
+    "NFR13",
+    "NFR14"
+  ],
+  "coverage": [
+    {
+      "id": "NFR1",
+      "status": "OK",
+      "target": "NFR1.1, NFR1.2, NFR1.3, NFR1.4, NFR1.5, NFR1.6, NFR1.7, NFR1.8, NFR1.9, NFR1.10, NFR1.11, NFR1.12, NFR1.13, NFR1.14, NFR1.15, NFR1.16"
+    },
+    {
+      "id": "NFR2",
+      "status": "OK",
+      "target": "NFR2.1"
+    },
+    {
+      "id": "NFR3",
+      "status": "OK",
+      "target": "NFR3.1, NFR3.2"
+    },
+    {
+      "id": "NFR4",
+      "status": "OK",
+      "target": "NFR4.1, NFR4.2"
+    },
+    {
+      "id": "NFR5",
+      "status": "OK",
+      "target": "NFR5.1, NFR5.2, NFR5.3"
+    },
+    {
+      "id": "NFR6",
+      "status": "OK",
+      "target": "NFR6.1, NFR6.2"
+    },
+    {
+      "id": "NFR7",
+      "status": "OK",
+      "target": "NFR7.1, NFR7.2"
+    },
+    {
+      "id": "NFR8",
+      "status": "OK",
+      "target": "NFR8.1"
+    },
+    {
+      "id": "NFR9",
+      "status": "OK",
+      "target": "NFR9.1, NFR9.2, NFR9.3"
+    },
+    {
+      "id": "NFR10",
+      "status": "OK",
+      "target": "NFR10.1"
+    },
+    {
+      "id": "NFR11",
+      "status": "OK",
+      "target": "NFR11.1, NFR11.2, NFR11.3"
+    },
+    {
+      "id": "NFR12",
+      "status": "OK",
+      "target": "NFR12.1, NFR12.2"
+    },
+    {
+      "id": "NFR13",
+      "status": "OK",
+      "target": "NFR13.1, NFR13.2, NFR13.3"
+    },
+    {
+      "id": "NFR14",
+      "status": "OK",
+      "target": "NFR14.1, NFR14.2"
+    }
+  ]
+}
