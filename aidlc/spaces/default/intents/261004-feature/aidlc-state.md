@@ -236,11 +236,8 @@
 
 
 
-- **Active Unit**: u2-identity-enterprise-access
 
-- **Unit Stage**: code-generation
 
-- **Unit State**: in-progress
 
 
 
@@ -305,7 +302,7 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-09T10:57:26Z
+- **Last Updated**: 2026-10-10T18:04:52Z
 
 - **Construction Autonomy Mode**: autonomous
 
