@@ -1,0 +1,567 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:identityrecovery:1",
+  "title": "계정 신원·MFA·복구와 확인된 동일인 연결",
+  "x-contract-id": "C01",
+  "x-provider-component": "IdentityRecovery",
+  "x-provider-unit": "U2",
+  "x-consumers": [
+    "CommercialAgreement",
+    "EnterpriseAccess",
+    "NotificationDelivery",
+    "OperationalAssurance",
+    "WorkInquiry"
+  ],
+  "x-mechanism": "in-process typed port; API/worker 중 해당 실행 호스트에서 사용",
+  "x-errors": {
+    "$ref": "urn:oms:contract:common:1#/$defs/Problem"
+  },
+  "x-operations": [
+    {
+      "name": "registerAccount",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/RegistrationInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/Receipt"
+      },
+      "stories": [
+        "US1.1"
+      ],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "startLogin",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/LoginInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/IdentityView"
+      },
+      "stories": [
+        "US1.7"
+      ],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "completeChallenge",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ChallengeInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/IdentityView"
+      },
+      "stories": [
+        "US1.7"
+      ],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ChallengeInvocationTarget"
+      }
+    },
+    {
+      "name": "enrolMfa",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ChallengeInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/Receipt"
+      },
+      "stories": [
+        "US1.7"
+      ],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "requestRecovery",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/RecoveryInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/Receipt"
+      },
+      "stories": [
+        "US1.8",
+        "US1.9"
+      ],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "verifyRecovery",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ChallengeInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/Receipt"
+      },
+      "stories": [
+        "US1.8"
+      ],
+      "target": {
+        "allOf": [
+          {
+            "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+          },
+          {
+            "properties": {
+              "recordRef": {
+                "allOf": [
+                  {
+                    "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                  },
+                  {
+                    "properties": {
+                      "owner": {
+                        "const": "IdentityRecovery"
+                      },
+                      "entity": {
+                        "const": "RecoveryCase"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "staffVerifyRecovery",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/DecisionInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/Receipt"
+      },
+      "stories": [
+        "US1.9"
+      ],
+      "target": {
+        "allOf": [
+          {
+            "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+          },
+          {
+            "properties": {
+              "recordRef": {
+                "allOf": [
+                  {
+                    "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                  },
+                  {
+                    "properties": {
+                      "owner": {
+                        "const": "IdentityRecovery"
+                      },
+                      "entity": {
+                        "const": "RecoveryCase"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "readIdentity",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/IdentityViewResult"
+      },
+      "stories": [
+        "US1.7"
+      ],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "verifiedPerson",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/RecordQuery"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/IdentityViewResult"
+      },
+      "stories": [],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "readOwnerDiagnostics",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/DiagnosticInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/DiagnosticView"
+      },
+      "stories": [
+        "US9.2",
+        "US9.4"
+      ],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "readOwnerHistory",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/RecordQuery"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/HistoryView"
+      },
+      "stories": [
+        "US9.4"
+      ],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+      }
+    }
+  ],
+  "$defs": {
+    "Call": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/PreIdentityContext"
+            },
+            "operation": {
+              "const": "registerAccount"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/RegistrationInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/PreIdentityContext"
+            },
+            "operation": {
+              "const": "startLogin"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/LoginInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/PreIdentityContext"
+            },
+            "operation": {
+              "const": "completeChallenge"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ChallengeInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ChallengeInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/LimitedIdentityContext"
+            },
+            "operation": {
+              "const": "enrolMfa"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ChallengeInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/PreIdentityContext"
+            },
+            "operation": {
+              "const": "requestRecovery"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/RecoveryInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/LimitedIdentityContext"
+            },
+            "operation": {
+              "const": "verifyRecovery"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ChallengeInput"
+            },
+            "target": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+                },
+                {
+                  "properties": {
+                    "recordRef": {
+                      "allOf": [
+                        {
+                          "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                        },
+                        {
+                          "properties": {
+                            "owner": {
+                              "const": "IdentityRecovery"
+                            },
+                            "entity": {
+                              "const": "RecoveryCase"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "staffVerifyRecovery"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/DecisionInput"
+            },
+            "target": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+                },
+                {
+                  "properties": {
+                    "recordRef": {
+                      "allOf": [
+                        {
+                          "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                        },
+                        {
+                          "properties": {
+                            "owner": {
+                              "const": "IdentityRecovery"
+                            },
+                            "entity": {
+                              "const": "RecoveryCase"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readIdentity"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "verifiedPerson"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/RecordQuery"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readOwnerDiagnostics"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/DiagnosticInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readOwnerHistory"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/RecordQuery"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

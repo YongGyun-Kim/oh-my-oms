@@ -83,3 +83,13 @@ aidlc/diagnostics/
 # which was proven to corrupt the multi-line audit blocks) ·
 # aidlc/spaces/*/intents/*/<phase>/<stage>/*.md (artifacts + diary).
 # END AI-DLC:gitignore
+
+# U1 product-generated reports, caches and local credentials
+.reports/u1/
+.runtime/u1/
+.runtime/u2/
+.reports/u2/
+.reports/project/
+apps/*/.next/
+playwright-report/
+test-results/

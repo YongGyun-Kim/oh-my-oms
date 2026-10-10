@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:staff-build:1",
+  "x-contract-id": "C15",
+  "allOf": [
+    {
+      "$ref": "urn:oms:contract:common:1#/$defs/BuildManifest"
+    },
+    {
+      "properties": {
+        "audience": {
+          "const": "STAFF"
+        }
+      }
+    }
+  ]
+}

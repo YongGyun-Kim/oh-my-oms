@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:productcatalog:2",
+  "title": "판매 상품과 공통 공개·가격 조건 — v2 explicit common dependency",
+  "x-contract-id": "C03",
+  "x-provider-component": "ProductCatalog",
+  "x-provider-unit": "U3",
+  "x-consumers": ["CommercialAgreement", "OperationalAssurance", "OrderAcceptance", "WorkInquiry"],
+  "x-mechanism": "in-process typed port; API/worker 중 해당 실행 호스트에서 사용",
+  "x-errors": {
+    "$ref": "urn:oms:contract:common:2#/$defs/Problem"
+  },
+  "x-operations": [
+    {
+      "name": "registerProduct",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/ProductInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US2.1"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "reviseProduct",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/ProductInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US2.1"],
+      "target": {
+        "allOf": [
+          {
+            "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+          },
+          {
+            "properties": {
+              "recordRef": {
+                "allOf": [
+                  {
+                    "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                  },
+                  {
+                    "properties": {
+                      "owner": {
+                        "const": "ProductCatalog"
+                      },
+                      "entity": {
+                        "const": "Product"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "readCommonOffer",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/RecordQuery"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/ProductViewResult"
+      },
+      "stories": [],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "readOwnerDiagnostics",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/DiagnosticInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/DiagnosticView"
+      },
+      "stories": ["US9.2", "US9.4"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "readOwnerHistory",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/RecordQuery"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/HistoryView"
+      },
+      "stories": ["US9.4"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    }
+  ],
+  "$defs": {
+    "Call": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "registerProduct"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ProductInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "reviseProduct"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ProductInput"
+            },
+            "target": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+                },
+                {
+                  "properties": {
+                    "recordRef": {
+                      "allOf": [
+                        {
+                          "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                        },
+                        {
+                          "properties": {
+                            "owner": {
+                              "const": "ProductCatalog"
+                            },
+                            "entity": {
+                              "const": "Product"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readCommonOffer"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/RecordQuery"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readOwnerDiagnostics"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/DiagnosticInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readOwnerHistory"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/RecordQuery"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

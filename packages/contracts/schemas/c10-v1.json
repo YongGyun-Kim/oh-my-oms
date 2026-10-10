@@ -1,0 +1,643 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:workinquiry:1",
+  "title": "권한에 맞는 진행·남은 조치·이력의 조합 조회",
+  "x-contract-id": "C10",
+  "x-provider-component": "WorkInquiry",
+  "x-provider-unit": "U7",
+  "x-consumers": [],
+  "x-mechanism": "in-process typed port; API/worker 중 해당 실행 호스트에서 사용",
+  "x-errors": {
+    "$ref": "urn:oms:contract:common:1#/$defs/Problem"
+  },
+  "x-operations": [
+    {
+      "name": "listVisibleProducts",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ProductViewResultPage"
+      },
+      "stories": [
+        "US2.2"
+      ],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "readOrders",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/InquiryViewResultPage"
+      },
+      "stories": [
+        "US3.3",
+        "US8.8",
+        "US8.12"
+      ],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "readOrder",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/InquiryViewResult"
+      },
+      "stories": [
+        "US3.3",
+        "US8.8",
+        "US8.12"
+      ],
+      "target": {
+        "allOf": [
+          {
+            "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+          },
+          {
+            "properties": {
+              "recordRef": {
+                "allOf": [
+                  {
+                    "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                  },
+                  {
+                    "properties": {
+                      "owner": {
+                        "const": "OrderAcceptance"
+                      },
+                      "entity": {
+                        "const": "Order"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "readReceipt",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ReceiptReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/Receipt"
+      },
+      "stories": [
+        "US3.3",
+        "US8.8",
+        "US8.12"
+      ],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ReceiptInvocationTarget"
+      }
+    },
+    {
+      "name": "readFinancial",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/FinancialViewResult"
+      },
+      "stories": [
+        "US4.5",
+        "US4.6",
+        "US8.6"
+      ],
+      "target": {
+        "allOf": [
+          {
+            "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+          },
+          {
+            "properties": {
+              "recordRef": {
+                "allOf": [
+                  {
+                    "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                  },
+                  {
+                    "properties": {
+                      "owner": {
+                        "const": "OrderAcceptance"
+                      },
+                      "entity": {
+                        "const": "Order"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "readHardware",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/HardwareViewResult"
+      },
+      "stories": [
+        "US5.6",
+        "US8.11"
+      ],
+      "target": {
+        "allOf": [
+          {
+            "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+          },
+          {
+            "properties": {
+              "recordRef": {
+                "allOf": [
+                  {
+                    "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                  },
+                  {
+                    "properties": {
+                      "owner": {
+                        "const": "OrderAcceptance"
+                      },
+                      "entity": {
+                        "const": "Order"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "readSoftware",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/SoftwareViewResult"
+      },
+      "stories": [
+        "US6.2",
+        "US6.5",
+        "US7.6",
+        "US7.7"
+      ],
+      "target": {
+        "allOf": [
+          {
+            "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+          },
+          {
+            "properties": {
+              "recordRef": {
+                "allOf": [
+                  {
+                    "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                  },
+                  {
+                    "properties": {
+                      "owner": {
+                        "const": "OrderAcceptance"
+                      },
+                      "entity": {
+                        "const": "Order"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "readHistory",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/HistoryView"
+      },
+      "stories": [
+        "US9.4"
+      ],
+      "target": {
+        "allOf": [
+          {
+            "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+          },
+          {
+            "properties": {
+              "recordRef": {
+                "allOf": [
+                  {
+                    "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                  },
+                  {
+                    "properties": {
+                      "owner": {
+                        "const": "OrderAcceptance"
+                      },
+                      "entity": {
+                        "const": "Order"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "readRecordHistory",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/HistoryView"
+      },
+      "stories": [
+        "US9.4"
+      ],
+      "target": {
+        "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+      }
+    }
+  ],
+  "$defs": {
+    "Call": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "listVisibleProducts"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readOrders"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readOrder"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+            },
+            "target": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+                },
+                {
+                  "properties": {
+                    "recordRef": {
+                      "allOf": [
+                        {
+                          "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                        },
+                        {
+                          "properties": {
+                            "owner": {
+                              "const": "OrderAcceptance"
+                            },
+                            "entity": {
+                              "const": "Order"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readReceipt"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ReceiptReadRequest"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ReceiptInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readFinancial"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+            },
+            "target": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+                },
+                {
+                  "properties": {
+                    "recordRef": {
+                      "allOf": [
+                        {
+                          "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                        },
+                        {
+                          "properties": {
+                            "owner": {
+                              "const": "OrderAcceptance"
+                            },
+                            "entity": {
+                              "const": "Order"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readHardware"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+            },
+            "target": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+                },
+                {
+                  "properties": {
+                    "recordRef": {
+                      "allOf": [
+                        {
+                          "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                        },
+                        {
+                          "properties": {
+                            "owner": {
+                              "const": "OrderAcceptance"
+                            },
+                            "entity": {
+                              "const": "Order"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readSoftware"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+            },
+            "target": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+                },
+                {
+                  "properties": {
+                    "recordRef": {
+                      "allOf": [
+                        {
+                          "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                        },
+                        {
+                          "properties": {
+                            "owner": {
+                              "const": "OrderAcceptance"
+                            },
+                            "entity": {
+                              "const": "Order"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readHistory"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+            },
+            "target": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+                },
+                {
+                  "properties": {
+                    "recordRef": {
+                      "allOf": [
+                        {
+                          "$ref": "urn:oms:contract:common:1#/$defs/Ref"
+                        },
+                        {
+                          "properties": {
+                            "owner": {
+                              "const": "OrderAcceptance"
+                            },
+                            "entity": {
+                              "const": "Order"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readRecordHistory"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:1#/$defs/ReadRequest"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:1#/$defs/RecordInvocationTarget"
+            }
+          },
+          "required": [
+            "context",
+            "operation",
+            "data",
+            "target"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

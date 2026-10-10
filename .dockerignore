@@ -1,0 +1,16 @@
+.git
+.codex
+.agents
+aidlc
+node_modules
+.runtime
+.reports
+test-results
+playwright-report
+tests
+docs
+**/.next
+**/.env
+**/.env.*
+**/*private-key*
+**/*.key

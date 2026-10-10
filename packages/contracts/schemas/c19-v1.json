@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:diagnostics:1",
+  "x-contract-id": "C19",
+  "x-input": {
+    "$ref": "urn:oms:contract:common:1#/$defs/DiagnosticInput"
+  },
+  "x-output": {
+    "$ref": "urn:oms:contract:common:1#/$defs/DiagnosticView"
+  },
+  "x-write-authority": "없음: 읽기 증거로 원본을 변경하지 않음"
+}

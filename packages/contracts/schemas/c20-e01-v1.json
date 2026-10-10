@@ -1,0 +1,67 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "MFA 복구/재등록 결과의 통지 근거 전달",
+    "version": "1.0.0"
+  },
+  "id": "urn:oms:contract:fact:e01:1",
+  "x-contract-id": "C20-E01",
+  "defaultContentType": "application/json",
+  "channels": {
+    "committedFact": {
+      "address": "IdentityRecovery.NotificationDelivery.facts.v1",
+      "description": "논리 주소; AWS 서비스/브로커 바인딩 미선정",
+      "messages": {
+        "fact": {
+          "$ref": "#/components/messages/fact"
+        }
+      }
+    }
+  },
+  "operations": {
+    "publishFact": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/committedFact"
+      },
+      "x-execution-owner": "IdentityRecovery"
+    },
+    "consumeFact": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/committedFact"
+      },
+      "x-execution-owner": "NotificationDelivery"
+    }
+  },
+  "components": {
+    "messages": {
+      "fact": {
+        "name": "E01",
+        "title": "MFA 복구/재등록 결과의 통지 근거 전달",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "allOf": [
+              {
+                "$ref": "urn:oms:contract:common:1#/$defs/Fact"
+              },
+              {
+                "properties": {
+                  "sourceOwner": {
+                    "const": "IdentityRecovery"
+                  }
+                },
+                "x-source-fact-owner-must-match": "IdentityRecovery"
+              }
+            ]
+          }
+        },
+        "correlationId": {
+          "location": "$message.payload#/correlationId"
+        }
+      }
+    }
+  },
+  "x-consumer-rule": "검증된 원본 사실/버전으로 해당 소비자만 판단; 반복/역순은 최신 원본 대조; 새 사실을 생성한 경우만 다음 의무 발행"
+}

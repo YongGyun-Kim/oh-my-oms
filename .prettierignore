@@ -1,0 +1,12 @@
+node_modules/
+apps/*/.next/
+.reports/
+.runtime/
+# Frozen upstream snapshots and unedited vendor security rules.
+packages/contracts/schemas/c*-v1.json
+packages/persistence/models/u1-v1.json
+scripts/u1/security-rules/
+
+# Next generates these declarations during dev/build; no handwritten runtime logic.
+apps/customer-web/next-env.d.ts
+apps/staff-web/next-env.d.ts

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:adapter:operationalassurance:1",
+  "x-contract-id": "C26",
+  "x-owner": "OperationalAssurance",
+  "x-outside-boundary": "External: 미선정 관측/배포/복구/위치 검증 수단",
+  "x-mechanism": "OMS가 구현할 adapter port; 업체별 전송 프로토콜/주소/인증은 확보 전 미정",
+  "x-operations": [
+    {
+      "name": "requestApprovedOperation",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ExternalRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ExternalObservation"
+      }
+    },
+    {
+      "name": "observeOriginalOperation",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ExternalRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ExternalObservation"
+      }
+    }
+  ],
+  "x-stories": [
+    "US9.1",
+    "US9.2",
+    "US9.3",
+    "US9.5",
+    "US9.6",
+    "US9.7"
+  ],
+  "x-guard": "실제 주체 지원/증거가 없으면 UNCONFIRMED; requestApprovedOperation은 실제 업체 기능을 추가 약속하지 않음"
+}

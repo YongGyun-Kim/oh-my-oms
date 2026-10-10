@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:adapter:identityrecovery:1",
+  "x-contract-id": "C21",
+  "x-owner": "IdentityRecovery",
+  "x-outside-boundary": "External: 미선정 신원/MFA/복구 주체",
+  "x-mechanism": "OMS가 구현할 adapter port; 업체별 전송 프로토콜/주소/인증은 확보 전 미정",
+  "x-operations": [
+    {
+      "name": "requestApprovedOperation",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ExternalRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ExternalObservation"
+      }
+    },
+    {
+      "name": "observeOriginalOperation",
+      "input": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ExternalRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:1#/$defs/ExternalObservation"
+      }
+    }
+  ],
+  "x-stories": [
+    "US1.7",
+    "US1.8",
+    "US1.9"
+  ],
+  "x-guard": "실제 주체 지원/증거가 없으면 UNCONFIRMED; requestApprovedOperation은 실제 업체 기능을 추가 약속하지 않음"
+}

@@ -1,0 +1,1801 @@
+{
+  "version": 1,
+  "entities": [
+    {
+      "name": "RecoveryCodeSecurityState",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "codeSecurityId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "codeSetRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryCodeSet"
+        },
+        {
+          "name": "bindingRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ProviderBinding"
+        },
+        {
+          "name": "securityStateRef",
+          "type": "Ref",
+          "required": true,
+          "references": "AccountSecurityState"
+        },
+        {
+          "name": "securityGeneration",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "origin",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["CURRENT_LEGACY_ADMISSION", "ISSUED_AT_SECURITY_GENERATION"]
+        },
+        {
+          "name": "establishedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "현재 보호된 집합/연결/신규 U2 보안 경계의 명시 매핑. 과거 누락 세대를 복원하거나 consumed/revoked/UNKNOWN 집합을 승격하지 않는다."
+      ]
+    },
+    {
+      "name": "AccountSecurityState",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "securityStateId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "accountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "securityGeneration",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "EnterpriseAccessFence",
+      "owner": "EnterpriseAccess",
+      "attributes": [
+        {
+          "name": "fenceId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise"
+        },
+        {
+          "name": "accessRevision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "StaffAuthorityFence",
+      "owner": "EnterpriseAccess",
+      "attributes": [
+        {
+          "name": "fenceId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "authorityRevision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "RegisteredContact",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "contactId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "accountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account",
+          "nullable": true
+        },
+        {
+          "name": "address",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["VERIFIED", "UNCONFIRMED", "REVOKED"]
+        },
+        {
+          "name": "contactVersion",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "verifiedAt",
+          "type": "Instant",
+          "required": true,
+          "nullable": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "VerificationPolicy",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "policyId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "purpose",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "requiredSourceKinds",
+          "type": "U2TextList",
+          "required": true
+        },
+        {
+          "name": "synthetic",
+          "type": "Boolean",
+          "required": true
+        },
+        {
+          "name": "active",
+          "type": "Boolean",
+          "required": true
+        },
+        {
+          "name": "expiresAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "retentionSeconds",
+          "type": "NonNegativeInteger",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "VerificationEvidence",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "evidenceId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "accountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "bindingRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ProviderBinding"
+        },
+        {
+          "name": "policyRef",
+          "type": "Ref",
+          "required": true,
+          "references": "VerificationPolicy"
+        },
+        {
+          "name": "purpose",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "sourceKind",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "authorityRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "operatorAuthorityRef",
+          "type": "Ref",
+          "required": false,
+          "references": "EmergencyOperatorAuthority",
+          "nullable": true
+        },
+        {
+          "name": "observedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "expiresAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "synthetic",
+          "type": "Boolean",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["CONFIRMED", "UNCONFIRMED", "CONFLICT", "REVOKED"]
+        },
+        {
+          "name": "contactRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RegisteredContact",
+          "nullable": true
+        },
+        {
+          "name": "contactVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise",
+          "nullable": true
+        },
+        {
+          "name": "caseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryCase",
+          "nullable": true
+        },
+        {
+          "name": "partyContextRef",
+          "type": "Ref",
+          "required": true,
+          "references": "PartyClaimContext",
+          "nullable": true
+        },
+        {
+          "name": "challengeId",
+          "type": "NonEmptyText",
+          "required": true,
+          "nullable": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "PersonVerification",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "personVerificationId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "personLinkRef",
+          "type": "Ref",
+          "required": true,
+          "references": "VerifiedPersonLink"
+        },
+        {
+          "name": "policyRef",
+          "type": "Ref",
+          "required": true,
+          "references": "VerificationPolicy"
+        },
+        {
+          "name": "evidenceRefs",
+          "type": "EvidenceRefs",
+          "required": true
+        },
+        {
+          "name": "verifiedBy",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "verifiedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "expiresAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["CONFIRMED", "UNCONFIRMED", "CONFLICT", "REVOKED"]
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "ScopeV2",
+      "owner": "EnterpriseAccess",
+      "attributes": [
+        {
+          "name": "scopeId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise"
+        },
+        {
+          "name": "action",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "kind",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "predicate",
+          "type": "U2Contract:ScopeV2",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "RoleRevisionState",
+      "owner": "EnterpriseAccess",
+      "attributes": [
+        {
+          "name": "roleStateId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "roleRef",
+          "type": "Ref",
+          "required": true,
+          "references": "CustomerRole",
+          "nullable": true
+        },
+        {
+          "name": "staffRoleRef",
+          "type": "Ref",
+          "required": true,
+          "references": "StaffRole",
+          "nullable": true
+        },
+        {
+          "name": "active",
+          "type": "Boolean",
+          "required": true
+        },
+        {
+          "name": "scopeRefs",
+          "type": "RefList",
+          "required": true,
+          "references": "ScopeV2"
+        },
+        {
+          "name": "actions",
+          "type": "U2StaffActionList",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "MembershipInvitation",
+      "owner": "EnterpriseAccess",
+      "attributes": [
+        {
+          "name": "invitationId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise"
+        },
+        {
+          "name": "inviterMembershipRef",
+          "type": "Ref",
+          "required": true,
+          "references": "EnterpriseMembership"
+        },
+        {
+          "name": "inviterAuthorityRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "contactRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RegisteredContact"
+        },
+        {
+          "name": "contactVersion",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "departmentRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Department",
+          "nullable": true
+        },
+        {
+          "name": "siteRef",
+          "type": "Ref",
+          "required": true,
+          "references": "BusinessSite",
+          "nullable": true
+        },
+        {
+          "name": "roleRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "expectedMembershipRevision",
+          "type": "Revision",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "reactivate",
+          "type": "Boolean",
+          "required": true
+        },
+        {
+          "name": "policyRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "tokenVerifier",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "keyVersion",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "tokenGeneration",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "issuedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "expiresAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["PENDING", "ACCEPTED", "REVOKED", "EXPIRED", "RECONFIRMATION_REQUIRED"]
+        },
+        {
+          "name": "acceptedAccountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account",
+          "nullable": true
+        },
+        {
+          "name": "acceptedMembershipRef",
+          "type": "Ref",
+          "required": true,
+          "references": "EnterpriseMembership",
+          "nullable": true
+        },
+        {
+          "name": "vaultRef",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "vaultExpiresAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "RecoveryCase",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "caseId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "accountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "bindingRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ProviderBinding"
+        },
+        {
+          "name": "bindingGeneration",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "securityGeneration",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "parentRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryCase",
+          "nullable": true
+        },
+        {
+          "name": "method",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "reason",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "createdAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "deadlineAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "holdReason",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "verificationRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryVerification",
+          "nullable": true
+        },
+        {
+          "name": "partyContextRef",
+          "type": "Ref",
+          "required": true,
+          "references": "PartyClaimContext",
+          "nullable": true
+        },
+        {
+          "name": "enrollmentAuthorityRef",
+          "type": "Ref",
+          "required": true,
+          "references": "EnrollmentAuthority",
+          "nullable": true
+        },
+        {
+          "name": "originalOperationRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "noticeRef",
+          "type": "Ref",
+          "required": true,
+          "references": "FactEnvelope",
+          "nullable": true
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": [
+            "REQUESTED",
+            "VERIFYING",
+            "ENROLMENT_ONLY",
+            "EXTERNAL_PENDING",
+            "COMPLETED",
+            "HOLD",
+            "REJECTED",
+            "CLOSED"
+          ]
+        },
+        {
+          "name": "previousBindingRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ProviderBinding",
+          "nullable": true
+        },
+        {
+          "name": "originalBindingRefs",
+          "type": "RefList",
+          "required": true,
+          "references": "ProviderBinding"
+        },
+        {
+          "name": "previousSecurityGeneration",
+          "type": "Revision",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "originalFactorRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "originalCodeSetRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "originalSessionRefs",
+          "type": "RefList",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "RecoveryVerification",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "verificationId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "caseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryCase"
+        },
+        {
+          "name": "accountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "bindingRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ProviderBinding"
+        },
+        {
+          "name": "policyRef",
+          "type": "Ref",
+          "required": true,
+          "references": "VerificationPolicy"
+        },
+        {
+          "name": "partyContextRef",
+          "type": "Ref",
+          "required": true,
+          "references": "PartyClaimContext"
+        },
+        {
+          "name": "issuerRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "operatorAuthorityRef",
+          "type": "Ref",
+          "required": false,
+          "references": "EmergencyOperatorAuthority",
+          "nullable": true
+        },
+        {
+          "name": "issuerAuthorityRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "evidenceRefs",
+          "type": "EvidenceRefs",
+          "required": true
+        },
+        {
+          "name": "verifiedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "expiresAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["CONFIRMED", "UNCONFIRMED", "CONFLICT", "REJECTED"]
+        },
+        {
+          "name": "reason",
+          "type": "NonEmptyText",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "PartyClaimContext",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "partyContextId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "browserVerifier",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "bindingRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ProviderBinding"
+        },
+        {
+          "name": "bindingGeneration",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "securityGeneration",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "accountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "caseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryCase"
+        },
+        {
+          "name": "audience",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["CUSTOMER", "STAFF"]
+        },
+        {
+          "name": "challengeId",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "secretVerifier",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "keyVersion",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "issuedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "expiresAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["PENDING", "VERIFIED", "REVOKED"]
+        },
+        {
+          "name": "verificationRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryVerification",
+          "nullable": true
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "RecoveryHandoffGrant",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "grantId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "caseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryCase"
+        },
+        {
+          "name": "accountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "bindingRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ProviderBinding"
+        },
+        {
+          "name": "bindingGeneration",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "securityGeneration",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "audience",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["CUSTOMER", "STAFF"]
+        },
+        {
+          "name": "purpose",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["MFA_REENROLMENT"]
+        },
+        {
+          "name": "challengeId",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "enrollmentTarget",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryCase"
+        },
+        {
+          "name": "verificationRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryVerification"
+        },
+        {
+          "name": "partyContextRef",
+          "type": "Ref",
+          "required": true,
+          "references": "PartyClaimContext"
+        },
+        {
+          "name": "deliveryRouteRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RegisteredContact"
+        },
+        {
+          "name": "issuerRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "operatorAuthorityRef",
+          "type": "Ref",
+          "required": false,
+          "references": "EmergencyOperatorAuthority",
+          "nullable": true
+        },
+        {
+          "name": "issuerAuthorityRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "codeVerifier",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "keyVersion",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "vaultRef",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "issuedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "expiresAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "attemptCount",
+          "type": "NonNegativeInteger",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["ISSUED", "CLAIMED", "EXPIRED", "EXHAUSTED", "REVOKED"]
+        },
+        {
+          "name": "claimReceiptRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ClaimReceipt",
+          "nullable": true
+        },
+        {
+          "name": "replacesGrantRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryHandoffGrant",
+          "nullable": true
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "ClaimReceipt",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "claimReceiptId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "grantRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryHandoffGrant",
+          "nullable": true
+        },
+        {
+          "name": "caseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryCase"
+        },
+        {
+          "name": "partyContextRef",
+          "type": "Ref",
+          "required": true,
+          "references": "PartyClaimContext"
+        },
+        {
+          "name": "accountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "authorityRef",
+          "type": "Ref",
+          "required": true,
+          "references": "EnrollmentAuthority"
+        },
+        {
+          "name": "consumedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "requestRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RequestReceipt",
+          "nullable": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "EnrollmentAuthority",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "authorityId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "accountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "bindingRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ProviderBinding"
+        },
+        {
+          "name": "bindingGeneration",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "securityGeneration",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "audience",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["CUSTOMER", "STAFF"]
+        },
+        {
+          "name": "purpose",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": [
+            "INITIAL_MFA",
+            "INVITATION_ACCEPTANCE",
+            "RECOVERY_VERIFICATION",
+            "MFA_REENROLMENT"
+          ]
+        },
+        {
+          "name": "sourceRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryCase",
+          "nullable": true
+        },
+        {
+          "name": "invitationRef",
+          "type": "Ref",
+          "required": true,
+          "references": "MembershipInvitation",
+          "nullable": true
+        },
+        {
+          "name": "contactVerificationRef",
+          "type": "Ref",
+          "required": true,
+          "references": "VerificationEvidence",
+          "nullable": true
+        },
+        {
+          "name": "claimReceiptRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ClaimReceipt",
+          "nullable": true
+        },
+        {
+          "name": "verificationRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryVerification",
+          "nullable": true
+        },
+        {
+          "name": "partyContextRef",
+          "type": "Ref",
+          "required": true,
+          "references": "PartyClaimContext",
+          "nullable": true
+        },
+        {
+          "name": "challengeId",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "handleVerifier",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "keyVersion",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "issuedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "expiresAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["ACTIVE", "COMPLETED", "EXPIRED", "REVOKED", "HOLD"]
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "handleVaultRef",
+          "type": "NonEmptyText",
+          "required": true,
+          "nullable": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "EmergencyRecoveryCase",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "emergencyCaseId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "caseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryCase"
+        },
+        {
+          "name": "accountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "operatorAuthorityRef",
+          "type": "Ref",
+          "required": true,
+          "references": "EmergencyOperatorAuthority",
+          "nullable": true
+        },
+        {
+          "name": "policyRef",
+          "type": "Ref",
+          "required": true,
+          "references": "VerificationPolicy",
+          "nullable": true
+        },
+        {
+          "name": "evidenceRefs",
+          "type": "EvidenceRefs",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["OPEN", "VERIFYING", "ENROLMENT_ONLY", "COMPLETED", "HOLD", "CLOSED"]
+        },
+        {
+          "name": "reason",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "deadlineAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "EmergencyOperatorAuthority",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "operatorAuthorityId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "operatorId",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "policyRef",
+          "type": "Ref",
+          "required": true,
+          "references": "VerificationPolicy"
+        },
+        {
+          "name": "synthetic",
+          "type": "Boolean",
+          "required": true
+        },
+        {
+          "name": "active",
+          "type": "Boolean",
+          "required": true
+        },
+        {
+          "name": "expiresAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "credentialVerifier",
+          "type": "NonEmptyText",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "AdministratorRestoration",
+      "owner": "EnterpriseAccess",
+      "attributes": [
+        {
+          "name": "restorationId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise"
+        },
+        {
+          "name": "membershipRef",
+          "type": "Ref",
+          "required": true,
+          "references": "EnterpriseMembership"
+        },
+        {
+          "name": "accountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "delegationRef",
+          "type": "Ref",
+          "required": true,
+          "references": "VerificationEvidence"
+        },
+        {
+          "name": "personVerificationRef",
+          "type": "Ref",
+          "required": true,
+          "references": "PersonVerification"
+        },
+        {
+          "name": "issuerRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "roleRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["REQUESTED", "VERIFIED", "APPLIED", "HOLD", "REJECTED", "CLOSED"]
+        },
+        {
+          "name": "holdReason",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "reason",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "deadlineAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "IdentityExecutionSlot",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "slotId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "accountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account"
+        },
+        {
+          "name": "bindingRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ProviderBinding"
+        },
+        {
+          "name": "caseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryCase"
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["ACTIVE", "UNKNOWN", "CLOSED"]
+        },
+        {
+          "name": "originalOperationRef",
+          "type": "Ref",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "deadlineAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "IdentityOperationResult",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "operationResultId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "caseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RecoveryCase"
+        },
+        {
+          "name": "bindingRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ProviderBinding"
+        },
+        {
+          "name": "operationId",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "inputDigest",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "providerRequestId",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "knowledge",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        },
+        {
+          "name": "effect",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": [
+            "REMOVED",
+            "SIGNED_OUT",
+            "PASSWORD_REPLACED",
+            "FACTOR_VERIFIED",
+            "ISOLATED",
+            "UNCONFIRMED"
+          ]
+        },
+        {
+          "name": "evidenceRefs",
+          "type": "EvidenceRefs",
+          "required": true
+        },
+        {
+          "name": "terminal",
+          "type": "Boolean",
+          "required": true
+        },
+        {
+          "name": "observedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    },
+    {
+      "name": "SecurityTombstone",
+      "owner": "IdentityRecovery",
+      "attributes": [
+        {
+          "name": "tombstoneId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "targetRef",
+          "type": "Ref",
+          "required": true
+        },
+        {
+          "name": "purpose",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "reason",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "destroyedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "epoch",
+          "type": "NonEmptyText",
+          "required": true
+        }
+      ],
+      "constraints": [
+        "U2 명시 모델; 현재 원본/개정과 primary·독립 journal·연속 prefix 보호로 판정한다."
+      ]
+    }
+  ]
+}
