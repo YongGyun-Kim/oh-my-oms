@@ -4,7 +4,7 @@
 
 2026-10-11 문서 정리 작업이다. 사람의 명시적 지시는 “부하 측정 종료 처리는 지금 상태로 기록해두고 종료한다”, “재해 복구 검증도 추후 진행”, 그리고 “최종 산출물 정리부터 진행하자”이다. 사람은 계획한 기능을 없애는 것이 아니라 첫 버전에 가져갈 범위를 조절하고 첫 배포 범위를 다시 정하자고 했다.
 
-이 기록은 그 지시의 구현 상태 인계이며 native 답변/승인/Skip·단계 완료·위험 수용 기록을 대신하지 않는다. 첫 배포 범위는2026-10-11 사용자의 “제안 범위로 확정”으로 APPROVED다. [첫 배포 범위](../../../release-planning/first-release-scope-proposal.md)·[첫 배포 실행 계획](../../../release-planning/first-release-delivery-plan.md)을 따르며, 이 승인은 첫 배포 범위만 정하고 Unit 완료·위험 수용·실제 배포를 승인하지 않는다. 원래 기능 설계·Unit 배정·요구사항은 수정하지 않는다. 제품 source `8972b7b0e26cbd9748c9ad80153dd9ecabe90e1ea066b70f421243f40a88d803`를 고정하고 제품/시험/DB/추가 collector·부하·복구·배포를 재개하지 않는다.
+이 기록은 그 지시의 구현 상태 인계이며 native 답변/승인/Skip·단계 완료·위험 수용 기록을 대신하지 않는다. 첫 배포 제안은 사용자 확인 전 PROPOSED다. 원래 기능 설계·Unit 배정·요구사항은 수정하지 않는다. 제품 source `8972b7b0e26cbd9748c9ad80153dd9ecabe90e1ea066b70f421243f40a88d803`를 고정하고 제품/시험/DB/추가 collector·부하·복구·배포를 재개하지 않는다.
 
 ## 후속 책임과 남은 근거
 
@@ -13,7 +13,7 @@
 | 부하 측정 | NORMAL299885.091333/RECOVERY119838.427/HOLD119882.437041ms의 최소 구간 미달 FAIL을 보존. 기술/정확성0과 구분 | 개발자·품질. 사용자가 재개할 때 고정 구간 끝까지 실제 계측하는 최소 회귀/보완 후 같은 source 전체 증명을 새로 수집. 지금 수정/재실행하지 않음 |
 | pilot DR | 미실행·사용자 추후 진행 | 개발자·Infra/U10.10k pilot의 등록 PRIMARY/JOURNAL/PREFIX fault/재기동/손상·현재 fence/code/5실패/tombstone/UNKNOWN·fresh MFA HTTP·독립 ACK 전수 대조·RTO≤30분/RPO0 실제 실행 필요 |
 | 확장 검증 | 100k/50분 Deferred, 첫 버전 필수 gate에서 분리한 기존 결정 유지 | 개발자·품질/Infra. 확장 또는 실제 수요가 가정을 넘어설 때 profile/환경/실행 범위를 사람과 확인. 과거 FAIL을 PASS로 바꾸지 않음 |
-| 첫 배포 기능 범위 | APPROVED·2026-10-11 | conductor·각 Unit. 확정한 실행 계획의 첫 배포/후속 부분을 설계에 연결. 원본69US/227AC·배정·미완료 보존, 실제 배포 승인은 별도 |
+| 첫 배포 기능 범위 | PROPOSED/미승인 | conductor·사용자. 기존 전체 설계/기능 배정은 보존한 채 별도 범위 결정. 이 기록으로 특정 기능을 제외/배포 승인하지 않음 |
 | 독립 최신 review | 미진행 | conductor·독립 reviewer. 현재 코드/계획/manifest/301ID/실제 증거·보류 항목 검토 후 실제 verdict 기록 |
 | U1 R-01/R-02 | OPEN | 원래 finding owner·새 reviewer. expired PUBLISHED 보호 control·mixed poison 격리의 현재 owning source/negative 회귀를 검토. 과거 기록 수정 없음 |
 | 원래 U1 상세563건 | OPEN·미복구 | provenance owner/conductor. 인정된 원래 exact bytes 백업 확인. 요약/선택16건/다른 source baseline을 복구본으로 표현 금지 |
@@ -30,7 +30,3 @@
 
 [plan](code-generation-plan.md)의 완료 체크는 구현/직접 시험 근거가 있는 항목만 갱신한다. P10 실제 측정/DR와 P11 독립 review는 완료 표시하지 않는다. 별도 source-write ledger의7188개 현재 생성물 inventory는 전체 과거 작성/삭제 사건이나 작성 주체 증거가 아니다. 이번 작업은 문서 정리이며 새 제품·시험·DB/환경 작업은0이다.
 
-
-## 승인 이후 적용과 증거 lineage
-
-필요한 U2 관리 업무와 접근 검증은 제한 파일럿 첫 배포에 포함하며 고급 편집·대량 관리 UI는 후속이다. 기존 부하 시간 FAIL·DR/확장 실증·OPEN은 계속 후속으로 남기고 원래 기준/성공 판정을 소급 변경하지 않는다. 현재 HEAD93697539f17870d28ad7be89a249f321c655afbb의503개 제품 파일 bytes/lock/tools는 원래 proof8972와 모두 같지만 metadata identity는324efd5e074a43a5d3dbfa81a3ca427d8bfad6aff4a9600d9faf100f8bbb6153이다. 원래 receipt는 갱신하지 않았고 현재 proof 유효성은 독립 심사에 인계한다.

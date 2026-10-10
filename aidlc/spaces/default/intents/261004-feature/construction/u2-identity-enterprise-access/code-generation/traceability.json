@@ -308,32 +308,32 @@
     {
       "id": "AC1.1.1",
       "status": "Deferred",
-      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC1.1.2",
       "status": "Deferred",
-      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC1.1.3",
       "status": "Deferred",
-      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC1.2.1",
       "status": "Deferred",
-      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC1.2.2",
       "status": "Deferred",
-      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC1.2.3",
       "status": "Deferred",
-      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC1.3.1",
@@ -353,7 +353,7 @@
     {
       "id": "AC1.3.4",
       "status": "Deferred",
-      "target": "U2/U8/U9·품질: 최소 PC 초대/관리 경계는 tests/u2/e2e/invitation-flow.spec.ts에서 검증했다. 전체 지원 접점과 출시 브라우저 업무 관리를 후속 통합해야 한다. 새 첫 배포 범위 미승인."
+      "target": "U2/U8/U9·품질: 최소 PC 초대/관리 경계는 tests/u2/e2e/invitation-flow.spec.ts에서 검증했다. 전체 지원 접점과 출시 브라우저 업무 관리를 후속 통합해야 한다. 새 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC1.4.1",
@@ -468,977 +468,977 @@
     {
       "id": "AC2.1.1",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.1.2",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.1.3",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.2.1",
       "status": "Deferred",
-      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.2.2",
       "status": "Deferred",
-      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.2.3",
       "status": "Deferred",
-      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.3.1",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.3.2",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.3.3",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.3.4",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.4.1",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.4.2",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.4.3",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.5.1",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.5.2",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.5.3",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.6.1",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.6.2",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.6.3",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.6.4",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.7.1",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.7.2",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.7.3",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC2.7.4",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.1.1",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.1.2",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.1.3",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.1.4",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.2.1",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.2.2",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.2.3",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.3.1",
       "status": "Deferred",
-      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.3.2",
       "status": "Deferred",
-      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.3.3",
       "status": "Deferred",
-      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.4.1",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.4.2",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.4.3",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.5.1",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.5.2",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.5.3",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.5.4",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.6.1",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.6.2",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC3.6.3",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.1.1",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.1.2",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.1.3",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.2.1",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.2.2",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.2.3",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.3.1",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.3.2",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.3.3",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.4.1",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.4.2",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.4.3",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.4.4",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.5.1",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.5.2",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.5.3",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.6.1",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.6.2",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC4.6.3",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.1.1",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.1.2",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.1.3",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.2.1",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.2.2",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.2.3",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.3.1",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.3.2",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.3.3",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.4.1",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.4.2",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.4.3",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.5.1",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.5.2",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.5.3",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.6.1",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.6.2",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.6.3",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.7.1",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.7.2",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC5.7.3",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.1.1",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.1.2",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.1.3",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.2.1",
       "status": "Deferred",
-      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.2.2",
       "status": "Deferred",
-      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.2.3",
       "status": "Deferred",
-      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.3.1",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.3.2",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.3.3",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.4.1",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.4.2",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.4.3",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.4.4",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.5.1",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.5.2",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.5.3",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.6.1",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.6.2",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC6.6.3",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.1.1",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.1.2",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.1.3",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.2.1",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.2.2",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.2.3",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.3.1",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.3.2",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.3.3",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.3.4",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.4.1",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.4.2",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.4.3",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.5.1",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.5.2",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.5.3",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.5.4",
       "status": "Deferred",
-      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.6.1",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.6.2",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.6.3",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.7.1",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.7.2",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.7.3",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.7.4",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.8.1",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.8.2",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC7.8.3",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.1.1",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.1.2",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.1.3",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.2.1",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.2.2",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.2.3",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.3.1",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.3.2",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.3.3",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.4.1",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.4.2",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.4.3",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.4.4",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.5.1",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.5.2",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.5.3",
       "status": "Deferred",
-      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.6.1",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.6.2",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.6.3",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.6.4",
       "status": "Deferred",
-      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.7.1",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.7.2",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.7.3",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.8.1",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.8.2",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.8.3",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.8.4",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.8.5",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.8.6",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.9.1",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.9.2",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.9.3",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.9.4",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.10.1",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.10.2",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.10.3",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.10.4",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.11.1",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.11.2",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.11.3",
       "status": "Deferred",
-      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.12.1",
       "status": "Deferred",
-      "target": "U9 (u9-staff-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U9 (u9-staff-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.12.2",
       "status": "Deferred",
-      "target": "U9 (u9-staff-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U9 (u9-staff-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC8.12.3",
       "status": "Deferred",
-      "target": "U9 (u9-staff-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U9 (u9-staff-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.1.1",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.1.2",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.1.3",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.2.1",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.2.2",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.2.3",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.3.1",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.3.2",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.3.3",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.3.4",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.4.1",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.4.2",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.4.3",
       "status": "Deferred",
-      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.5.1",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.5.2",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.5.3",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.6.1",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.6.2",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.6.3",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.7.1",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.7.2",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "AC9.7.3",
       "status": "Deferred",
-      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 적용/후속 부분은2026-10-11 확정한 release-planning/first-release-delivery-plan.md를 따른다. 원본 AC 전체 완료를 뜻하지 않는다."
     },
     {
       "id": "BR1.1",

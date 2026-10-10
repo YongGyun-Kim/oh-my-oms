@@ -3,7 +3,7 @@
 ## 범위와 승인 경계
 
 **Unit:** u2-identity-enterprise-access  
-**상태:** 59항목 계획의 P00–P09 구현·직접 시험과 P10 도구/CI/IaC·현재 source 검사를 수행했다. 최신 전체 collector는 부하 구간 시간 하한 미달로 FAIL이다. 사용자의 명시 지시에 따라 부하 측정을 현재 상태로 종료하고 DR는 추후 진행하며 P11 산출물만 정리한다. Unit 완료·위험 수용·실제 배포 승인은 아니다. 첫 배포 범위는2026-10-11 별도 사용자 결정에 연결한다.  
+**상태:** 59항목 계획의 P00–P09 구현·직접 시험과 P10 도구/CI/IaC·현재 source 검사를 수행했다. 최신 전체 collector는 부하 구간 시간 하한 미달로 FAIL이다. 사용자의 명시 지시에 따라 부하 측정을 현재 상태로 종료하고 DR는 추후 진행하며 P11 산출물만 정리한다. Unit 완료·위험 수용·첫 배포 범위 승인은 아니다.  
 **구현 담당:** 개발자 본인, IdentityRecovery/EnterpriseAccess 원본과 기존 호스트의 U2 통합 접점.  
 **실행 형태:** library/embedded, U1 의존. 독립 인증 서비스나 추가 AWS 계정을 만들지 않는다.
 
@@ -369,7 +369,7 @@ ND 상세 상태/인계/ScopeV2는 기존 FD 정의보다 구체화된 후속 �
 
 ## 현재 산출과 다음 확인
 
-현재 source8972b7b0e26cbd9748c9ad80153dd9ecabe90e1ea066b70f421243f40a88d803를 보존한 채 code-summary.md·source-manifest.json·traceability.json·source-write-ledger.json·follow-up-status-20261011.md를 작성했다. 완료 체크는 해당 항목의 구현/직접 시험 또는 실제 문서 작성 근거이며 전체 검증·실제 CI·출시 완료를 뜻하지 않는다. 제품·시험·DB·runtime·새 collector를 변경/실행하지 않았다. 문서 JSON/경로/301ID 확인은 conductor가 Luna에 맡기며 독립 최신 review와 native 완료/후속 결정도 conductor 책임이다. 첫 배포 기능 범위는2026-10-11 “제안 범위로 확정” 결정과 첫 배포 실행 계획을 따른다. 원래 전체 기능 설계/배정과 미완료 판정은 유지한다.
+현재 source8972b7b0e26cbd9748c9ad80153dd9ecabe90e1ea066b70f421243f40a88d803를 보존한 채 code-summary.md·source-manifest.json·traceability.json·source-write-ledger.json·follow-up-status-20261011.md를 작성했다. 완료 체크는 해당 항목의 구현/직접 시험 또는 실제 문서 작성 근거이며 전체 검증·실제 CI·출시 완료를 뜻하지 않는다. 제품·시험·DB·runtime·새 collector를 변경/실행하지 않았다. 문서 JSON/경로/301ID 확인은 conductor가 Luna에 맡기며 독립 최신 review와 native 완료/후속 결정도 conductor 책임이다. 첫 배포 기능 범위는 아직 PROPOSED이며 원래 전체 기능 설계/배정은 유지한다.
 
 ## 2026-10-11 실행 결과와 사용자 보류
 
@@ -377,11 +377,5 @@ ND 상세 상태/인계/ScopeV2는 기존 FD 정의보다 구체화된 후속 �
 - pilot3900 요청의 기술/정확성/worker failure는0이지만 NORMAL299885.091333ms/300000, RECOVERY119838.427ms/120000, HOLD119882.437041ms/120000의 최소 구간을 충족하지 못했다. PEAK60030.027875ms/60000 통과는 전체 성공이 아니다.
 - U2 first-start58/p95494ms/missing0와 UI/purpose/resource/worker recovery true, ACK782 수집은 실제 관측이다. ACK의 DR 전수 대조·RPO0/RTO30분 실증은 미실행이다.
 - 사람은 부하 측정을 현재 상태로 기록하고 종료하며 DR를 추후 진행하고 최종 산출물 정리부터 진행하도록 지시했다. 따라서 P10 두 실행 항목과 P11 독립 review를 완료 표시하지 않는다. 기준·FAIL 원문·현재 source를 바꾸지 않는다.
-- 기존100k/50분 확장 검증은 Deferred, 두 original provenance gap과 U1 R-01/R-02는 OPEN이다. 첫 배포는2026-10-11 확정된 제한 파일럿 범위와 후속 백로그를 따른다. 이 범위 결정으로 원본 AC 전체·U2 완료나 실패/OPEN 해결을 표시하지 않는다.
+- 기존100k/50분 확장 검증은 Deferred, 두 original provenance gap과 U1 R-01/R-02는 OPEN이다. 새 첫 배포 제안은 사용자 확인 전이며 전체 설계/기능 범위를 여기서 제외하지 않는다.
 - 상세 근거는 code-summary.md와 execution-failure-duration-20261011.md, 후속 책임은 follow-up-status-20261011.md에 연결한다. 문서 정리는 승인/위험 수용/native completion 또는 reviewer verdict가 아니다.
-
-## 첫 배포 범위 적용 — 2026-10-11
-
-[첫 배포 범위](../../../release-planning/first-release-scope-proposal.md)·[첫 배포 실행 계획](../../../release-planning/first-release-delivery-plan.md)이 첫 배포 대상/순서를 정하며 원본69US/227AC·Unit 소유/의존성은 보존한다. U2 US1.3/1.4/1.6은 필요한 관리 업무를 포함하고 고급 편집/대량 관리 UI는 후속이다. US1.5/1.7/1.8/1.9/1.10의 접근·MFA·복구/관리자 경계와 실제 인증/회사망 준비는 유지한다. 첫 배포에서 사용하는 실제 경로 검증·전체 testable 제품80%/미실행분모·보안·권한·처리 정확성은 낮추지 않는다.
-
-기존10분 측정 시간 하한 FAIL 재실행·100k/50분 확장·재해 RTO/RPO 실증은 첫 배포 필수 검증에서 분리한 후속 작업이다. 기존 P10 targets와 원래 결과는 그대로 남기며 짧은 지원 경로 검증의 정확 규모/기간은 후속 시험 설계 전 미정이다. 지금 새 시험/collector나 성공 체크를 만들지 않는다. 현재 새 HEAD와 원래 proof의 동일 제품 bytes lineage는 code-summary.md에 기록했다.

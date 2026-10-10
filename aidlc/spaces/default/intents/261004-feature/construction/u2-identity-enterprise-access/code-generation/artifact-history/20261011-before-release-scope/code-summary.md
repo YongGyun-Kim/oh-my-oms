@@ -4,16 +4,14 @@
 
 IdentityRecovery/EnterpriseAccess의 U2 library와 기존 API·worker·BFF·최소 PC 접점을 구현했다. **전체 검증의 최종 결과는 FAIL이며 Unit 완료·배포 승인이 아니다.** 사용자는 부하 측정의 현재 결과를 기록하고 종료하며, 재해 복구 검증은 추후 진행하고, 최종 산출물 정리부터 진행하도록 지시했다. 이 문서 정리는 제품·시험·DB를 수정하거나 추가 실행하지 않는다.
 
-검증 실행의 원래 source identity는 `8972b7b0e26cbd9748c9ad80153dd9ecabe90e1ea066b70f421243f40a88d803`다. 본문 결과와 “현재 source” 표현은 이 원래 검증 실행을 가리킨다. 같은 source의 단위/통합·전체 coverage·PC·형식/타입/린트·synth·이미지·보안·같은 이미지 runtime 검사는 통과했다. pilot 부하의 기술/정확성 오류는0이지만 NORMAL/RECOVERY/HOLD의 실제 측정 시간이 최소 구간보다 짧아 통과하지 못했다. DR·RTO/RPO·release 검증은 미실행이다.
+제품 source identity는 `8972b7b0e26cbd9748c9ad80153dd9ecabe90e1ea066b70f421243f40a88d803`다. 같은 source의 단위/통합·전체 coverage·PC·형식/타입/린트·synth·이미지·보안·같은 이미지 runtime 검사는 통과했다. pilot 부하의 기술/정확성 오류는0이지만 NORMAL/RECOVERY/HOLD의 실제 측정 시간이 최소 구간보다 짧아 통과하지 못했다. DR·RTO/RPO·release 검증은 미실행이다.
 
-전체 기능 설계와 주 책임26AC/협력201AC 배정은 유지한다. 2026-10-11 사용자가 “제안 범위로 확정”으로 답한 [첫 배포 범위](../../../release-planning/first-release-scope-proposal.md)·[첫 배포 실행 계획](../../../release-planning/first-release-delivery-plan.md)을 적용한다. 고객사10곳 이내 제한 파일럿의 필요한 신원/기업/MFA/권한·복구/관리자 대응은 첫 배포에 포함하고 고급 관리 UI·대량 편의는 후속이다. 첫 배포 범위 승인은 U2 전체 완료·미해결 문제 위험 수용·실제 배포 승인이 아니다. 실제 AWS/Cognito/SQS·회사망·국내 경로·신원/위임/법적 보관·외부 수신 근거는 UNVERIFIED/HOLD다.
+전체 승인 기능 설계와 주 책임26AC/협력201AC 배정은 유지한다. 첫 배포 기능 범위 제안은 [PROPOSED 문서](../../../release-planning/first-release-scope-proposal.md)의 사용자 확인 전 제안이며 여기서 확정·제외·승인으로 반영하지 않는다. 실제 AWS/Cognito/SQS·회사망·국내 경로·신원/위임/법적 보관·외부 수신 근거는 UNVERIFIED/HOLD다.
 
 ## 실행 근거와 소스 경계
 
-현재 HEAD는 `93697539f17870d28ad7be89a249f321c655afbb`, 현재 metadata source identity는 `324efd5e074a43a5d3dbfa81a3ca427d8bfad6aff4a9600d9faf100f8bbb6153`다. 기존 proof의 HEAD는 `4aaaba619b98f60ab32f0cb0dd0ba8c0706d6144`였다. 읽기 전용 대조에서503개 제품/시험/설정 파일의 path/hash·lock·도구는 모두 같고 identity의 변경 요소는 HEAD뿐이다. 이는 동일 제품 bytes의 lineage이며 이전8972 proof를 새 HEAD의 current-proof로 재라벨하거나 receipt를 갱신하지 않았다. 새 identity의 전체 proof 유효성은 심사에 인계하며 재실행하지 않았다.
-
 - 현재 receipt: `.reports/u2/validation-source.json` ·71454bytes·SHA256 `12cad3428cafd9cca3fc2b88abe9a37b12121fe711cbf1102f2cda885e183646`. 현재503개 source 파일·lock·도구 identity와 명령별 실제 child 결과/새 artifact를 결합한다.
-- 원래 engine brief: `artifact-history/20261011-before-release-scope/execution-brief.md` ·86132bytes·SHA256 `b0af4ba5a0db8929e5189a101ebc32b33860a1ec20d028a890132db9526d443c`. 새 `execution-brief.md`는 native stdout 원문90188bytes·SHA256 `d69c2716ff9da55a34d83293228e35a243eeafa26b33cc7a1b85613ff0b8c981`이며 notice stderr와 구별해 저장했다. Testing Contract `sha256:13f152f4c3058c2b60200db7b5b96fba74e7d312052a9fb0e92c883f68c5628b`의 test-after·Standard·전체 testable 제품80%/미실행분모를 유지했다.
+- 원래 engine brief: `execution-brief.md` ·86132bytes·SHA256 `b0af4ba5a0db8929e5189a101ebc32b33860a1ec20d028a890132db9526d443c`. Testing Contract `sha256:13f152f4c3058c2b60200db7b5b96fba74e7d312052a9fb0e92c883f68c5628b`의 test-after·Standard·전체 testable 제품80%/미실행분모를 유지했다.
 - native `aidlc engine testing-posture verify --unit u2-identity-enterprise-access`는 exit0/`execution_allowed=true`였다. effective check off/current content continuation이므로 stale binding을 새 사람 승인으로 표현하지 않는다. 초기 승인/receipt·brief는 보존하고 상태/audit/diary/guard를 직접 수정하지 않았다.
 - [source-manifest.json](source-manifest.json)은 strict version1/stage/unit/writes의218개 실제 application byte 변경 경로다. main workspace라 repo는 없다. 무관한 U1·framework·다른 작업자 변경을 claim하지 않는다.
 - [source-write-ledger.json](source-write-ledger.json)은 각 application exact path/before/after hash와 baseline, 현재7188개 ignored report/runtime/Next 생성물의 exact path·bytes·hash inventory를 분리한다. **현재 존재 inventory는 전체 과거 write/delete 이벤트나 작성 주체 증거가 아니다.** 확인된 parent brief 임시파일 삭제·Docker 환경 변경·보고서 덮어쓰기 사건을 별도 event로 기록했다.
@@ -110,7 +108,7 @@ security는 dependency physical bundle+audit/SAST/secret/CDK template/IaC adjudi
 
 [traceability.json](traceability.json)은227AC+31BR+43NFR=301ID를 모두 보존한다. `OK`52개는 단일 존재 구현/시험 파일에 연결된 **U2 local 책임의 직접 증거**다. `Deferred`249개는201협력AC와 실제 외부/업무/UI/운영·보류 검증을 포함하며 원래 owner와 남은 근거를 설명한다. 전체69스토리·301요구 완료율로 해석하지 않는다.26주책임 중 실제 확인 정책/제공자/회사망/전체UI·원본 업무 승인 등이 필요한 조건도 Deferred로 남겼다.
 
-- 부하 시간 하한 FAIL·pilot DR 미실행·expansion100k/50분 Deferred; 첫 배포 범위는2026-10-11 별도 확정됐으며, 전체 Unit 완료·실제 배포와 구분한다.
+- 부하 시간 하한 FAIL·pilot DR 미실행·expansion100k/50분 Deferred; 새로운 첫 배포 기능 범위는 미승인.
 - U1 code review R-01(만료 PUBLISHED), R-02(혼합 SQS poison)는 현재 owning fix/회귀가 있어도 **OPEN**. 과거 review/state를 수정하거나 native finding을 폐쇄하지 않았다.
 - 최초 U1 상세563건 report와 최초 실패 SAST child 상세JSON provenance gap은 **OPEN**. 현재16건 exact bytes/새 baseline/전체 proof/current scanner raw는 원래 상세 원문 복구가 아니다. 외부 백업 존재는 미확인이다.
 - 과거 전체 TOTP 실패의 생성/검증 step·시각과 과거 terminalblocked1의 code는 미관측. 후속 deterministic 재현/current 관측이 과거 누락을 복원하지 않는다. CDP 오류 자체의 원인은 미확정이며 BODY_UNAVAILABLE 의존성 회귀는 실제 UI/MFA/보관 ACK/단회 수락을 대체하지 않는다.

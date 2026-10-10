@@ -16,15 +16,15 @@ Tick each step's box in `aidlc/spaces/default/intents/261004-feature/constructio
 ## 범위와 승인 경계
 
 **Unit:** u2-identity-enterprise-access
-**상태:** 59항목 계획의 P00–P09 구현·직접 시험과 P10 도구/CI/IaC·현재 source 검사를 수행했다. 최신 전체 collector는 부하 구간 시간 하한 미달로 FAIL이다. 사용자의 명시 지시에 따라 부하 측정을 현재 상태로 종료하고 DR는 추후 진행하며 P11 산출물만 정리한다. Unit 완료·위험 수용·실제 배포 승인은 아니다. 첫 배포 범위는2026-10-11 별도 사용자 결정에 연결한다.
+**상태:** 58항목 승인 후 P00–P05의 계층별 구현·시험과 P06 일부를 진행했다. P06 선택 U1 회귀에서 원래 보고서 출력 경로를 덮어쓴 실행 편차를 확인해 추가 source 쓰기·시험을 중지했다. 아래 기존 완료 체크는 실제 검증 상태를 보존하며, 출력 격리 보완을 포함한59항목 계획 재승인을 기다린다.
 **구현 담당:** 개발자 본인, IdentityRecovery/EnterpriseAccess 원본과 기존 호스트의 U2 통합 접점.
 **실행 형태:** library/embedded, U1 의존. 독립 인증 서비스나 추가 AWS 계정을 만들지 않는다.
 
-초기 승인·보완 이후 계약/모델·암호/보호 재구성·현재 권한/범위·초대/소속/역할·당사자 인계/claim·직접/비상 복구/HOLD·완료 conjunction·worker/API/BFF/최소 PC를 구현하고 계층별 검증했다. 현재 source8972b7b0의 전체 coverage·보안/같은 이미지 runtime·PC 결과는 해당 source 증거이며 전체 Unit·성능/DR·출시 완료를 뜻하지 않는다. P10 측정 시간 하한 FAIL·DR 미실행과 P11 독립 review 대기는 아래 실행 결과에 구분한다. 실제 AWS/Cognito/계정/자료·Slack/email·git commit/push/merge는 실행 범위에 포함하지 않는다.
+초기 승인과58항목 보완 승인에 따라 계약/모델·암호/보호 재구성·현재 권한/범위·초대/소속/역할·당사자 인계와 claim 및 P06 접수/검토/HOLD를 부분 구현했다. 묶음별 통과는 중간 측정이며 최종 Unit·전체 현재 source coverage·보안·성능·복원·UI 검증이나 출시 완료를 뜻하지 않는다. 직접 사전 코드의 새 제한 권위·비상/재지정 HOLD·완료 conjunction과 P07–P11 및 남은 이전 계층 연결은 미완료다. 실제 AWS/Cognito/계정/자료·Slack/email·git commit/push/merge는 실행 범위에 포함하지 않는다.
 
 P06에서 tests/u1/unit/identity.spec.ts·identity-browser.spec.ts 선택16/16을 U1 기본 reporter로 실행해 .reports/u1/unit.json을16개 결과로 덮어썼다. 저장소·보고서·검토 기록의 bounded 조사에서는 원래 상세 보고서의 정확 bytes 사본을 찾지 못했다. U1의563/563 요약 및 별도 U2 baseline은 남아 있지만 원래 상세 보고서와 같은 근거로 대체하지 않는다. 손실은 [실행 편차 기록](test-report-isolation-incident.md)에 열린 문제로 유지하고, 현재 파일16/16의6818bytes·SHA256 b0d001e61fb14673305a56307ce38cd5de866f11d2e314826f59817ec4f2e745는 .reports/u2/incidents/u1-unit-overwrite-20261010.json의 base64 payload에 정확히 보존했다. 과거 U1 검토·상태·요약·측정값은 수정하지 않는다. 새 검증은 현재 source로 새 namespace에 수집하며, 과거 상세 report 복구나 전체 U1 재검증 통과로 표현하지 않는다. 외부/개인 백업의 존재는 미확인이다.
 
-59항목 보완 이후 scripts/u2/run-u1-regression.ts가 정확 선택경로·명시된 U2 JSON output·기존 U1 default report의 before/after hash 동일성을 강제하도록 구현·검증했다. 계층별 선택시험은 U2 selected report에 쓰고 전체 run의 canonical report와 분리했다. 현재는 문서 정리만 수행하고 새 source 구현·시험은 재개하지 않는다. Testing Contract와 품질 하한·기존 기능/신뢰 경계는 유지한다.
+재승인 후 scripts/u2/run-u1-regression.ts가 정확 선택경로·명시된 U2 JSON output·기존 U1 default report의 before/after hash 동일성을 강제한다. 새 계층별 선택시험은 U2 selected report에 쓰고 전체 run의 canonical report와 분리한다. 보완 계획 승인 전에는 추가 source 구현·시험을 진행하지 않는다. Testing Contract와 품질 하한·기존 기능/신뢰 경계는 유지한다.
 
 주 책임은 US1.3–US1.10의26AC다. 나머지201AC에는 현재 신원/MFA·행위별 scope·동일인·정보/이력 경계를 제공한다. 전체69스토리/227AC·43NFR의 업무/UI/cloud/운영 실증을 U2 local 합성 결과로 완료 처리하지 않는다. 상품 등록은 내부 직원만, B2B HW/SW와 기존 거래 원본 책임을 유지한다.
 
@@ -380,22 +380,7 @@ ND 상세 상태/인계/ScopeV2는 기존 FD 정의보다 구체화된 후속 �
 
 ## 현재 산출과 다음 확인
 
-현재 source8972b7b0e26cbd9748c9ad80153dd9ecabe90e1ea066b70f421243f40a88d803를 보존한 채 code-summary.md·source-manifest.json·traceability.json·source-write-ledger.json·follow-up-status-20261011.md를 작성했다. 완료 체크는 해당 항목의 구현/직접 시험 또는 실제 문서 작성 근거이며 전체 검증·실제 CI·출시 완료를 뜻하지 않는다. 제품·시험·DB·runtime·새 collector를 변경/실행하지 않았다. 문서 JSON/경로/301ID 확인은 conductor가 Luna에 맡기며 독립 최신 review와 native 완료/후속 결정도 conductor 책임이다. 첫 배포 기능 범위는2026-10-11 “제안 범위로 확정” 결정과 첫 배포 실행 계획을 따른다. 원래 전체 기능 설계/배정과 미완료 판정은 유지한다.
-
-## 2026-10-11 실행 결과와 사용자 보류
-
-- 최신 전체 collector는 source8972b7b0, controller40381/PID80449 exit1이다. U1 unit571/integration168/coverage739, U2 unit449/integration272/coverage721, 전체9246/11518=80.27435318631707%, PC5/5와 check/synth/image/scans/same-image runtime는 통과했다.
-- pilot3900 요청의 기술/정확성/worker failure는0이지만 NORMAL299885.091333ms/300000, RECOVERY119838.427ms/120000, HOLD119882.437041ms/120000의 최소 구간을 충족하지 못했다. PEAK60030.027875ms/60000 통과는 전체 성공이 아니다.
-- U2 first-start58/p95494ms/missing0와 UI/purpose/resource/worker recovery true, ACK782 수집은 실제 관측이다. ACK의 DR 전수 대조·RPO0/RTO30분 실증은 미실행이다.
-- 사람은 부하 측정을 현재 상태로 기록하고 종료하며 DR를 추후 진행하고 최종 산출물 정리부터 진행하도록 지시했다. 따라서 P10 두 실행 항목과 P11 독립 review를 완료 표시하지 않는다. 기준·FAIL 원문·현재 source를 바꾸지 않는다.
-- 기존100k/50분 확장 검증은 Deferred, 두 original provenance gap과 U1 R-01/R-02는 OPEN이다. 첫 배포는2026-10-11 확정된 제한 파일럿 범위와 후속 백로그를 따른다. 이 범위 결정으로 원본 AC 전체·U2 완료나 실패/OPEN 해결을 표시하지 않는다.
-- 상세 근거는 code-summary.md와 execution-failure-duration-20261011.md, 후속 책임은 follow-up-status-20261011.md에 연결한다. 문서 정리는 승인/위험 수용/native completion 또는 reviewer verdict가 아니다.
-
-## 첫 배포 범위 적용 — 2026-10-11
-
-[첫 배포 범위](../../../release-planning/first-release-scope-proposal.md)·[첫 배포 실행 계획](../../../release-planning/first-release-delivery-plan.md)이 첫 배포 대상/순서를 정하며 원본69US/227AC·Unit 소유/의존성은 보존한다. U2 US1.3/1.4/1.6은 필요한 관리 업무를 포함하고 고급 편집/대량 관리 UI는 후속이다. US1.5/1.7/1.8/1.9/1.10의 접근·MFA·복구/관리자 경계와 실제 인증/회사망 준비는 유지한다. 첫 배포에서 사용하는 실제 경로 검증·전체 testable 제품80%/미실행분모·보안·권한·처리 정확성은 낮추지 않는다.
-
-기존10분 측정 시간 하한 FAIL 재실행·100k/50분 확장·재해 RTO/RPO 실증은 첫 배포 필수 검증에서 분리한 후속 작업이다. 기존 P10 targets와 원래 결과는 그대로 남기며 짧은 지원 경로 검증의 정확 규모/기간은 후속 시험 설계 전 미정이다. 지금 새 시험/collector나 성공 체크를 만들지 않는다. 현재 새 HEAD와 원래 proof의 동일 제품 bytes lineage는 code-summary.md에 기록했다.
+위7개 구조 파일의 부분 작성과 U1 baseline 실행 결과를 기록했다. 실패는 skeleton.spec.ts의 mock map 누락이 실제 보존 보고서로 fallback하는 테스트 격리 문제이며 제품 verifier나 보고서를 수정해 통과시키지 않는다. 추가 테스트 파일 보완 범위 때문에 이 계획을 재승인받는다. 현재 추가 source 구현/시험은 중지 상태이며 source-manifest/traceability/code-summary는 실제 전체 변경/검증 후에 생성한다. conductor가 변경 계획·테스트 지침·동일 Testing Contract를 확인하고 원래 PATH aidlc의 native Plan Approval을 제시한다. 승인/receipt를 임의 작성하지 않는다.
 
 ## Current unit-test instructions
 
@@ -403,7 +388,7 @@ ND 상세 상태/인계/ScopeV2는 기존 FD 정의보다 구체화된 후속 �
 
 ## 현재 상태·목적
 
-59항목 계획의 구현/직접 시험과 필수 current-source 검사를 수행했다. 원래 source8972b7b0의 단위/통합·전체 coverage·PC/보안 근거는 [code-summary.md](code-summary.md)에 연결하며, 최종 collector는 부하 구간 시간 하한 FAIL이고 DR는 미실행이다. 출력 격리 실행기는 구현·검증했으나 원래 U1 상세563건 report와 최초 실패 SAST child 상세 원본의 gap 두 건은 OPEN이다. 아래 명령은 등록된 실행/후속 검증 지침이며 이번 문서 정리에서 실행하지 않는다.
+58항목 승인 후 P00–P05와 P06 일부의 구현·묶음별 검증을 진행했으며 최종 전체 검증은 미완료다. P06의 U1 identity/identity-browser 선택16/16 실행이 기본 outputFile을 사용해 .reports/u1/unit.json을 덮어썼다. 원래 상세 report의 정확 사본은 확인한 저장소 범위에서 미복구이며, U1 과거563/563 요약·별도 baseline을 그 사본으로 대체하지 않는다. 현재16개 출력의 정확 bytes·hash는 .reports/u2/incidents/u1-unit-overwrite-20261010.json에 보존했고 [편차 기록](test-report-isolation-incident.md)에 열린 문제로 남긴다. source 쓰기·시험은 중지 상태이며 출력 격리 보완을 포함한59항목 재승인 후 재개한다. 아래 추가 실행기는 아직 구현/시험 전이다.
 
 Unit은 library/embedded이며 API·worker·두 BFF의 실제 local 통합을 시험한다. 테스트는 계획의 Testing Contract(test-after/standard/feature)를 그대로 따른다. 각 계층 구현→그 계층 시험 작성/실행→다음 계층 순서다. 첫 시험 전에 runner/config를 준비한다. component당5–8개 시험을 기본으로 정상+최소두error/edge·명시된 부정/동시/장애·호환 회귀를 추가한다. 테스트가 없는 상태를 pass 처리하거나 중요 통합 시험을 빈 stub/todo로 남기지 않는다.
 
@@ -413,7 +398,7 @@ PART2의 실제 Plan Approval/현재 tool-produced brief 확인 후에만 실행
 
 기존 npm ci에는 postinstall CDK bundle 작업이 있어 읽기전용 명령이 아니다. 계획 단계에는 실행하지 않으며 승인된 구현 환경에서만 현 lock으로 설치한다. PostgreSQL은 기존17.11 pinned image의 **별도 primary·journal 인스턴스/DB권한**를 사용한다. U2용 별도 DB oms_u2_verification/oms_u2_journal_verification, E2E는 oms_u2_e2e/oms_u2_journal_e2e로 분리한다. U1 baseline/원래 대량측정 DB·다른 작업자 DB를 drop/reset하지 않는다. 두 instance의 현재 loopback port15432/25432 및 소유/합성 labels를 검증하고 불확실하면 차단한다.
 
-P00 등록 파일과 원래 실행 설계:
+P00 예정 files:
 - tests/u2/fixtures/databases.ts: OMS_U2_DATABASE_PROFILE=verification-isolated|e2e-isolated만 허용. localSynthetic/loopback·DB명·current owner/합성 profile를 대조한다. 원래 U1 fixture를 U2 reset target으로 직접 재사용하지 않는다.
 - scripts/u2/prepare-test-databases.ts·bootstrap-ci.ts: .runtime/u2/test-databases.env에 한시 합성 credentials를 생성/0600으로 보관, console/artifact에 출력하지 않음. target admission 후 U2 schema/role/migration만 준비한다.
 - tests/u2/fixtures/identity.ts·enterprise.ts·provider.ts·queue.ts·clock.ts·local-service.ts·reset.ts: deterministic fixture/현재 원본·실제 경계의 SDK doubles/로컬 queue, U2 합성 profile only.
@@ -551,7 +536,7 @@ npm run test:u2:recovery
 
 복원은 같은 u2-pilot-v1 규모의 실제 DB 원본과 independent ACK를 사용하여 local process/논리 손상/두 PG 경계의 t0→현재 보안 검증·fresh MFA·실제 HTTP 허용 조회까지30분/RPO0과 소비·회수/epoch를 비교한다. 실제 AWS/AZ/RTO30분·30일99.9%·실제1인 운영/Slack/email 수신·전체 WCAG/브라우저 통과는 이 합성 결과로 종결하지 않는다.
 
-U2 단위 실행의 보고서 경로는 .reports/u2/unit.json·integration.json·coverage.json·coverage/coverage-final.json·coverage/coverage-summary.json·coverage/lcov.info·e2e.json·runtime-security.json·performance.json·recovery.json이다. 전체 check.json·security.json·security-policy.json·release-validation.json과 .reports/project/coverage-aggregate.json은 project-validation이 만드는 별도 근거다. 현재 source/lock/model/schema/config/image/tool/fixture digest·실행 시각/범위·failure/skip/미실행을 묶는다. 기존 U1 보존 측정 원본을 수정하지 않고 새 namespace에 기록한다. 선택 시험/실패 로그와 단위 전체 run·프로젝트 최종 gate를 구분한다.
+U2 단위 실행의 예정 보고서는 .reports/u2/unit.json·integration.json·coverage.json·coverage/coverage-final.json·coverage/coverage-summary.json·coverage/lcov.info·e2e.json·runtime-security.json·performance.json·recovery.json이다. 전체 check.json·security.json·security-policy.json·release-validation.json과 .reports/project/coverage-aggregate.json은 project-validation이 만드는 별도 근거다. 현재 source/lock/model/schema/config/image/tool/fixture digest·실행 시각/범위·failure/skip/미실행을 묶는다. 기존 U1 보존 측정 원본을 수정하지 않고 새 namespace에 기록한다. 선택 시험/실패 로그와 단위 전체 run·프로젝트 최종 gate를 구분한다.
 
 ## 수락 추적·실패 처리·후속 인계
 
@@ -563,10 +548,4 @@ U2 단위 실행의 보고서 경로는 .reports/u2/unit.json·integration.json�
 
 ## Sources
 
-[code-generation-plan.md](code-generation-plan.md)의 Testing Contract와 P00–P11, SD01–12/SV01–08·LC02–09·IP01–08 및 기능 trace가 시험 원본이다. 기존 실제 명령/설정은 package.json·tests/u1/vitest.*.config.ts·playwright.config.ts·scripts/u1/check.ts/security.ts·.github/workflows/u1-validation.yml을 읽어 대조했다. 등록·실행한 U2 runner/config/시험/명령의 실제 source별 결과는 code-summary.md와 원래 receipt를 따른다. 미실행 DR/release·실제 외부 검증을 통과로 표현하지 않는다. 프로젝트 전체 검증의 명령·집계 책임은 [계획의 project-validation](code-generation-plan.md#project-validation)과 향후 docs/u2/verification.md에 있다.
-
-## 첫 배포와 후속 검증의 구분 — 2026-10-11
-
-사용자가 “제안 범위로 확정”으로 답한 [첫 배포 범위](../../../release-planning/first-release-scope-proposal.md)·[첫 배포 실행 계획](../../../release-planning/first-release-delivery-plan.md)을 적용한다. 고객사10곳 이내 제한 파일럿에서 필요한 접근/관리·MFA·복구 경계는 유지하고 고급 관리 UI/대량 편의는 후속이다. 원본26주책임AC/협력201AC 전체의 완료와 첫 배포 적용 부분을 구별한다.
-
-기존10분 측정 시간 하한 FAIL의 재실행·100k/50분 확장·재해 RTO30분/RPO0 실증은 후속이다. 위 기존 수집 명령/targets는 원래 검증과 후속 재개 지침이며 현재 자동 실행 또는 첫 배포 필수 장기 묶음으로 해석하지 않는다. 짧은 지원 경로 종합 검증의 정확 규모/기간은 후속 설계 전 미정이다. 전체80%/미실행분모·필수 보안·권한/정확성/ACK 조건을 낮추거나 과거 FAIL/미실행을 PASS로 바꾸지 않는다. 이번 수정은 문서 연결만이며 제품/시험/DB/collector를 재개하지 않는다.
+[code-generation-plan.md](code-generation-plan.md)의 Testing Contract와 P00–P11, SD01–12/SV01–08·LC02–09·IP01–08 및 기능 trace가 시험 원본이다. 기존 실제 명령/설정은 package.json·tests/u1/vitest.*.config.ts·playwright.config.ts·scripts/u1/check.ts/security.ts·.github/workflows/u1-validation.yml을 읽어 대조했다. 현재 U2 runner/config/시험/명령을 등록·실행했다고 주장하지 않는다. 프로젝트 전체 검증의 명령·집계 책임은 [계획의 project-validation](code-generation-plan.md#project-validation)과 향후 docs/u2/verification.md에 있다.
