@@ -617,6 +617,10 @@ function isPlanApprovalPrerequisite(args: string[]): boolean {
 
   const noun = args[1];
   const verb = args[2];
+
+if (noun === "state" && verb === "unit" && args[3] === "start") {
+  return true;
+}
   // The conductor re-enters through next on each human turn, and continue
   // delivers the remaining stage rules. Requiring approval for that transport
   // traps installations before they can finish presenting or answering it.
