@@ -50176,3 +50176,190 @@
 **Context**: construction > u3-commercial-ordering > code-generation > catalog-verification-20261012.md
 
 ---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:30:09Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 첫 계약 slice 작성과 포맷을 마치고 소스 쓰기를 중지했습니다. 시험은 실행하지 않았으며 Step11·12는 미체크입니다.\n\n현재 구현은 계약 등록·새 개정 초안, 정확한 다른 사람 승인, 충돌 차단, 기업 조건 우선 해석입니다. 일반 호출은 `UNREGISTERED`로 차단합니다. 기존 U2 Major를 해결했다고 표시하지 않았습니다.\n\n제안·동의·수
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:31:41Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Contract slice 검사 결과입니다.\n\n- TypeScript: 종료 코드 0\n- U3 unit: 150/150 통과, `success: true`\n- Catalog 및 commercial-agreement integration: Catalog 10개 통과, commercial-agreement 10개 실패. 공통 setup에서 [enterprise
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T17:33:17Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/agreement-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > agreement-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:33:52Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: fixture와 lint 수정은 완료했습니다. 반복 bootstrap은 현재 `StaffAuthorityFence`를 읽고 정확한 예상 개정으로 증가시킵니다. 모델 검증은 유지했습니다.\n\n실제 owner 포트는 서버 생성자에 `REGISTERED_OWNER`를 명시 등록하고, 보호된 원본 검사 뒤 owner 콜백의 정확한 대상·개정·목적·내용 지문 결합을 
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:46:14Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 수정·포맷을 완료하고 소스 쓰기를 중지했습니다. 시험은 실행하지 않았습니다.\n\n서버 등록 real owner의 정확한 근거 결합과 동일 namespace의 비식별 person key를 검증합니다. 일반 호출은 미등록, 운영의 local 합성 등록은 차단합니다. 승인 전체와 콜백에 남은 실행 예산을 적용했습니다. mocked owner 시험은 실제 운영 증명
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T17:47:40Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/agreement-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > agreement-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:48:17Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Agreement owner-port slice 검사 결과입니다.\n\n- TypeScript: 종료 코드 0\n- U3 unit: 164/164 통과, `success: true`\n- U3 agreement 및 owner-port integration: 15개 모두 실패, `success: false`. 공통 setup에서 [agreement.ts](/User
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T17:49:54Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/agreement-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > agreement-verification-20261012.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T17:56:37Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/agreement-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > agreement-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:58:50Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 수정·포맷을 완료하고 소스 쓰기를 중지했습니다. 시험은 실행하지 않았습니다.\n\n원인은 `VerifiedPersonLink.evidenceRefs`의 `/0/entity` enum입니다. legacy 참조에는 U2 `VerificationEvidence`가 허용되지 않습니다. 기존 `IdentityHistory` anchor로 정확한 link/check·확인
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T18:00:39Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: History-anchor 수정 후 검증 결과입니다.\n\n- TypeScript: 종료 코드 0\n- U3 unit: 164/164 통과, `success: true`\n- Agreement/owner-port integration: 15개 모두 실패, `success: false`. 모두 runtime schema validation에서 `INVALID_INP
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T18:03:57Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/agreement-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > agreement-verification-20261012.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T18:04:16Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/agreement-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > agreement-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T18:08:51Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 수정·포맷을 완료하고 소스 쓰기를 중지했습니다. 시험은 실행하지 않았습니다.\n\n실패는 `/agreementEvidenceRefs/0/entity`와 `/conditions/0/evidenceRefs/0/entity`의 enum 불일치였습니다. U3 참조만 등록된 U2 폐쇄 목록에 연결했고, 구형 common/U2 계약은 유지했습니다. 실제 registry3
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T18:10:29Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: 입력·Ref 정렬 검증 결과입니다.\n\n- TypeScript: 종료 코드 0\n- U3 unit: 171/171 통과, `success: true`\n- Agreement/owner-port integration: 15개 모두 실패, `success: false`. 공통 원인은 `U3Transaction.current`가 현재 원본의 보호 bytes 확인을 거
+
+---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T18:15:42Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T18:16:38Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/agreement-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > agreement-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T18:21:12Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 비교 경계 수정과 시험 작성을 마치고 소스 쓰기를 중지했습니다.\n\n- 등록된 선택·nullable 필드의 NULL/생략만 비교용 복사본에서 정규화합니다.\n- 원본 bytes·반환값·필수 필드·버전·출처 메타데이터는 보존합니다.\n- 동등 표현과 참조·버전·메타데이터 변조 거절 시험을 추가했습니다.\n\nLuna용 정확 명령과 새 보고서 경로를 전달했습니다. 시험
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T18:23:09Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Comparison-only current-image 정규화 검증이 모두 통과했습니다.\n\n- U3 unit: 184/184 통과\n- Agreement/owner-port integration: 15/15 통과\n- Repository regression: 22/22 통과\n- TypeScript와 ESLint: 종료 코드 0\n\n세 JSON 보고서 모두 `suc
+
+---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T18:24:27Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T18:28:28Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/agreement-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > agreement-verification-20261012.md
+
+---

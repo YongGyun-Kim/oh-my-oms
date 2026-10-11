@@ -22,6 +22,8 @@ export * from './external-policy.js';
 export * from './identity-browser.js';
 export * from './enterprise-organisation.js';
 export * from './catalog-query.js';
+export * from './commercial-agreement.js';
+export * from './u3-current-basis.js';
 export * from './enterprise-query.js';
 export * from './history-query.js';
 

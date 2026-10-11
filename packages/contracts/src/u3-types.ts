@@ -57,6 +57,23 @@ export interface U3AgreementInput {
   renewalTermsRef: Ref | null;
   agreementEvidenceRefs: Ref[];
 }
+export interface U3AgreementRegistrationInput extends U3AgreementInput {
+  contractRef: Ref | null;
+  effectiveWindow: EffectiveWindow;
+  conditions: CommonConditionDraft[];
+}
+export interface U3CommercialTermsQuery {
+  targetScope: TargetScope;
+  productRef: Ref;
+  commonOfferRevisionRef: Ref;
+}
+export interface U3ResolvedCommercialTerms {
+  enterpriseRef: Ref;
+  productRef: Ref;
+  commonOfferRevisionRef: Ref;
+  agreementRevisionRefs: Ref[];
+  conditionBindings: ConditionBinding[];
+}
 export interface U3AgreementApprovalInput {
   meta: CommandMeta;
   targetRef: Ref;

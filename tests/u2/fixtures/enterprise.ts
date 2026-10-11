@@ -119,11 +119,16 @@ export async function seedU2Enterprise(store: ProtectedStore) {
         grantedBy: staff.actorAccountRef,
         revision: 1,
       });
-      await tx.put('StaffAuthorityFence', {
-        fenceId: U2_STAFF_FENCE_ID,
-        authorityRevision: 1,
-        revision: 1,
-      });
+      const currentFence = await tx.get('StaffAuthorityFence', U2_STAFF_FENCE_ID);
+      await tx.put(
+        'StaffAuthorityFence',
+        {
+          fenceId: U2_STAFF_FENCE_ID,
+          authorityRevision: Number(currentFence?.authorityRevision ?? 0) + 1,
+          revision: Number(currentFence?.revision ?? 0) + 1,
+        },
+        currentFence ? Number(currentFence.revision) : null,
+      );
     },
   );
   const access = new EnterpriseAccess(store, new SyntheticEnterpriseVerification(), now, true);

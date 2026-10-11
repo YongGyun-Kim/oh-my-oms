@@ -3,6 +3,100 @@
   "$id": "urn:oms:contract:u3-commercial:2",
   "title": "U3 commercial profile revision 2 — registry version 3; common 1/2 preserved",
   "$defs": {
+    "AgreementRegistrationInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommandMeta" },
+        "enterpriseRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope/properties/enterpriseRef"
+        },
+        "productRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AgreementInput/allOf/1/properties/productRefs"
+        },
+        "commercialTermsRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef" },
+        "provisionTermsRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef" },
+        "renewalTermsRef": {
+          "anyOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef" },
+            { "type": "null" }
+          ]
+        },
+        "agreementEvidenceRefs": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs" },
+        "contractRef": {
+          "anyOf": [
+            {
+              "allOf": [
+                { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+                {
+                  "properties": {
+                    "owner": { "const": "CommercialAgreement" },
+                    "entity": { "const": "EnterpriseContract" }
+                  }
+                }
+              ]
+            },
+            { "type": "null" }
+          ]
+        },
+        "effectiveWindow": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/EffectiveWindow" },
+        "conditions": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommonOfferDraft/properties/conditions"
+        }
+      },
+      "required": [
+        "meta",
+        "enterpriseRef",
+        "productRefs",
+        "commercialTermsRef",
+        "provisionTermsRef",
+        "renewalTermsRef",
+        "agreementEvidenceRefs",
+        "contractRef",
+        "effectiveWindow",
+        "conditions"
+      ],
+      "additionalProperties": false
+    },
+    "CommercialTermsQuery": {
+      "type": "object",
+      "properties": {
+        "targetScope": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope" },
+        "productRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderLineInput/properties/productRef"
+        },
+        "commonOfferRevisionRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderLineInput/properties/commonOfferRevisionRef"
+        }
+      },
+      "required": ["targetScope", "productRef", "commonOfferRevisionRef"],
+      "additionalProperties": false
+    },
+    "ResolvedCommercialTerms": {
+      "type": "object",
+      "properties": {
+        "enterpriseRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope/properties/enterpriseRef"
+        },
+        "productRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderLineInput/properties/productRef"
+        },
+        "commonOfferRevisionRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderLineInput/properties/commonOfferRevisionRef"
+        },
+        "agreementRevisionRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AgreementRefs"
+        },
+        "conditionBindings": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBindings" }
+      },
+      "required": [
+        "enterpriseRef",
+        "productRef",
+        "commonOfferRevisionRef",
+        "agreementRevisionRefs",
+        "conditionBindings"
+      ],
+      "additionalProperties": false
+    },
     "RecoverySecurityObservation": {
       "type": "object",
       "properties": {
@@ -563,7 +657,7 @@
     "Ref": {
       "allOf": [
         {
-          "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
         },
         {
           "type": "object",
@@ -1588,46 +1682,31 @@
       ]
     },
     "AgreementApprovalInput": {
-      "allOf": [
-        {
-          "$ref": "urn:oms:contract:common:2#/$defs/DecisionInput"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "meta": {
-              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/MutationMeta"
-            },
-            "targetRef": {
-              "allOf": [
-                {
-                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "owner": {
-                      "const": "CommercialAgreement"
-                    },
-                    "entity": {
-                      "enum": ["AgreementRevision"]
-                    }
-                  }
-                }
-              ]
-            },
-            "basisRefs": {
-              "type": "array",
-              "items": {
-                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
-              },
-              "minItems": 1,
-              "maxItems": 100,
-              "uniqueItems": true
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/MutationMeta" },
+        "targetRef": {
+          "allOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+            {
+              "properties": {
+                "owner": { "const": "CommercialAgreement" },
+                "entity": { "const": "AgreementRevision" }
+              }
             }
-          }
+          ]
+        },
+        "decision": { "enum": ["APPROVE", "DECLINE"] },
+        "basisRefs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" }
         }
-      ]
+      },
+      "required": ["meta", "targetRef", "decision", "basisRefs"],
+      "additionalProperties": false
     },
     "ContractChangeInput": {
       "allOf": [

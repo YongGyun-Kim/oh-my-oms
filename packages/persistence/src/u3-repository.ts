@@ -8,7 +8,13 @@ import {
 import type { Ref } from '@oms/contracts';
 import type { CommitResult, ProtectedStore, WriteRequest } from './protected-store.js';
 import type { ProtectedTransaction } from './protected-transaction.js';
-import { modelDefinition, rowModelVersion, type ModelData } from './model-catalog.js';
+import {
+  modelDefinition,
+  modelForData,
+  rowModelVersion,
+  validateModel,
+  type ModelData,
+} from './model-catalog.js';
 import { U3_MODELS } from './u3-model-catalog.js';
 import { validateU3RecoveryImage } from './u3-recovery-payload.js';
 
@@ -27,6 +33,36 @@ const sharedModels = new Set([
 const revision = (row: ModelData) =>
   Number(row.revision ?? row.aggregateVersion ?? row.sourceRevision ?? row.sourceVersion);
 
+// DB NULL과 보호 원본의 생략은 등록된 선택·nullable 필드에서만 동등하다.
+// 원본 검증 후 비교용 복사본만 정규화하며 보호 bytes와 반환값은 보존한다.
+function sameCurrentImage(
+  repository: U3Repository,
+  model: string,
+  left: ModelData,
+  right: ModelData,
+): boolean {
+  const comparable = (image: ModelData) => {
+    validateModel(model, image, repository.store.schema);
+    const definition = modelForData(model, image);
+    const nullableOptional = new Set(
+      definition.attributes
+        .filter(
+          (attribute) =>
+            !attribute.required &&
+            attribute.nullable === true &&
+            !['modelVersion', 'sourceContract'].includes(attribute.name),
+        )
+        .map((attribute) => attribute.name),
+    );
+    return Object.fromEntries(
+      Object.entries(image).filter(
+        ([name, value]) => !nullableOptional.has(name) || (value !== null && value !== undefined),
+      ),
+    );
+  };
+  return canonicalJson(comparable(left)) === canonicalJson(comparable(right));
+}
+
 // A scope is private to one primary transaction; concurrent callers never share premises.
 export class U3Transaction {
   private readonly premises = new Map<string, { reference: Ref; data: ModelData }>();
@@ -38,7 +74,7 @@ export class U3Transaction {
     const visible = await this.repository.current(reference);
     const raw = await this.transaction.get(reference.entity, reference.id);
     requireCondition(
-      raw && canonicalJson(raw) === canonicalJson(visible),
+      raw && sameCurrentImage(this.repository, reference.entity, raw, visible),
       503,
       'CURRENT_U3_NOT_PROTECTED',
       '현재 원본의 보호 bytes를 확인해야 합니다.',
@@ -46,7 +82,7 @@ export class U3Transaction {
     const key = reference.entity + '/' + reference.id;
     const previous = this.premises.get(key);
     requireCondition(
-      !previous || canonicalJson(previous.data) === canonicalJson(visible),
+      !previous || sameCurrentImage(this.repository, reference.entity, previous.data, visible),
       409,
       'U3_PREMISE_CHANGED',
       '같은 판단의 원본 전제가 변경됐습니다.',
@@ -61,7 +97,7 @@ export class U3Transaction {
     for (const { reference, data } of this.premises.values()) {
       const visible = await this.repository.current(reference);
       requireCondition(
-        canonicalJson(visible) === canonicalJson(data),
+        sameCurrentImage(this.repository, reference.entity, visible, data),
         409,
         'U3_PREMISE_CHANGED',
         '원래 판단 전제의 보호 개정이 변경됐습니다.',
@@ -71,7 +107,9 @@ export class U3Transaction {
         .rows()
         .find((row) => row.model === reference.entity && row.id === reference.id);
       requireCondition(
-        raw && !written?.deleted && canonicalJson(raw) === canonicalJson(written?.data ?? data),
+        raw &&
+          !written?.deleted &&
+          sameCurrentImage(this.repository, reference.entity, raw, written?.data ?? data),
         503,
         'CURRENT_U3_NOT_PROTECTED',
         '현재 원본 또는 예정된 변경과 일치하지 않습니다.',
