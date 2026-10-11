@@ -34,10 +34,10 @@ HTTP 라우트가 서버측으로 정확한 U3 등록 버전을 선택하며 클
 
 각 테스트 가능한 계층을 구현한 다음 해당 계층의 시험을 작성·실행한다. 아래 원본 Testing Contract가 순서/품질의 기준이다. 새 테스트 설정은 첫 실행 전에 준비하며 초기 승인은 이 계획/지침을 함께 묶는다.
 
-- [ ] **Step 1 — 현재 기준·source inventory 준비.** 변경 영향과 구형 원본/등록 경계를 고정한다. 승인 뒤 기존 관련 U1/U2 정상·권한·호스트/저장 회귀의 현재 baseline을 기록한다. 대량 부하/전체 DR collector는 실행하지 않는다. 기존 FAIL/미실행은 보존한다.
-- [ ] **Step 2 — U3 runner·격리 fixture 준비.** tests/u3의 Vitest unit/integration/coverage 설정과 로컬 전용 DB/profile·clock/queue/기업/직원/근거 fixture를 준비한다. 아래 지침의 정확 명령을 등록하고 passWithNoTests:false·DB 이름/로컬 admission을 확인한다. 다른 프로젝트/실제 DB를 reset하지 않는다.
-- [ ] **Step 3 — v2 profile·값/등록 계약 구현.** 새로운 profile/schema·타입/operations에 TargetScope·닫힌 Ref·조건별 모든 계약 개정·Money/Period·100행·두 changeKind를 반영한다. 현재 schema/등록 :2를 같은 ID로 덮어쓰지 않고 서버측 :3 연결을 정의한다.
-- [ ] **Step 4 — 계약/값 시험 후 실행.** closed input/producer·unknown owner/entity/field·wrong version/target/null·enum 대응·정수/범위·100행·조건 합집합·구/신 schema 구분을 독립 검사한다.
+- [x] **Step 1 — 현재 기준·source inventory 준비.** 변경 영향과 구형 원본/등록 경계를 고정한다. 승인 뒤 기존 관련 U1/U2 정상·권한·호스트/저장 회귀의 현재 baseline을 기록한다. 대량 부하/전체 DR collector는 실행하지 않는다. 기존 FAIL/미실행은 보존한다.
+- [x] **Step 2 — U3 runner·격리 fixture 준비.** tests/u3의 Vitest unit/integration/coverage 설정과 로컬 전용 DB/profile·clock/queue/기업/직원/근거 fixture를 준비한다. 아래 지침의 정확 명령을 등록하고 passWithNoTests:false·DB 이름/로컬 admission을 확인한다. 다른 프로젝트/실제 DB를 reset하지 않는다.
+- [x] **Step 3 — v2 profile·값/등록 계약 구현.** 새로운 profile/schema·타입/operations에 TargetScope·닫힌 Ref·조건별 모든 계약 개정·Money/Period·100행·두 changeKind를 반영한다. 현재 schema/등록 :2를 같은 ID로 덮어쓰지 않고 서버측 :3 연결을 정의한다.
+- [x] **Step 4 — 계약/값 시험 후 실행.** closed input/producer·unknown owner/entity/field·wrong version/target/null·enum 대응·정수/범위·100행·조건 합집합·구/신 schema 구분을 독립 검사한다.
 - [ ] **Step 5 — 영속 모델·migration·보호 decoder 구현.** 논리 18엔티티/값 객체를 단일 current 모델·제약/인덱스·구형 version decoding에 매핑한다. 새 모델/필드의 원본/보호 후보·복구 대조·DB 역할 경계를 연결한다.
 - [ ] **Step 6 — 모델/migration 시험 후 실행.** 신규/구형 원본·정확 금액/기간·unknown field·누락·외래 대상/개정·이력 보존·명시 DDL/최소 역할·같은 모델 중복 등록·구형 미확인 승격 차단을 격리 DB에서 검증한다.
 - [ ] **Step 7 — U3 repository/현재 전제 구현.** 기존 보호 쓰기와 같은 primary transaction 안에 원본/전체 행·스냅샷/결과/이력/Outbox·요청 식별을 기록한다. 현재 권한/근거/개정 전후 대조·별도 보호 ack·원래 결과 조회를 연결한다.

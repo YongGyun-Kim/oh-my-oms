@@ -14,6 +14,11 @@
     "infra/cdk"
   ],
   "scripts": {
+    "test:u3:unit": "vitest run --config tests/u3/vitest.unit.config.ts",
+    "test:u3:integration": "OMS_U3_DATABASE_PROFILE=verification-isolated vitest run --config tests/u3/vitest.integration.config.ts",
+    "test:u3:coverage": "OMS_U3_DATABASE_PROFILE=verification-isolated vitest run --config tests/u3/vitest.coverage.config.ts --coverage",
+    "pretest:u3:integration": "node --import tsx scripts/u3/prepare-test-databases.ts",
+    "pretest:u3:coverage": "node --import tsx scripts/u3/prepare-test-databases.ts",
     "test:u2:unit": "vitest run --config tests/u2/vitest.unit.config.ts",
     "test:u2:integration": "OMS_U2_DATABASE_PROFILE=verification-isolated vitest run --config tests/u2/vitest.integration.config.ts",
     "test:u2:coverage": "OMS_U2_DATABASE_PROFILE=verification-isolated vitest run --config tests/u2/vitest.coverage.config.ts --coverage",

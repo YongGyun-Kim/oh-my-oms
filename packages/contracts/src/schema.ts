@@ -5,6 +5,7 @@ import type { FormatsPlugin } from 'ajv-formats';
 import type { AnySchema, ValidateFunction } from 'ajv';
 import { OmsError } from './errors.js';
 import { canonicalJson } from './canonical.js';
+import { validateU3Semantics } from './u3-validation.js';
 
 const BASE = 'urn:oms:contract:common:2';
 // ajv-formats ships CommonJS; use the documented plugin interface across NodeNext interop.
@@ -33,6 +34,11 @@ export class SchemaValidator {
     this.ajv.addSchema(
       JSON.parse(
         readFileSync(new URL('../schemas/u2-access-additions-v1.json', import.meta.url), 'utf8'),
+      ) as AnySchema,
+    );
+    this.ajv.addSchema(
+      JSON.parse(
+        readFileSync(new URL('../schemas/u3-commercial-v2.json', import.meta.url), 'utf8'),
       ) as AnySchema,
     );
   }
@@ -68,6 +74,8 @@ export class SchemaValidator {
     this.compiled.set(uri, validator);
     if (!validator(data))
       throw new OmsError(400, 'INVALID_INPUT', '등록된 계약과 다른 입력입니다.');
+    if (uri.startsWith('urn:oms:contract:u3-commercial:2#/$defs/'))
+      validateU3Semantics(uri.slice(uri.lastIndexOf('/') + 1), data);
     return data as T;
   }
 }

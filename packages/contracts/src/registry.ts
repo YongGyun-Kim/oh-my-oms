@@ -9,6 +9,7 @@ import type {
 import { OmsError, requireCondition } from './errors.js';
 import { SchemaValidator } from './schema.js';
 import type { U2PurposeContext, U2PrivateOperatorContext } from './u2-types.js';
+import { U3_PROFILE, U3_REGISTRY_VERSION } from './u3-declarations.js';
 
 export interface Operation {
   owner: string;
@@ -40,6 +41,17 @@ export class OperationRegistry {
   private readonly handlers = new Map<string, Handler>();
   constructor(private readonly validator: SchemaValidator) {}
   declare(operation: Operation): void {
+    if (
+      operation.contract === 'u3-commercial' ||
+      operation.input.startsWith(U3_PROFILE) ||
+      operation.output.startsWith(U3_PROFILE)
+    )
+      requireCondition(
+        operation.contract === 'u3-commercial' && operation.version === U3_REGISTRY_VERSION,
+        503,
+        'CONTRACT_VERSION_MISMATCH',
+        'U3 profile 개정2는 별도 registry version3으로 등록해야 합니다.',
+      );
     const key = this.key(operation.owner, operation.name, operation.version);
     requireCondition(
       !this.operations.has(key),

@@ -1,0 +1,15 @@
+import { defineConfig } from 'vitest/config';
+import { assertU3DatabaseProfile } from './fixtures/databases.js';
+
+assertU3DatabaseProfile();
+export default defineConfig({
+  test: {
+    include: ['tests/u3/integration/**/*.spec.ts'],
+    testTimeout: 30000,
+    hookTimeout: 30000,
+    fileParallelism: false,
+    passWithNoTests: false,
+    reporters: ['default', 'json'],
+    outputFile: '.reports/u3/integration.json',
+  },
+});

@@ -1,0 +1,2003 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:u3-commercial:2",
+  "title": "U3 commercial profile revision 2 — registry version 3; common 1/2 preserved",
+  "$defs": {
+    "Id": {
+      "$ref": "urn:oms:contract:common:2#/$defs/Id"
+    },
+    "Revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "Ref": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          }
+        }
+      ]
+    },
+    "Refs": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+      },
+      "minItems": 0,
+      "maxItems": 1000,
+      "uniqueItems": true
+    },
+    "Money": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "const": "KRW"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 4096
+        }
+      },
+      "required": ["currency", "value"],
+      "additionalProperties": false
+    },
+    "Period": {
+      "$ref": "urn:oms:contract:common:2#/$defs/Period"
+    },
+    "Evidence": {
+      "$ref": "urn:oms:contract:common:2#/$defs/Evidence"
+    },
+    "ServiceContext": {
+      "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+    },
+    "InvocationTarget": {
+      "$ref": "urn:oms:contract:common:2#/$defs/InvocationTarget"
+    },
+    "CommandMeta": {
+      "type": "object",
+      "properties": {
+        "clientRequestId": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Id"
+        },
+        "expectedRevision": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Revision"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "evidenceRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        }
+      },
+      "required": ["clientRequestId", "expectedRevision", "reason", "evidenceRefs"],
+      "additionalProperties": false
+    },
+    "MutationMeta": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommandMeta"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "expectedRevision": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Revision"
+            }
+          }
+        }
+      ]
+    },
+    "TargetScope": {
+      "type": "object",
+      "properties": {
+        "enterpriseRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "enum": ["Enterprise"]
+                }
+              }
+            }
+          ]
+        },
+        "departmentRef": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "EnterpriseAccess"
+                    },
+                    "entity": {
+                      "enum": ["Department"]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "siteRef": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "EnterpriseAccess"
+                    },
+                    "entity": {
+                      "enum": ["BusinessSite"]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contextPolicyRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "enum": ["Enterprise"]
+                }
+              }
+            }
+          ]
+        },
+        "organisationRevision": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Revision"
+        }
+      },
+      "required": [
+        "enterpriseRef",
+        "departmentRef",
+        "siteRef",
+        "contextPolicyRef",
+        "organisationRevision"
+      ],
+      "additionalProperties": false
+    },
+    "EffectiveWindow": {
+      "type": "object",
+      "properties": {
+        "startAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "endAt": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "startInclusive": {
+          "type": "boolean"
+        },
+        "endInclusive": {
+          "type": "boolean"
+        }
+      },
+      "required": ["startAt", "endAt", "startInclusive", "endInclusive"],
+      "additionalProperties": false
+    },
+    "TermsRef": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "ProductCatalog"
+                },
+                "entity": {
+                  "enum": ["CommonOfferRevision"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "CommercialAgreement"
+                },
+                "entity": {
+                  "enum": ["AgreementRevision", "AgreementHistory", "CommercialProposal"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "AgreementRefs": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "owner": {
+                "const": "CommercialAgreement"
+              },
+              "entity": {
+                "enum": ["AgreementRevision"]
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 1000,
+      "uniqueItems": true
+    },
+    "ConditionBinding": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "conditionKey": {
+              "const": "PRICE"
+            },
+            "sourceRef": {
+              "oneOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "ProductCatalog"
+                        },
+                        "entity": {
+                          "enum": ["CommonOfferRevision"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "CommercialAgreement"
+                        },
+                        "entity": {
+                          "enum": ["AgreementRevision", "AgreementHistory"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
+            },
+            "effectiveWindow": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/EffectiveWindow"
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+              },
+              "minItems": 1,
+              "maxItems": 100,
+              "uniqueItems": true
+            }
+          },
+          "required": ["conditionKey", "sourceRef", "value", "effectiveWindow", "evidenceRefs"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "conditionKey": {
+              "const": "PAYMENT"
+            },
+            "sourceRef": {
+              "oneOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "ProductCatalog"
+                        },
+                        "entity": {
+                          "enum": ["CommonOfferRevision"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "CommercialAgreement"
+                        },
+                        "entity": {
+                          "enum": ["AgreementRevision", "AgreementHistory"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "enum": ["PREPAY", "POSTPAY"]
+                },
+                "termsRef": {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+                }
+              },
+              "required": ["mode", "termsRef"],
+              "additionalProperties": false
+            },
+            "effectiveWindow": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/EffectiveWindow"
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+              },
+              "minItems": 1,
+              "maxItems": 100,
+              "uniqueItems": true
+            }
+          },
+          "required": ["conditionKey", "sourceRef", "value", "effectiveWindow", "evidenceRefs"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "conditionKey": {
+              "const": "PROVISION"
+            },
+            "sourceRef": {
+              "oneOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "ProductCatalog"
+                        },
+                        "entity": {
+                          "enum": ["CommonOfferRevision"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "CommercialAgreement"
+                        },
+                        "entity": {
+                          "enum": ["AgreementRevision", "AgreementHistory"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "type": "object",
+              "properties": {
+                "choice": {
+                  "const": "FULL"
+                },
+                "termsRef": {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+                }
+              },
+              "required": ["choice", "termsRef"],
+              "additionalProperties": false
+            },
+            "effectiveWindow": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/EffectiveWindow"
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+              },
+              "minItems": 1,
+              "maxItems": 100,
+              "uniqueItems": true
+            }
+          },
+          "required": ["conditionKey", "sourceRef", "value", "effectiveWindow", "evidenceRefs"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "conditionKey": {
+              "const": "PERIOD"
+            },
+            "sourceRef": {
+              "oneOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "ProductCatalog"
+                        },
+                        "entity": {
+                          "enum": ["CommonOfferRevision"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "CommercialAgreement"
+                        },
+                        "entity": {
+                          "enum": ["AgreementRevision", "AgreementHistory"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Period"
+            },
+            "effectiveWindow": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/EffectiveWindow"
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+              },
+              "minItems": 1,
+              "maxItems": 100,
+              "uniqueItems": true
+            }
+          },
+          "required": ["conditionKey", "sourceRef", "value", "effectiveWindow", "evidenceRefs"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "conditionKey": {
+              "const": "COMPLETION"
+            },
+            "sourceRef": {
+              "oneOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "ProductCatalog"
+                        },
+                        "entity": {
+                          "enum": ["CommonOfferRevision"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "CommercialAgreement"
+                        },
+                        "entity": {
+                          "enum": ["AgreementRevision", "AgreementHistory"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+            },
+            "effectiveWindow": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/EffectiveWindow"
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+              },
+              "minItems": 1,
+              "maxItems": 100,
+              "uniqueItems": true
+            }
+          },
+          "required": ["conditionKey", "sourceRef", "value", "effectiveWindow", "evidenceRefs"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "conditionKey": {
+              "const": "RENEWAL"
+            },
+            "sourceRef": {
+              "oneOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "ProductCatalog"
+                        },
+                        "entity": {
+                          "enum": ["CommonOfferRevision"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "CommercialAgreement"
+                        },
+                        "entity": {
+                          "enum": ["AgreementRevision", "AgreementHistory"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+            },
+            "effectiveWindow": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/EffectiveWindow"
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+              },
+              "minItems": 1,
+              "maxItems": 100,
+              "uniqueItems": true
+            }
+          },
+          "required": ["conditionKey", "sourceRef", "value", "effectiveWindow", "evidenceRefs"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "conditionKey": {
+              "const": "VISIBILITY"
+            },
+            "sourceRef": {
+              "oneOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "ProductCatalog"
+                        },
+                        "entity": {
+                          "enum": ["CommonOfferRevision"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "CommercialAgreement"
+                        },
+                        "entity": {
+                          "enum": ["AgreementRevision", "AgreementHistory"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "type": "boolean"
+            },
+            "effectiveWindow": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/EffectiveWindow"
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+              },
+              "minItems": 1,
+              "maxItems": 100,
+              "uniqueItems": true
+            }
+          },
+          "required": ["conditionKey", "sourceRef", "value", "effectiveWindow", "evidenceRefs"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ConditionBindings": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding"
+      },
+      "minItems": 0,
+      "maxItems": 100,
+      "uniqueItems": true
+    },
+    "ProductInput": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/ProductInput"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommandMeta"
+            },
+            "commonPrice": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
+            },
+            "salesConditionRefs": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+            }
+          }
+        }
+      ]
+    },
+    "ProductView": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/ProductView"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "commonPrice": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
+            },
+            "resolvedPrice": {
+              "anyOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "AgreementInput": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/AgreementInput"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommandMeta"
+            },
+            "enterpriseRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "EnterpriseAccess"
+                    },
+                    "entity": {
+                      "enum": ["Enterprise"]
+                    }
+                  }
+                }
+              ]
+            },
+            "productRefs": {
+              "type": "array",
+              "items": {
+                "allOf": [
+                  {
+                    "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "owner": {
+                        "const": "ProductCatalog"
+                      },
+                      "entity": {
+                        "enum": ["Product"]
+                      }
+                    }
+                  }
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 100,
+              "uniqueItems": true
+            },
+            "commercialTermsRef": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+            },
+            "provisionTermsRef": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+            },
+            "renewalTermsRef": {
+              "anyOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "agreementEvidenceRefs": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+            }
+          }
+        }
+      ]
+    },
+    "AgreementApprovalInput": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/DecisionInput"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/MutationMeta"
+            },
+            "targetRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "CommercialAgreement"
+                    },
+                    "entity": {
+                      "enum": ["AgreementRevision"]
+                    }
+                  }
+                }
+              ]
+            },
+            "basisRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+              },
+              "minItems": 1,
+              "maxItems": 100,
+              "uniqueItems": true
+            }
+          }
+        }
+      ]
+    },
+    "ContractChangeInput": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/ContractChangeInput"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommandMeta"
+            },
+            "enterpriseRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "EnterpriseAccess"
+                    },
+                    "entity": {
+                      "enum": ["Enterprise"]
+                    }
+                  }
+                }
+              ]
+            },
+            "agreementEvidenceRefs": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+            }
+          }
+        }
+      ]
+    },
+    "OfferExceptionInput": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/OfferExceptionInput"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommandMeta"
+            },
+            "enterpriseRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "EnterpriseAccess"
+                    },
+                    "entity": {
+                      "enum": ["Enterprise"]
+                    }
+                  }
+                }
+              ]
+            },
+            "productRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "ProductCatalog"
+                    },
+                    "entity": {
+                      "enum": ["Product"]
+                    }
+                  }
+                }
+              ]
+            },
+            "agreementRevisionRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "CommercialAgreement"
+                    },
+                    "entity": {
+                      "enum": ["AgreementRevision"]
+                    }
+                  }
+                }
+              ]
+            },
+            "price": {
+              "anyOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "ProposalInput": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/ProposalInput"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommandMeta"
+            },
+            "targetOrderRef": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "OrderAcceptance"
+                        },
+                        "entity": {
+                          "enum": ["Order"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "targetEntitlementRef": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "SoftwareLifecycle"
+                        },
+                        "entity": {
+                          "enum": ["EnterpriseEntitlement"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "targetRenewalCycleRef": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "SoftwareLifecycle"
+                        },
+                        "entity": {
+                          "enum": ["RenewalCycle"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "originalTermsRef": {
+              "oneOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "OrderAcceptance"
+                        },
+                        "entity": {
+                          "enum": ["PurchaseTermsSnapshot", "OrderChangeApplication"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "const": "CommercialAgreement"
+                        },
+                        "entity": {
+                          "enum": ["AgreementRevision", "AgreementHistory"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "proposedTermsRef": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+            },
+            "agreementEvidenceRefs": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+            }
+          }
+        }
+      ]
+    },
+    "ConsentInput": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/ConsentInput"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/MutationMeta"
+            },
+            "proposalRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "CommercialAgreement"
+                    },
+                    "entity": {
+                      "enum": ["CommercialProposal"]
+                    }
+                  }
+                }
+              ]
+            },
+            "proposalRevision": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Revision"
+            }
+          }
+        }
+      ]
+    },
+    "AgreementView": {
+      "$ref": "urn:oms:contract:common:2#/$defs/AgreementView"
+    },
+    "ProposalView": {
+      "allOf": [
+        { "$ref": "urn:oms:contract:common:2#/$defs/ProposalView" },
+        {
+          "type": "object",
+          "properties": {
+            "originalTerms": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ProposalTerms" },
+            "proposedTerms": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ProposalTerms" }
+          }
+        }
+      ]
+    },
+    "ProposalTerms": {
+      "allOf": [
+        { "$ref": "urn:oms:contract:common:2#/$defs/ProposalTerms" },
+        {
+          "type": "object",
+          "properties": {
+            "lines": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 100,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "price": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money" },
+                  "quantity": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+                  "period": {
+                    "anyOf": [
+                      { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Period" },
+                      { "type": "null" }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Receipt": {
+      "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+    },
+    "OrderLineInput": {
+      "type": "object",
+      "properties": {
+        "productRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "ProductCatalog"
+                },
+                "entity": {
+                  "enum": ["Product"]
+                }
+              }
+            }
+          ]
+        },
+        "commonOfferRevisionRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "ProductCatalog"
+                },
+                "entity": {
+                  "enum": ["CommonOfferRevision"]
+                }
+              }
+            }
+          ]
+        },
+        "agreementRevisionRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AgreementRefs"
+        },
+        "conditionBindings": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBindings"
+        },
+        "quantity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "paymentMode": {
+          "enum": ["PREPAY", "POSTPAY"]
+        },
+        "requestedActivationDate": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Date"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "productRef",
+        "commonOfferRevisionRef",
+        "agreementRevisionRefs",
+        "conditionBindings",
+        "quantity",
+        "paymentMode",
+        "requestedActivationDate"
+      ],
+      "additionalProperties": false
+    },
+    "OrderInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope"
+        },
+        "productType": {
+          "enum": ["HARDWARE", "SOFTWARE"]
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderLineInput"
+          },
+          "minItems": 1,
+          "maxItems": 100
+        },
+        "provisionChoice": {
+          "const": "FULL"
+        },
+        "partialConsentRef": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "productType",
+        "lines",
+        "provisionChoice",
+        "partialConsentRef"
+      ],
+      "additionalProperties": false
+    },
+    "OrderLineView": {
+      "type": "object",
+      "properties": {
+        "orderLineRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "OrderAcceptance"
+                },
+                "entity": {
+                  "enum": ["OrderLine"]
+                }
+              }
+            }
+          ]
+        },
+        "productRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "ProductCatalog"
+                },
+                "entity": {
+                  "enum": ["Product"]
+                }
+              }
+            }
+          ]
+        },
+        "quantity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "purchasePrice": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
+        },
+        "paymentTermsRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+        },
+        "agreedPeriod": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Period"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completionBasisRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+        },
+        "commonOfferRevisionRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "ProductCatalog"
+                },
+                "entity": {
+                  "enum": ["CommonOfferRevision"]
+                }
+              }
+            }
+          ]
+        },
+        "agreementRevisionRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AgreementRefs"
+        },
+        "conditionBindings": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBindings"
+        }
+      },
+      "required": [
+        "orderLineRef",
+        "productRef",
+        "quantity",
+        "purchasePrice",
+        "paymentTermsRef",
+        "agreedPeriod",
+        "completionBasisRef",
+        "commonOfferRevisionRef",
+        "agreementRevisionRefs",
+        "conditionBindings"
+      ],
+      "additionalProperties": false
+    },
+    "OrderView": {
+      "type": "object",
+      "properties": {
+        "orderRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "OrderAcceptance"
+                },
+                "entity": {
+                  "enum": ["Order"]
+                }
+              }
+            }
+          ]
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope"
+        },
+        "productType": {
+          "enum": ["HARDWARE", "SOFTWARE"]
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderLineView"
+          },
+          "minItems": 1,
+          "maxItems": 100
+        },
+        "purchaseTermsSnapshotRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "OrderAcceptance"
+                },
+                "entity": {
+                  "enum": ["PurchaseTermsSnapshot"]
+                }
+              }
+            }
+          ]
+        },
+        "commonOfferRevisionRefs": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "const": "ProductCatalog"
+                  },
+                  "entity": {
+                    "enum": ["CommonOfferRevision"]
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 100,
+          "uniqueItems": true
+        },
+        "agreementRevisionRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AgreementRefs"
+        },
+        "conditionBindings": {
+          "type": "array",
+          "items": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding" },
+          "maxItems": 700,
+          "uniqueItems": true
+        },
+        "provisionChoice": {
+          "const": "FULL"
+        },
+        "consentRef": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "CommercialAgreement"
+                    },
+                    "entity": {
+                      "enum": ["CustomerConsent"]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "acceptance": {
+          "enum": ["REVIEW_REQUIRED", "ACCEPTED", "DECLINED", "UNVERIFIED"]
+        },
+        "basisRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        }
+      },
+      "required": [
+        "orderRef",
+        "targetScope",
+        "productType",
+        "lines",
+        "purchaseTermsSnapshotRef",
+        "commonOfferRevisionRefs",
+        "agreementRevisionRefs",
+        "conditionBindings",
+        "provisionChoice",
+        "consentRef",
+        "acceptance",
+        "basisRefs"
+      ],
+      "additionalProperties": false
+    },
+    "ApplyOrderChangeInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/MutationMeta"
+        },
+        "orderRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "OrderAcceptance"
+                },
+                "entity": {
+                  "enum": ["Order"]
+                }
+              }
+            }
+          ]
+        },
+        "changeKind": {
+          "enum": ["REVIEW_PRICE_CHANGE", "ACCEPTED_AFTERSALES_CHANGE"]
+        },
+        "afterSalesDecisionRef": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "AfterSalesDecision"
+                    },
+                    "entity": {
+                      "enum": ["AfterSalesDecisionRecord"]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "customerConsentRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "CommercialAgreement"
+                },
+                "entity": {
+                  "enum": ["CustomerConsent"]
+                }
+              }
+            }
+          ]
+        },
+        "newTermsRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+        }
+      },
+      "required": [
+        "meta",
+        "orderRef",
+        "changeKind",
+        "afterSalesDecisionRef",
+        "customerConsentRef",
+        "newTermsRef"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "changeKind": {
+                "const": "REVIEW_PRICE_CHANGE"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "afterSalesDecisionRef": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "type": "object",
+            "properties": {
+              "afterSalesDecisionRef": {
+                "allOf": [
+                  {
+                    "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "owner": {
+                        "const": "AfterSalesDecision"
+                      },
+                      "entity": {
+                        "enum": ["AfterSalesDecisionRecord"]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "OrderDecisionInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/MutationMeta"
+        },
+        "targetRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "OrderAcceptance"
+                },
+                "entity": {
+                  "enum": ["Order"]
+                }
+              }
+            }
+          ]
+        },
+        "decision": {
+          "enum": ["ACCEPT", "REJECT", "HOLD"]
+        },
+        "basisRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        }
+      },
+      "required": ["meta", "targetRef", "decision", "basisRefs"],
+      "additionalProperties": false
+    },
+    "ProductViewResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "knowledge": {
+              "const": "KNOWN"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ProductView"
+            },
+            "sourceRefs": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            }
+          },
+          "required": ["knowledge", "data", "sourceRefs", "observedAt"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "knowledge": {
+              "enum": ["UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+            },
+            "sourceRefs": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            },
+            "safeReasonCode": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            }
+          },
+          "required": ["knowledge", "sourceRefs", "observedAt", "safeReasonCode"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "AgreementViewResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "knowledge": {
+              "const": "KNOWN"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AgreementView"
+            },
+            "sourceRefs": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            }
+          },
+          "required": ["knowledge", "data", "sourceRefs", "observedAt"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "knowledge": {
+              "enum": ["UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+            },
+            "sourceRefs": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            },
+            "safeReasonCode": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            }
+          },
+          "required": ["knowledge", "sourceRefs", "observedAt", "safeReasonCode"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ProposalViewResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "knowledge": {
+              "const": "KNOWN"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ProposalView"
+            },
+            "sourceRefs": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            }
+          },
+          "required": ["knowledge", "data", "sourceRefs", "observedAt"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "knowledge": {
+              "enum": ["UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+            },
+            "sourceRefs": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            },
+            "safeReasonCode": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            }
+          },
+          "required": ["knowledge", "sourceRefs", "observedAt", "safeReasonCode"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "OrderViewResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "knowledge": {
+              "const": "KNOWN"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderView"
+            },
+            "sourceRefs": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            }
+          },
+          "required": ["knowledge", "data", "sourceRefs", "observedAt"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "knowledge": {
+              "enum": ["UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+            },
+            "sourceRefs": {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            },
+            "safeReasonCode": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            }
+          },
+          "required": ["knowledge", "sourceRefs", "observedAt", "safeReasonCode"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "AgreementViewResultPage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AgreementViewResult"
+          },
+          "maxItems": 100
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        }
+      },
+      "required": ["items", "nextCursor", "observedAt"],
+      "additionalProperties": false
+    }
+  }
+}

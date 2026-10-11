@@ -8,3 +8,5 @@ export * from './execution-budget.js';
 export * from './observation.js';
 export * from './u2-types.js';
 export * from './u2-declarations.js';
+export * from './u3-types.js';
+export * from './u3-declarations.js';
