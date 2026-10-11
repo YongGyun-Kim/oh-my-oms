@@ -3,6 +3,21 @@
   "$id": "urn:oms:contract:u3-commercial:2",
   "title": "U3 commercial profile revision 2 — registry version 3; common 1/2 preserved",
   "$defs": {
+    "OriginalReceiptProbe": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "disposition": { "const": "RECEIPT" },
+            "receipt": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Receipt" },
+            "observedAt": { "$ref": "urn:oms:contract:common:2#/$defs/Instant" }
+          },
+          "required": ["disposition", "receipt", "observedAt"],
+          "additionalProperties": false
+        },
+        { "$ref": "urn:oms:contract:foundation:1#/$defs/OriginalReceiptProbe/oneOf/1" }
+      ]
+    },
     "ConsentAction": { "const": "contract.consent" },
     "RoleStateActions": {
       "anyOf": [

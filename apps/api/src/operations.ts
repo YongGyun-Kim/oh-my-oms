@@ -18,6 +18,8 @@ import type {
   IdentityConsumer,
 } from '@oms/core';
 import type { ProtectedStore } from '@oms/persistence';
+import { bindU3Operations } from './u3-operations.js';
+import type { U3ApiOwners } from './u3-operations.js';
 export interface ApiOwners {
   store: ProtectedStore;
   identity: IdentityRecovery;
@@ -31,6 +33,7 @@ export interface ApiOwners {
   identityConsumer?: IdentityConsumer;
   personRegistration?: 'LOCAL_SYNTHETIC' | 'UNREGISTERED';
   u2RateKey?: Buffer;
+  u3?: U3ApiOwners;
 }
 // These handlers own one primary transaction before journal protection. This capability
 // is explicit; a future external-effect handler cannot inherit no-acceptance evidence.
@@ -69,9 +72,24 @@ export function businessOperations(owners: ApiOwners): OperationRegistry {
       target: InvocationTarget,
     ) => Promise<unknown>,
   ) =>
-    registry.bind(owner, name, 2, (invocation) =>
-      operation(invocation.context as ServiceContext, invocation.data as Input, invocation.target),
-    );
+    registry.bind(owner, name, 2, (invocation) => {
+      requireCondition(
+        !owners.u3 ||
+          ![
+            'ProductCatalog:registerProduct',
+            'ProductCatalog:reviseProduct',
+            'OrderAcceptance:submitOrder',
+          ].includes(owner + ':' + name),
+        403,
+        'U3_LEGACY_MUTATION_BLOCKED',
+        '현재 U3 상업 변경은 서버가 등록한 새 계약으로만 실행합니다.',
+      );
+      return operation(
+        invocation.context as ServiceContext,
+        invocation.data as Input,
+        invocation.target,
+      );
+    });
   const enterpriseTarget = (target: InvocationTarget): Ref => {
     requireCondition(
       target.kind === 'ENTERPRISE',
@@ -201,5 +219,6 @@ export function businessOperations(owners: ApiOwners): OperationRegistry {
   );
   bind('NotificationDelivery', 'recordNoticeRead', owners.notices.recordRead.bind(owners.notices));
   bind('IdentityRecovery', 'readIdentity', (context) => owners.identity.readIdentity(context));
+  if (owners.u3) bindU3Operations(registry, owners);
   return registry;
 }

@@ -1,9 +1,17 @@
-import { fingerprint, requireCondition } from '@oms/contracts';
+import {
+  canonicalJson,
+  declareU3Operations,
+  declareU3HostOperations,
+  fingerprint,
+  OperationRegistry,
+  requireCondition,
+} from '@oms/contracts';
 import type { InvocationTarget, Receipt, ServiceContext, TargetScope } from '@oms/contracts';
-import { HttpAttempts, originalScopedKey } from '@oms/persistence';
+import { HttpAttempts, originalScopedKey, recordedSourceContract } from '@oms/persistence';
 import type { ProtectedStore } from '@oms/persistence';
 import { Authorization } from './authorization.js';
 import { Commands } from './commands.js';
+import { AuthorizationFence } from './authorization-fence.js';
 import type { OrderingPolicy } from './scopes.js';
 export class WorkInquiry {
   private readonly authorization: Authorization;
@@ -84,7 +92,7 @@ export class WorkInquiry {
   async readReceipt(context: ServiceContext, requestId: string): Promise<Receipt> {
     this.store.schema.validate('Id', requestId);
     await this.authorization.identity(context);
-    const receipt = await this.store.read('RequestReceipt', requestId);
+    let receipt = await this.store.read('RequestReceipt', requestId);
     requireCondition(
       receipt &&
         receipt.audience === context.audience &&
@@ -92,6 +100,42 @@ export class WorkInquiry {
       404,
       'NOT_FOUND',
       '대상을 확인할 수 없습니다.',
+    );
+    const source = recordedSourceContract(receipt, this.store.schema);
+    let currentAction: string | null = null;
+    if (source.knowledge === 'KNOWN') {
+      receipt = await this.store.currentProtected('RequestReceipt', requestId);
+      requireCondition(
+        receipt,
+        503,
+        'ORIGINAL_PROTECTION_PENDING',
+        '현재 접수 보호 원본이 필요합니다.',
+      );
+      const registry = new OperationRegistry(this.store.schema);
+      declareU3Operations(registry);
+      declareU3HostOperations(registry);
+      const operation = registry.lookup(String(receipt.owner), String(receipt.operation), 3);
+      requireCondition(
+        operation.kind === 'command' && operation.action,
+        403,
+        'RECEIPT_ACTION_NOT_REGISTERED',
+        '실제 접수 행위의 현재 조회 권한이 필요합니다.',
+      );
+      currentAction = operation.action;
+    }
+    const fence = new AuthorizationFence(this.authorization),
+      snapshot =
+        source.knowledge === 'KNOWN'
+          ? await fence.capture(
+              context,
+              (receipt.targetScope as TargetScope | null)?.enterpriseRef.id ?? null,
+            )
+          : null;
+    requireCondition(
+      source.knowledge !== 'KNOWN' || context.audience !== 'CUSTOMER' || receipt.targetScope,
+      403,
+      'RECEIPT_SCOPE_REQUIRED',
+      '현재 고객 접수의 정확한 기업 범위가 필요합니다.',
     );
     if (receipt.targetScope && context.audience === 'CUSTOMER') {
       const target = receipt.targetScope as TargetScope;
@@ -108,26 +152,29 @@ export class WorkInquiry {
       );
       await this.authorization.requireCustomer(
         context,
-        receipt.owner === 'OrderAcceptance'
-          ? 'order.read'
-          : ['setOrderingContextPolicy', 'upsertOrganisation'].includes(String(receipt.operation))
-            ? 'organisation.manage'
-            : receipt.operation === 'upsertMembership'
-              ? 'user.manage'
-              : 'role.manage',
+        currentAction ??
+          (receipt.owner === 'OrderAcceptance'
+            ? 'order.read'
+            : ['setOrderingContextPolicy', 'upsertOrganisation'].includes(String(receipt.operation))
+              ? 'organisation.manage'
+              : receipt.operation === 'upsertMembership'
+                ? 'user.manage'
+                : 'role.manage'),
         target,
         original.orderingContextPolicy as OrderingPolicy,
       );
     }
     if (context.audience === 'STAFF') {
-      const action = {
-        approveEnterprise: 'enterprise.approve',
-        designateInitialAdministrator: 'enterprise.initial-administrator.designate',
-        registerProduct: 'product.register',
-        reviseProduct: 'product.revise',
-        defineStaffRole: 'staff.role.manage',
-        grantStaffRole: 'staff.role.manage',
-      }[String(receipt.operation)];
+      const action =
+        currentAction ??
+        {
+          approveEnterprise: 'enterprise.approve',
+          designateInitialAdministrator: 'enterprise.initial-administrator.designate',
+          registerProduct: 'product.register',
+          reviseProduct: 'product.revise',
+          defineStaffRole: 'staff.role.manage',
+          grantStaffRole: 'staff.role.manage',
+        }[String(receipt.operation)];
       requireCondition(
         action,
         403,
@@ -136,6 +183,17 @@ export class WorkInquiry {
       );
       await this.authorization.requireStaff(context, action);
     }
-    return this.commands.receipt(receipt);
+    const result = this.commands.receipt(receipt);
+    if (snapshot) {
+      await fence.assert(context, snapshot);
+      requireCondition(
+        canonicalJson(await this.store.currentProtected('RequestReceipt', requestId)) ===
+          canonicalJson(receipt),
+        409,
+        'RECEIPT_CHANGED',
+        '조회 중 현재 보호 접수 개정이 변경됐습니다.',
+      );
+    }
+    return result;
   }
 }

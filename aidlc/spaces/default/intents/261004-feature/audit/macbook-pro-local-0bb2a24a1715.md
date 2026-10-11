@@ -51589,3 +51589,66 @@
 **Message**: Step11–14 체크박스 네 개만 완료로 표시하고 다시 고정했습니다. 호스트 연결·CI·실제 운영 원본 등록은 별도 미완료 상태로 유지합니다.
 
 ---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T23:42:31Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/delivery-checkpoint-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > delivery-checkpoint-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:50:17Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 첫 호스트 연결 계층 7파일과 단위·통합 시험을 작성하고 쓰기를 고정했습니다. 실제 역할 생성·부여/회수와 새 접수 참조 왕복을 검사하도록 Luna 명령을 전달했습니다.\n\n보호 조회 8개, HTTP·parser·worker 연결은 남아 있으며 Step15–16은 미완료입니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:51:20Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: tsc, U3 unit 258/258, in-process host 통합 4/4, ESLint가 모두 통과했습니다. 실행 전후 source identity와 지정 7개 파일 SHA는 동일하며, 결과를 root에 전달했습니다.
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T23:51:50Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/host-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > host-verification-20261012.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T23:51:57Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/host-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > host-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:52:16Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: U1 통합 회귀 24/24, U2 통합 회귀 10/10이 통과했습니다. 격리 검증 DB 준비도 완료됐으며, source identity와 지정 7개 파일 해시는 전후 동일합니다. 결과를 root에 전달했습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T23:52:26Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/host-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > host-verification-20261012.md
+
+---
