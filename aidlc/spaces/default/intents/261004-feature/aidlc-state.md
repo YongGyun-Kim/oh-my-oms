@@ -267,6 +267,18 @@
 
 
 
+- **Active Unit**: u3-commercial-ordering
+
+- **Unit Stage**: nfr-requirements
+
+- **Unit State**: paused
+
+
+
+- **Unit Pause Reason**: 기존 답변 적용 내용을 한 번에 확인하고 실제 Looks correct 답변을 기다린다
+
+- **Unit Next Action**: 실제 요약 답변을 받은 후 재개하고 답변 영수증을 기록해 보안·기술·NFR 추적 3개 산출물을 작성한다
+
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
 
@@ -328,7 +340,7 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-11T08:15:27Z
+- **Last Updated**: 2026-10-11T08:20:28Z
 
 - **Construction Autonomy Mode**: autonomous
 
