@@ -319,7 +319,7 @@ describe('정확한 제안·동의·수락 전후 changeKind', () => {
     const consent = consentInput();
     expect(validate('ConsentInput', consent)).toEqual(consent);
     for (const replacement of [
-      { proposalRevision: 2 },
+      { proposalRevision: 0 },
       { decision: 'AGREE' },
       { meta: fixtureMeta(2) },
       { employeeConfirmed: true },

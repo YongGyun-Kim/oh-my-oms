@@ -156,9 +156,9 @@ export function validateU3Semantics(definition: string, value: unknown): void {
   }
   if (definition === 'ConsentInput') {
     check(
-      data.proposalRevision === (data.proposalRef as Ref).revision &&
-        (data.meta as { expectedRevision: number }).expectedRevision === data.proposalRevision,
-      '동의의 정확한 제안 개정이 다릅니다.',
+      (data.meta as { expectedRevision: number }).expectedRevision ===
+        (data.proposalRef as Ref).revision,
+      '동의의 현재 제안 저장 개정이 다릅니다. 내용 개정은 소유 서비스가 보호 원본과 대조합니다.',
     );
   }
   if (

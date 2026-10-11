@@ -2,7 +2,7 @@ import { canonicalJson, requireCondition, ExecutionBudget, OmsError } from '@oms
 import type { Ref } from '@oms/contracts';
 import type { ModelData, ProtectedStore, U3Transaction } from '@oms/persistence';
 import { Authorization } from './authorization.js';
-import { ref } from './references.js';
+import { ref, u3Ref } from './references.js';
 
 export interface U3EvidenceRegistration {
   kind: 'UNREGISTERED' | 'LOCAL_SYNTHETIC' | 'REGISTERED_OWNER';
@@ -176,18 +176,20 @@ export class U3CurrentBasis {
     model: string,
     equals: Record<string, unknown>,
   ): Promise<ModelData[]> {
+    const reference = (data: ModelData) =>
+      data.modelVersion === 2 ? u3Ref(model, data, this.store.schema) : ref(model, data);
     const raw = await scope.transaction.list(model, equals, 100),
       visible = await this.store.list(model, { equals, limit: 100 });
     confirmed(
       raw.length < 100 &&
         visible.length < 100 &&
         exact(
-          raw.map((value) => ref(model, value)).sort((a, b) => a.id.localeCompare(b.id)),
-          visible.map((value) => ref(model, value)).sort((a, b) => a.id.localeCompare(b.id)),
+          raw.map(reference).sort((a, b) => a.id.localeCompare(b.id)),
+          visible.map(reference).sort((a, b) => a.id.localeCompare(b.id)),
         ),
     );
     const records: ModelData[] = [];
-    for (const value of visible) records.push(await scope.current(ref(model, value)));
+    for (const value of visible) records.push(await scope.current(reference(value)));
     return records;
   }
   async evidence(

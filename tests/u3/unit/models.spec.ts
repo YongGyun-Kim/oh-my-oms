@@ -25,6 +25,36 @@ import {
 
 const schema = new SchemaValidator();
 describe('18개 논리 모델과 단일 물리 등록', () => {
+  it('제안 선택 expand는 과거 bytes를 보존하고 저장 개정/내용 개정이 다른 동의도 등록 형식을 유지한다', () => {
+    const old = modelFixture('CommercialProposal'),
+      before = canonicalJson(old);
+    expect(decodeU3Model('CommercialProposal', 2, old, schema)).toEqual(old);
+    expect(canonicalJson(old)).toBe(before);
+    const complete = {
+      ...old,
+      originalPriceBreakdown: old.priceBreakdown,
+      termsFingerprint: 'a'.repeat(64),
+      supersedesRef: null,
+    };
+    expect(decodeU3Model('CommercialProposal', 2, complete, schema)).toEqual(complete);
+    for (const change of [
+      { termsFingerprint: 'client-known' },
+      { originalPriceBreakdown: null },
+      {
+        supersedesRef: {
+          owner: 'CommercialAgreement',
+          entity: 'AgreementRevision',
+          id: 'other',
+          revision: 1,
+        },
+      },
+    ])
+      expect(() =>
+        decodeU3Model('CommercialProposal', 2, { ...complete, ...change }, schema),
+      ).toThrow();
+    const consent = { ...modelFixture('CustomerConsent'), proposalRevision: 2 };
+    expect(decodeU3Model('CustomerConsent', 2, consent, schema)).toEqual(consent);
+  });
   it('U1 공개43개 projection을 유지하고 U3 18개를 중복 없이 연결한다', () => {
     expect(MODELS).toHaveLength(43);
     expect(U3_MODELS).toHaveLength(18);

@@ -18,7 +18,7 @@ import type { ModelData, ProtectedStore } from '@oms/persistence';
 import { U3Commands } from './u3-commands.js';
 import { ref } from './references.js';
 import { U3CurrentBasis } from './u3-current-basis.js';
-import type { U3EvidenceRegistration } from './u3-current-basis.js';
+import type { U3ApprovalProofContext, U3EvidenceRegistration } from './u3-current-basis.js';
 import {
   assertNoCommercialConflict,
   approvedExceptionTerms,
@@ -627,6 +627,151 @@ export class CommercialAgreement {
       );
     });
   }
+  // 이미 검증된 U3 원자 판단의 scope 안에서 같은 기업 우선 조건을 사용한다.
+  async currentTerms(
+    scope: U3Transaction,
+    input: U3CommercialTermsQuery,
+  ): Promise<U3ResolvedCommercialTerms> {
+    this.basis.requireRegistration();
+    const product = await scope.current(input.productRef),
+      offer = await scope.current(input.commonOfferRevisionRef);
+    requireCondition(
+      product.modelVersion === 2 &&
+        product.saleState === 'OFFERABLE' &&
+        offer.visible &&
+        canonicalJson(product.currentOfferRef) === canonicalJson(input.commonOfferRevisionRef) &&
+        canonicalJson(offer.productRef) === canonicalJson(input.productRef) &&
+        withinEffectiveWindow(offer.effectiveWindow as EffectiveWindow, this.now()),
+      409,
+      'STALE_CATALOG_OFFER',
+      '현재 공통 조건의 정확한 개정이 필요합니다.',
+    );
+    const applicable: ModelData[] = [];
+    for (const agreement of await this.agreements(scope, input.targetScope.enterpriseRef)) {
+      if (
+        agreement.state !== 'APPROVED' ||
+        !(agreement.productRefs as Ref[]).some((value) => value.id === input.productRef.id)
+      )
+        continue;
+      const approvalRef = agreement.approvalRef as Ref | null;
+      requireCondition(approvalRef, 503, 'U3_PROOF_UNCONFIRMED', '정확한 승인 원본이 필요합니다.');
+      const approval = await scope.current(approvalRef!);
+      requireCondition(
+        approval.decision === 'APPROVE' &&
+          canonicalJson(approval.revisionRef) ===
+            canonicalJson(ref('AgreementRevision', agreement)),
+        503,
+        'U3_PROOF_UNCONFIRMED',
+        '정확한 계약 승인 개정이 다릅니다.',
+      );
+      if (withinEffectiveWindow(agreement.effectiveWindow as EffectiveWindow, this.now()))
+        applicable.push(agreement);
+    }
+    const conditionBindings = resolveConditionBindings(
+      offer.conditionBindings as ConditionBinding[],
+      applicable,
+      this.now(),
+    );
+    requireCondition(
+      ['PRICE', 'PAYMENT', 'PROVISION', 'COMPLETION', 'VISIBILITY'].every((key) =>
+        conditionBindings.some((value) => value.conditionKey === key),
+      ),
+      503,
+      'U3_PROOF_UNCONFIRMED',
+      '현재 유효한 필수 판매 조건이 필요합니다.',
+    );
+    requireCondition(
+      conditionBindings.find((value) => value.conditionKey === 'VISIBILITY')?.value === true,
+      404,
+      'NOT_FOUND',
+      '해당 기업에 공개된 상품을 확인할 수 없습니다.',
+    );
+    const result = {
+      enterpriseRef: input.targetScope.enterpriseRef,
+      productRef: input.productRef,
+      commonOfferRevisionRef: input.commonOfferRevisionRef,
+      agreementRevisionRefs: [
+        ...new Map(
+          conditionBindings
+            .filter((value) => value.sourceRef.owner === 'CommercialAgreement')
+            .map((value) => [canonicalJson(value.sourceRef), value.sourceRef]),
+        ).values(),
+      ],
+      conditionBindings,
+    };
+    return result;
+  }
+  async approvedSources(
+    scope: U3Transaction,
+    references: Ref[],
+    proof: U3ApprovalProofContext,
+  ): Promise<void> {
+    for (const reference of references) {
+      requireCondition(
+        reference.owner === 'CommercialAgreement' && reference.entity === 'AgreementRevision',
+        503,
+        'U3_PROOF_UNCONFIRMED',
+        '승인 기업 조건의 정확한 원본 개정이 필요합니다.',
+      );
+      const agreement = await scope.current(reference);
+      const contract = await this.currentParentContract(scope, agreement);
+      requireCondition(
+        agreement.state === 'APPROVED' &&
+          agreement.approvalRef &&
+          (contract.enterpriseRef as Ref).id === proof.targetEnterpriseRef.id &&
+          withinEffectiveWindow(agreement.effectiveWindow as EffectiveWindow, this.now()),
+        503,
+        'U3_PROOF_UNCONFIRMED',
+        '현재 기업의 유효 승인 조건이 필요합니다.',
+      );
+      const approval = await scope.current(agreement.approvalRef as Ref);
+      requireCondition(
+        approval.decision === 'APPROVE' &&
+          canonicalJson(approval.revisionRef) === canonicalJson(reference) &&
+          canonicalJson(approval.registrantPersonRef) ===
+            canonicalJson(agreement.registeredPersonRef),
+        503,
+        'U3_PROOF_UNCONFIRMED',
+        '정확한 승인 내용과 사람 원본이 필요합니다.',
+      );
+      await this.commands.authorization.requireStaffSource(
+        approval.approverAccountRef as Ref,
+        'contract.approve',
+        scope.transaction,
+      );
+      await this.basis.differentPeople(
+        scope,
+        agreement.registeredBy as Ref,
+        agreement.registeredPersonRef as Ref | null,
+        approval.approverAccountRef as Ref,
+        approval.approverPersonRef as Ref,
+        proof,
+      );
+      const evidence = approval.evidenceRefs as Ref[];
+      requireCondition(
+        [
+          ...(agreement.agreementEvidenceRefs as Ref[]),
+          ...(agreement.conditionBindings as ConditionBinding[]).flatMap(
+            (value) => value.evidenceRefs,
+          ),
+        ].every((reference) =>
+          evidence.some((value) => canonicalJson(value) === canonicalJson(reference)),
+        ),
+        503,
+        'U3_PROOF_UNCONFIRMED',
+        '승인의 모든 조건/합의 출처가 필요합니다.',
+      );
+      await this.basis.evidence(
+        scope,
+        evidence,
+        this.basis.registration.agreementPurpose,
+        agreement.registeredBy as Ref,
+        proof.targetEnterpriseRef,
+        undefined,
+        proof,
+      );
+    }
+  }
   async resolve(
     context: ServiceContext,
     input: U3CommercialTermsQuery,
@@ -651,78 +796,7 @@ export class CommercialAgreement {
             this.commands.repository,
             new ProtectedTransaction(manager, this.store.schema),
           );
-          const product = await scope.current(input.productRef),
-            offer = await scope.current(input.commonOfferRevisionRef);
-          requireCondition(
-            product.modelVersion === 2 &&
-              product.saleState === 'OFFERABLE' &&
-              offer.visible &&
-              canonicalJson(product.currentOfferRef) ===
-                canonicalJson(input.commonOfferRevisionRef) &&
-              canonicalJson(offer.productRef) === canonicalJson(input.productRef) &&
-              withinEffectiveWindow(offer.effectiveWindow as EffectiveWindow, this.now()),
-            409,
-            'STALE_CATALOG_OFFER',
-            '현재 공통 조건의 정확한 개정이 필요합니다.',
-          );
-          const applicable: ModelData[] = [];
-          for (const agreement of await this.agreements(scope, input.targetScope.enterpriseRef)) {
-            if (
-              agreement.state !== 'APPROVED' ||
-              !(agreement.productRefs as Ref[]).some((value) => value.id === input.productRef.id)
-            )
-              continue;
-            const approvalRef = agreement.approvalRef as Ref | null;
-            requireCondition(
-              approvalRef,
-              503,
-              'U3_PROOF_UNCONFIRMED',
-              '정확한 승인 원본이 필요합니다.',
-            );
-            const approval = await scope.current(approvalRef!);
-            requireCondition(
-              approval.decision === 'APPROVE' &&
-                canonicalJson(approval.revisionRef) ===
-                  canonicalJson(ref('AgreementRevision', agreement)),
-              503,
-              'U3_PROOF_UNCONFIRMED',
-              '정확한 계약 승인 개정이 다릅니다.',
-            );
-            if (withinEffectiveWindow(agreement.effectiveWindow as EffectiveWindow, this.now()))
-              applicable.push(agreement);
-          }
-          const conditionBindings = resolveConditionBindings(
-            offer.conditionBindings as ConditionBinding[],
-            applicable,
-            this.now(),
-          );
-          requireCondition(
-            ['PRICE', 'PAYMENT', 'PROVISION', 'COMPLETION', 'VISIBILITY'].every((key) =>
-              conditionBindings.some((value) => value.conditionKey === key),
-            ),
-            503,
-            'U3_PROOF_UNCONFIRMED',
-            '현재 유효한 필수 판매 조건이 필요합니다.',
-          );
-          requireCondition(
-            conditionBindings.find((value) => value.conditionKey === 'VISIBILITY')?.value === true,
-            404,
-            'NOT_FOUND',
-            '해당 기업에 공개된 상품을 확인할 수 없습니다.',
-          );
-          const result = {
-            enterpriseRef: input.targetScope.enterpriseRef,
-            productRef: input.productRef,
-            commonOfferRevisionRef: input.commonOfferRevisionRef,
-            agreementRevisionRefs: [
-              ...new Map(
-                conditionBindings
-                  .filter((value) => value.sourceRef.owner === 'CommercialAgreement')
-                  .map((value) => [canonicalJson(value.sourceRef), value.sourceRef]),
-              ).values(),
-            ],
-            conditionBindings,
-          };
+          const result = await this.currentTerms(scope, input);
           await scope.assertPremises();
           await this.ingress(context, ingressProof);
           return result;

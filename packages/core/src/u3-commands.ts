@@ -29,6 +29,7 @@ import type {
 import { Authorization } from './authorization.js';
 import { AuthorizationFence } from './authorization-fence.js';
 import { enqueueMinimumNotice } from './pending-notification.js';
+import { u3Ref } from './references.js';
 import type { OrderingPolicy } from './scopes.js';
 
 export interface U3CommandAccess {
@@ -384,12 +385,7 @@ export class U3Commands {
           sourceRevision: result.target.revision,
         };
         await scope.transaction.put(histories[owner], history);
-        const historyRef: Ref = {
-          owner,
-          entity: histories[owner],
-          id: history.historyId,
-          revision: history.sourceRevision,
-        };
+        const historyRef = u3Ref(histories[owner], history, this.store.schema);
         await scope.transaction.put('RequestReceipt', {
           requestId,
           principalId: context.principalId,

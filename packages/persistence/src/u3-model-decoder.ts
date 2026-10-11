@@ -116,7 +116,7 @@ export function validateU3ModelConstraints(
       '불변 스냅샷의 조건 합집합이 다릅니다.',
     );
   }
-  if (model === 'CommercialProposal')
+  if (model === 'CommercialProposal') {
     check(
       data.targetOrderRef !== null
         ? data.targetEntitlementRef === null &&
@@ -125,11 +125,17 @@ export function validateU3ModelConstraints(
         : data.targetEntitlementRef !== null && data.targetRenewalCycleRef !== null,
       '주문 대상 또는 정확한 권한·갱신 회차를 보존해야 합니다.',
     );
-  if (model === 'CustomerConsent')
-    check(
-      data.proposalRevision === (data.proposalRef as Ref).revision,
-      '동의 제안의 정확한 개정이 다릅니다.',
-    );
+    if (data.termsFingerprint !== undefined && data.termsFingerprint !== null)
+      check(
+        typeof data.termsFingerprint === 'string' &&
+          /^[a-f0-9]{64}$/.test(data.termsFingerprint) &&
+          data.originalPriceBreakdown !== undefined &&
+          data.originalPriceBreakdown !== null,
+        '표시 fingerprint에는 원래 확인 비용이 함께 보존돼야 합니다.',
+      );
+  }
+  // CustomerConsent.proposalRef는 보호된 저장 개정, proposalRevision은 내용 개정이다.
+  // 정확한 둘의 결합은 현재 CommercialProposal을 확인하는 소유 서비스에서 검증한다.
   if (model === 'OrderChangeApplication')
     check(
       data.changeKind === 'REVIEW_PRICE_CHANGE'

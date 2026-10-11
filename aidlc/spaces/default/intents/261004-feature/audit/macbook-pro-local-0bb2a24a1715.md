@@ -50659,3 +50659,191 @@
 **Context**: construction > u3-commercial-ordering > code-generation > proposal-contract-verification-20261012.md
 
 ---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T20:07:10Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:29:22Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 소스를 고정하고 Luna 검사 명령·새 보고서 경로·수정 파일 13개를 전달했습니다.\n\n제안 저장·정확 동의·수동 갱신 경계와 시험을 작성했습니다. Step11/12는 미완료이며, 실제 U6 등록과 적용 후 후속 제안 연결이 남아 있습니다.
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T20:30:51Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/proposal-service-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > proposal-service-verification-20261012.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T20:31:54Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/proposal-service-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > proposal-service-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:32:55Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Proposal service slice 검증 결과입니다.\n\n- TypeScript와 ESLint: 종료 코드 0\n- U3 unit: 237/237 통과\n- Agreement-family 회귀: 27/27 통과\n- Model/authority 회귀: 21/21 통과\n- Proposal integration: 12개 모두 실패. 공통 fixture setup
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T20:33:12Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/proposal-service-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > proposal-service-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:34:20Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 서비스·fixture·시험을 실제 Order2의 `state`/`changeApplicationRefs`에 맞췄습니다. 모델의 폐쇄 검증은 유지했습니다.\n\n소스를 고정하고 새 Luna 명령을 전달했습니다. Step11/12는 미완료입니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:35:53Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Order2 alignment 검증 결과입니다.\n\n- TypeScript 및 ESLint: 종료 코드 0\n- U3 unit: 237/237 통과, `success: true`\n- Proposal integration: 12개 모두 실패. 테스트 공통 setup의 `seedProposalAuthority`가 transaction commit 중 `u1_ord
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T20:36:51Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/proposal-service-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > proposal-service-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:38:40Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 실패 FK는 `provisionChoiceRefKey`였습니다. fixture의 실제 OrderLine·ProvisionChoice·Order·구매 스냅샷을 원자적으로 연결했습니다.\n\n소스를 고정하고 최소 Luna 재검증 명령을 전달했습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:40:19Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Fixture graph 수정 후 TypeScript와 fixture ESLint 검사는 종료 코드 0입니다. Proposal integration은 종료 코드 1로, JSON 기준 12개 테스트 중 1개 통과·11개 실패, pending·todo 0입니다.\n\n이전 외래 키 오류는 해소됐지만, 현재 11개 실패는 `commercial-proposal.ts:
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T20:41:17Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/proposal-service-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > proposal-service-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:46:15Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 제안 전용 조회가 전체 primary/protected 대조 후 정확한 보호 원상을 사용하도록 수정했습니다. 상태 변경에도 명시된 null을 보존하며, 과거 미상 자료 차단은 유지합니다.\n\n소스를 고정하고 최소 Luna 재검증 명령을 전달했습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:48:20Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: TypeScript와 지정 ESLint 검사는 통과했습니다. Proposal integration은 12개 중 7개 통과, 5개 실패로 `success: false`입니다.\n\n첫 실패는 `CommercialProposal.creator`에서 current collection을 읽는 중 발생했습니다. [u3-repository.ts](/Users/gyun/P
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T20:50:23Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/proposal-service-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > proposal-service-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:54:19Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: U3 전용 참조가 실제 등록된 이력 개정을 사용하도록 맞췄습니다. 구형 `ref()` 의미는 유지했고, 권한 hook 시험은 미보호 변경 차단으로 정확히 표기했습니다.\n\n소스를 고정하고 Luna 검증 명령을 전달했습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:58:27Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Versioned U3 Ref 검증 결과입니다.\n\n- U3 unit: 239/239 통과\n- Proposal integration: 12/12 통과\n- Agreement 회귀: 27/27 통과\n- ESLint: 종료 코드 0\n- TypeScript: 종료 코드 2. [references.spec.ts](<project-dir>/
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:58:56Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 시험 변수에 `ModelData` 타입만 추가했습니다. 실행 데이터·검증식·제품 소스는 그대로입니다.\n\n소스를 고정하고 타입 검사와 해당 파일 lint 명령을 전달했습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T20:58:56Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/proposal-service-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > proposal-service-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:59:42Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Type-only 수정 후 TypeScript와 지정 ESLint 검사가 모두 종료 코드 0으로 통과했습니다. 테스트는 재실행하지 않았고 이전 unit/integration 보고서를 보존했습니다.\n\n시작·종료 product identity는 동일합니다: HEAD `ca50c50ecd19ac679faf35cd1711c31d443bc29f`, digest `5
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T21:00:21Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/proposal-service-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > proposal-service-verification-20261012.md
+
+---

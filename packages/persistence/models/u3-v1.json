@@ -538,6 +538,25 @@
           "required": true
         },
         {
+          "name": "originalPriceBreakdown",
+          "type": "U3Contract:OrderPriceBreakdown",
+          "required": false,
+          "nullable": true
+        },
+        {
+          "name": "termsFingerprint",
+          "type": "NonEmptyText",
+          "required": false,
+          "nullable": true
+        },
+        {
+          "name": "supersedesRef",
+          "type": "Ref",
+          "references": "CommercialProposal",
+          "required": false,
+          "nullable": true
+        },
+        {
           "name": "proposedTerms",
           "type": "U3Contract:ProposalTerms",
           "required": true

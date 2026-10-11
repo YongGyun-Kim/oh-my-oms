@@ -120,7 +120,7 @@ describe('실제 registry3 제안·동의 생산자/소비자 계약', () => {
     ])
       expect(() => registeredProposalInput('createProposal', { ...input, ...changed })).toThrow();
     for (const changed of [
-      { proposalRevision: 2 },
+      { proposalRevision: 0 },
       { termsFingerprint: 'unconfirmed' },
       { targetScope: null },
       { decision: 'AGREE' },
