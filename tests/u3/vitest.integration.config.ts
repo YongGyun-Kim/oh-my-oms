@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitest/config';
-import { assertU3DatabaseProfile } from './fixtures/databases.js';
+import { assertU3DatabaseProfile } from './fixtures/profile.js';
 
 assertU3DatabaseProfile();
 export default defineConfig({

@@ -3,6 +3,334 @@
   "$id": "urn:oms:contract:u3-commercial:2",
   "title": "U3 commercial profile revision 2 — registry version 3; common 1/2 preserved",
   "$defs": {
+    "SourceContract": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "const": "urn:oms:contract:u3-commercial:2"
+        },
+        "registryVersion": {
+          "const": 3
+        }
+      },
+      "required": ["profile", "registryVersion"],
+      "additionalProperties": false
+    },
+    "SnapshotConditionBindings": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding"
+      },
+      "minItems": 0,
+      "maxItems": 700,
+      "uniqueItems": true
+    },
+    "CapturedLine": {
+      "type": "object",
+      "properties": {
+        "productRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+        },
+        "commonOfferRevisionRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+        },
+        "agreementRevisionRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AgreementRefs"
+        },
+        "conditionBindings": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBindings"
+        },
+        "quantity": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Revision"
+        },
+        "paymentMode": {
+          "enum": ["PREPAY", "POSTPAY"]
+        },
+        "requestedActivationDate": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Date"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "purchasePrice": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "priceKnowledge": {
+          "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        },
+        "paymentTermsRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "agreedPeriod": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Period"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completionBasisRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "productRef",
+        "commonOfferRevisionRef",
+        "agreementRevisionRefs",
+        "conditionBindings",
+        "quantity",
+        "paymentMode",
+        "requestedActivationDate",
+        "purchasePrice",
+        "priceKnowledge",
+        "paymentTermsRef",
+        "agreedPeriod",
+        "completionBasisRef"
+      ],
+      "additionalProperties": false
+    },
+    "CapturedLines": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CapturedLine"
+      },
+      "minItems": 1,
+      "maxItems": 100
+    },
+    "PriceAdjustment": {
+      "type": "object",
+      "properties": {
+        "itemId": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Id"
+        },
+        "kind": {
+          "enum": ["TAX", "SHIPPING", "FEE", "DISCOUNT"]
+        },
+        "knowledge": {
+          "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "position": {
+          "enum": ["SEPARATE", "UNIT_PRICE", "OTHER_ITEM", "NOT_APPLICABLE"]
+        },
+        "includedInItemId": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidenceRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        },
+        "confirmedByRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "itemId",
+        "kind",
+        "knowledge",
+        "amount",
+        "position",
+        "includedInItemId",
+        "evidenceRefs",
+        "confirmedByRef"
+      ],
+      "additionalProperties": false
+    },
+    "OrderPriceBreakdown": {
+      "type": "object",
+      "properties": {
+        "lineAmounts": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 100
+        },
+        "productAmount": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "adjustments": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u3-commercial:2#/$defs/PriceAdjustment"
+          },
+          "minItems": 0,
+          "maxItems": 100
+        },
+        "total": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "knowledge": {
+          "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        }
+      },
+      "required": ["lineAmounts", "productAmount", "adjustments", "total", "knowledge"],
+      "additionalProperties": false
+    },
+    "RecoveryRow": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "schemaVersion": {
+          "enum": [1, 2]
+        },
+        "id": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Id"
+        },
+        "revision": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Revision"
+        },
+        "data": {
+          "type": "object"
+        },
+        "deleted": {
+          "type": "boolean"
+        }
+      },
+      "required": ["model", "schemaVersion", "id", "revision", "data", "deleted"],
+      "additionalProperties": false
+    },
+    "RecoveryPayload": {
+      "type": "object",
+      "properties": {
+        "sourceContract": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/SourceContract" },
+        "schemaVersion": {
+          "const": 2
+        },
+        "epoch": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Id"
+        },
+        "commitOrder": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Revision"
+        },
+        "requestId": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Id"
+        },
+        "correlationId": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Id"
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u3-commercial:2#/$defs/RecoveryRow"
+          },
+          "minItems": 1,
+          "maxItems": 1024,
+          "contains": {
+            "type": "object",
+            "properties": {
+              "schemaVersion": {
+                "const": 2
+              }
+            },
+            "required": ["schemaVersion"]
+          },
+          "minContains": 1
+        },
+        "previousDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contentDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "sourceContract",
+        "schemaVersion",
+        "epoch",
+        "commitOrder",
+        "requestId",
+        "correlationId",
+        "rows",
+        "previousDigest",
+        "contentDigest"
+      ],
+      "additionalProperties": false
+    },
     "Id": {
       "$ref": "urn:oms:contract:common:2#/$defs/Id"
     },

@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitest/config';
-import { assertU3DatabaseProfile } from './fixtures/databases.js';
+import { assertU3DatabaseProfile } from './fixtures/profile.js';
 
 // Contribution only. The source-bound union of all three jobs owns the 80% gate.
 assertU3DatabaseProfile();

@@ -2,17 +2,20 @@ import { canonicalJson, fingerprint, requireCondition, SchemaValidator } from '@
 import { modelDefinition, primaryAttribute, validateModel } from './model-catalog.js';
 import type { ModelData } from './model-catalog.js';
 import { validateU2RecoveryImage } from './u2-recovery-payload.js';
+import { validateU3RecoveryImage } from './u3-recovery-payload.js';
+import { rowModelVersion } from './model-catalog.js';
 
 export interface RecoveryRow {
   model: string;
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
   id: string;
   revision: number;
   data: ModelData;
   deleted: boolean;
 }
 export interface RecoveryPayload {
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
+  sourceContract?: { profile: 'urn:oms:contract:u3-commercial:2'; registryVersion: 3 };
   epoch: string;
   commitOrder: number;
   requestId: string;
@@ -33,6 +36,12 @@ export interface RequestKey {
 }
 export function validateRecoveryRow(row: RecoveryRow, schema: SchemaValidator): void {
   if (row.model === 'RequestKey') {
+    requireCondition(
+      row.schemaVersion === 1,
+      503,
+      'RECOVERY_KEY_SCHEMA',
+      '접수 키의 실제 등록 버전은1입니다.',
+    );
     const data = row.data;
     requireCondition(
       Object.keys(data).sort().join(',') ===
@@ -67,7 +76,14 @@ export function validateRecoveryRow(row: RecoveryRow, schema: SchemaValidator): 
   }
   const definition = modelDefinition(row.model);
   validateModel(row.model, row.data, schema);
+  requireCondition(
+    row.schemaVersion === rowModelVersion(row.model, row.data),
+    503,
+    'RECOVERY_MODEL_VERSION',
+    '원상 decoder의 실제 등록 버전이 다릅니다.',
+  );
   validateU2RecoveryImage(row.model, row.data);
+  validateU3RecoveryImage(row.model, row.schemaVersion, row.data);
   requireCondition(
     row.id === row.data[primaryAttribute(definition).name] &&
       row.revision ===
@@ -91,9 +107,12 @@ export function decodePayload(text: string, schema: SchemaValidator): RecoveryPa
     'RECOVERY_SIZE',
     '복구 자료 크기가 초과되었습니다.',
   );
+  const raw = JSON.parse(text) as { schemaVersion?: unknown };
   const payload = schema.validateUri<RecoveryPayload>(
-    'urn:oms:contract:foundation:1#/$defs/RecoveryPayload',
-    JSON.parse(text),
+    raw?.schemaVersion === 2
+      ? 'urn:oms:contract:u3-commercial:2#/$defs/RecoveryPayload'
+      : 'urn:oms:contract:foundation:1#/$defs/RecoveryPayload',
+    raw,
   );
   const { contentDigest, ...body } = payload;
   requireCondition(

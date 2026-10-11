@@ -46,7 +46,16 @@ export async function execute(
     target: request.target,
     key: request.idempotencyKey,
   });
-  const inputFingerprint = fingerprint(request.input);
+  if (request.sourceContract !== undefined)
+    host.schema.validateUri(
+      'urn:oms:contract:u3-commercial:2#/$defs/SourceContract',
+      request.sourceContract,
+    );
+  const inputFingerprint = fingerprint(
+    request.sourceContract === undefined
+      ? request.input
+      : { sourceContract: request.sourceContract, input: request.input },
+  );
   let candidate: Candidate | undefined;
   let replay = false;
   await host.primary.transaction(async (manager) => {
@@ -105,7 +114,7 @@ export async function execute(
       '접수 순번 범위를 초과했습니다.',
     );
     const requestId = randomUUID();
-    const transaction = new ProtectedTransaction(manager, host.schema);
+    const transaction = new ProtectedTransaction(manager, host.schema, request.sourceContract);
     await operation(transaction, requestId);
     const key: RequestKey = {
       scopedKey,
@@ -128,7 +137,10 @@ export async function execute(
       deleted: false,
     });
     const payload = sealPayload({
-      schemaVersion: 1,
+      schemaVersion: rows.some((row) => row.schemaVersion === 2) ? 2 : 1,
+      ...(rows.some((row) => row.schemaVersion === 2)
+        ? { sourceContract: request.sourceContract }
+        : {}),
       epoch: request.epoch,
       commitOrder,
       requestId,

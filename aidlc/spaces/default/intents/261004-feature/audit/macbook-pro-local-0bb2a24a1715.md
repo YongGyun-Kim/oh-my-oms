@@ -49641,3 +49641,146 @@
 **Context**: construction > u3-commercial-ordering > code-generation > contracts-verification-20261011.md
 
 ---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T14:54:17Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T14:55:20Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Step 5–6의 TypeScript 검사, U3 unit 시험, 합성 DB 준비, ESLint는 종료 코드 0으로 완료됐습니다. U3 unit은 4개 파일에서 86개 테스트가 통과했고 skip은 없습니다. 보고서는 `.reports/u3/unit.json`에 기록됐습니다.\n\nMigration integration 시험은 시작 단계에서 종료 코드 1로 실패
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T14:56:57Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/models-verification-20261011.md
+**Context**: construction > u3-commercial-ordering > code-generation > models-verification-20261011.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T14:58:46Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 설정 로딩의 무거운 DB import를 제거했습니다. 기존 profile·endpoint 검증은 유지했습니다.\n\n변경 파일:\n\n- 새 `tests/u3/fixtures/profile.ts`\n- `tests/u3/fixtures/databases.ts`\n- `tests/u3/vitest.integration.config.ts`\n- `tests/u3/vites
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T14:59:59Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: 재검증 네 개가 모두 종료 코드 0으로 완료됐습니다. Migration compatibility는 10개, coverage config smoke는 6개 테스트가 통과했고 skip은 없습니다. 두 번째 명령은 `--coverage` 없이 실행했으므로 전체 coverage 결과가 아닙니다. TypeScript와 지정 ESLint 검사도 오류가 없습니다.\n\n현
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T15:03:03Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/models-verification-20261011.md
+**Context**: construction > u3-commercial-ordering > code-generation > models-verification-20261011.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T15:04:01Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: 승인된 저장·복구 영향 회귀 결과입니다.\n\n- U1 unit: 5개 파일, 46개 통과, 종료 코드 0\n- U2 unit: 5개 파일 중 4개 통과. 49개 통과, 1개 실패, 종료 코드 1\n- U1 integration: 5개 파일 중 4개 통과. 85개 통과, 1개 실패, 종료 코드 1\n- U2 integration: 5개 파일 중 4개 통과. 51개 
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T15:06:23Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/models-verification-20261011.md
+**Context**: construction > u3-commercial-ordering > code-generation > models-verification-20261011.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T15:06:41Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/models-verification-20261011.md
+**Context**: construction > u3-commercial-ordering > code-generation > models-verification-20261011.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T15:07:44Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 원인을 확인하고 최소 수정했습니다. 새 `sourceContract`의 `null/undefined`만 과거 저장 projection에서 제외합니다. 실제 계약 값과 다른 필드 변경은 그대로 보존하여 기존 보안·원본 대조가 거절하도록 했습니다.\n\n변경 파일은 4개입니다.\n\n- `packages/persistence/src/model-catalog.ts`\n-
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T15:16:21Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: 일곱 검증 중 여섯은 통과했고, U3 unit 검사에서 한 실패가 남았습니다.\n\n- U3 unit: 4개 파일, 88 passed / 1 failed, skip 0. [models.spec.ts](<project-dir>/tests/u3/unit/models.spec.ts:188)에서 FactEnvelope의 `sourceCon
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T15:17:38Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: FactEnvelope의 실제 개정 필드는 `aggregateVersion`입니다. 시험만 수정했고, 미등록 `revision` 입력은 `UNKNOWN_MODEL_FIELD`로 거절되는 검사도 추가했습니다. 제품 코드는 변경하지 않았습니다.\n\nLuna 재검증:\n\n```sh\nPATH=/tmp/oms-u1-runtime/node-v22.23.3-darwin-a
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T15:18:57Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: 최종 U3 unit 검사가 통과했습니다. 4개 파일에서 89개 테스트가 통과했고 skip은 없습니다. `tsc --noEmit`과 지정 ESLint 검사도 종료 코드 0입니다. 새 보고서는 `.reports/u3/models-projection-unit-final.json`에 기록됐습니다.\n\n현재 source identity digest는 요청한 값 `f6
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T15:20:36Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/code-generation-plan.md
+**Context**: construction > u3-commercial-ordering > code-generation > code-generation-plan.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T15:20:40Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: Step5·6 체크박스만 완료 표시했습니다. 제품 소스는 변경하지 않았고 Step7은 미착수입니다.\n\n최종 manifest에 이번 모델·migration·복구 변경과 `.gitignore`, 계약 스키마, `fixtures/profile.ts`, U2 보완 시험까지 포함하겠습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T15:21:29Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/models-verification-20261011.md
+**Context**: construction > u3-commercial-ordering > code-generation > models-verification-20261011.md
+
+---

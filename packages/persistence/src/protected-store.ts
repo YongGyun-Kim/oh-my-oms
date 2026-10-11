@@ -2,7 +2,7 @@ import type { Audience, ScopeV2 } from '@oms/contracts';
 import { canonicalJson, ExecutionBudget, requireCondition, SchemaValidator } from '@oms/contracts';
 import type { DataSource } from 'typeorm';
 import type { ModelData } from './model-catalog.js';
-import { modelDefinition } from './model-catalog.js';
+import { modelDefinition, validateModel } from './model-catalog.js';
 import { ProtectedTransaction } from './protected-transaction.js';
 import * as protectedwrite from './protected-write.js';
 import { decodePayload } from './recovery-types.js';
@@ -18,6 +18,7 @@ export interface WriteRequest {
   input: unknown;
   correlationId: string;
   epoch: string;
+  sourceContract?: { profile: 'urn:oms:contract:u3-commercial:2'; registryVersion: 3 };
 }
 export type FaultBoundary = 'PRIMARY_COMMITTED' | 'JOURNAL_PROTECTED' | 'VISIBILITY_UPDATED';
 export interface CommitResult {
@@ -156,7 +157,7 @@ export class ProtectedStore {
       `SELECT v.data,v.deleted FROM u1_entity_version v JOIN u1_protected_prefix p ON p.epoch=v.epoch AND v.commit_order<=p.commit_order JOIN u1_epoch_sequence e ON e.epoch=v.epoch WHERE v.model=$1 AND v.id=$2 ORDER BY e.generation DESC,v.commit_order DESC LIMIT 1`,
       [model, id],
     )) as { data: ModelData; deleted: boolean }[];
-    return rows[0] && !rows[0].deleted ? rows[0].data : null;
+    return rows[0] && !rows[0].deleted ? validateModel(model, rows[0].data, this.schema) : null;
   }
   async list(model: string, query: ModelQuery = {}): Promise<ModelData[]> {
     await this.currentEpoch();
@@ -273,7 +274,7 @@ export class ProtectedStore {
       `WITH candidates AS (SELECT DISTINCT v.id FROM u1_entity_version v WHERE v.model=$1 AND ($2::text IS NULL OR v.id>$2) AND v.data @> $3::jsonb${alternativesFor('v')}${idsFilter}) SELECT latest.data FROM candidates c CROSS JOIN LATERAL (SELECT v.data,v.deleted FROM u1_entity_version v JOIN u1_protected_prefix p ON p.epoch=v.epoch AND v.commit_order<=p.commit_order JOIN u1_epoch_sequence e ON e.epoch=v.epoch WHERE v.model=$1 AND v.id=c.id ORDER BY e.generation DESC,v.commit_order DESC LIMIT 1) latest WHERE NOT latest.deleted AND latest.data @> $3::jsonb${alternativesFor('latest')} ORDER BY c.id LIMIT $4`,
       parameters,
     )) as { data: ModelData }[];
-    return rows.map((row) => row.data);
+    return rows.map((row) => validateModel(model, row.data, this.schema));
   }
   async readRevision(model: string, id: string, revision: number): Promise<ModelData | null> {
     await this.currentEpoch();
@@ -283,7 +284,7 @@ export class ProtectedStore {
       'SELECT v.data,v.deleted FROM u1_entity_version v JOIN u1_protected_prefix p ON p.epoch=v.epoch AND v.commit_order<=p.commit_order WHERE v.model=$1 AND v.id=$2 AND v.revision=$3 LIMIT 1',
       [model, id, revision],
     )) as { data: ModelData; deleted: boolean }[];
-    return rows[0] && !rows[0].deleted ? rows[0].data : null;
+    return rows[0] && !rows[0].deleted ? validateModel(model, rows[0].data, this.schema) : null;
   }
   async currentProtected(model: string, id: string): Promise<ModelData | null> {
     ExecutionBudget.current()?.check();

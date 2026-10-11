@@ -49,7 +49,14 @@ export async function migrateRecovery(primary: DataSource, journal: DataSource):
         IF octet_length(t)>4194304 THEN RAISE EXCEPTION 'payload size' USING ERRCODE='22023'; END IF;
         body:=t::jsonb;
         IF b::jsonb IS DISTINCT FROM body-'contentDigest' OR encode(digest(b,'sha256'),'hex') IS DISTINCT FROM d THEN RAISE EXCEPTION 'payload digest' USING ERRCODE='22023'; END IF;
-        IF body->>'epoch' IS DISTINCT FROM e OR (body->>'commitOrder')::bigint IS DISTINCT FROM o OR body->>'contentDigest' IS DISTINCT FROM d OR body->>'previousDigest' IS DISTINCT FROM p OR body->>'schemaVersion' IS DISTINCT FROM '1' OR jsonb_array_length(body->'rows')<1 THEN RAISE EXCEPTION 'payload metadata' USING ERRCODE='22023'; END IF;
+        IF body->>'epoch' IS DISTINCT FROM e OR (body->>'commitOrder')::bigint IS DISTINCT FROM o OR body->>'contentDigest' IS DISTINCT FROM d OR body->>'previousDigest' IS DISTINCT FROM p OR body->>'schemaVersion' IS NULL OR body->>'schemaVersion' NOT IN ('1','2') OR jsonb_array_length(body->'rows')<1 THEN RAISE EXCEPTION 'payload metadata' USING ERRCODE='22023'; END IF;
+        IF body->'schemaVersion' NOT IN ('1'::jsonb,'2'::jsonb) OR
+           EXISTS(SELECT 1 FROM jsonb_array_elements(body->'rows') r WHERE r->'schemaVersion' IS NULL OR r->'schemaVersion' NOT IN ('1'::jsonb,'2'::jsonb)) OR
+           (body->'schemaVersion'='1'::jsonb AND EXISTS(SELECT 1 FROM jsonb_array_elements(body->'rows') r WHERE r->'schemaVersion'<>'1'::jsonb)) OR
+           (body->'schemaVersion'='2'::jsonb AND (body->'sourceContract' IS DISTINCT FROM '{"profile":"urn:oms:contract:u3-commercial:2","registryVersion":3}'::jsonb OR
+             NOT EXISTS(SELECT 1 FROM jsonb_array_elements(body->'rows') r WHERE r->'schemaVersion'='2'::jsonb) OR
+             EXISTS(SELECT 1 FROM jsonb_array_elements(body->'rows') r WHERE r->'schemaVersion'='2'::jsonb AND r->'data'->'modelVersion' IS DISTINCT FROM '2'::jsonb)))
+        THEN RAISE EXCEPTION 'payload model version' USING ERRCODE='22023'; END IF;
         -- Hash canonical body separately; caller supplies canonical JSON but cannot replace an existing entry.
         PERFORM 1 FROM u1_journal_prefix WHERE epoch=e FOR UPDATE;
         IF NOT FOUND THEN RAISE EXCEPTION 'unregistered epoch' USING ERRCODE='22023'; END IF;

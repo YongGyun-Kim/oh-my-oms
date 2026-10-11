@@ -152,6 +152,26 @@ describe('만료 PUBLISHED Work의 protected control과 원래 효과 비실행'
     expect(f.queue.acknowledgements).toHaveLength(0);
     expect((await store.read('WorkItem', String(f.work.workId)))?.state).toBe('PENDING');
   });
+  it.each([
+    { profile: 'urn:oms:contract:u3-commercial:2', registryVersion: 3 },
+    { profile: 'urn:oms:contract:u3-commercial:2', registryVersion: 2 },
+  ])(
+    '구형 Work의 primary-only sourceContract %j 오염은 control/ACK를 허용하지 않는다',
+    async (sourceContract) => {
+      const f = await fixture(),
+        before = await store.list('NotificationIntent');
+      await sources.primaryAdmin
+        .getRepository('WorkItem')
+        .update({ workId: f.work.workId }, { sourceContract });
+      await expect(f.worker.consume(f.message)).rejects.toMatchObject({
+        code: 'CURRENT_AUTH_NOT_PROTECTED',
+      });
+      expect(f.queue.acknowledgements).toHaveLength(0);
+      expect(await store.read('WorkItem', String(f.work.workId))).toEqual(f.work);
+      expect(await store.list('NotificationIntent')).toEqual(before);
+      expect(await store.list('ConsumerProcessingMark')).toHaveLength(0);
+    },
+  );
   it('원래 permit/사실의 대상·소비자 관계가 다르면 만료 execution을 완화하지 않고 거절한다', async () => {
     const f = await fixture(),
       id = randomUUID(),

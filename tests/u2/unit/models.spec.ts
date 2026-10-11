@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { SchemaValidator } from '@oms/contracts';
 import {
   U2_MODELS,
+  U3_MODELS,
   MODELS,
   ALL_MODELS,
   modelDefinition,
@@ -61,7 +62,16 @@ const security = {
 describe('U2 additive 모델과 원래 ID/decoder', () => {
   it('기존 MODELS versioned 목록은 보존하고 물리 schema는 추가 모델을 등록한다', () => {
     expect(MODELS).toHaveLength(43);
-    expect(ALL_MODELS.length).toBe(MODELS.length + U2_MODELS.length);
+    const expectedNames = [
+      ...new Set([...MODELS, ...U2_MODELS, ...U3_MODELS].map((model) => model.name)),
+    ].sort();
+    expect(ALL_MODELS.map((model) => model.name).sort()).toEqual(expectedNames);
+    expect(new Set(ALL_MODELS.map((model) => model.name)).size).toBe(ALL_MODELS.length);
+    expect(
+      materialSchemas()
+        .map((value) => value.options.name)
+        .sort(),
+    ).toEqual(expectedNames);
     expect(materialSchemas().map((value) => value.options.name)).toContain('RecoveryHandoffGrant');
   });
   it('closed security 모델의 정확한 owner/ID를 등록한다', () => {

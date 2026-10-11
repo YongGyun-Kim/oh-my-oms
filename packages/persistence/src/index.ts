@@ -22,3 +22,7 @@ export * from './purpose-secret-vault.js';
 export * from './u2-recovery-payload.js';
 export * from './u2-repository.js';
 export * from './u2-security-state.js';
+export * from './u3-model-catalog.js';
+export * from './u3-model-decoder.js';
+export * from './u3-migration.js';
+export * from './u3-recovery-payload.js';

@@ -101,6 +101,34 @@ export function validateU3Semantics(definition: string, value: unknown): void {
     );
   if (definition === 'OrderLineInput' || definition === 'OrderLineView')
     validateLine(value as U3OrderLineInput);
+  if (definition === 'CapturedLine' || definition === 'CapturedLines') {
+    const lines = definition === 'CapturedLine' ? [data] : (value as Record<string, unknown>[]);
+    for (const line of lines) {
+      validateLine(line as unknown as U3OrderLineInput);
+      check(
+        (line.priceKnowledge === 'KNOWN') === (line.purchasePrice !== null),
+        '미확인 구매 가격을0원/확정 금액으로 치환할 수 없습니다.',
+      );
+    }
+  }
+  if (definition === 'PriceAdjustment')
+    check(
+      (data.knowledge === 'KNOWN') ===
+        (data.amount !== null &&
+          data.confirmedByRef !== null &&
+          (data.evidenceRefs as unknown[]).length > 0),
+      '미확인 비용과 확정0원은 다른 상태입니다.',
+    );
+  if (definition === 'OrderPriceBreakdown' && data.knowledge === 'KNOWN') {
+    check(
+      data.total !== null &&
+        data.productAmount !== null &&
+        (data.lineAmounts as unknown[]).every((amount) => amount !== null),
+      '확정 합계에는 확인한 모든 행 금액이 필요합니다.',
+    );
+    for (const adjustment of data.adjustments as Record<string, unknown>[])
+      validateU3Semantics('PriceAdjustment', adjustment);
+  }
   if (definition === 'OrderInput') {
     const lines = data.lines as U3OrderLineInput[];
     for (const line of lines) validateLine(line);

@@ -9,10 +9,18 @@ export function validateAttribute(
     findModel: (name: string) => Model | undefined;
     columnType: (attribute: Attribute) => EntitySchemaColumnOptions['type'];
     u2?: boolean;
+    u3?: boolean;
     u2DecisionBasis?: boolean;
   },
 ): void {
   const { schema } = context;
+  if (attribute.type.startsWith('U3Contract:')) {
+    schema.validateUri(
+      'urn:oms:contract:u3-commercial:2#/$defs/' + attribute.type.slice(11),
+      value,
+    );
+    return;
+  }
   if (attribute.type.startsWith('U2Contract:')) {
     schema.validateUri(
       'urn:oms:contract:u2-access-additions:1#/$defs/' + attribute.type.slice(11),
@@ -144,7 +152,9 @@ export function validateAttribute(
       '지원하지 않는 원본 상태입니다.',
     );
   if (['Identifier', 'Revision', 'Instant', 'Money'].includes(attribute.type)) {
-    schema.validate(attribute.type === 'Identifier' ? 'Id' : attribute.type, value);
+    if (context.u3 && ['Revision', 'Money'].includes(attribute.type))
+      schema.validateUri('urn:oms:contract:u3-commercial:2#/$defs/' + attribute.type, value);
+    else schema.validate(attribute.type === 'Identifier' ? 'Id' : attribute.type, value);
     return;
   }
   if (attribute.type === 'LocalDate') {
@@ -152,7 +162,9 @@ export function validateAttribute(
     return;
   }
   if (attribute.type === 'Ref' || attribute.type === 'ExternalRef') {
-    if (context.u2) schema.validateUri('urn:oms:contract:u2-access-additions:1#/$defs/Ref', value);
+    if (context.u3) schema.validateUri('urn:oms:contract:u3-commercial:2#/$defs/Ref', value);
+    else if (context.u2)
+      schema.validateUri('urn:oms:contract:u2-access-additions:1#/$defs/Ref', value);
     else schema.validate('Ref', value);
     const target = attribute.references && context.findModel(attribute.references);
     if (target)
@@ -225,7 +237,9 @@ export function validateAttribute(
           items: {
             $ref: context.u2
               ? 'urn:oms:contract:u2-access-additions:1#/$defs/Ref'
-              : 'urn:oms:contract:common:2#/$defs/Ref',
+              : context.u3
+                ? 'urn:oms:contract:u3-commercial:2#/$defs/Ref'
+                : 'urn:oms:contract:common:2#/$defs/Ref',
           },
         },
         value,

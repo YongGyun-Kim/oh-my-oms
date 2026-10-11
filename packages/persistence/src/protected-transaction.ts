@@ -1,21 +1,60 @@
 import type { EntityManager } from 'typeorm';
-import { ExecutionBudget, requireCondition, SchemaValidator } from '@oms/contracts';
+import { canonicalJson, ExecutionBudget, requireCondition, SchemaValidator } from '@oms/contracts';
 import {
   modelDefinition,
   primaryAttribute,
   physicalData,
   validateModel,
   tableName,
+  storedModelData,
+  rowModelVersion,
 } from './model-catalog.js';
 import type { ModelData } from './model-catalog.js';
 import type { RecoveryRow } from './recovery-types.js';
+import { U3_MODELS } from './u3-model-catalog.js';
 
 export class ProtectedTransaction {
   private readonly changes = new Map<string, RecoveryRow>();
   constructor(
     private readonly manager: EntityManager,
     private readonly schema: SchemaValidator,
+    private readonly sourceContract?: {
+      profile: 'urn:oms:contract:u3-commercial:2';
+      registryVersion: 3;
+    },
   ) {}
+  private assertWriteVersion(model: string, data: ModelData): void {
+    if (this.sourceContract !== undefined)
+      this.schema.validateUri(
+        'urn:oms:contract:u3-commercial:2#/$defs/SourceContract',
+        this.sourceContract,
+      );
+    if (this.sourceContract && ['RequestReceipt', 'WorkItem', 'FactEnvelope'].includes(model)) {
+      this.schema.validateUri(
+        'urn:oms:contract:u3-commercial:2#/$defs/SourceContract',
+        data.sourceContract,
+      );
+      requireCondition(
+        canonicalJson(data.sourceContract) === canonicalJson(this.sourceContract),
+        400,
+        'WRITE_CONTRACT_SOURCE',
+        '접수/전달 원본의 실제 등록 계약을 보존해야 합니다.',
+      );
+    }
+    if (!U3_MODELS.some((entry) => entry.name === model)) return;
+    requireCondition(
+      data.modelVersion !== 2 || this.sourceContract !== undefined,
+      400,
+      'WRITE_CONTRACT_REQUIRED',
+      '새 U3 쓰기는 실제 등록 profile/operation version을 명시해야 합니다.',
+    );
+    requireCondition(
+      !this.sourceContract || data.modelVersion === 2,
+      400,
+      'WRITE_MODEL_VERSION',
+      '새 U3 명령을 구형 model version으로 기록할 수 없습니다.',
+    );
+  }
   async countCurrentAuthWindows(at: string): Promise<number> {
     this.schema.validate('Instant', at);
     ExecutionBudget.current()?.check();
@@ -35,7 +74,7 @@ export class ProtectedTransaction {
     const result: ModelData = {};
     for (const attribute of modelDefinition(model).attributes)
       result[attribute.name] = found[attribute.name];
-    return result;
+    return storedModelData(model, result);
   }
   async list(
     model: string,
@@ -86,20 +125,30 @@ export class ProtectedTransaction {
           record[attribute.name] = (record[attribute.name] as Date).toISOString();
       }
     return found.map((record) =>
-      Object.fromEntries(
-        modelDefinition(model).attributes.map((attribute) => [
-          attribute.name,
-          record[attribute.name],
-        ]),
+      storedModelData(
+        model,
+        Object.fromEntries(
+          modelDefinition(model).attributes.map((attribute) => [
+            attribute.name,
+            record[attribute.name],
+          ]),
+        ),
       ),
     );
   }
   async put(model: string, data: ModelData, expectedRevision: number | null = null): Promise<void> {
     ExecutionBudget.current()?.check();
+    this.assertWriteVersion(model, data);
     validateModel(model, data, this.schema);
     const definition = modelDefinition(model);
     const id = data[primaryAttribute(definition).name] as string;
     const previous = await this.get(model, id);
+    requireCondition(
+      !previous || rowModelVersion(model, previous) === rowModelVersion(model, data),
+      409,
+      'MODEL_UPGRADE_REQUIRED',
+      '구형 원본을 새 쓰기로 추정 변환할 수 없습니다.',
+    );
     if (expectedRevision !== null)
       requireCondition(
         previous?.revision === expectedRevision,
@@ -128,7 +177,7 @@ export class ProtectedTransaction {
     await this.manager.getRepository<ModelData>(model).save(physicalData(model, data));
     this.changes.set(model + '/' + id, {
       model,
-      schemaVersion: 1,
+      schemaVersion: rowModelVersion(model, data),
       id,
       revision,
       data,
@@ -147,6 +196,7 @@ export class ProtectedTransaction {
     const key = primaryAttribute(definition).name;
     const ids = new Set<string>();
     for (const data of records) {
+      this.assertWriteVersion(model, data);
       validateModel(model, data, this.schema);
       const id = data[key] as string;
       const revision = Number(
@@ -170,7 +220,7 @@ export class ProtectedTransaction {
       const id = data[key] as string;
       this.changes.set(model + '/' + id, {
         model,
-        schemaVersion: 1,
+        schemaVersion: rowModelVersion(model, data),
         id,
         revision: 1,
         data,
@@ -188,12 +238,13 @@ export class ProtectedTransaction {
       '삭제할 원본 개정이 다릅니다.',
     );
     const deleted = { ...current, revision: expectedRevision + 1 };
+    this.assertWriteVersion(model, deleted);
     await this.manager
       .getRepository(model)
       .delete({ [primaryAttribute(modelDefinition(model)).name]: id });
     this.changes.set(model + '/' + id, {
       model,
-      schemaVersion: 1,
+      schemaVersion: rowModelVersion(model, deleted),
       id,
       revision: expectedRevision + 1,
       data: deleted,

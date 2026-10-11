@@ -5,6 +5,8 @@ import { EntitySchema } from 'typeorm';
 import { validateAttribute } from './model-attribute.js';
 import { U2_MODELS } from './u2-model-catalog.js';
 import { validateU2ModelConstraints } from './u2-model-decoder.js';
+import { U3_MODELS, physicalU3Model } from './u3-model-catalog.js';
+import { validateU3ModelConstraints } from './u3-model-decoder.js';
 
 export interface Attribute {
   name: string;
@@ -30,7 +32,35 @@ const catalog = JSON.parse(
 // Preserve the U1 catalog's public versioned projection for old consumers.
 // Physical registration and current decoders use the additive full catalog.
 export const MODELS = Object.freeze(catalog.entities);
-export const ALL_MODELS = Object.freeze([...MODELS, ...U2_MODELS]);
+const u3ByName = new Map(U3_MODELS.map((model) => [model.name, model]));
+export const ALL_MODELS = Object.freeze([
+  ...MODELS.map<Model>((model) => {
+    const current = u3ByName.get(model.name);
+    if (current) return physicalU3Model(model, current);
+    if (['RequestReceipt', 'WorkItem', 'FactEnvelope'].includes(model.name))
+      return {
+        ...model,
+        attributes: [
+          ...model.attributes,
+          {
+            name: 'sourceContract',
+            type: 'U3Contract:SourceContract',
+            required: false,
+            nullable: true,
+          },
+        ],
+      };
+    return model;
+  }),
+  ...U2_MODELS,
+  ...U3_MODELS.filter((model) => !MODELS.some((old) => old.name === model.name)),
+]);
+requireCondition(
+  new Set(ALL_MODELS.map((model) => model.name)).size === ALL_MODELS.length,
+  503,
+  'DUPLICATE_MODEL',
+  '물리 모델 이름은 한 번만 등록해야 합니다.',
+);
 const modelByName = new Map(ALL_MODELS.map((model) => [model.name, model]));
 
 export function modelDefinition(name: string): Model {
@@ -72,8 +102,8 @@ function columnType(attribute: Attribute): EntitySchemaColumnOptions['type'] {
     return 'varchar';
   return 'jsonb';
 }
-export function materialSchemas(): EntitySchema<ModelData>[] {
-  return ALL_MODELS.map((model) => {
+export function materialSchemas(models: readonly Model[] = ALL_MODELS): EntitySchema<ModelData>[] {
+  return models.map((model) => {
     const columns: Record<string, EntitySchemaColumnOptions> = {};
     const foreignKeys: NonNullable<EntitySchemaOptions<ModelData>['foreignKeys']> = [];
     const checks: { expression: string }[] = [];
@@ -139,11 +169,12 @@ export function materialSchemas(): EntitySchema<ModelData>[] {
 }
 
 export function validateModel(name: string, data: ModelData, schema: SchemaValidator): ModelData {
-  const definition = modelDefinition(name);
+  const definition = modelForData(name, data);
   const attributeContext = {
     schema,
     columnType,
     findModel: (name: string) => modelByName.get(name),
+    u3: data.modelVersion === 2 && u3ByName.has(name),
     u2DecisionBasis:
       name === 'EnterpriseMembership' &&
       !!data.designationBasis &&
@@ -189,7 +220,82 @@ export function validateModel(name: string, data: ModelData, schema: SchemaValid
     validateAttribute(attribute, value, attributeContext);
   }
   validateU2ModelConstraints(name, data);
+  validateU3ModelConstraints(name, data, schema);
   return data;
+}
+
+export function modelForData(name: string, data: ModelData): Model {
+  const current = u3ByName.get(name);
+  if (!current) return modelDefinition(name);
+  if (data.modelVersion === 2) return current;
+  const legacy = MODELS.find((model) => model.name === name);
+  requireCondition(
+    data.modelVersion === undefined && legacy,
+    400,
+    'MODEL_VERSION',
+    '현재 U3 원본은 명시 modelVersion2, 과거 원본은 등록된 구형 decoder가 필요합니다.',
+  );
+  return legacy;
+}
+export function rowModelVersion(name: string, data: ModelData): 1 | 2 {
+  return modelForData(name, data) === u3ByName.get(name) ? 2 : 1;
+}
+// Physical NULLs introduced by expand migration are not invented legacy fields.
+export function storedModelData(name: string, physical: ModelData): ModelData {
+  const u3 = u3ByName.get(name),
+    legacy = MODELS.find((model) => model.name === name);
+  if (!u3)
+    return Object.fromEntries(
+      modelDefinition(name)
+        .attributes.filter(
+          (attribute) =>
+            attribute.type !== 'U3Contract:SourceContract' ||
+            (physical[attribute.name] !== null && physical[attribute.name] !== undefined),
+        )
+        .map((attribute) => [attribute.name, physical[attribute.name]]),
+    );
+  if (!legacy)
+    return Object.fromEntries(
+      modelDefinition(name)
+        .attributes.filter(
+          (attribute) =>
+            physical[attribute.name] !== undefined &&
+            (attribute.required || physical[attribute.name] !== null),
+        )
+        .map((attribute) => [attribute.name, physical[attribute.name]]),
+    );
+  if (physical.modelVersion === 2) {
+    const names = new Set(u3.attributes.map((attribute) => attribute.name));
+    for (const old of legacy.attributes)
+      requireCondition(
+        names.has(old.name) || physical[old.name] === null || physical[old.name] === undefined,
+        503,
+        'MODEL_VERSION_MIX',
+        '현재 U3 원본에 구형 전용 값을 섞을 수 없습니다.',
+      );
+    return Object.fromEntries(
+      u3.attributes
+        .filter(
+          (attribute) =>
+            physical[attribute.name] !== undefined &&
+            (attribute.required || physical[attribute.name] !== null),
+        )
+        .map((attribute) => [attribute.name, physical[attribute.name]]),
+    );
+  }
+  const names = new Set(legacy.attributes.map((attribute) => attribute.name));
+  for (const attribute of u3.attributes)
+    requireCondition(
+      names.has(attribute.name) ||
+        physical[attribute.name] === null ||
+        physical[attribute.name] === undefined,
+      503,
+      'MODEL_VERSION_MIX',
+      '구형 원본에 현재 U3 값을 추정할 수 없습니다.',
+    );
+  return Object.fromEntries(
+    legacy.attributes.map((attribute) => [attribute.name, physical[attribute.name]]),
+  );
 }
 
 export function physicalData(name: string, data: ModelData): ModelData {
