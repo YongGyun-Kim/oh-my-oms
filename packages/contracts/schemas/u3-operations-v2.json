@@ -152,7 +152,7 @@
     "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
     "action": "product.read",
     "kind": "query",
-    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/CommonOfferQuery",
     "output": "urn:oms:contract:u3-commercial:2#/$defs/ProductViewResult",
     "targetKind": "NONE"
   },

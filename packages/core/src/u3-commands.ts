@@ -212,7 +212,10 @@ export class U3Commands {
       const policy = await this.targetScope(access.scope, transaction);
       const action = operation.action ?? access.customerAction;
       requireCondition(
-        action && ['order.submit', 'order.read', 'contract.change.request'].includes(action),
+        action &&
+          ['product.read', 'order.submit', 'order.read', 'contract.change.request'].includes(
+            action,
+          ),
         403,
         'U3_CUSTOMER_ACTION',
         '고객 대상의 명시 업무 행위가 필요합니다.',
@@ -244,6 +247,39 @@ export class U3Commands {
         '현재 승인 기업의 정확한 개정이 필요합니다.',
       );
     }
+  }
+  async read<T>(
+    context: ServiceContext,
+    owner: U3Owner,
+    name: string,
+    input: unknown,
+    access: U3CommandAccess,
+    observe: () => Promise<T>,
+  ): Promise<T> {
+    const operation = this.registry.lookup(owner, name, U3_REGISTRY_VERSION);
+    requireCondition(
+      operation.kind === 'query' &&
+        operation.audience.includes(context.audience) &&
+        context.audience !== 'SYSTEM',
+      403,
+      'U3_PERSON_QUERY',
+      '현재 사람 조회의 등록 권한이 필요합니다.',
+    );
+    this.store.schema.validate('ServiceContext', context);
+    const query = this.store.schema.validateUri<Record<string, unknown>>(operation.input, input);
+    requireCondition(
+      canonicalJson(query.targetScope ?? null) === canonicalJson(access.scope),
+      400,
+      'U3_TARGET_SCOPE',
+      '실제 조회 범위와 입력이 다릅니다.',
+    );
+    await this.authorize(context, operation, access);
+    const snapshot = await this.fence.capture(context, access.scope?.enterpriseRef.id ?? null);
+    const result = await observe();
+    this.store.schema.validateUri(operation.output, result);
+    await this.authorize(context, operation, access);
+    await this.fence.assert(context, snapshot);
+    return result;
   }
   private request<T extends { meta: CommandMeta }>(
     context: ServiceContext,

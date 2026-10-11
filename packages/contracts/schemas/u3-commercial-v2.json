@@ -1337,25 +1337,154 @@
       "uniqueItems": true
     },
     "ProductInput": {
-      "allOf": [
-        {
-          "$ref": "urn:oms:contract:common:2#/$defs/ProductInput"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "meta": {
-              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommandMeta"
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommandMeta" },
+        "productType": { "enum": ["HARDWARE", "SOFTWARE"] },
+        "softwareTermKind": { "enum": ["PERPETUAL", "TERM", null] },
+        "label": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "salesDescription": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "commonPrice": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money" },
+        "salesConditionRefs": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs" },
+        "offerDraft": {
+          "anyOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommonOfferDraft" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "required": [
+        "meta",
+        "productType",
+        "softwareTermKind",
+        "label",
+        "salesDescription",
+        "commonPrice",
+        "salesConditionRefs",
+        "offerDraft"
+      ],
+      "additionalProperties": false
+    },
+    "CommonOfferDraft": {
+      "type": "object",
+      "properties": {
+        "effectiveWindow": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/EffectiveWindow" },
+        "revisionEvidenceRefs": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs" },
+        "conditions": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 7,
+          "items": {
+            "type": "object",
+            "properties": {
+              "conditionKey": {
+                "enum": [
+                  "PRICE",
+                  "PAYMENT",
+                  "PROVISION",
+                  "PERIOD",
+                  "COMPLETION",
+                  "RENEWAL",
+                  "VISIBILITY"
+                ]
+              },
+              "value": true,
+              "effectiveWindow": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/EffectiveWindow"
+              },
+              "evidenceRefs": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding/oneOf/0/properties/evidenceRefs"
+              }
             },
-            "commonPrice": {
-              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
-            },
-            "salesConditionRefs": {
-              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
-            }
+            "required": ["conditionKey", "value", "effectiveWindow", "evidenceRefs"],
+            "additionalProperties": false,
+            "oneOf": [
+              {
+                "properties": {
+                  "conditionKey": { "const": "PRICE" },
+                  "value": {
+                    "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding/oneOf/0/properties/value"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "conditionKey": { "const": "PAYMENT" },
+                  "value": {
+                    "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding/oneOf/1/properties/value"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "conditionKey": { "const": "PROVISION" },
+                  "value": {
+                    "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding/oneOf/2/properties/value"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "conditionKey": { "const": "PERIOD" },
+                  "value": {
+                    "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding/oneOf/3/properties/value"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "conditionKey": { "const": "COMPLETION" },
+                  "value": {
+                    "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding/oneOf/4/properties/value"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "conditionKey": { "const": "RENEWAL" },
+                  "value": {
+                    "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding/oneOf/5/properties/value"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "conditionKey": { "const": "VISIBILITY" },
+                  "value": {
+                    "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding/oneOf/6/properties/value"
+                  }
+                }
+              }
+            ]
           }
         }
-      ]
+      },
+      "required": ["effectiveWindow", "revisionEvidenceRefs", "conditions"],
+      "additionalProperties": false
+    },
+    "CommonOfferQuery": {
+      "type": "object",
+      "properties": {
+        "targetRef": {
+          "allOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+            {
+              "properties": {
+                "owner": { "const": "ProductCatalog" },
+                "entity": { "enum": ["Product", "CommonOfferRevision"] }
+              }
+            }
+          ]
+        },
+        "targetScope": {
+          "anyOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "required": ["targetRef", "targetScope"],
+      "additionalProperties": false
     },
     "ProductView": {
       "allOf": [

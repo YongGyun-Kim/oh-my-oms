@@ -50068,3 +50068,111 @@
 **Message**: 계획 파일의 Step7·8 체크박스만 완료 표시했습니다. 본문과 다른 파일은 수정하지 않았으며 Step9는 시작하지 않았습니다.
 
 ---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:04:06Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: Step9 구현과 Step10 시험 작성을 마치고 소스 쓰기를 중지했습니다. 테스트는 실행하지 않았고 완료 체크도 하지 않았습니다.\n\n변경은 U3 상품 입력·조건 초안, 기존 catalog 파일의 등록/개정/조회, 조회 권한 fence와 U3 fixture·시험으로 한정했습니다. 구형 입력과 registry2는 유지했습니다. 미완성 조건은 `INCOMPLE
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:05:54Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Catalog Step 9–10 검사 결과입니다.\n\n- TypeScript: 종료 코드 0\n- U3 unit: 134개 중 133개 통과, 1개 실패, pending·todo 0. 실패는 [catalog.spec.ts](<project-dir>/tests/u3/unit/catalog.spec.ts:60)에서 미확인 조건 입력이 
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:05:56Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 원인은 초안과 저장 계약의 근거 개수 불일치입니다.\n\n- 실패 입력: PRICE 조건의 `evidenceRefs: []`\n- 초안: 현재 0개 허용\n- 실제 `ConditionBinding`: 1–100개 필수\n\n최소 수정은 초안 항목에도 기존 근거 계약을 그대로 적용하고, 빈 근거 사례를 필수 입력 거절로 검증하는 것입니다. 조건 항목이 아직 없는 초안의
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T17:07:18Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/catalog-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > catalog-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:07:47Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 수정·포맷을 완료하고 소스 쓰기를 중지했습니다. 시험은 실행하지 않았습니다.\n\n항목 근거는 기존 1–100개 계약에 맞췄습니다. 빈 근거는 거절하며, 조건 항목·개정 근거가 미완성인 유효 초안의 DB 저장 시험은 유지·보완했습니다. 미사용 선언 두 곳도 제거했습니다.\n\n```sh\nPATH=/tmp/oms-u1-runtime/node-v22.23.3-darw
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:09:19Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Catalog evidence-aligned 검증이 모두 통과했습니다. TypeScript와 ESLint는 종료 코드 0입니다. U3 unit은 134/134, Catalog 및 repository integration은 32/32 테스트가 통과했습니다. JSON 보고서 모두 `success: true`이며 실패·pending·todo는 0입니다.\n\n현재 
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T17:10:28Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/catalog-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > catalog-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:11:09Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: 두 U1 legacy 회귀가 모두 통과했습니다.\n\n- Contracts/adapters unit: 31/31 통과\n- Business-flow integration: 53/53 통과\n\nJSON 보고서 모두 `success: true`이며 실패·pending·todo는 0입니다.】【：】【“】【
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T17:11:34Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/catalog-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > catalog-verification-20261012.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T17:11:35Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/code-generation-plan.md
+**Context**: construction > u3-commercial-ordering > code-generation > code-generation-plan.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T17:11:40Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: Step9·10 체크박스만 완료 표시했습니다. 본문과 다른 파일은 수정하지 않았습니다. Step11은 시작하지 않았습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T17:12:17Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/catalog-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > catalog-verification-20261012.md
+
+---

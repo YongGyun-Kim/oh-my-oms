@@ -16,7 +16,13 @@ export async function seedU3CommandAuthority(store: ProtectedStore) {
   const registered = await new U3StaffAccess(store, fixture.now).defineRole(fixture.staff, {
     meta: meta(),
     label: 'U3 저장 경계 합성 역할',
-    actions: ['product.register', 'product.revise', 'order.decide', 'contract.register'],
+    actions: [
+      'product.register',
+      'product.revise',
+      'product.read',
+      'order.decide',
+      'contract.register',
+    ],
   });
   await new StaffAccess(store, fixture.now).grantRole(fixture.staff, {
     meta: meta(),
@@ -49,7 +55,12 @@ export async function seedU3CommandAuthority(store: ProtectedStore) {
     },
     async (tx) => {
       const scopeRefs = [];
-      for (const action of ['order.submit', 'order.read', 'contract.change.request']) {
+      for (const action of [
+        'product.read',
+        'order.submit',
+        'order.read',
+        'contract.change.request',
+      ]) {
         const scope = {
           actionScopeId: randomUUID(),
           enterpriseRef: fixture.enterpriseRef,

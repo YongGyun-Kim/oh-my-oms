@@ -24,6 +24,7 @@ export function productFixture(): U3ProductInput {
     salesDescription: '실제 판매 상품이 아닌 검증 자료',
     commonPrice: { currency: 'KRW', value: '1000' },
     salesConditionRefs: [],
+    offerDraft: null,
   };
 }
 export function orderFixture(count = 1): U3OrderInput {

@@ -27,6 +27,13 @@ export type ConditionBinding = ConditionSource &
     | { conditionKey: 'COMPLETION' | 'RENEWAL'; value: Ref }
     | { conditionKey: 'VISIBILITY'; value: boolean }
   );
+type WithoutSource<T> = T extends unknown ? Omit<T, 'sourceRef'> : never;
+export type CommonConditionDraft = WithoutSource<ConditionBinding>;
+export interface CommonOfferDraft {
+  effectiveWindow: EffectiveWindow;
+  conditions: CommonConditionDraft[];
+  revisionEvidenceRefs: Ref[];
+}
 export interface U3ProductInput {
   meta: CommandMeta;
   productType: 'HARDWARE' | 'SOFTWARE';
@@ -35,6 +42,11 @@ export interface U3ProductInput {
   salesDescription: string;
   commonPrice: Money;
   salesConditionRefs: Ref[];
+  offerDraft: CommonOfferDraft | null;
+}
+export interface U3CommonOfferQuery {
+  targetRef: Ref;
+  targetScope: TargetScope | null;
 }
 export interface U3AgreementInput {
   meta: CommandMeta;
