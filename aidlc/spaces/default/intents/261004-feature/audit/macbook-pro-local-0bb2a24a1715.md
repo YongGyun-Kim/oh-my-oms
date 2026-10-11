@@ -51017,3 +51017,119 @@
 **Context**: construction > u3-commercial-ordering > code-generation > order-submission-verification-20261012.md
 
 ---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T21:58:00Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 전체 직원 판단 계층과 시험 6개 파일을 작성·포맷하고 소스를 고정했습니다. Luna용 정확 명령과 새 보고서 경로를 전달했습니다.\n\n미등록·부분 준비·미확인 금액은 HOLD이며, 실제 후속 이행 완료로 표시하지 않습니다. 검사 결과를 기다리고 있고 변경 적용·AppliedTerms 연결은 아직 미완료입니다.
+
+---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T21:58:09Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:03:19Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Order-decision 검증 결과입니다. TypeScript는 종료 코드 0, U3 unit은 246/246 통과했습니다. Order-decision integration은 종료 코드 1로 11개 중 5개 통과, 6개 실패였으며 미처리 오류는 보고되지 않았습니다. 지정에 따라 통합 실패 후 ESLint와 submission 회귀는 실행하지 않았습니다.\n
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:03:36Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 정상 주문이 HOLD가 되는 구체 원인을 찾았습니다. `CommonOfferRevision`에 없는 `state`를 `OFFERABLE`과 비교하고 있었습니다. 실제 등록 필드는 `visible`이며, 정상 원본도 이 검사에서 `ORDER_TERMS_CHANGED`로 처리됩니다.\n\n`visible === true`와 기존 유효 구간을 확인하는 최소 수정안을
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:04:09Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: `CommonOfferRevision.visible === true`로 한 줄만 수정하고 소스를 고정했습니다. 기존 보호·기간·참조·근거 검증은 유지했습니다.\n\n파일 해시와 새 통합 보고서 명령을 전달했으며, 실제 재검증 결과는 아직 없습니다.
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T22:04:11Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-decision-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-decision-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:06:02Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Order-decision visible 수정 검증 결과입니다. TypeScript는 통과했고 U3 unit은 246/246 통과했습니다. Integration은 11개 중 9개 통과, 2개 실패로 종료 코드 1이었습니다. 지시에 따라 실패 후 submission 회귀와 ESLint는 실행하지 않았습니다.\n\n실패는 [order-decision.spec.ts
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:06:26Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: 정정했습니다. 직전 검증에서 U3 unit은 지정 명령으로 실행되어 246/246 통과했고, 새 보고서는 `.reports/u3/order-decision-unit-20261012.json`입니다. Integration은 `.reports/u3/order-decision-visible-fixed-integration-20261012.json`에 기록됐으며 
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T22:06:56Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-decision-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-decision-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:07:20Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 두 실패 모두 시험의 분류 문제로 확인했습니다.\n\n- `RequestKey`는 별도 폐쇄 검증을 받는 접수 식별 행으로 구분하고, 나머지 모델의 소유권 검사는 유지합니다.\n- 동시 판단은 실제 잠금 거절 `55P03`과 stale를 구분합니다. 잠금 거절된 동일 입력의 재시도는 stale여야 하며, 추가 결정·접수가 없어야 합니다.\n\n최소 수정안을 전달했으
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:08:25Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 승인된 시험 파일 하나만 수정·포맷하고 소스를 고정했습니다. 접수 식별 행을 구분하고, 동시 판단의 패자 재시도·추가 효과 없음·원본 불변 검증을 강화했습니다.\n\n파일 해시와 새 Luna 검증 명령을 전달했습니다. 제품 코드는 그대로입니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:10:52Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Order-decision 수정 이후 지정 검증이 모두 통과했습니다.\n\n- TypeScript: 종료 코드 0\n- Order-decision integration: 11/11 통과\n- Order submission regression: 7/7 통과\n- ESLint: 종료 코드 0\n- unhandled error: 0\n\n시작·종료 source identity
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T22:11:09Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-decision-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-decision-verification-20261012.md
+
+---

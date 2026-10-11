@@ -12,6 +12,8 @@ import type {
   U3ProposalTerms,
   U3OrderPriceBreakdown,
   U3ResolvedCommercialTerms,
+  U3OrderDecisionInput,
+  U3PriceConfirmation,
 } from '@oms/contracts';
 import {
   requireCondition,
@@ -19,8 +21,9 @@ import {
   fingerprint,
   ExecutionBudget,
   U3_PROFILE,
+  OmsError,
 } from '@oms/contracts';
-import { ProtectedTransaction, U3Transaction } from '@oms/persistence';
+import { ProtectedTransaction, U3Transaction, U3_SOURCE_CONTRACT } from '@oms/persistence';
 import type { ModelData, ProtectedStore } from '@oms/persistence';
 import { randomUUID } from 'node:crypto';
 import { Authorization } from './authorization.js';
@@ -34,6 +37,15 @@ import { CommercialAgreement } from './commercial-agreement.js';
 import type { U3EvidenceRegistration } from './u3-current-basis.js';
 import { confirmedOrderPrice, unconfirmedOrderPrice } from './order-price.js';
 import type { OrderingPolicy } from './scopes.js';
+import { U3OrderReadiness } from './u3-order-readiness.js';
+import type {
+  U3ReadinessObservation,
+  U3ReadinessRegistration,
+  U3ReadinessRequest,
+} from './u3-order-readiness.js';
+import type { Assessment } from './order-assessment.js';
+import { resolveConditionBindings } from './commercial-terms.js';
+import { withinEffectiveWindow } from './catalog-conditions.js';
 export class OrderAcceptance {
   private readonly authorization: Authorization;
   private readonly commands: Commands;
@@ -319,14 +331,17 @@ export class OrderAcceptance {
 export class U3OrderAcceptance {
   readonly commands: U3Commands;
   readonly agreement: CommercialAgreement;
+  readonly readiness: U3OrderReadiness;
   constructor(
     readonly store: ProtectedStore,
     readonly now: () => Date,
     private readonly staffIngress: (proof: unknown) => Promise<boolean>,
     evidence?: U3EvidenceRegistration,
+    readiness: U3ReadinessRegistration[] = [],
   ) {
     this.commands = new U3Commands(store, now);
     this.agreement = new CommercialAgreement(store, now, staffIngress, evidence);
+    this.readiness = new U3OrderReadiness(store, now, readiness);
   }
   private async ingress(context: ServiceContext, proof: unknown): Promise<void> {
     requireCondition(
@@ -613,6 +628,426 @@ export class U3OrderAcceptance {
             // 결과는 전체 행을 소유하는 집계 원본을 가리킨다. 모든 행은 같은 후보에 그대로 보호한다.
             refs: [orderRef, snapshotRef, choiceRef, decisionRef],
             state: 'REVIEW_REQUIRED',
+            notice: true,
+          };
+        },
+      ),
+    );
+  }
+  private unresolved(error: unknown): boolean {
+    return (
+      error instanceof OmsError &&
+      [
+        'ORDER_READINESS_UNCONFIRMED',
+        'ORDER_PRICE_UNCONFIRMED',
+        'ORDER_TERMS_CHANGED',
+        'U3_PROOF_UNCONFIRMED',
+        'STALE_U3_REFERENCE',
+        'ACTION_DENIED',
+        'AGREEMENT_CONDITION_CONFLICT',
+      ].includes(error.code)
+    );
+  }
+  private assessment(owner: Assessment['sourceOwner'], code: string): Assessment {
+    return {
+      sourceOwner: owner,
+      knowledge: 'UNKNOWN',
+      reasonKind: 'UNVERIFIED',
+      reasonCode: code,
+      observedAt: this.now().toISOString(),
+      sourceRevision: null,
+      basisRefs: [],
+    };
+  }
+  private async decisionOriginal(scope: U3Transaction, input: U3OrderDecisionInput) {
+    const order = await scope.current(input.targetRef);
+    requireCondition(
+      order.modelVersion === 2 &&
+        canonicalJson(order.targetScope) === canonicalJson(input.targetScope),
+      404,
+      'NOT_FOUND',
+      '해당 기업·조직의 정확한 주문이 필요합니다.',
+    );
+    requireCondition(
+      order.state === 'REVIEW',
+      409,
+      'ORDER_ALREADY_DECIDED',
+      '전체 수락·거절 후 새 판단으로 기존 결과를 덮어쓸 수 없습니다.',
+    );
+    requireCondition(
+      (order.changeApplicationRefs as Ref[]).length === 0,
+      503,
+      'ORDER_APPLIED_SOURCE_UNCONFIRMED',
+      '실제 적용 조건 소유 경로를 먼저 확인해야 합니다.',
+    );
+    const snapshotRef = order.purchaseTermsRef as Ref;
+    await scope.current(snapshotRef);
+    const snapshot = await this.commands.repository.current(snapshotRef),
+      choice = await scope.current(order.provisionChoiceRef as Ref),
+      birth = await this.store.readRevision('Order', input.targetRef.id, 1);
+    requireCondition(
+      birth?.modelVersion === 2 &&
+        canonicalJson(snapshot.orderRef) ===
+          canonicalJson(u3Ref('Order', birth, this.store.schema)) &&
+        canonicalJson(birth.purchaseTermsRef) === canonicalJson(snapshotRef) &&
+        birth.submissionRequestId === order.submissionRequestId &&
+        choice.choice === 'FULL' &&
+        canonicalJson(choice.orderRef) === canonicalJson(snapshot.orderRef) &&
+        canonicalJson(choice.effectiveRevisionRef) === canonicalJson(snapshotRef),
+      503,
+      'ORDER_SNAPSHOT_UNCONFIRMED',
+      '불변 구매 스냅샷과 실제 최초 전체 제공 원본이 필요합니다.',
+    );
+    const currentReceipt = await this.store.currentProtected(
+      'RequestReceipt',
+      String(order.submissionRequestId),
+    );
+    requireCondition(
+      currentReceipt,
+      503,
+      'ORDER_SNAPSHOT_UNCONFIRMED',
+      '실제 보호된 원래 제출 접수가 필요합니다.',
+    );
+    const receipt = await scope.current(ref('RequestReceipt', currentReceipt));
+    requireCondition(
+      canonicalJson(receipt.sourceContract) === canonicalJson(U3_SOURCE_CONTRACT) &&
+        receipt.owner === 'OrderAcceptance' &&
+        receipt.operation === 'submitOrder' &&
+        receipt.audience === 'CUSTOMER' &&
+        receipt.principalId === (birth.requesterAccountRef as Ref).id &&
+        (receipt.targetIdentity as { kind: string }).kind === 'NONE' &&
+        canonicalJson(receipt.targetScope) === canonicalJson(input.targetScope) &&
+        [snapshotRef, snapshot.orderRef as Ref].every((reference) =>
+          (receipt.resultRefs as Ref[]).some(
+            (value) => canonicalJson(value) === canonicalJson(reference),
+          ),
+        ),
+      503,
+      'ORDER_SNAPSHOT_UNCONFIRMED',
+      '스냅샷·요청자·고정 범위는 동일한 보호 제출 결과에 결합되어야 합니다.',
+    );
+    const captured = snapshot.capturedLines as ModelData[],
+      lines: ModelData[] = [];
+    requireCondition(
+      captured.length >= 1 &&
+        captured.length <= 100 &&
+        captured.length === (order.lineRefs as Ref[]).length,
+      503,
+      'ORDER_SNAPSHOT_UNCONFIRMED',
+      '주문 전체 행을 확인해야 합니다.',
+    );
+    for (const [index, reference] of (order.lineRefs as Ref[]).entries()) {
+      const line = await scope.current(reference),
+        original = captured[index]!;
+      requireCondition(
+        line.modelVersion === 2 &&
+          Number(line.position) === index + 1 &&
+          canonicalJson(line.orderRef) === canonicalJson(snapshot.orderRef) &&
+          line.requestedPaymentMode === order.paymentKind &&
+          [
+            'productRef',
+            'quantity',
+            'purchasePrice',
+            'paymentTermsRef',
+            'agreedPeriod',
+            'completionBasisRef',
+            'commonOfferRevisionRef',
+            'agreementRevisionRefs',
+            'conditionBindings',
+            'requestedActivationDate',
+          ].every((field) => canonicalJson(line[field]) === canonicalJson(original[field])),
+        503,
+        'ORDER_SNAPSHOT_UNCONFIRMED',
+        '모든 현재 행은 최초 구매 조건·수량·기간과 정확히 일치해야 합니다.',
+      );
+      lines.push(line);
+    }
+    const terms: U3ProposalTerms = {
+      termsRecordRef: snapshotRef,
+      lines: captured.map((line) => ({
+        productRef: line.productRef as Ref,
+        quantity: Number(line.quantity),
+        price: line.purchasePrice as U3ProposalTerms['lines'][number]['price'],
+        period: line.agreedPeriod as U3ProposalTerms['lines'][number]['period'],
+        conditionRefs: [
+          ...new Map(
+            (line.conditionBindings as ConditionBinding[]).map((binding) => [
+              canonicalJson(binding.sourceRef),
+              binding.sourceRef,
+            ]),
+          ).values(),
+        ],
+      })),
+    };
+    const request: U3ReadinessRequest = {
+      orderRef: input.targetRef,
+      purchaseTermsRef: snapshotRef,
+      enterpriseRef: input.targetScope.enterpriseRef,
+      targetScope: input.targetScope,
+      productType: order.productType as U3ReadinessRequest['productType'],
+      paymentKind: order.paymentKind as U3ReadinessRequest['paymentKind'],
+      provisionChoice: 'FULL',
+      priceBreakdown: snapshot.priceBreakdown as U3OrderPriceBreakdown,
+      lines: lines.map((line, index) => ({
+        lineRef: (order.lineRefs as Ref[])[index]!,
+        productRef: line.productRef as Ref,
+        commonOfferRevisionRef: line.commonOfferRevisionRef as Ref,
+        agreementRevisionRefs: line.agreementRevisionRefs as Ref[],
+        conditionBindings: line.conditionBindings as ConditionBinding[],
+        quantity: Number(line.quantity),
+        paymentMode: line.requestedPaymentMode as 'PREPAY' | 'POSTPAY',
+        requestedActivationDate: line.requestedActivationDate as string | null,
+        agreedPeriod: line.agreedPeriod as U3ReadinessRequest['lines'][number]['agreedPeriod'],
+      })),
+      epoch: await this.store.currentEpoch(),
+      decisionDigest: fingerprint(input),
+    };
+    return { order, snapshot, lines, terms, receipt, request };
+  }
+  private async commercialReadiness(
+    scope: U3Transaction,
+    original: Awaited<ReturnType<U3OrderAcceptance['decisionOriginal']>>,
+  ) {
+    const { request, snapshot, terms, receipt } = original;
+    const seen = new Set<string>();
+    for (const line of request.lines) {
+      const key = canonicalJson([line.commonOfferRevisionRef, line.agreementRevisionRefs]);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const common = await scope.current(line.commonOfferRevisionRef),
+        agreements: ModelData[] = [];
+      requireCondition(
+        common.modelVersion === 2 &&
+          common.visible === true &&
+          canonicalJson(common.productRef) === canonicalJson(line.productRef) &&
+          withinEffectiveWindow(
+            common.effectiveWindow as Parameters<typeof withinEffectiveWindow>[0],
+            this.now(),
+          ),
+        503,
+        'ORDER_TERMS_CHANGED',
+        '구매 시 선택한 조건 원본의 현재 판단 효력을 확인해야 합니다.',
+      );
+      for (const reference of line.agreementRevisionRefs)
+        agreements.push(await scope.current(reference));
+      await this.agreement.approvedSources(scope, line.agreementRevisionRefs, {
+        epoch: request.epoch,
+        approvalDigest: request.decisionDigest,
+        targetEnterpriseRef: request.enterpriseRef,
+      });
+      const resolved = resolveConditionBindings(
+        common.conditionBindings as ConditionBinding[],
+        agreements,
+        this.now(),
+      );
+      requireCondition(
+        canonicalJson(resolved) === canonicalJson(line.conditionBindings),
+        503,
+        'ORDER_TERMS_CHANGED',
+        '원래 조건의 효력/필수 근거가 달라지면 새 합의를 확인해야 합니다.',
+      );
+      for (const binding of line.conditionBindings)
+        for (const evidence of binding.evidenceRefs) await scope.current(evidence);
+    }
+    const confirmation = snapshot.priceConfirmation as U3PriceConfirmation | null | undefined;
+    requireCondition(
+      confirmation && (snapshot.priceBreakdown as U3OrderPriceBreakdown).knowledge === 'KNOWN',
+      503,
+      'ORDER_PRICE_UNCONFIRMED',
+      '미확인 총액이나 확인 자료 부재를0원으로 수락할 수 없습니다.',
+    );
+    await confirmedOrderPrice(
+      scope,
+      terms,
+      confirmation,
+      request.enterpriseRef,
+      request.epoch,
+      String(receipt.requestFingerprint),
+      this.agreement.basis,
+      this.commands.authorization,
+    );
+  }
+  async decide(
+    context: ServiceContext,
+    input: U3OrderDecisionInput,
+    ingressProof: unknown = null,
+  ): Promise<Receipt> {
+    await this.ingress(context, ingressProof);
+    return this.budget(context, () =>
+      this.commands.run(
+        context,
+        'OrderAcceptance',
+        'decideOrder',
+        { kind: 'RECORD', recordRef: input.targetRef },
+        input,
+        { scope: input.targetScope },
+        async (scope) => {
+          const original = await this.decisionOriginal(scope, input),
+            { order, request } = original;
+          requireCondition(
+            input.meta.reason.trim().length > 0 &&
+              (input.decision !== 'REJECT' || input.basisRefs.length > 0),
+            400,
+            'ORDER_DECISION_REASON',
+            '전체 거절은 실제 근거와 비어 있지 않은 사유가 필요합니다.',
+          );
+          if (input.basisRefs.length)
+            await this.agreement.basis.evidence(
+              scope,
+              input.basisRefs,
+              this.agreement.basis.registration.agreementPurpose,
+              context.actorAccountRef!,
+              request.enterpriseRef,
+              undefined,
+              {
+                epoch: request.epoch,
+                approvalDigest: request.decisionDigest,
+                targetEnterpriseRef: request.enterpriseRef,
+              },
+            );
+          let commercial = this.assessment('CommercialAgreement', 'ORDER_PRICE_UNCONFIRMED');
+          try {
+            await this.commercialReadiness(scope, original);
+            commercial = {
+              sourceOwner: 'CommercialAgreement',
+              knowledge: 'KNOWN',
+              reasonKind: 'SPECIAL_CONDITION',
+              reasonCode: 'ORIGINAL_CONFIRMED_TERMS',
+              observedAt: this.now().toISOString(),
+              sourceRevision: request.purchaseTermsRef.revision,
+              basisRefs: [request.purchaseTermsRef],
+            };
+          } catch (error) {
+            if (!this.unresolved(error)) throw error;
+            commercial.reasonCode = (error as OmsError).code;
+          }
+          const owners = [
+            'FinancialSettlement',
+            request.productType === 'HARDWARE' ? 'HardwareFulfillment' : 'SoftwareLifecycle',
+          ] as const;
+          const observations: (U3ReadinessObservation | null)[] = [];
+          for (const owner of owners) {
+            try {
+              observations.push(await this.readiness.current(owner, request));
+            } catch (error) {
+              if (!this.unresolved(error)) throw error;
+              observations.push(null);
+            }
+          }
+          const lineAssessments = request.lines.map((line, index) => ({
+            lineRef: line.lineRef,
+            assessments: [
+              commercial,
+              ...owners.map((owner, ownerIndex): Assessment => {
+                const observation = observations[ownerIndex],
+                  readiness = observation?.lines[index];
+                const periodMismatch =
+                  owner === 'SoftwareLifecycle' &&
+                  line.requestedActivationDate !== null &&
+                  line.agreedPeriod !== null &&
+                  line.requestedActivationDate !== line.agreedPeriod.startDate;
+                const ready =
+                  observation?.knowledge === 'KNOWN' &&
+                  readiness?.knowledge === 'KNOWN' &&
+                  readiness.readyQuantity === line.quantity &&
+                  (!periodMismatch || readiness.activationResolution === 'CONFIRMED');
+                return ready
+                  ? {
+                      sourceOwner: owner,
+                      knowledge: 'KNOWN',
+                      reasonKind: 'SPECIAL_CONDITION',
+                      reasonCode: 'OWNER_READY_FOR_ACCEPTANCE',
+                      observedAt: observation!.observedAt,
+                      sourceRevision: observation!.sourceRef.revision,
+                      basisRefs: observation!.sourceRefs,
+                    }
+                  : this.assessment(
+                      owner,
+                      periodMismatch ? 'ACTIVATION_AGREEMENT_UNCONFIRMED' : 'ORDER_OWNER_NOT_READY',
+                    );
+              }),
+            ],
+          }));
+          const allReady = lineAssessments.every((line) =>
+            line.assessments.every((assessment) => assessment.knowledge === 'KNOWN'),
+          );
+          const decision = input.decision === 'ACCEPT' && !allReady ? 'HOLD' : input.decision;
+          const acceptance =
+            decision === 'ACCEPT'
+              ? 'ACCEPTED'
+              : decision === 'REJECT'
+                ? 'DECLINED'
+                : 'REVIEW_REQUIRED';
+          const record: ModelData = {
+            modelVersion: 2,
+            decisionId: randomUUID(),
+            orderRef: input.targetRef,
+            acceptance,
+            lineAssessments,
+            basisRefs: input.basisRefs,
+            evaluatedAt: this.now().toISOString(),
+            assessedSourceRevisions: [
+              commercial,
+              ...observations
+                .filter((value) => value !== null)
+                .map((value) => ({
+                  sourceOwner: value.binding.owner,
+                  sourceRevision: value.sourceRef.revision,
+                })),
+            ]
+              .filter((value) => value.sourceRevision !== null)
+              .map((value) => ({
+                sourceOwner: value.sourceOwner,
+                sourceRevision: value.sourceRevision,
+              })),
+            actorRef: context.actorAccountRef,
+            observedOrderRevision: input.targetRef.revision,
+            decision,
+            revision: 1,
+          };
+          await scope.transaction.put('AcceptanceDecision', record);
+          const decisionRef = u3Ref('AcceptanceDecision', record, this.store.schema),
+            after: ModelData = {
+              ...order,
+              state:
+                decision === 'ACCEPT' ? 'ACCEPTED' : decision === 'REJECT' ? 'REJECTED' : 'REVIEW',
+              acceptanceRef: decisionRef,
+              revision: input.targetRef.revision + 1,
+            };
+          await scope.transaction.put('Order', after, input.targetRef.revision);
+          // 수락 직전 원본·권한 재대조. 변경되면 전체 후보를 롤백하며 늦은 응답으로 수락하지 않는다.
+          if (decision === 'ACCEPT') {
+            await this.commercialReadiness(scope, original);
+            for (const [index, owner] of owners.entries()) {
+              const before = observations[index]!,
+                current = await this.readiness.current(owner, request);
+              requireCondition(
+                canonicalJson([
+                  current.binding,
+                  current.knowledge,
+                  current.sourceRef,
+                  current.sourceRefs,
+                  current.lines,
+                ]) ===
+                  canonicalJson([
+                    before.binding,
+                    before.knowledge,
+                    before.sourceRef,
+                    before.sourceRefs,
+                    before.lines,
+                  ]),
+                409,
+                'ORDER_READINESS_CHANGED',
+                '같은 수락 직전의 준비 원본/수량/개정이 달라졌습니다.',
+              );
+            }
+          }
+          await this.ingress(context, ingressProof);
+          return {
+            target: u3Ref('Order', after, this.store.schema),
+            refs: [u3Ref('Order', after, this.store.schema), decisionRef],
+            before: input.targetRef,
+            state: decision === 'HOLD' ? 'REVIEW_REQUIRED' : 'RESULT_RECORDED',
             notice: true,
           };
         },

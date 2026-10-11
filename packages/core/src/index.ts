@@ -27,6 +27,7 @@ export * from './catalog-query.js';
 export * from './commercial-agreement.js';
 export * from './commercial-proposal.js';
 export * from './u3-renewal-source.js';
+export * from './u3-order-readiness.js';
 export * from './u3-current-basis.js';
 export * from './enterprise-query.js';
 export * from './history-query.js';
