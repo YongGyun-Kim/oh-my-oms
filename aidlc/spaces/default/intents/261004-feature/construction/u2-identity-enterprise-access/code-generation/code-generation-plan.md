@@ -1,5 +1,41 @@
 # U2 Code Generation 계획
 
+## 현재 시도 — PC fixture 최소 수리 계획 (2026-10-11, 승인 대기)
+
+이 절의 **Step1–Step6만 이번 Plan Approval의 실행 범위**다. 아래 「역사적 계획 원문」의59항목·체크·수집 명령·과거 완료/대기 표현은 이전 시도의 기록이며 다시 실행할 지시가 아니다. 새 시도에 과거 승인·READY·완료 체크를 승계하지 않는다. 지금은 PART 1만 작성하며 제품/fixture/시험 source·DB·시험·manifest 변경/실행은0이다. 질문·fresh fingerprint·실제 사람 승인·native 실행 허용 확인과 tool-produced 실행 brief는 conductor가 처리한다.
+
+사용자가 요청한 수리는 `tests/u1/fixtures/local-service.ts`와 `tests/u1/fixtures/staff-bootstrap.ts` 두 fixture다. 직접 부정 회귀를 위해 **새 시험 파일 `tests/u2/unit/u1-pc-fixture-preparation.spec.ts` 1개를 추가 제안**한다. 따라서 검토할 실제 source 쓰기 목록은 fixture2+시험1의3경로이며 제품 capability·스키마·runner/config·dependency·UI 변경은 없다. 이 시험 파일도 아직 존재/작성/실행하지 않았고 이번 승인 대상에 포함한다. 기존 두 fixture 안에서 최소 연결하며 불필요 helper 모듈을 분리하지 않는다.
+
+### 원인·원문·적용 기준
+
+- 공식 U1 PC4개는 `tests/u1/e2e/foundation-flow.spec.ts:119`의 새 역할 option 기대1/관측0으로 실패했다. 고유 선택1case도 FAIL이며 POST 역할 생성202/`RESULT_RECORDED`/StaffRole Ref 존재·Work Ref 없음, GET 역할 directory503/`SECURITY_BACKFILL_REQUIRED` 3회를 실제 관측했다. active 값은 미관측이다. 읽기 전용 U1 E2E DB 대조는 생성 역할/receipt4개와 직원 AccountSecurityState0/StaffAuthorityFence0개를 확인했다.
+- [진단과 두 파일 diff 제안](../../../verification/u2-pc-retry-diagnosis-20261011.md)의 결론을 사용한다. 역할 생성 자체 실패나 worker 지연·selector 문제로 바꾸지 않는다. API가 U2 directory의 현재 보호 fence를 검사하므로 원래 U1 reset/seed 준비 경계를 보완한다.
+- 기존 두 문서의 정확 원문은 conductor가 private temp `/var/folders/p7/nswgd_5919z69r72m_ykpvdc0000gn/T/oms-u2-before-fixture-plan-2unbpqo_/`에 보존했다. `code-generation-plan.md`58761bytes/SHA256 `8890f288f213663472067644413cc0cd845fb1f8213ee6d18c1f5e511427cb26`, `unit-test-instructions.md`30099bytes/SHA256 `3f12611c2aaa90dd1e7341c185fe5dc5cb65b4381a44a20e76b2e81513107e76`; `manifest.json`에 copy 경로가 있다. Git `f3832ac`에도 이전 원문이 남아 있다. 승인 전 workspace archive 추가는 guard가 거절했으며 생성된 artifact-history 경로가 있다고 주장하지 않는다.
+- [첫 배포 범위](../../../release-planning/first-release-scope-proposal.md)·[실행 계획](../../../release-planning/first-release-delivery-plan.md)의 고객사10곳 이내 제한 파일럿·일주문1000 계획 목표와 한국어 PC1280 이상을 유지한다. 이는 실제 수요/용량/배포 성공 증거가 아니다. 실제 Cognito·회사망·신원/법적 정책·수신/capability 미확인은 realactivation HOLD다.
+- 아래 `## Testing Contract`는 이번 `aidlc engine testing-posture render`의 완전한 JSON 블록과 그대로 일치한다. test-after/Standard/feature·80%/미실행분모와 보안 하한을 변경하지 않는다.
+
+### 순차 수리·시험과 책임
+
+- [ ] **Step1 — R00: runner·보존·승인 준비.** package.json의 등록 script와 고정 Node22.23.3/npm10.9.9·Vitest5.0.3/Playwright1.64.0·기존 tests/u2/vitest.unit.config.ts/integration.config.ts 및 두 Playwright config를 사용한다. 설치/config 변경 없이 아래 지침의 exact scoped 명령을 준비한다. fixture/source503파일·HEAD/lock/tools의 새 identity와 보존 보고서 bytes/hash를 읽어 고정하고 신규 output 부재를 확인한다. 사람의 이번 계획 승인과 native 허용 brief 전에는 R01/시험을 시작하지 않는다.
+- [ ] **Step2 — R01: 두 fixture의 준비 계층 구현.** `local-service.ts`에서 원래 reset→customer/other/unrelated/staff4계정 보호 seed **뒤**, 최소 manager seed **앞**에 등록 `backfillU2SecurityState(store)`를 연결한다. `OMS_U1_DATABASE_PROFILE=e2e-isolated`·기존 approved-local-only/production 차단과 exact loopback/port/database/user 검증을 준비 쓰기 전에 적용한다. 대상은 primary127.0.0.1:15432/`oms_u1_e2e`/`u1_verify_app`, journal127.0.0.1:25432/`oms_u1_journal_e2e`/`u1_verify_journal_append`뿐이다. 등록 reset/admission 자체를 넓히지 않는다. `staff-bootstrap.ts`의 기존 비공개 `initial-minimum-staff-role` 보호 transaction에 최초 StaffAuthorityFence를 추가한다. 현재 보호 STAFF Account와 raw/transaction Account를 앞/안에서 대조한다. 기존 fence는 currentProtected와 일치하면 개정/bytes를 유지하고 불일치·raw-only는 거절한다. 신규 fence의1은 새 합성 경계 최초 revision이며 과거 미확인 세대를 채우는 값이 아니다. 기존 Role/Grant/Receipt/History와 `staff.role.manage`만 유지하고 Receipt resultRefs를 바꾸지 않는다. 최소 seed가 생략된 기존 grant/no-reset namespace에 fence가 없거나 보호 불일치이면 닫고 API를 열지 않는다. backfill·manager/fence 보호 확인 완료→owners/API 생성·listen 순서를 강제한다. verification/다른 profile 호출의 원래 동작과 추가 U1 호출부는 보존한다.
+- [ ] **Step3 — R02: 구현 직후 준비 계층 시험 작성·실행.** 새 `tests/u2/unit/u1-pc-fixture-preparation.spec.ts`에 모듈별5–8개의 실제 호출/순서·상태 변경 검증을 작성한다. local-service 정상 준비/API 개방 순서, production/잘못된 synthetic/profile/host/port/db/user 차단, backfill 실패 시 API 미개방, 기존 grant+fence 없음/불일치 차단, 다른 profile 원래 동작을 검증한다. staff-bootstrap 정상 최소 grant+최초 fence 같은 transaction, 현재 Account 없음/raw-only/개정 변경 거절, 확인된 기존 fence 보존, raw-only/보호 불일치 fence 거절, fence 쓰기 실패 시 Role/Grant/Receipt/History 원자 rollback 및 원래 최소 권한/resultRefs를 검증한다. 가상 I/O/DB transaction double은 commit/rollback·현재 원본 불일치를 판정하며 항상allow/success oracle로 권위를 대신하지 않는다. timer/listen/DB 연결은 실제 기동하지 않고 module mock과 종료 정리로 격리한다. 단순 unit/type/lint/format은 source 작성 중지 후 exact digest/명령/고유 output/보호 hash를 conductor에게 전달해 Luna가 실행한다. 실패 원문을 보존하고 소유 범위의 원인만 수정한다.
+- [ ] **Step4 — R03: 기존 실제 PG 회귀.** 기존 `tests/u2/integration/migration-compatibility.spec.ts`의 protected legacy backfill 정상/멱등 및 valid/revoked/unconfirmed/used/unknown/stale/unprotected 행위, `runtime-security.spec.ts`의 보호된 기존 fence 보존 case를 정확 필터로 재사용한다. 기존 U2 verification-isolated의 등록 준비/역할만 사용하고 U1 E2E/U1 baseline과 다른 자료를 reset하지 않는다. 신규 pure fixture 시험은 orchestration 경계, 기존 PG 시험은 보호 primary/journal/prefix와 legacy admission 경계, 다음 PC는 실제 U1 fixture 소비/API/BFF/UI 연결을 담당한다. 기존 시험을 새 fixture 직접 PG 회귀로 과장하지 않는다. full integration/coverage/scanner/collector를 실행하지 않는다.
+- [ ] **Step5 — R04: source 고정 후 기존 U1 PC4+U2 PC5 직렬 검증.** U1 `foundation-flow.spec.ts`4case를 그대로 실행해 기업 신청/승인→역할 생성·부여→HW/SW 상품·주문 전체대기를 보존한다. U2 `invitation-flow.spec.ts`2+`recovery-party.spec.ts`1+`staff-boundary.spec.ts`2를 별도 실행한다. U1을 U2 PC5로 대체하지 않는다. 원래 selector/120000ms 시나리오 및 config 기한·MFA/skew/현재권위/private경계·기존 계정/권한·역할별/전체32+32 연결 예산을 변경하지 않는다. 정확 고유 reporter/outputDir와 source 전후/원래 보고서 hash를 보존하며9case 모두 실제 통과·failed/skip/flaky0을 확인한다. reporter JSON·원문 log·safe status/code/boolean 외 secret/code/cookie/DOM/PII는 출력하지 않는다. fixture 실패 시 API/BFF/browser/worker/DB pool의 실제 소유 프로세스 종료를 확인한다.
+- [ ] **Step6 — R05: 수정 범위 인계·독립 검토·정식 체크포인트.** 구현 후에만 이번3경로의 diff/source identity·새 scoped 증거·old 원문 보존을 summary/trace/strict manifest/쓰기 ledger에 연결하고 독립 review를 conductor에게 넘긴다. 과거59항목/기존 review receipt를 이번 승인/검토로 재라벨하지 않는다. 의미 있는 수정 묶음의 commit/push는 사용자 허용 범위에서 conductor가 처리하며 source HEAD 변경은 bytes lineage와 새 identity를 구별한다. 정식 Construction verification 명령 선택/보호 승인·`bolt checkpoint --action verify --unit u2-identity-enterprise-access --kind unit`·현재 Construction 정책에 따른 체크포인트 승인은 conductor 책임이다. 선택 PC 통과만으로 공식 checkpoint/Unit 완료를 쓰지 않는다. 테스트 실패/준비 누락/보호 보고서 변형은 halt·원문/cleanup 인계 뒤 conductor가 현재 진단에 따라 실제로 허용하는 처리 선택을 기다리며 우연한 반복/timeout 확대를 하지 않는다.
+
+### 추적·적용하지 않는 계층·미충족 항목
+
+R01/R02의 계정/직원 보호 준비는 US1.7·AC1.7.1–3, BR1.1/1.4/7.3/7.4, NFR1.2/1.4/13.2/13.3에 연결한다. R03/R04는 US1.3/1.4/1.6의 현재 소속/역할·직원 관리 및 U1 협력 US1.1/1.2/3.3의 대표 통합 경계를 검증한다. 이 매핑은 전체 AC·실제 회사망/MFA provider 실증 완료 판정이 아니다. API/business/repository 제품 구현·DB migration·UI·IaC/CI·dependency는 이번에 새로 구현할 계층이 없으므로 건드리지 않는다.
+
+`scripts/u2/runtime-source.ts:productInventory`는 apps/packages src/infra/cdk/scripts u1+u2를 제품 분모로 선정하며 tests 경로는 포함하지 않는다. 계획의 fixture2+새 시험1은 **현재 정의의 제품 분모에 없는 시험 코드**지만 전체 runtime source identity에는 포함된다. 따라서 기존 전체80.274353%는 이전 identity의 역사적 근거이며 이번 새 identity의 coverage PASS로 선언하지 않는다. 분모/config/exclusion/80% 하한을 수정하지 않고 현재 전체 coverage·보안 gate의 실제 검증 필요성은 후속 인계에 남긴다. 이번 계획은 추가 full collector/이미지/scanner/100k50분/10분 부하/DR를 실행하도록 허용하지 않는다.
+
+P10 시간 하한 FAIL·DR 미실행/후속 확장, P11 과거 독립 review 및 남은 code-review Major2, FD R01–03/NFR Design HMAC R01·U1 R01/R02, original U1563 상세/SAST child 원본 provenance gap2·과거 TOTP시각/terminal code 미관측은 각각 원래 근거/후속 책임으로 유지한다. fixture 수리로 해결·위험 수용·Skip/PASS를 만들지 않는다. 새 제품 정책 질문: None. 정확 준비/현재 보호 대조가 두 fixture로 불가능하면 추가 owning path와 이유를 conductor에 반환하고 그 의존 구현을 멈춘다.
+
+## 역사적 계획 원문 — 이전59항목, 이번 실행 지시 아님
+
+다음 원문은 보존된 이전 계획에서 제목 아래 본문을 그대로 유지한 것이다. 역사적 체크·완료/미실행·후속 명령을 현재 수리 scope와 혼동하지 않는다. Testing Contract 블록은 현재 render와 일치하며 계속 authoritative다.
+
+
 ## 범위와 승인 경계
 
 **Unit:** u2-identity-enterprise-access  
@@ -121,110 +157,110 @@ API/worker·계약/모델·현재 권한/protection 변경은 high 영향이다.
 
 ### Step1 — P00. 현재 기준·구조·runner 준비
 
-- [x] scripts/u2/run-u1-regression.ts와 tests/u2/unit/u1-regression-output.spec.ts를 구현하고 계층 test-after로 검증한다. unit/integration의 승인된 정확 tests/u1 경로만 선택하고 U2 report-key/고유 JSON output을 강제한다. 누락·잘못된 모드/경로·U1 output·임의 reporter override·no-test·실패/미생성/skip는 거절하고, 기존 U1 default report의 byte hash를 실행 전후 대조해 변경 시 차단한다. 기존 runner/config·DB admission/명시된 준비 규칙과 하한을 보존하며 추가 DB reset이나 외부 실행을 넣지 않는다. 보호된 원래 보고서 바이트를 새 측정으로 대체하지 않는다. incident의 현재16/16 증거/해시·원래 상세 bytes 미복구·남은 조치를 기록하고, 전체 현재 source proof와 과거 근거를 구별한다. 모든 기존/후속 U1 선택 회귀는 이 실행기만 사용하며 U2 선택시험도 명시 selected output으로 전체 report를 덮어쓰지 않는다.
+- [ ] scripts/u2/run-u1-regression.ts와 tests/u2/unit/u1-regression-output.spec.ts를 구현하고 계층 test-after로 검증한다. unit/integration의 승인된 정확 tests/u1 경로만 선택하고 U2 report-key/고유 JSON output을 강제한다. 누락·잘못된 모드/경로·U1 output·임의 reporter override·no-test·실패/미생성/skip는 거절하고, 기존 U1 default report의 byte hash를 실행 전후 대조해 변경 시 차단한다. 기존 runner/config·DB admission/명시된 준비 규칙과 하한을 보존하며 추가 DB reset이나 외부 실행을 넣지 않는다. 보호된 원래 보고서 바이트를 새 측정으로 대체하지 않는다. incident의 현재16/16 증거/해시·원래 상세 bytes 미복구·남은 조치를 기록하고, 전체 현재 source proof와 과거 근거를 구별한다. 모든 기존/후속 U1 선택 회귀는 이 실행기만 사용하며 U2 선택시험도 명시 selected output으로 전체 report를 덮어쓰지 않는다.
 
-- [x] tests/u1/unit/skeleton.spec.ts의 보고서 fixture를 격리한다. readFileSync/statSync가 .reports/u1/ 아래 요청을 fixture map에서 찾지 못하면 mock ENOENT를 반환하고 실제 disk로 fallback하지 않게 한다. 상대/절대 경로를 같은 보고서 namespace로 정규화하고 fixture 존재/누락을 동일하게 판정한다. runtime source identity 계산에 필요한 보고서 namespace 밖 파일의 실제 읽기는 유지한다. 기존 보존 보고서·제품 verifySkeleton·80%/필수보고서 기준은 수정하지 않는다. 누락 read/stat·상대/절대 경로·fixture 존재 및 source 파일 읽기 회귀를 해당 테스트에 추가하고 정확한 단일 파일 명령으로 실행한 뒤 current-source 전체 unit baseline을 별도 project-validation에서 재수집한다.
-- [x] 현재 설계/계약·source drift·existing 변경·callers 확인, 실제 Plan Approval receipt/brief 확인 후에만 실행한다. 기존 U1 전체 baseline 실행은 아래 project-validation 담당에게 요청해 변경 전 source identity당 한 번 기록한다. U2 단위 지침은 U2 시험과 직접 영향받는 U1 파일 filter만 실행한다. U1 두 미해결 회귀를 일반 기존 suite 통과로 숨기지 않는다.
-- [x] package.json에 U2 명령을 추가하고 tsconfig.json의 tests/u2·scripts/u2를 포함한다. 버전은 현 lock 유지, 새 dependency가 필요하면 관련 코드 전 exact 지원/보안 근거를 확보하고 package-lock.json 변경을 선언한다.
-- [x] tests/u2/vitest.unit.config.ts, vitest.integration.config.ts, vitest.coverage.config.ts, playwright.config.ts; tests/u2/fixtures/{databases,identity,enterprise,provider,queue,clock,local-service,reset}.ts; scripts/u2/{prepare-test-databases,bootstrap-ci,check}.ts를 만든다.
-- [x] U2 local-only admission과 독립 primary/journal DB·역할·namespace를 준비한다. 기존 U1 baseline DB/보고서·다른 작업자 자료를 reset하지 않는다. runner/config tests/u2/unit/tooling.spec.ts 작성·실행으로 대상/denominator/no-test/미지원 차단을 확인한다.
+- [ ] tests/u1/unit/skeleton.spec.ts의 보고서 fixture를 격리한다. readFileSync/statSync가 .reports/u1/ 아래 요청을 fixture map에서 찾지 못하면 mock ENOENT를 반환하고 실제 disk로 fallback하지 않게 한다. 상대/절대 경로를 같은 보고서 namespace로 정규화하고 fixture 존재/누락을 동일하게 판정한다. runtime source identity 계산에 필요한 보고서 namespace 밖 파일의 실제 읽기는 유지한다. 기존 보존 보고서·제품 verifySkeleton·80%/필수보고서 기준은 수정하지 않는다. 누락 read/stat·상대/절대 경로·fixture 존재 및 source 파일 읽기 회귀를 해당 테스트에 추가하고 정확한 단일 파일 명령으로 실행한 뒤 current-source 전체 unit baseline을 별도 project-validation에서 재수집한다.
+- [ ] 현재 설계/계약·source drift·existing 변경·callers 확인, 실제 Plan Approval receipt/brief 확인 후에만 실행한다. 기존 U1 전체 baseline 실행은 아래 project-validation 담당에게 요청해 변경 전 source identity당 한 번 기록한다. U2 단위 지침은 U2 시험과 직접 영향받는 U1 파일 filter만 실행한다. U1 두 미해결 회귀를 일반 기존 suite 통과로 숨기지 않는다.
+- [ ] package.json에 U2 명령을 추가하고 tsconfig.json의 tests/u2·scripts/u2를 포함한다. 버전은 현 lock 유지, 새 dependency가 필요하면 관련 코드 전 exact 지원/보안 근거를 확보하고 package-lock.json 변경을 선언한다.
+- [ ] tests/u2/vitest.unit.config.ts, vitest.integration.config.ts, vitest.coverage.config.ts, playwright.config.ts; tests/u2/fixtures/{databases,identity,enterprise,provider,queue,clock,local-service,reset}.ts; scripts/u2/{prepare-test-databases,bootstrap-ci,check}.ts를 만든다.
+- [ ] U2 local-only admission과 독립 primary/journal DB·역할·namespace를 준비한다. 기존 U1 baseline DB/보고서·다른 작업자 자료를 reset하지 않는다. runner/config tests/u2/unit/tooling.spec.ts 작성·실행으로 대상/denominator/no-test/미지원 차단을 확인한다.
 
 연결: 전8스토리·BR7.1/7.3/7.4, NFR9.2/13.3/14.1/14.2. 선행: P00 runtime/도구 준비와 실제 승인.
 
 ### Step2 — P01. 데이터 모델·닫힌 계약 구현 → 시험
 
-- [x] packages/contracts/schemas/u2-access-additions-v1.json·u2-operations-v1.json, packages/contracts/src/u2-{types,declarations}.ts를 추가하고 schema.ts/registry.ts/index.ts에 명시 등록한다. CE-U2-01–07와 CE-U2-ND-01–03의 exact operation/target/context/input/output/Problem·Knowledge·expectedRevision·closed nullable/enum을 정의한다. 기존 common/C01/C02/C21/E01의 미등록 필드/목적을 추가하지 않는다.
-- [x] packages/persistence/models/u2-v1.json, packages/persistence/src/{u2-model-catalog,u2-migration,u2-model-decoder}.ts를 추가하고 model-catalog.ts/model-attribute.ts/data-source.ts/index.ts의 additive 등록을 연결한다. Account security generation·binding/auth/session/enterprise/staff fence는 기존 ID와 explicit mapping한다.
-- [x] PartyClaimContext/RecoveryHandoffGrant/ClaimReceipt/EnrollmentAuthority·Recovery/Verification/Emergency/Restoration·Invitation·role/grant/ScopeV2·등록연락/증거 policy 참조·HOLD 관계·소비/파기 marker를 SD/LC의 현재 원본으로 물리 매핑한다. logical FD의 옛 상태 enum을 그대로 runtime에 넓히지 않고 ND CLOSED/VERIFYING 등 새 전이는 U2 decoder/profile로 닫는다.
-- [x] unique active binding·membership enterprise/account·active grant·원래 invitation acceptance/claim receipt·recovery execution slot·idempotent effect와 조회 인덱스를 migration으로 보장한다. expand/backfill/구·신 decoder 공존, rollback의 원본 보존을 정의한다.
-- [x] tests/u2/unit/{contracts,models}.spec.ts·tests/u2/integration/{postgres-models,migration-compatibility}.spec.ts를 작성·실행한다. additionalProperties/wrong owner/target/purpose/TTL/enum·필수값/constraint·기존 안정ID·구형 미지원·rollback 차분·동시 unique 효과를 검증한다.
+- [ ] packages/contracts/schemas/u2-access-additions-v1.json·u2-operations-v1.json, packages/contracts/src/u2-{types,declarations}.ts를 추가하고 schema.ts/registry.ts/index.ts에 명시 등록한다. CE-U2-01–07와 CE-U2-ND-01–03의 exact operation/target/context/input/output/Problem·Knowledge·expectedRevision·closed nullable/enum을 정의한다. 기존 common/C01/C02/C21/E01의 미등록 필드/목적을 추가하지 않는다.
+- [ ] packages/persistence/models/u2-v1.json, packages/persistence/src/{u2-model-catalog,u2-migration,u2-model-decoder}.ts를 추가하고 model-catalog.ts/model-attribute.ts/data-source.ts/index.ts의 additive 등록을 연결한다. Account security generation·binding/auth/session/enterprise/staff fence는 기존 ID와 explicit mapping한다.
+- [ ] PartyClaimContext/RecoveryHandoffGrant/ClaimReceipt/EnrollmentAuthority·Recovery/Verification/Emergency/Restoration·Invitation·role/grant/ScopeV2·등록연락/증거 policy 참조·HOLD 관계·소비/파기 marker를 SD/LC의 현재 원본으로 물리 매핑한다. logical FD의 옛 상태 enum을 그대로 runtime에 넓히지 않고 ND CLOSED/VERIFYING 등 새 전이는 U2 decoder/profile로 닫는다.
+- [ ] unique active binding·membership enterprise/account·active grant·원래 invitation acceptance/claim receipt·recovery execution slot·idempotent effect와 조회 인덱스를 migration으로 보장한다. expand/backfill/구·신 decoder 공존, rollback의 원본 보존을 정의한다.
+- [ ] tests/u2/unit/{contracts,models}.spec.ts·tests/u2/integration/{postgres-models,migration-compatibility}.spec.ts를 작성·실행한다. additionalProperties/wrong owner/target/purpose/TTL/enum·필수값/constraint·기존 안정ID·구형 미지원·rollback 차분·동시 unique 효과를 검증한다.
 
 연결: 전8스토리·BR1.1/2.1/2.4/3.1/7.3, CE 전체, NFR1.2/1.6/1.12/1.13/13.1/13.2. 선행: 원래 contract meanings/등록 범위를 확정하고 새 기능은 binding 검증 전 비활성.
 
 ### Step3 — P02. repository·암호 자료·보호 재구성 구현 → 시험
 
-- [x] packages/persistence/src/{u2-repository,purpose-secret-vault,u2-recovery-payload,u2-security-state}.ts와 기존 protected-store.ts/protected-transaction.ts/security-state.ts/recovery-types.ts/recovery-security-policy.ts/recovery-security.ts/recovery-replay.ts를 확장한다. 현재 fence·짧은 lock/CAS·consumer effect·history/Receipt/notice obligation은 한 primary logical change로 후보 기록한다.
-- [x] packages/core/src/purpose-verifier.ts를 구현한다. HMAC 메시지는 domain/version·길이 제한 canonical metadata **및 검증할 후보 secret 정확 bytes**를 포함한다. handoff는12bytes random→16문자 canonical base64url·재인코딩/길이 검사, trim/casefold 없음. 목적/target/account/binding/security/source revision/keyVersion을 결합하고 constant-time compare한다.
-- [x] AES256-GCM unique nonce/AAD·현재 exact permit/권한별 read·expiry/revoke/claim 파기·backup suppression을 구현한다. 보호 DB 제한 namespace/역할+별도 key 권위이며 journal append/diagnostic reader는 decrypt 불가. 일반 payload에는 verifier/Ref/marker만 포함한다.
-- [x] tests/u2/unit/{purpose-verifier,secret-vault,recovery-payload}.spec.ts·tests/u2/integration/{repository,protected-state,secret-lifecycle}.spec.ts 작성·실행. primary/journal/prefix/visibility fault·응답유실 재대조·no handle/ACK before prefix, 소비/회수/5실패/UNKNOWN/tombstone 복원·권한 부활0·secret표식0을 확인한다.
+- [ ] packages/persistence/src/{u2-repository,purpose-secret-vault,u2-recovery-payload,u2-security-state}.ts와 기존 protected-store.ts/protected-transaction.ts/security-state.ts/recovery-types.ts/recovery-security-policy.ts/recovery-security.ts/recovery-replay.ts를 확장한다. 현재 fence·짧은 lock/CAS·consumer effect·history/Receipt/notice obligation은 한 primary logical change로 후보 기록한다.
+- [ ] packages/core/src/purpose-verifier.ts를 구현한다. HMAC 메시지는 domain/version·길이 제한 canonical metadata **및 검증할 후보 secret 정확 bytes**를 포함한다. handoff는12bytes random→16문자 canonical base64url·재인코딩/길이 검사, trim/casefold 없음. 목적/target/account/binding/security/source revision/keyVersion을 결합하고 constant-time compare한다.
+- [ ] AES256-GCM unique nonce/AAD·현재 exact permit/권한별 read·expiry/revoke/claim 파기·backup suppression을 구현한다. 보호 DB 제한 namespace/역할+별도 key 권위이며 journal append/diagnostic reader는 decrypt 불가. 일반 payload에는 verifier/Ref/marker만 포함한다.
+- [ ] tests/u2/unit/{purpose-verifier,secret-vault,recovery-payload}.spec.ts·tests/u2/integration/{repository,protected-state,secret-lifecycle}.spec.ts 작성·실행. primary/journal/prefix/visibility fault·응답유실 재대조·no handle/ACK before prefix, 소비/회수/5실패/UNKNOWN/tombstone 복원·권한 부활0·secret표식0을 확인한다.
 
 연결: 전8스토리·BR7.1/7.2, BR5.1/5.4/5.5/7.5, NFR1.10/1.12/4.1/4.2/5.1/5.3/11.2/11.3; NFR review R-01/IP03/05. 선행: 실제 key/legal policy 없는 경로는 realactivation 불가.
 
 ### Step4 — P03. 행위·현재권한·ScopeV2/동일인 구현 → 시험
 
-- [x] packages/core/src/{scope-v2,scope-compatibility,authorization-fence,verified-person}.ts 및 authorization.ts/scopes.ts/current-customer-scopes.ts/customer-contexts.ts를 확장한다. 정확15행위/4kind·한 완성 술어씩 OR·policy revision·NOT_USED/UNSET/oldorder/retired ID를 유지한다.
-- [x] 구 multiID 사업장/부서는 한 행위의 EXACT predicate 각각으로 분해, known pair만 보존한다. 기존 허용 집합 동일·타기업/타행위/곱집합 확대 금지. 표현 불명·policy/revision 누락은 보류/거절한다.
-- [x] management action 범위 안에서 before/after target과 역할 전체를 검증하되 직접 업무권 부재만으로 explicit self/other grant를 거절하지 않는다. enterpriseAccessRevision/membershipRevision/roleRevisions/accountSecurityRevision 및 staffAuthorityRevision을 실행/commit/투영에서 재대조한다.
-- [x] 등록된 actual person policy/evidence·current link 상태를 제공한다. 같은 사람 다계정·UNCONFIRMED/CONFLICT를 다른 사람으로 반환하지 않는다. 계약 실제 승인은 U3, SW 같은사람 두권한·별도승인은 U6에 남긴다.
-- [x] tests/u2/unit/{scopes,scope-compatibility,authorization,verified-person}.spec.ts·tests/u2/integration/{authority-race,information-projection}.spec.ts 작성·실행. grant회수/role개정 경합·다른 유효 grant 유지·현재 count/history/error/cache 누출0 포함.
+- [ ] packages/core/src/{scope-v2,scope-compatibility,authorization-fence,verified-person}.ts 및 authorization.ts/scopes.ts/current-customer-scopes.ts/customer-contexts.ts를 확장한다. 정확15행위/4kind·한 완성 술어씩 OR·policy revision·NOT_USED/UNSET/oldorder/retired ID를 유지한다.
+- [ ] 구 multiID 사업장/부서는 한 행위의 EXACT predicate 각각으로 분해, known pair만 보존한다. 기존 허용 집합 동일·타기업/타행위/곱집합 확대 금지. 표현 불명·policy/revision 누락은 보류/거절한다.
+- [ ] management action 범위 안에서 before/after target과 역할 전체를 검증하되 직접 업무권 부재만으로 explicit self/other grant를 거절하지 않는다. enterpriseAccessRevision/membershipRevision/roleRevisions/accountSecurityRevision 및 staffAuthorityRevision을 실행/commit/투영에서 재대조한다.
+- [ ] 등록된 actual person policy/evidence·current link 상태를 제공한다. 같은 사람 다계정·UNCONFIRMED/CONFLICT를 다른 사람으로 반환하지 않는다. 계약 실제 승인은 U3, SW 같은사람 두권한·별도승인은 U6에 남긴다.
+- [ ] tests/u2/unit/{scopes,scope-compatibility,authorization,verified-person}.spec.ts·tests/u2/integration/{authority-race,information-projection}.spec.ts 작성·실행. grant회수/role개정 경합·다른 유효 grant 유지·현재 count/history/error/cache 누출0 포함.
 
 연결: US1.4/1.5/1.6/1.7·BR1.1–1.4/2.1/2.3/3.1–3.6/4.1/4.2; NFR1.2/1.3/1.7/1.8/1.14/1.15/13.2; FD R-03.
 
 ### Step5 — P04. 초대·소속·역할/관리자 구현 → 시험
 
-- [x] packages/core/src/{enterprise-invitations,enterprise-memberships,enterprise-role-revisions,administrator-restoration}.ts 및 enterprise-access.ts/enterprise-access-state.ts/enterprise-organisation.ts/enterprise-roles.ts/staff-access.ts를 확장한다.
-- [x] 초대 issuedAt+7일·256bit token verifier, contact/version·org policy/role revision·inviter/current management·create/reactivate intent를 고정한다. 수락은 verified own password+TOTP invitation purpose이며 소속 선행/일반기업자료를 요구/노출하지 않는다.
-- [x] 수락/회수/동시accept의 한 protected effect·ACTIVE 소속 덮어쓰기 금지·INACTIVE exact intention·role/org/inviter 변경 재확인, tokenGeneration rotate/resend 원래 expiry 유지·24h raw 전달수명/원문 파기를 구현한다.
-- [x] role define와 revise/deactivate 분리·명시 self-grant/직원 catalog·기업관리 before/after 검증, 마지막/동시 마지막 admin0 허용/경고와 실효관리 부재 별도 표시. 재지정은 현재 staff restore+사설/MFA·검증 위임/person·explicit management grants만 적용한다.
-- [x] tests/u2/unit/{invitations,memberships,role-revisions,administrator}.spec.ts·tests/u2/integration/{invitation-race,membership-role-race,administrator-restoration}.spec.ts 작성·실행. expiry직전/정각/이후·resend/재시도·currentauthority/revision·admin0/다른grant·보호실패 검증.
+- [ ] packages/core/src/{enterprise-invitations,enterprise-memberships,enterprise-role-revisions,administrator-restoration}.ts 및 enterprise-access.ts/enterprise-access-state.ts/enterprise-organisation.ts/enterprise-roles.ts/staff-access.ts를 확장한다.
+- [ ] 초대 issuedAt+7일·256bit token verifier, contact/version·org policy/role revision·inviter/current management·create/reactivate intent를 고정한다. 수락은 verified own password+TOTP invitation purpose이며 소속 선행/일반기업자료를 요구/노출하지 않는다.
+- [ ] 수락/회수/동시accept의 한 protected effect·ACTIVE 소속 덮어쓰기 금지·INACTIVE exact intention·role/org/inviter 변경 재확인, tokenGeneration rotate/resend 원래 expiry 유지·24h raw 전달수명/원문 파기를 구현한다.
+- [ ] role define와 revise/deactivate 분리·명시 self-grant/직원 catalog·기업관리 before/after 검증, 마지막/동시 마지막 admin0 허용/경고와 실효관리 부재 별도 표시. 재지정은 현재 staff restore+사설/MFA·검증 위임/person·explicit management grants만 적용한다.
+- [ ] tests/u2/unit/{invitations,memberships,role-revisions,administrator}.spec.ts·tests/u2/integration/{invitation-race,membership-role-race,administrator-restoration}.spec.ts 작성·실행. expiry직전/정각/이후·resend/재시도·currentauthority/revision·admin0/다른grant·보호실패 검증.
 
 연결: US1.3/1.4/1.6/1.10·BR2.1–2.6/3.1–3.3/3.6/4.1/6.1/6.2/7.1/7.2/7.4; NFR1.13–1.16/4.1/5.2.
 
 ### Step6 — P05. 확인 당사자 인계·제한 등록 구현 → 시험
 
-- [x] packages/core/src/{party-claim-context,recovery-handoff,enrollment-authority}.ts와 identity.ts/identity-state.ts/identity-session.ts/identity-challenges.ts에 목적별 서버 상태를 연결한다.
-- [x] 새 verified PartyClaimContext256bit browser secret+challenge, 확인자의 결정/권위·당사자 contextRef·case/target/binding/security/verification/policy revisions를 고정한다. 익명 case 생성자/기존 cookie 자동 승격 금지·발급 자체는 generation 증가 없음.
-- [x] handoff96bit16문자/발급후5분/유효형식 잘못된claim5회는 grant 원본에 원자 보호 누적. unknown/malformed/wrongcontext가 타인 grant를 소진시키지 않음. 발급/교체/회수·동일case active grant 하나를 보존한다.
-- [x] claim code+party secret+CSRF/origin+exactchallenge/currentissuer 검증→ISSUED 단회소비/ClaimReceipt→post-fence generation/EnrollmentAuthority 보호→handle 반환 순서. consumedAt부터 별도5분/provider더짧은기한, retry/read-result TTL 연장 없음.
-- [x] tests/u2/unit/{party-context,handoff,enrollment-authority}.spec.ts·tests/u2/integration/{handoff-race,handoff-recovery}.spec.ts 작성·실행. 타인선행case/code탈취/다른cookie·case/purpose/challenge/issuer회수·5실패/정각만료·동시claim·재발급/restore 부활0 포함.
+- [ ] packages/core/src/{party-claim-context,recovery-handoff,enrollment-authority}.ts와 identity.ts/identity-state.ts/identity-session.ts/identity-challenges.ts에 목적별 서버 상태를 연결한다.
+- [ ] 새 verified PartyClaimContext256bit browser secret+challenge, 확인자의 결정/권위·당사자 contextRef·case/target/binding/security/verification/policy revisions를 고정한다. 익명 case 생성자/기존 cookie 자동 승격 금지·발급 자체는 generation 증가 없음.
+- [ ] handoff96bit16문자/발급후5분/유효형식 잘못된claim5회는 grant 원본에 원자 보호 누적. unknown/malformed/wrongcontext가 타인 grant를 소진시키지 않음. 발급/교체/회수·동일case active grant 하나를 보존한다.
+- [ ] claim code+party secret+CSRF/origin+exactchallenge/currentissuer 검증→ISSUED 단회소비/ClaimReceipt→post-fence generation/EnrollmentAuthority 보호→handle 반환 순서. consumedAt부터 별도5분/provider더짧은기한, retry/read-result TTL 연장 없음.
+- [ ] tests/u2/unit/{party-context,handoff,enrollment-authority}.spec.ts·tests/u2/integration/{handoff-race,handoff-recovery}.spec.ts 작성·실행. 타인선행case/code탈취/다른cookie·case/purpose/challenge/issuer회수·5실패/정각만료·동시claim·재발급/restore 부활0 포함.
 
 연결: US1.7/1.9·BR1.1/1.2/5.2/5.3/5.6/7.1/7.2/7.3, NFR1.5/1.6/1.10/1.12/4.1/5.1/5.3; FD R-01.
 
 ### Step7 — P06. 직접·담당자·비상 복구/HOLD 구현 → 시험
 
-- [x] packages/core/src/{recovery-case,recovery-verification,recovery-hold,emergency-recovery,recovery-completion}.ts와 identity-codes.ts/identity-factor.ts/identity-security-events.ts/recovery-codes.ts를 확장한다.
-- [x] password+현재 미사용 code 원자소비→generation회수/제한authority, 사전code 정기만료없음·재발급/회수/invalidbinding 거절. 직접복구에는 직원handoffcode를 추가 요구하지 않는다.
-- [x] 수동은 현재 recovery.verify+private/MFA·실제정책/출처/권위, 비상은 별도actual운영권위로 원래담당자만. capability/evidence/policy 없음은 HOLD. 일반role/header/publicendpoint로 EMERGENCY를 만들지 않는다.
-- [x] 각 Recovery/Emergency/AdministratorRestoration의 현재근거·예상개정 기반 HOLD resume/close/supersedes를 닫는다. expiredgrant/oldUNKNOWNeffect 재사용·새기한 덮기 금지. 새준비도 동일 unresolved execution slot에 연결한다.
-- [x] 새TOTP 실제확인+옛factor/code/session 무효화/옛effect종료·격리+새필수code보관확인+COMPLETED/보호history/E01의무를 모두 충족해야 완료. 통지요청/실전달·새BUSINESS재로그인은 별개다.
-- [x] tests/u2/unit/{saved-code-recovery,recovery-verification,recovery-hold,emergency-recovery,recovery-completion}.spec.ts·tests/u2/integration/{recovery-concurrency,hold-transitions,recovery-completion}.spec.ts 작성·실행. 이메일만/증거Ref만·issuer상실/expiredpermit·generation/oldsubject/rollback 경계 포함.
+- [ ] packages/core/src/{recovery-case,recovery-verification,recovery-hold,emergency-recovery,recovery-completion}.ts와 identity-codes.ts/identity-factor.ts/identity-security-events.ts/recovery-codes.ts를 확장한다.
+- [ ] password+현재 미사용 code 원자소비→generation회수/제한authority, 사전code 정기만료없음·재발급/회수/invalidbinding 거절. 직접복구에는 직원handoffcode를 추가 요구하지 않는다.
+- [ ] 수동은 현재 recovery.verify+private/MFA·실제정책/출처/권위, 비상은 별도actual운영권위로 원래담당자만. capability/evidence/policy 없음은 HOLD. 일반role/header/publicendpoint로 EMERGENCY를 만들지 않는다.
+- [ ] 각 Recovery/Emergency/AdministratorRestoration의 현재근거·예상개정 기반 HOLD resume/close/supersedes를 닫는다. expiredgrant/oldUNKNOWNeffect 재사용·새기한 덮기 금지. 새준비도 동일 unresolved execution slot에 연결한다.
+- [ ] 새TOTP 실제확인+옛factor/code/session 무효화/옛effect종료·격리+새필수code보관확인+COMPLETED/보호history/E01의무를 모두 충족해야 완료. 통지요청/실전달·새BUSINESS재로그인은 별개다.
+- [ ] tests/u2/unit/{saved-code-recovery,recovery-verification,recovery-hold,emergency-recovery,recovery-completion}.spec.ts·tests/u2/integration/{recovery-concurrency,hold-transitions,recovery-completion}.spec.ts 작성·실행. 이메일만/증거Ref만·issuer상실/expiredpermit·generation/oldsubject/rollback 경계 포함.
 
 연결: US1.8/1.9/1.10·BR5.1–5.6/6.2/7.1/7.2/7.5; NFR1.11/1.12/1.16/3.2/4.2/5.2/5.3/9.3; FD R-02.
 
 ### Step8 — P07. 제공자/worker 통합·기반 경계 보완 → 시험
 
-- [x] packages/integrations/src/{identity-capabilities,cognito-recovery}.ts·cognito.ts, packages/core/src/{identity-work,identity-consumer}.ts·identity-provider.ts·worker-consumer.ts·worker-relay.ts·queue.ts, packages/integrations/src/{sqs,worker-batch,runtime-loop,runtime-configuration}.ts와 apps/worker/src/main.ts를 결합한다.
-- [x] C21 exact approvedOperation/work/target/providerbinding/inputDigest/lease/epoch/attempt/deadline·SDK maxAttempts1·전체subjectmutation1/capability/providerbreaker를 등록한다. admin제거/signout/당사자firstpassword교체는 exactpool/현재permit에만. timeout/ResourceNotFound/probe/factor없음은 원래 제거 종료 증명이 아니므로 HOLD, 실capability 없는 actualadapter 실행불가.
-- [x] **U1 R-01:** matched expired PUBLISHED Work를 business effect 실행 없이 별도 bounded control transaction으로 REVIEW_REQUIRED/HOLD·원래IDs/deadline/delivery/history/currentepoch 보호한다. expired effect permit을 완화하지 않고 이 transition의 current 권위를 명시한다. 보호 기록 불가면 no-success-ACK/대조필요, 무한 PENDING 재소비 금지.
-- [x] **U1 R-02:** SqsBroker.receive의 per-envelope parse/identity·receive/redrive 근거와 finite quarantine 결과를 명시하고 valid siblings를 bounded consumer lanes로 전달한다. invalid envelope를 성공ACK하지 않으며 missing receipt/속성/schema/JSON 각각 격리한다. SDK-double 성공을 실제SQS증거로 부르지 않는다.
-- [x] tests/u2/unit/{provider-capabilities,identity-worker,mixed-sqs-batch,expired-work}.spec.ts·tests/u2/integration/{provider-unknown,worker-boundaries}.spec.ts 작성·실행. 기존 tests/u1/unit/{worker-batch,adapters,worker}.spec.ts·tests/u1/integration/{business-flow,http-boundaries,recovery}.spec.ts 회귀도 수행한다.
+- [ ] packages/integrations/src/{identity-capabilities,cognito-recovery}.ts·cognito.ts, packages/core/src/{identity-work,identity-consumer}.ts·identity-provider.ts·worker-consumer.ts·worker-relay.ts·queue.ts, packages/integrations/src/{sqs,worker-batch,runtime-loop,runtime-configuration}.ts와 apps/worker/src/main.ts를 결합한다.
+- [ ] C21 exact approvedOperation/work/target/providerbinding/inputDigest/lease/epoch/attempt/deadline·SDK maxAttempts1·전체subjectmutation1/capability/providerbreaker를 등록한다. admin제거/signout/당사자firstpassword교체는 exactpool/현재permit에만. timeout/ResourceNotFound/probe/factor없음은 원래 제거 종료 증명이 아니므로 HOLD, 실capability 없는 actualadapter 실행불가.
+- [ ] **U1 R-01:** matched expired PUBLISHED Work를 business effect 실행 없이 별도 bounded control transaction으로 REVIEW_REQUIRED/HOLD·원래IDs/deadline/delivery/history/currentepoch 보호한다. expired effect permit을 완화하지 않고 이 transition의 current 권위를 명시한다. 보호 기록 불가면 no-success-ACK/대조필요, 무한 PENDING 재소비 금지.
+- [ ] **U1 R-02:** SqsBroker.receive의 per-envelope parse/identity·receive/redrive 근거와 finite quarantine 결과를 명시하고 valid siblings를 bounded consumer lanes로 전달한다. invalid envelope를 성공ACK하지 않으며 missing receipt/속성/schema/JSON 각각 격리한다. SDK-double 성공을 실제SQS증거로 부르지 않는다.
+- [ ] tests/u2/unit/{provider-capabilities,identity-worker,mixed-sqs-batch,expired-work}.spec.ts·tests/u2/integration/{provider-unknown,worker-boundaries}.spec.ts 작성·실행. 기존 tests/u1/unit/{worker-batch,adapters,worker}.spec.ts·tests/u1/integration/{business-flow,http-boundaries,recovery}.spec.ts 회귀도 수행한다.
 
 연결: US1.8/1.9·협력US3.3/8.9/9.1/9.2·BR1.2/1.4/5.4/7.1/7.3/7.5; NFR1.9/3.2/4.2/5.3/6.2/10.1. 과거 U1 review 상태는 보존한다.
 
 ### Step9 — P08. API/endpoint·BFF 경계 구현 → 시험
 
-- [x] apps/api/src/{u2-operations,u2-authentication,u2-routes}.ts·operations.ts/authentication.ts/routes.ts/application.ts/transport-input.ts/security.ts와 packages/persistence/src/http-auth-intents.ts/http-attempts.ts를 결합한다.
-- [x] operation별 registered profile/version/target/data를 runtime검증한다. PRE/INITIAL/INVITE/RECOVERY/MFA_REENROLMENT/BUSINESS·private 운영authority를 서버 원본으로 구별, caller boolean·header·공유BFFcredential이 authority 아님. firstMFA에 아직없는MFA증거를 요구하지 않는다.
-- [x] packages/ui/src/{bff,client,security-proxy,ui-types}.ts·apps/customer-web/proxy.ts·apps/staff-web/proxy.ts·apps/customer-web/app/api/[...path]/route.ts·apps/staff-web/app/api/[...path]/route.ts에 목적cookie/CSRF/origin/ no-store/no-referrer/private ingress를 연결한다. 안전GET은 consume/변경 없음·URL raw token 즉시깨끗한 landing 교환.
-- [x] JSON64KiB/depth16/string4096·roleRefs100/predicate200/evidence20·page25/max100/cursor5분·scan200/total2000·bounded32+32/250ms·crypto4+16·network/identifier/global limit를 명시한다. 각 현재 권한 predicate의 SQL pushdown/allowlist와 current fence를 조회·commit·projection에 적용한다.
-- [x] tests/u2/unit/{http-contracts,bff-purpose,resource-budget}.spec.ts·tests/u2/integration/{http-identity,http-access,http-primary-ac,runtime-security}.spec.ts 작성·실행. direct API/직원public/위조ingress·origin/CSRF·subject/challenge·opaquecursor/cache·oversized/고갈/no-leak·원래결과재시도 포함.
+- [ ] apps/api/src/{u2-operations,u2-authentication,u2-routes}.ts·operations.ts/authentication.ts/routes.ts/application.ts/transport-input.ts/security.ts와 packages/persistence/src/http-auth-intents.ts/http-attempts.ts를 결합한다.
+- [ ] operation별 registered profile/version/target/data를 runtime검증한다. PRE/INITIAL/INVITE/RECOVERY/MFA_REENROLMENT/BUSINESS·private 운영authority를 서버 원본으로 구별, caller boolean·header·공유BFFcredential이 authority 아님. firstMFA에 아직없는MFA증거를 요구하지 않는다.
+- [ ] packages/ui/src/{bff,client,security-proxy,ui-types}.ts·apps/customer-web/proxy.ts·apps/staff-web/proxy.ts·apps/customer-web/app/api/[...path]/route.ts·apps/staff-web/app/api/[...path]/route.ts에 목적cookie/CSRF/origin/ no-store/no-referrer/private ingress를 연결한다. 안전GET은 consume/변경 없음·URL raw token 즉시깨끗한 landing 교환.
+- [ ] JSON64KiB/depth16/string4096·roleRefs100/predicate200/evidence20·page25/max100/cursor5분·scan200/total2000·bounded32+32/250ms·crypto4+16·network/identifier/global limit를 명시한다. 각 현재 권한 predicate의 SQL pushdown/allowlist와 current fence를 조회·commit·projection에 적용한다.
+- [ ] tests/u2/unit/{http-contracts,bff-purpose,resource-budget}.spec.ts·tests/u2/integration/{http-identity,http-access,http-primary-ac,runtime-security}.spec.ts 작성·실행. direct API/직원public/위조ingress·origin/CSRF·subject/challenge·opaquecursor/cache·oversized/고갈/no-leak·원래결과재시도 포함.
 
 연결: 전8스토리·BR1.1–1.4/3.5/7.3/7.4; NFR1.1/1.2/1.4–1.6/1.8/1.16/6.2/7.2/13.1.
 
 ### Step10 — P09. U2 목적/상태의 최소 PC UI 연결 → 시험
 
-- [x] packages/ui/src/{invitation-acceptance,recovery-claim,recovery-status}.tsx·login.tsx/member-panel.tsx/staff-role-panel.tsx/portal.tsx/index.ts와 두 app/page.tsx에 실제 U2 API의 허용목적/결과를 연결한다. 한국어·PC1280·남은기한/오입력/보류/재확인·접수/수락/실제MFA/통지상태를 구별한다.
-- [x] raw secret 브라우저 영속저장/telemetry 없음, 복사붙여넣기·label/keyboard/focus/no-color-only·재인증/계정전환/회수와 data-testid를 적용한다. 전체U8/U9 화면·직원mobile·MDM/NAC를 이 단계에서 추가하지 않는다.
-- [x] tests/u2/unit/{purpose-ui,access-state-ui}.spec.tsx·tests/u2/e2e/{invitation-flow,recovery-party,staff-boundary}.spec.ts 작성·실행. Chromium1280 및 axe/keyboard·누출/회수 fixture를 현재 소스에 실행한다. 고객4브라우저/직원2브라우저 출시최신·직전stable·수동확대/WCAG2.2AA 전체실증은 U8/U9·품질 인계다.
+- [ ] packages/ui/src/{invitation-acceptance,recovery-claim,recovery-status}.tsx·login.tsx/member-panel.tsx/staff-role-panel.tsx/portal.tsx/index.ts와 두 app/page.tsx에 실제 U2 API의 허용목적/결과를 연결한다. 한국어·PC1280·남은기한/오입력/보류/재확인·접수/수락/실제MFA/통지상태를 구별한다.
+- [ ] raw secret 브라우저 영속저장/telemetry 없음, 복사붙여넣기·label/keyboard/focus/no-color-only·재인증/계정전환/회수와 data-testid를 적용한다. 전체U8/U9 화면·직원mobile·MDM/NAC를 이 단계에서 추가하지 않는다.
+- [ ] tests/u2/unit/{purpose-ui,access-state-ui}.spec.tsx·tests/u2/e2e/{invitation-flow,recovery-party,staff-boundary}.spec.ts 작성·실행. Chromium1280 및 axe/keyboard·누출/회수 fixture를 현재 소스에 실행한다. 고객4브라우저/직원2브라우저 출시최신·직전stable·수동확대/WCAG2.2AA 전체실증은 U8/U9·품질 인계다.
 
 연결: US1.3–1.10의 해당 접점·BR7.4/3.5, NFR12.1/12.2/1.8. AC1.3.4의 원래 PC·mobile 문구는 최신 첫버전PC결정과 함께 provenance 유지, 모바일완료를 주장하지 않는다.
 
 ### Step11 — P10. build/환경·IaC·CI·필수검사·성능/복원 검증
 
-- [x] scripts/u2/{security,runtime-security-report,synth,performance,recovery,release-validation,runtime-source,ci-full-proof,coverage-evidence,coverage-aggregate}.ts·docs/u2/runtime-profile.json·coverage-scope.md·verification.md·security-exceptions.json·secret-exposures.json을 작성한다. 모든 파일을 실제 manifest에 선언하고 미실행PASS를 만들지 않는다.
-- [x] infra/cdk/src/{runtime-binding,compute,storage,profile,stack}.ts·Dockerfile·tsconfig.build.json에 U2 shared module/model/schema/vault·worker exactadmin/consumer capability·별도key/DBrole 및 전체pool합계를 반영한다. synthetic synth만·REAL_ACTIVATION_UNVERIFIED 유지, API에 worker admin을 자동허용하지 않음. queue/secret 최소mapping·국내설정값만 검증하며 actual topology/regionproof를 주장하지 않는다.
-- [x] .github/workflows/u1-validation.yml에 U1검증 보존+별도U2 job/두결과 필수집계·한 current source identity당 한 project-validation 집계 job, contents:read·동일lock/source/image/digests·cancel-in-progress:false/180분·별도DB/보고서를 연결한다. 실패/취소/skip/report누락/SHA불일치 차단, 최소결과7일·rawtrace/ACK/secret자료 업로드금지. 지금 push/CI실행/배포하지 않는다.
-- [x] tests/u2/unit/{infrastructure,ci-report-gates,tooling,coverage-aggregate}.spec.ts를 계층 구현 직후 실행한다. U2 단위 coverage runner는 tests/u2의 unit/integration만 실행한다. 전체 U1 suite·필수 공통 검사·현재 전체 제품 coverage≥80%는 아래 project-validation에서 source identity당 한 번 수행한다. apps/packages/infra·scripts/u1+u2의 모든직접testable제품파일/미실행분모 포함·제외근거 기록. secret/SAST/dependency/CDKtemplate/image/격리runtime 보고서 하한 유지.
+- [ ] scripts/u2/{security,runtime-security-report,synth,performance,recovery,release-validation,runtime-source,ci-full-proof,coverage-evidence,coverage-aggregate}.ts·docs/u2/runtime-profile.json·coverage-scope.md·verification.md·security-exceptions.json·secret-exposures.json을 작성한다. 모든 파일을 실제 manifest에 선언하고 미실행PASS를 만들지 않는다.
+- [ ] infra/cdk/src/{runtime-binding,compute,storage,profile,stack}.ts·Dockerfile·tsconfig.build.json에 U2 shared module/model/schema/vault·worker exactadmin/consumer capability·별도key/DBrole 및 전체pool합계를 반영한다. synthetic synth만·REAL_ACTIVATION_UNVERIFIED 유지, API에 worker admin을 자동허용하지 않음. queue/secret 최소mapping·국내설정값만 검증하며 actual topology/regionproof를 주장하지 않는다.
+- [ ] .github/workflows/u1-validation.yml에 U1검증 보존+별도U2 job/두결과 필수집계·한 current source identity당 한 project-validation 집계 job, contents:read·동일lock/source/image/digests·cancel-in-progress:false/180분·별도DB/보고서를 연결한다. 실패/취소/skip/report누락/SHA불일치 차단, 최소결과7일·rawtrace/ACK/secret자료 업로드금지. 지금 push/CI실행/배포하지 않는다.
+- [ ] tests/u2/unit/{infrastructure,ci-report-gates,tooling,coverage-aggregate}.spec.ts를 계층 구현 직후 실행한다. U2 단위 coverage runner는 tests/u2의 unit/integration만 실행한다. 전체 U1 suite·필수 공통 검사·현재 전체 제품 coverage≥80%는 아래 project-validation에서 source identity당 한 번 수행한다. apps/packages/infra·scripts/u1+u2의 모든직접testable제품파일/미실행분모 포함·제외근거 기록. secret/SAST/dependency/CDKtemplate/image/격리runtime 보고서 하한 유지.
 - [ ] current U2 파일럿 정의(u2-pilot-v1)를 docs/u2/runtime-profile.json 한 원본에서 소비한다. 첫 버전 계획 목표는 고객사10곳·일주문1000이며, 합성 검증 가정은 누적주문10000(목표10일분)·상품1000·고객계정100·내부계정10·동시20이다. 정상5req/s5분80/20→집중20req/s1분→정상5req/s2분 내 회복/2분 유지의 총10분을 실제 검증한다. 평균5/max50품목·조회p95≤1초/변경≤2초/유효기술error≤0.1%, eligible firststart≤10초·HTTP5/10초·work30초/1+3/5분·전체제품80%·보안·정확성/ACK/RTO30분·RPO0·pool32+32를 유지한다. 요청률/계정/동시성은 실제 수요나 서비스 상한이 아니다. 기존100기업/1000고객/10000상품/100000주문·100active·20req/s30분→100req/s5분→회복5분/유지10분은 후속 확장 검증으로 연기하며 첫 버전 완료 gate에서 분리한다. docs/u2/pilot-verification-change.md에 frozen NFR7→LC04→IP06의 원문·변경근거·후속 owner/조건과 과거 FAIL/미실행/OPEN을 연결한다.
 - [ ] ACK independent manifest·현재fence/grant/code/claim/5실패/tombstone/UNKNOWN를 primary/journal각fault/재기동/복원에서 비교한다. 성공접수유실/중복0·부활0·local RTO30분 이하를 실제측정한다. 실패·미실행이면 간극을 보고, AWS/AZ·30일99.9%·실제한사람운영/수신실적은 별도미확인이다.
 
@@ -232,9 +268,9 @@ API/worker·계약/모델·현재 권한/protection 변경은 high 영향이다.
 
 ### Step12 — P11. 문서·추적·source manifest·후속 review
 
-- [x] 현재 구현/시험/설정 파일·실제 명령·결과/분모·실제준비/미실행·계획편차를 code-summary.md에 기록한다. 관련 docs/u2/*.md에 원래operation/target/deadline/actualeffect·HOLD/파기/복구·버전/rollback·API/모듈의존을 문서화한다.
-- [x] 후속 source-manifest.json을 strict schema stage=code-generation/unit=u2-identity-enterprise-access/version=1/writes로 작성한다. 모든 생성/수정/삭제 app/test/config/CI/IaC/lock/docs·shell/generator결과를 workspace-relative exactpath로 포함한다. mainworkspace라 repo는 생략, generatedtree만 trailing slash. 이번 PART1에서는 만들지 않는다.
-- [x] 후속 traceability.json은 기능trace의227AC+rules31BR+상세43NFR를 누락없이 열거한다. OK target은 실제존재하는 구현/시험 한파일; 경계구현만으로 wholeAC성공을 주장하지 않는다. 후속owner/real-evidence는 Deferred와 구체사유·소유자/남은시험으로 기록한다.
+- [ ] 현재 구현/시험/설정 파일·실제 명령·결과/분모·실제준비/미실행·계획편차를 code-summary.md에 기록한다. 관련 docs/u2/*.md에 원래operation/target/deadline/actualeffect·HOLD/파기/복구·버전/rollback·API/모듈의존을 문서화한다.
+- [ ] 후속 source-manifest.json을 strict schema stage=code-generation/unit=u2-identity-enterprise-access/version=1/writes로 작성한다. 모든 생성/수정/삭제 app/test/config/CI/IaC/lock/docs·shell/generator결과를 workspace-relative exactpath로 포함한다. mainworkspace라 repo는 생략, generatedtree만 trailing slash. 이번 PART1에서는 만들지 않는다.
+- [ ] 후속 traceability.json은 기능trace의227AC+rules31BR+상세43NFR를 누락없이 열거한다. OK target은 실제존재하는 구현/시험 한파일; 경계구현만으로 wholeAC성공을 주장하지 않는다. 후속owner/real-evidence는 Deferred와 구체사유·소유자/남은시험으로 기록한다.
 - [ ] conductor에 계획/지침·실제diff/manifest·소스identity·U2/U1회귀·security/coverage/results·남은finding/actualHOLD를 전달한다. architecture reviewer는 새코드/계획의 설계일치·보호/인계/현재권위·버전/기반회귀를 검토한다. agent가 lifecycle/decision/gate/추가dispatch를 실행하지 않는다.
 
 
