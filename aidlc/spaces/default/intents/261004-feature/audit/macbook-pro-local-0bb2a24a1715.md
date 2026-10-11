@@ -46884,3 +46884,154 @@
 **Run floor**: GATE_REJECTED:2026-10-11T03:17:47Z#1
 
 ---
+
+## Unit Paused
+**Timestamp**: 2026-10-11T03:21:15Z
+**Event**: UNIT_PAUSED
+**Stage**: functional-design
+**Unit**: u2-identity-enterprise-access
+**Run floor**: GATE_REJECTED:2026-10-11T03:17:47Z#1
+**Reason**: 기존 U2 기능 설계 네 산출물의 Keep/Modify/Redo 재사용 선택을 기다림. 제안 수정은 격리 U1 fixture 두 파일에 한정.
+**Next Action**: 사용자의 재사용 선택을 기록하고 unit resume 후 기존 설계 보존 또는 요청 변경과 현재 재개 검토를 수행한다.
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-11T03:21:20Z
+**Event**: DECISION_RECORDED
+**Stage**: functional-design
+**Decision**: U1 fixture 두 파일 보완을 진행하기 전, 다시 열린 U2 기능 설계의 기존 entities/rules/functional-spec/traceability 산출물을 어떻게 재사용할까요? 업무 설계 변경이 없어 Keep을 권장합니다.
+**Options**: Keep,Modify,Redo from scratch
+**Unit**: u2-identity-enterprise-access
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T03:21:54Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Question Answered
+**Timestamp**: 2026-10-11T03:22:02Z
+**Event**: QUESTION_ANSWERED
+**Stage**: functional-design
+**Details**: Keep
+**Unit**: u2-identity-enterprise-access
+
+---
+
+## Artifact Reused
+**Timestamp**: 2026-10-11T03:22:02Z
+**Event**: ARTIFACT_REUSED
+**Stage**: functional-design
+**Decision**: keep
+**Artifacts**: aidlc/spaces/default/intents/261004-feature/construction/u2-identity-enterprise-access/functional-design/entities.md,aidlc/spaces/default/intents/261004-feature/construction/u2-identity-enterprise-access/functional-design/rules.md,aidlc/spaces/default/intents/261004-feature/construction/u2-identity-enterprise-access/functional-design/functional-spec.md,aidlc/spaces/default/intents/261004-feature/construction/u2-identity-enterprise-access/functional-design/traceability.json
+
+---
+
+## Unit Resumed
+**Timestamp**: 2026-10-11T03:22:12Z
+**Event**: UNIT_RESUMED
+**Stage**: functional-design
+**Unit**: u2-identity-enterprise-access
+**Run floor**: GATE_REJECTED:2026-10-11T03:17:47Z#1
+
+---
+
+## Review Requested
+**Timestamp**: 2026-10-11T03:22:28Z
+**Event**: REVIEW_REQUESTED
+**Stage**: functional-design
+**Reviewer**: aidlc-architecture-reviewer-agent
+**Unit**: u2-identity-enterprise-access
+**Iteration**: 1
+**Recovery**: stale-receipt
+**Recovery Cause**: artifact
+**Artifact Fingerprint**: sha256:a19dd88054307bc7099dacd52e19a4cad3ed806c487db18c7f23927f4dae980a
+**Request Id**: review:75dcbc590cf461c4f13f120ae2803e44
+**Review File**: .aidlc-engine/reviews/functional-design/units/u2-identity-enterprise-access/bea298894dd0a5a7/1.75dcbc590cf461c4f13f120ae2803e44.review.md
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T03:22:46Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/.aidlc-engine/reviewer-dispatch.json
+**Context**: .aidlc-engine > reviewer-dispatch.json
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T03:25:08Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/.aidlc-engine/reviews/functional-design/units/u2-identity-enterprise-access/bea298894dd0a5a7/1.75dcbc590cf461c4f13f120ae2803e44.review.md
+**Context**: .aidlc-engine > reviews > functional-design > units > u2-identity-enterprise-access > bea298894dd0a5a7 > 1.75dcbc590cf461c4f13f120ae2803e44.review.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T03:25:12Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a126d0-af31-74b3-9cf4-1e8460b20854
+**Message**: U2 functional-design의 네 문서는 `HEAD 94335b0`의 동일 경로와 byte-for-byte 일치했습니다. UTF-8, JSON, Markdown 링크, escaping 검사도 통과했습니다. Traceability는 upstream 227개, coverage 227개(OK 26, Deferred 201, gap 0)입니다. BR 31
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T03:25:22Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-architecture-reviewer-agent
+**Agent ID**: 01a126ee-68ba-7211-bf78-807323b8c2ec
+**Message**: **Reviewer:** aidlc-architecture-reviewer-agent\n\n**READY — Critical 0, Major 1, Minor 2.** 기존 R-01/R-02/R-03은 모두 `Unresolved`, 새 finding은 없습니다.\n\nYAML·관계/규칙 참조·227개 추적 ID/BR target 검사와 리뷰 표·권위 필드 검사는 통
+
+---
+
+## Review Completed
+**Timestamp**: 2026-10-11T03:25:33Z
+**Event**: REVIEW_COMPLETED
+**Stage**: functional-design
+**Reviewer**: aidlc-architecture-reviewer-agent
+**Unit**: u2-identity-enterprise-access
+**Iteration**: 1
+**Verdict**: READY
+**Request Fingerprint**: sha256:a19dd88054307bc7099dacd52e19a4cad3ed806c487db18c7f23927f4dae980a
+**Artifact Fingerprint**: sha256:a19dd88054307bc7099dacd52e19a4cad3ed806c487db18c7f23927f4dae980a
+**Request Id**: review:75dcbc590cf461c4f13f120ae2803e44
+**Review Record**: .aidlc-engine/reviews/functional-design/units/u2-identity-enterprise-access/bea298894dd0a5a7/1.json
+**Review Record Digest**: sha256:1982e71e834ce2f9a35626739a37146261deaf52efd56b9bcdf735a7589f5726
+
+---
+
+## Unit Completed
+**Timestamp**: 2026-10-11T03:25:37Z
+**Event**: UNIT_COMPLETED
+**Stage**: functional-design
+**Unit**: u2-identity-enterprise-access
+**Run floor**: GATE_REJECTED:2026-10-11T03:17:47Z#1
+
+---
+
+## Unit Started
+**Timestamp**: 2026-10-11T03:26:51Z
+**Event**: UNIT_STARTED
+**Stage**: nfr-requirements
+**Unit**: u2-identity-enterprise-access
+**Run floor**: GATE_REJECTED:2026-10-11T03:17:47Z#1
+
+---
+
+## Unit Paused
+**Timestamp**: 2026-10-11T03:26:58Z
+**Event**: UNIT_PAUSED
+**Stage**: nfr-requirements
+**Unit**: u2-identity-enterprise-access
+**Run floor**: GATE_REJECTED:2026-10-11T03:17:47Z#1
+**Reason**: 기존 U2 NFR Requirements/NFR Design/Infrastructure Design 산출물의 일괄 Keep/Modify/Redo 재사용 선택을 기다림. 제안 제품 수정은 U1 격리 fixture 두 파일만 해당.
+**Next Action**: 사용자의 재사용 선택을 기록해 명시한 세 단계에 적용하고, 현재 단계 unit resume 및 필요한 재개 검토 후 code-generation의 두 파일 보완 계획을 준비한다.
+
+---
