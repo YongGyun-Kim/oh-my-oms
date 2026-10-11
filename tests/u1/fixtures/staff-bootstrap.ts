@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { requireCondition } from '@oms/contracts';
+import { requireCondition, type Ref } from '@oms/contracts';
 import { ref } from '@oms/core';
 import { currentSecurityMatches, U2_STAFF_FENCE_ID, type ProtectedStore } from '@oms/persistence';
 import { syntheticBasis } from './enterprise.js';
@@ -15,11 +15,35 @@ export async function seedMinimumStaffManager(
   const protectedAccount = u2E2e ? await store.currentProtected('Account', accountId) : null;
   if (u2E2e)
     requireCondition(
-      protectedAccount?.audience === 'STAFF' &&
+      protectedAccount?.active === true &&
         currentSecurityMatches('Account', protectedAccount, account),
       503,
       'FIXTURE_STAFF_SOURCE',
       '현재 보호된 합성 직원 원본이 필요합니다.',
+    );
+  const bindings = u2E2e
+    ? await store.list('ProviderBinding', {
+        equals: { accountRef: { id: accountId }, audience: 'STAFF', active: true },
+        limit: 2,
+      })
+    : [];
+  const protectedBinding =
+    bindings.length === 1
+      ? await store.currentProtected('ProviderBinding', String(bindings[0]!.bindingId))
+      : null;
+  const bindingAccount = protectedBinding?.accountRef as Ref | undefined;
+  if (u2E2e)
+    requireCondition(
+      protectedBinding?.audience === 'STAFF' &&
+        protectedBinding.active === true &&
+        protectedBinding.removalState === 'CLEAR' &&
+        bindingAccount?.owner === 'IdentityRecovery' &&
+        bindingAccount.entity === 'Account' &&
+        bindingAccount.id === accountId &&
+        currentSecurityMatches('ProviderBinding', protectedBinding, bindings[0] ?? null),
+      503,
+      'FIXTURE_STAFF_BINDING',
+      '현재 보호된 단일 직원 신원 연결이 필요합니다.',
     );
   const key = randomUUID();
   await store.execute(
@@ -62,6 +86,19 @@ export async function seedMinimumStaffManager(
           409,
           'FIXTURE_STAFF_SOURCE_CHANGED',
           '합성 직원 원본이 변경됐습니다.',
+        );
+        const currentBindings = await transaction.list(
+          'ProviderBinding',
+          { accountRef: { id: accountId }, audience: 'STAFF', active: true },
+          2,
+        );
+        requireCondition(
+          currentBindings.length === 1 &&
+            currentBindings[0]!.bindingId === protectedBinding?.bindingId &&
+            currentSecurityMatches('ProviderBinding', protectedBinding, currentBindings[0]!),
+          409,
+          'FIXTURE_STAFF_BINDING_CHANGED',
+          '합성 직원 신원 연결이 변경됐습니다.',
         );
         const existing = await transaction.get('StaffAuthorityFence', U2_STAFF_FENCE_ID);
         const protectedFence = await store.currentProtected(

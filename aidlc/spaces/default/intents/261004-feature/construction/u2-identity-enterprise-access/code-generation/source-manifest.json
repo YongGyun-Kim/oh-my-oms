@@ -656,6 +656,15 @@
     },
     {
       "path": "tsconfig.json"
+    },
+    {
+      "path": "tests/u1/fixtures/local-service.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/staff-bootstrap.ts"
+    },
+    {
+      "path": "tests/u2/unit/u1-pc-fixture-preparation.spec.ts"
     }
   ]
 }

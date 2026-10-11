@@ -1,5 +1,33 @@
 # U2 코드·검증 산출 요약
 
+## 현재 PC fixture 수리 결과 — 2026-10-11
+
+이 절은 새 수리 source `f0e45bd5be202d247da21e79b88bece5f4b08290b8cf4ccf02602efbf9cd4169`·HEAD `7693486b2de30148d7843ff8670252ab73368ff0`·504파일의 **선택 검증**이다. 아래 「역사적 산출 요약」의 본문·“현재” 표현·전체 coverage/보안/부하 결과는 원래8972 identity와 당시 metadata HEAD를 가리킨다. 이전 proof/receipt를 새 source로 재라벨하지 않았다. 이번 결과는 전체 Unit/전체 coverage/실제 배포 PASS가 아니며 선택 PC 결과는 정식 Unit 검증·완료 증거를 대신하지 않는다.
+
+[원인·검증 packet](../../../verification/u2-pc-staff-binding-diagnosis-20261011.md)에 새 수리 근거를 연결한다. 원래 U1 E2E 준비는 U2 보안 backfill/fence가 없어 역할 directory503으로 실패했다. 첫 fixture 수리는 Account에 없는 audience를 검사하고 unit도 그 가짜 필드를 넣어 정상 seed의 실패를 가렸다. 이를 현재 보호된 active Account와 실제 STAFF ProviderBinding의 계정 연결·단일 활성·CLEAR·보호/raw 일치 및 transaction 재대조로 정정했다. 모델/제품 API·권한·selector/timeout·DB namespace는 바꾸지 않았다.
+
+| 누적 수리 경로 | 현재 bytes / SHA256 | 책임 |
+|---|---|---|
+| tests/u1/fixtures/local-service.ts |6896 / `8ab7ae0b01bb40d36070f3d547235de4d35b8bbcb32393a80184845144e1d4fb`| 기존 reset→4계정 보호 seed→backfill→최소 manager/fence 확인→API 개방. 원인 정정 단계에서는 불변 |
+| tests/u1/fixtures/staff-bootstrap.ts |5735 / `e54ffd9a01cde8f1f5ed416ecc216da969dbd1d3fc5da49a1b005f23ab450b38`| 같은 최소 권한 보호 transaction의 최초 fence·기존 fence 보존 및 실제 binding 검증 |
+| tests/u2/unit/u1-pc-fixture-preparation.spec.ts |20155 / `2455fabfaf8fdce4db7ae596ea8f68ed5306583ee25a40a997837e5c29822c9c`| 실제 seed/model 필드와 준비 순서·누락/불일치/모호 binding·rollback16case |
+
+| 증거 identity | 실제 결과 | 원문 |
+|---|---|---|
+| 현재 f0e45bd5… / Luna | unit16/16·tsc·ESLint·Prettier --check 모두 exit0 | `.reports/u2/selected/pc-binding-repair-unit-20261011-1.json`6606bytes/SHA `51fa7ba24059b1eb89c2b506e46da31599b1fbb091393846cda13b95181073cd`; private `/var/folders/p7/nswgd_5919z69r72m_ykpvdc0000gn/T/oms-u2-binding-preservation-11cnfc8a/binding-1-run/binding-run-summary.json` |
+| 현재 f0e45bd5… / U1 PC |4/4·exit0·실패/skip/flaky0·38.73226초 | `.reports/u2/selected/pc-binding-repair-u1-pc4-20261011-1.json`7616bytes/SHA `0db2e8f0b2790f17487fcdad3aff69313d6b62c291f86bfef7907d35760c1e40` |
+| 현재 f0e45bd5… / U2 PC |5/5·exit0·실패/skip/flaky0·15.030317초 | `.reports/u2/selected/pc-binding-repair-u2-pc5-20261011-1.json`56938bytes/SHA `18cc80686ab67b0245e6a0728d5476ac889726913a25a06857834db25aeb574f` |
+| 이전 수리 1d44a821… | PG backfill 선택10PASS와 fence 선택1PASS. 각각 미선택8/10case는 전체 PASS로 세지 않는다 | 두 `pc-fixture-repair-{backfill,fence}-20261011-1.json` 원문. 해당 제품/시험 bytes 불변으로 반복하지 않았으며 새 source의 fresh PG 결과로 부르지 않는다 |
+| 원래 전체8972… |9246/11518=80.274353%와 당시 보안/이미지/runtime 결과 | 아래 역사적 원문. 이번 수리의 전체 proof가 아니며 부하 시간 FAIL·DR 미실행을 유지 |
+
+현재 PC는 실제 persistence의 seed/backfill/manager와 기존 U1 기업·역할·상품·주문4case 및 U2 초대·복구·직원5case를 검증했다. 보호16보고서 중15hash는 불변이고 기존 PC가 `.reports/u1/context-http-diagnostics.json`만230→604bytes로 자동 갱신했다(before SHA `977ef50889c443890403db74c20356b30b84cb8e6010019751ba71a24329cee9`, after SHA `8ec4dd1e6c38d2e1bad72a6651adfa2bc2a81d4ee05bc35cece79cf895d6dc8a`). 전후 exactbytes와 PC 원문은 private `/var/folders/p7/nswgd_5919z69r72m_ykpvdc0000gn/T/oms-u2-before-fixture-plan-2unbpqo_/execution-pc-binding-repair-20261011/`에 보존했다. 이전 원문을 복원 덮어쓰지 않았다. reporter 사본의 원문 bytes 대조는 일치했고 tool log는 반환된 combined 출력의 증거이며 stdout/stderr 개별 stream은 미관측이다. 종료 뒤8포트 listener0·설정 fixture/Next/pinned Playwright 경로 프로세스 잔여0을 확인했다.
+
+strict manifest는 기존218claim을 보존하고 이번3경로만 추가해221개다. ledger에는 기존 baseline/events/7188 생성물 inventory를 그대로 두고 이번 source별 수리/선택 증거를 별도 블록으로 연결했다. traceability는 제품/요구/301ID·52OK/249Deferred 의미가 변하지 않아 **원래 bytes를 유지**한다. fixture 시험으로 전체 AC·상용 Cognito/회사망/보관정책·실제 수신/클라우드 검증을 완료하지 않는다. 전체제품80%/미실행분모·보안·권한·정확성·ACK 기준과 기존 부하 FAIL/DR Deferred·원본 provenance gap2·기존 미해결 문제·realactivation HOLD를 유지한다.
+
+## 역사적 산출 요약 — 원래8972 proof 및 당시 metadata, 원문 보존
+
+아래는 기존 제목 아래 본문을 그대로 보존한 이전 기록이다. 이 부분의 “현재”/완료 표현을 이번 수리 source의 전체 검증 또는 새 승인·리뷰 판정으로 해석하지 않는다.
+
 ## 현재 상태
 
 IdentityRecovery/EnterpriseAccess의 U2 library와 기존 API·worker·BFF·최소 PC 접점을 구현했다. **전체 검증의 최종 결과는 FAIL이며 Unit 완료·배포 승인이 아니다.** 사용자는 부하 측정의 현재 결과를 기록하고 종료하며, 재해 복구 검증은 추후 진행하고, 최종 산출물 정리부터 진행하도록 지시했다. 이 문서 정리는 제품·시험·DB를 수정하거나 추가 실행하지 않는다.

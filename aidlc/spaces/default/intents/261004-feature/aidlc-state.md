@@ -261,11 +261,9 @@
 
 - **Unit Stage**: code-generation
 
-- **Unit State**: paused
+- **Unit State**: in-progress
 
-- **Unit Pause Reason**: U1 PC 준비가 FIXTURE_STAFF_SOURCE(status503)로 실패해 실행0case; U2 PC 미실행이며 원인 미확정
 
-- **Unit Next Action**: 실패 원문을 기준으로 보호 STAFF Account 준비 조건을 좁혀 진단할지 결정한다
 
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
@@ -328,7 +326,7 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-11T06:13:50Z
+- **Last Updated**: 2026-10-11T06:33:35Z
 
 - **Construction Autonomy Mode**: autonomous
 

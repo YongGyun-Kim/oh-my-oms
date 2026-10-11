@@ -80,7 +80,8 @@ vi.mock('../../u1/fixtures/identity.js', () => ({
   SyntheticIdentityProvider: class {},
   seedSyntheticAccount: async (_store: unknown, accountId: string, audience: string) => {
     fixture.events.push('seed:' + accountId);
-    fixture.accounts.set(accountId, { accountId, audience, revision: 1 });
+    const seeded = await syntheticRecords(accountId, audience as 'CUSTOMER' | 'STAFF');
+    fixture.accounts.set(accountId, seeded.account);
   },
 }));
 vi.mock('../../u1/fixtures/staff-bootstrap.js', () => ({
@@ -234,12 +235,47 @@ describe('U1 PC prepare order', () => {
   });
 });
 
-function bootstrapStore() {
-  const account = { accountId: 'staff', audience: 'STAFF', revision: 1 };
+async function syntheticRecords(accountId = 'staff', audience: 'CUSTOMER' | 'STAFF' = 'STAFF') {
+  const actual = await vi.importActual<typeof import('../../u1/fixtures/identity.js')>(
+    '../../u1/fixtures/identity.js',
+  );
+  const persistence = await vi.importActual<typeof import('@oms/persistence')>('@oms/persistence');
+  const captured = new Map<string, Row>();
+  const capture = {
+    currentEpoch: async () => 'initial',
+    execute: async (
+      _meta: unknown,
+      callback: (tx: { put: (model: string, data: Row) => Promise<void> }) => Promise<void>,
+    ) =>
+      callback({
+        put: async (model, data) => {
+          const attributes = persistence.modelDefinition(model).attributes;
+          if (
+            Object.keys(data).some(
+              (key) => !attributes.some((attribute) => attribute.name === key),
+            ) ||
+            attributes.some((attribute) => attribute.required && data[attribute.name] === undefined)
+          )
+            throw Error('FIXTURE_SEED_MODEL_MISMATCH');
+          captured.set(model, structuredClone(data));
+        },
+      }),
+  } as unknown as ProtectedStore;
+  // Execute the existing seed builder; only its persistence writes are isolated.
+  const seeded = await actual.seedSyntheticAccount(capture, accountId, audience);
+  expect(captured.get('Account')).toEqual(seeded.account);
+  expect(captured.get('ProviderBinding')).toEqual(seeded.binding);
+  return seeded;
+}
+async function bootstrapStore() {
+  const { account, binding } = await syntheticRecords();
   const state = {
     rawAccount: account as Row | null,
     protectedAccount: { ...account } as Row | null,
     txAccount: { ...account } as Row | null,
+    rawBindings: [{ ...binding }] as Row[],
+    protectedBinding: { ...binding } as Row | null,
+    txBindings: [{ ...binding }] as Row[],
     rawFence: null as Row | null,
     protectedFence: null as Row | null,
     failFence: false,
@@ -247,16 +283,34 @@ function bootstrapStore() {
     rolledBack: false,
     meta: null as Row | null,
   };
+  const selectBindings = (rows: Row[], equals: Row, limit: number) =>
+    rows
+      .filter(
+        (row) =>
+          row.audience === equals.audience &&
+          row.active === equals.active &&
+          (row.accountRef as Row).id === (equals.accountRef as Row).id,
+      )
+      .slice(0, limit);
   const store = {
     read: async () => state.rawAccount,
-    currentProtected: async (model: string) =>
-      model === 'Account' ? state.protectedAccount : state.protectedFence,
+    list: async (model: string, query: { equals: Row; limit: number }) => {
+      if (model !== 'ProviderBinding') throw Error('UNEXPECTED_FIXTURE_MODEL');
+      return selectBindings(state.rawBindings, query.equals, query.limit);
+    },
+    currentProtected: async (model: string, id: string) => {
+      if (model === 'Account') return state.protectedAccount;
+      if (model === 'ProviderBinding')
+        return state.protectedBinding?.bindingId === id ? state.protectedBinding : null;
+      return state.protectedFence;
+    },
     currentEpoch: async () => 'initial',
     execute: async (
       meta: Row,
       callback: (
         tx: {
           get: (model: string) => Promise<Row | null>;
+          list: (model: string, equals: Row, limit: number) => Promise<Row[]>;
           put: (model: string, data: Row) => void;
         },
         requestId: string,
@@ -268,6 +322,10 @@ function bootstrapStore() {
         await callback(
           {
             get: async (model) => (model === 'Account' ? state.txAccount : state.rawFence),
+            list: async (model, equals, limit) => {
+              if (model !== 'ProviderBinding') throw Error('UNEXPECTED_FIXTURE_MODEL');
+              return selectBindings(state.txBindings, equals, limit);
+            },
             put: async (model, data) => {
               if (model === 'StaffAuthorityFence' && state.failFence)
                 throw Error('FIXTURE_FENCE_WRITE_FAILURE');
@@ -292,8 +350,10 @@ async function seedManager(store: ProtectedStore) {
   return actual.seedMinimumStaffManager(store, 'staff', new Date('2026-10-11T00:00:00.000Z'));
 }
 describe('U1 initial staff fence', () => {
-  it('최소 Role/Grant/fence/Receipt/History를 같은 보호 transaction에 기록한다', async () => {
-    const { state, store } = bootstrapStore();
+  it('실제 Account/STAFF binding seed로 최소 권한과 fence를 같은 보호 transaction에 기록한다', async () => {
+    const { state, store } = await bootstrapStore();
+    expect(state.rawAccount).not.toHaveProperty('audience');
+    expect(state.rawBindings[0]?.audience).toBe('STAFF');
     await seedManager(store);
     expect(state.meta?.operation).toBe('initial-minimum-staff-role');
     expect(state.meta?.input).toEqual({ accountId: 'staff', action: 'staff.role.manage' });
@@ -312,26 +372,77 @@ describe('U1 initial staff fence', () => {
       'StaffRoleGrant',
     ]);
   });
-  it('현재 STAFF 보호 원본 없음/다른 audience/개정 불일치는 쓰기 전에 거절한다', async () => {
-    for (const source of [null, { audience: 'CUSTOMER' }, { revision: 2 }]) {
-      const { state, store } = bootstrapStore();
-      state.protectedAccount = source === null ? null : { ...state.protectedAccount, ...source };
-      await expect(seedManager(store)).rejects.toMatchObject({ code: 'FIXTURE_STAFF_SOURCE' });
+  it('Account 없음/비활성/미보호/원본 개정 불일치는 최소 준비 전에 거절한다', async () => {
+    for (const mode of ['missing', 'inactive', 'unprotected', 'stale'] as const) {
+      const { state, store } = await bootstrapStore();
+      if (mode === 'missing') state.rawAccount = null;
+      if (mode === 'inactive') {
+        state.rawAccount = { ...state.rawAccount, active: false };
+        state.protectedAccount = { ...state.protectedAccount, active: false };
+      }
+      if (mode === 'unprotected') state.protectedAccount = null;
+      if (mode === 'stale') state.protectedAccount = { ...state.protectedAccount, revision: 2 };
+      if (mode === 'missing')
+        await expect(seedManager(store)).rejects.toThrow('합성 직원 계정 준비');
+      else await expect(seedManager(store)).rejects.toMatchObject({ code: 'FIXTURE_STAFF_SOURCE' });
       expect(state.meta).toBeNull();
       expect(state.committed).toEqual([]);
     }
   });
-  it('transaction 안의 Account 개정 변경은 Role/Grant까지 rollback한다', async () => {
-    const { state, store } = bootstrapStore();
-    state.txAccount = { ...state.txAccount, revision: 2 };
-    await expect(seedManager(store)).rejects.toMatchObject({
-      code: 'FIXTURE_STAFF_SOURCE_CHANGED',
-    });
-    expect(state.rolledBack).toBe(true);
-    expect(state.committed).toEqual([]);
+  it('STAFF binding 없음/타계정/CUSTOMER/비활성/제거/모호/미보호/원본 불일치는 거절한다', async () => {
+    for (const mode of [
+      'missing',
+      'other-account',
+      'customer',
+      'inactive',
+      'unknown-removal',
+      'removed',
+      'ambiguous',
+      'unprotected',
+      'stale',
+      'wrong-owner',
+    ] as const) {
+      const { state, store } = await bootstrapStore();
+      const binding = state.rawBindings[0]!;
+      if (mode === 'missing') state.rawBindings = [];
+      if (mode === 'other-account')
+        binding.accountRef = { ...(binding.accountRef as Row), id: 'other' };
+      if (mode === 'customer') binding.audience = 'CUSTOMER';
+      if (mode === 'inactive') binding.active = false;
+      if (mode === 'unknown-removal') binding.removalState = 'UNKNOWN';
+      if (mode === 'removed') binding.removalState = 'COMPLETED';
+      if (mode === 'ambiguous')
+        state.rawBindings.push({ ...binding, bindingId: 'second-staff-binding' });
+      if (mode === 'unprotected') state.protectedBinding = null;
+      if (mode === 'stale')
+        state.protectedBinding = { ...state.protectedBinding, authRevision: 2, revision: 2 };
+      if (mode === 'wrong-owner') {
+        binding.accountRef = { ...(binding.accountRef as Row), owner: 'EnterpriseAccess' };
+        state.protectedBinding = { ...binding };
+      }
+      await expect(seedManager(store)).rejects.toMatchObject({ code: 'FIXTURE_STAFF_BINDING' });
+      expect(state.meta).toBeNull();
+      expect(state.committed).toEqual([]);
+    }
+  });
+  it('tx 안의 Account 또는 binding 변경/소실/복수는 Role/Grant까지 rollback한다', async () => {
+    for (const mode of ['account', 'binding', 'missing-binding', 'duplicate-binding'] as const) {
+      const { state, store } = await bootstrapStore();
+      if (mode === 'account') state.txAccount = { ...state.txAccount, revision: 2 };
+      if (mode === 'binding')
+        state.txBindings[0] = { ...state.txBindings[0], authRevision: 2, revision: 2 };
+      if (mode === 'missing-binding') state.txBindings = [];
+      if (mode === 'duplicate-binding')
+        state.txBindings.push({ ...state.txBindings[0], bindingId: 'second-staff-binding' });
+      await expect(seedManager(store)).rejects.toMatchObject({
+        code: mode === 'account' ? 'FIXTURE_STAFF_SOURCE_CHANGED' : 'FIXTURE_STAFF_BINDING_CHANGED',
+      });
+      expect(state.rolledBack).toBe(true);
+      expect(state.committed).toEqual([]);
+    }
   });
   it('확인된 기존 fence를 revision1로 되돌리거나 다시 쓰지 않는다', async () => {
-    const { state, store } = bootstrapStore();
+    const { state, store } = await bootstrapStore();
     const fence = { fenceId: 'u2-staff-authority', authorityRevision: 7, revision: 7 };
     state.rawFence = { ...fence };
     state.protectedFence = { ...fence };
@@ -347,7 +458,7 @@ describe('U1 initial staff fence', () => {
       [fence, { ...fence, revision: 6 }],
       [null, fence],
     ]) {
-      const { state, store } = bootstrapStore();
+      const { state, store } = await bootstrapStore();
       state.rawFence = raw;
       state.protectedFence = protectedRow;
       await expect(seedManager(store)).rejects.toMatchObject({
@@ -358,16 +469,18 @@ describe('U1 initial staff fence', () => {
     }
   });
   it('최초 fence 쓰기 실패에서 접수/권한/이력의 일부 commit은 없다', async () => {
-    const { state, store } = bootstrapStore();
+    const { state, store } = await bootstrapStore();
     state.failFence = true;
     await expect(seedManager(store)).rejects.toThrow('FIXTURE_FENCE_WRITE_FAILURE');
     expect(state.rolledBack).toBe(true);
     expect(state.committed).toEqual([]);
   });
-  it('기존 verification 호출은 fence를 새로 요구하거나 추가하지 않는다', async () => {
+  it('기존 verification 호출은 새 보호 binding/fence를 요구하거나 추가하지 않는다', async () => {
     vi.stubEnv('OMS_U1_DATABASE_PROFILE', 'verification-isolated');
-    const { state, store } = bootstrapStore();
+    const { state, store } = await bootstrapStore();
     state.protectedAccount = null;
+    state.protectedBinding = null;
+    state.rawBindings = [];
     await seedManager(store);
     expect(state.committed.map((entry) => entry.model)).toEqual([
       'StaffRole',
@@ -375,11 +488,5 @@ describe('U1 initial staff fence', () => {
       'RequestReceipt',
       'AccessHistory',
     ]);
-  });
-  it('합성 직원 계정 자체가 없으면 transaction을 시작하지 않는다', async () => {
-    const { state, store } = bootstrapStore();
-    state.rawAccount = null;
-    await expect(seedManager(store)).rejects.toThrow('합성 직원 계정 준비');
-    expect(state.meta).toBeNull();
   });
 });

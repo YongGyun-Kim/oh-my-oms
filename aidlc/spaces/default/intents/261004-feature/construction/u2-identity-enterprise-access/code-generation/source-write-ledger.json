@@ -37830,6 +37830,229 @@
       "meaning": "원래 실패 상세 JSON 미복구. 당시 stage receipt/security summary/project log와 후속 current raw를 구분한다."
     }
   ],
+  "pcFixtureRepair": {
+    "version": 1,
+    "scope": "PC fixture 최소 수리의 실제 source 쓰기와 선택 검증. 기존 sourceIdentity/baseline/applicationChanges/generatedInventory/events는 역사적 원문으로 유지한다.",
+    "sourceBeforeRepair": {
+      "head": "5de6f546f7db63f853c922729a74f64c5875bf94",
+      "digest": "615c14e7968357b26c1da5d668bde0a5c6df03079aa2c167269745d2849c304c",
+      "files": 503,
+      "original8972FileHashesEqual": true
+    },
+    "sourceAtCauseFixBaseline": {
+      "head": "7693486b2de30148d7843ff8670252ab73368ff0",
+      "meaning": "아래 baseline769 hash는 해당 commit의 git show bytes로 읽기 전용 대조했다. 별도 미수집 runtime digest를 추정하지 않는다."
+    },
+    "currentSource": {
+      "head": "7693486b2de30148d7843ff8670252ab73368ff0",
+      "digest": "f0e45bd5be202d247da21e79b88bece5f4b08290b8cf4ccf02602efbf9cd4169",
+      "files": 504,
+      "productBytesChanged": 0
+    },
+    "applicationChanges": [
+      {
+        "path": "tests/u1/fixtures/local-service.ts",
+        "action": "modified",
+        "beforeRepairSha256": "14a51568493c73ece28f79378d73876efdca6152e2d94b7522307d88f7fd9a29",
+        "baseline769Sha256": "8ab7ae0b01bb40d36070f3d547235de4d35b8bbcb32393a80184845144e1d4fb",
+        "bytes": 6896,
+        "sha256": "8ab7ae0b01bb40d36070f3d547235de4d35b8bbcb32393a80184845144e1d4fb",
+        "meaning": "등록된 U1 E2E target guard와 reset/4계정 seed 뒤 backfill/fence 확인→API 개방. binding 원인 정정 단계에는 추가 수정하지 않음."
+      },
+      {
+        "path": "tests/u1/fixtures/staff-bootstrap.ts",
+        "action": "modified",
+        "beforeRepairSha256": "8dfecce85ad9d1097839c3580d38e56431cb4bd082a37f049ba81dff5133b345",
+        "baseline769Sha256": "2acc1efbca3f5f420030b1d999fd69f2659d77798d896dd7fbfe17406f194496",
+        "bytes": 5735,
+        "sha256": "e54ffd9a01cde8f1f5ed416ecc216da969dbd1d3fc5da49a1b005f23ab450b38",
+        "meaning": "최초 fence를 같은 최소 권한 transaction에 등록하고 잘못된 Account.audience 판정을 실제 ProviderBinding의 현재 보호 판정으로 정정."
+      },
+      {
+        "path": "tests/u2/unit/u1-pc-fixture-preparation.spec.ts",
+        "action": "created",
+        "beforeRepairSha256": null,
+        "baseline769Sha256": "473f722f182832c7d8478f93fd5f80d22eb088ccbf9faf0bbaa4f5faef81a8dd",
+        "bytes": 20155,
+        "sha256": "2455fabfaf8fdce4db7ae596ea8f68ed5306583ee25a40a997837e5c29822c9c",
+        "meaning": "처음 시험의 가짜 Account audience를 제거하고 실제 seed/model 필드, binding/현재 원본/tx 변경·rollback16case로 보완."
+      }
+    ],
+    "applicationDeletes": [],
+    "diagnosis": "aidlc/spaces/default/intents/261004-feature/verification/u2-pc-staff-binding-diagnosis-20261011.md",
+    "selectedEvidence": {
+      "unit": {
+        "source": "f0e45bd5be202d247da21e79b88bece5f4b08290b8cf4ccf02602efbf9cd4169",
+        "path": ".reports/u2/selected/pc-binding-repair-unit-20261011-1.json",
+        "bytes": 6606,
+        "sha256": "51fa7ba24059b1eb89c2b506e46da31599b1fbb091393846cda13b95181073cd",
+        "exitCode": 0,
+        "passed": 16,
+        "failed": 0,
+        "owner": "Luna",
+        "privateRunSummary": "/var/folders/p7/nswgd_5919z69r72m_ykpvdc0000gn/T/oms-u2-binding-preservation-11cnfc8a/binding-1-run/binding-run-summary.json"
+      },
+      "staticChecks": {
+        "source": "f0e45bd5be202d247da21e79b88bece5f4b08290b8cf4ccf02602efbf9cd4169",
+        "owner": "Luna",
+        "typeExitCode": 0,
+        "eslintExitCode": 0,
+        "prettierCheckExitCode": 0,
+        "meaning": "출력과 before/after source·보고서 guard는 위 privateRunSummary에 있다. 제품 실행/보안 scanner/coverage를 대체하지 않는다."
+      },
+      "u1PC": {
+        "source": "f0e45bd5be202d247da21e79b88bece5f4b08290b8cf4ccf02602efbf9cd4169",
+        "path": ".reports/u2/selected/pc-binding-repair-u1-pc4-20261011-1.json",
+        "bytes": 7616,
+        "sha256": "0db2e8f0b2790f17487fcdad3aff69313d6b62c291f86bfef7907d35760c1e40",
+        "exitCode": 0,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "startTime": "2026-10-11T06:46:37.201Z",
+        "durationMs": 38732.26
+      },
+      "u2PC": {
+        "source": "f0e45bd5be202d247da21e79b88bece5f4b08290b8cf4ccf02602efbf9cd4169",
+        "path": ".reports/u2/selected/pc-binding-repair-u2-pc5-20261011-1.json",
+        "bytes": 56938,
+        "sha256": "18cc80686ab67b0245e6a0728d5476ac889726913a25a06857834db25aeb574f",
+        "exitCode": 0,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "startTime": "2026-10-11T06:48:02.616Z",
+        "durationMs": 15030.317
+      },
+      "historicalPG": {
+        "source": "1d44a821cf09b90796ff755dc14a2effd2468d0299584ceae6d1db2d5533f990",
+        "backfill": {
+          "path": ".reports/u2/selected/pc-fixture-repair-backfill-20261011-1.json",
+          "bytes": 8426,
+          "sha256": "32fb08ee35d16696c192191ba0e624d703d126e05aff297bd41a9035f6737bf1",
+          "exitCode": 0,
+          "passed": 10,
+          "failed": 0,
+          "filterNotSelected": 8
+        },
+        "fence": {
+          "path": ".reports/u2/selected/pc-fixture-repair-fence-20261011-1.json",
+          "bytes": 5704,
+          "sha256": "7903802db248eb933f83ad750e28e2953553fc4f153464421eb128acee42f9e4",
+          "exitCode": 0,
+          "passed": 1,
+          "failed": 0,
+          "filterNotSelected": 10
+        },
+        "meaning": "실제 해당 제품/시험 bytes 불변으로 반복하지 않았다. 현재 source의 fresh PG 실행이라고 부르지 않는다."
+      },
+      "historicalOverallCoverage": {
+        "source": "8972b7b0e26cbd9748c9ad80153dd9ecabe90e1ea066b70f421243f40a88d803",
+        "covered": 9246,
+        "total": 11518,
+        "meaning": "현재 source의 전체 coverage PASS로 재라벨하지 않는다. 시간 하한 FAIL와 DR 미실행은 역사적 원문/후속 책임으로 유지."
+      }
+    },
+    "reportEffects": {
+      "protectedReports": 16,
+      "unchangedReports": 15,
+      "changes": [
+        {
+          "path": ".reports/u1/context-http-diagnostics.json",
+          "action": "modified-by-existing-PC-diagnostics",
+          "beforeBytes": 230,
+          "beforeSha256": "977ef50889c443890403db74c20356b30b84cb8e6010019751ba71a24329cee9",
+          "afterBytes": 604,
+          "afterSha256": "8ec4dd1e6c38d2e1bad72a6651adfa2bc2a81d4ee05bc35cece79cf895d6dc8a",
+          "meaning": "전후 exactbytes를 private wrapper에 보존했다. 이전 원문을 복원 덮어쓰지 않았다."
+        }
+      ],
+      "privateDirectory": "/var/folders/p7/nswgd_5919z69r72m_ykpvdc0000gn/T/oms-u2-before-fixture-plan-2unbpqo_/execution-pc-binding-repair-20261011/",
+      "rawStreamLimit": "PC tool log는 exec_command가 반환한 combined 출력 chunks만 보존한 증거다. stdout/stderr 개별 stream과 별도 OS raw stream은 미관측이며 이를 생성해 소급하지 않는다."
+    },
+    "generatedEvidenceWrites": [
+      {
+        "path": ".reports/u2/selected/pc-binding-repair-unit-20261011-1.json",
+        "writer": "Luna",
+        "action": "created"
+      },
+      {
+        "path": ".reports/u2/selected/pc-binding-repair-u1-pc4-20261011-1.json",
+        "writer": "등록된 U1 Playwright runner",
+        "action": "created"
+      },
+      {
+        "path": ".reports/u2/selected/pc-binding-repair-u2-pc5-20261011-1.json",
+        "writer": "등록된 U2 Playwright runner",
+        "action": "created"
+      },
+      {
+        "path": ".reports/u2/selected/pc-binding-repair-u1-pc4-artifacts-20261011-1/",
+        "writer": "등록된 U1 Playwright runner",
+        "action": "runtime-output-target",
+        "meaning": "설정된 출력 대상이며 존재하는 모든 파일의 작성 주체/과거 이벤트를 전수 추정하지 않는다."
+      },
+      {
+        "path": ".reports/u2/selected/pc-binding-repair-u2-pc5-artifacts-20261011-1/",
+        "writer": "등록된 U2 Playwright runner",
+        "action": "runtime-output-target",
+        "meaning": "설정된 출력 대상이며 DOM/trace/비밀 원문 수집을 새로 허용하지 않는다."
+      },
+      {
+        "path": "/var/folders/p7/nswgd_5919z69r72m_ykpvdc0000gn/T/oms-u2-before-fixture-plan-2unbpqo_/execution-pc-binding-repair-20261011/before-report-hashes-and-context-exact.json",
+        "action": "created",
+        "writer": "developer file tool",
+        "bytes": 2798,
+        "sha256": "b872adda595f1b109a8f6ede1775d027bdb0370dfdb2678aa055e3e656793ce8"
+      },
+      {
+        "path": "/var/folders/p7/nswgd_5919z69r72m_ykpvdc0000gn/T/oms-u2-before-fixture-plan-2unbpqo_/execution-pc-binding-repair-20261011/u1-pc4-tool-output.json",
+        "action": "created",
+        "writer": "developer file tool",
+        "bytes": 18641,
+        "sha256": "ec03487427d57d98be738272d733e0ded1ebaa2671064db6472c1caee040ef28"
+      },
+      {
+        "path": "/var/folders/p7/nswgd_5919z69r72m_ykpvdc0000gn/T/oms-u2-before-fixture-plan-2unbpqo_/execution-pc-binding-repair-20261011/u1-pc4-report-and-context-exact.json",
+        "action": "created",
+        "writer": "developer file tool",
+        "bytes": 13592,
+        "sha256": "ed5357f303fae67e25b1731677c2e3745f666d786a20604d665242b61567108d"
+      },
+      {
+        "path": "/var/folders/p7/nswgd_5919z69r72m_ykpvdc0000gn/T/oms-u2-before-fixture-plan-2unbpqo_/execution-pc-binding-repair-20261011/u2-pc5-tool-output.json",
+        "action": "created",
+        "writer": "developer file tool",
+        "bytes": 43828,
+        "sha256": "18ffd74e6fe687d7aa2cfb4d297982fbf38e71c31118e1d8ff26def5f2b88421"
+      },
+      {
+        "path": "/var/folders/p7/nswgd_5919z69r72m_ykpvdc0000gn/T/oms-u2-before-fixture-plan-2unbpqo_/execution-pc-binding-repair-20261011/u2-pc5-report-and-final-hashes-exact.json",
+        "action": "created",
+        "writer": "developer file tool",
+        "bytes": 79388,
+        "sha256": "635062923a232287c4207c66d5106c5cf63dcec5b12ee7e6d10a3d51dd73516e"
+      }
+    ],
+    "cleanup": {
+      "configuredPorts": [
+        3100,
+        3200,
+        3400,
+        3401,
+        3300,
+        3301,
+        34800,
+        34801
+      ],
+      "listenersAfter": 0,
+      "configuredFixtureNextPlaywrightProcessesAfter": 0,
+      "meaning": "종료 뒤 읽기 전용 lsof/ps 관측. DB 전체 연결/실제 cloud 운영 상태를 추가 실증한 것이 아니다."
+    },
+    "limits": "새 requirement/제품 capability/권한/스키마/기한/selector/namespace/80% 하한 변경0. 새 독립 review·정식 checkpoint·전체 Unit/배포 완료를 기록하지 않는다. 기존 finding/FAIL/Deferred/provenance OPEN/realactivation HOLD는 원래 근거와 책임으로 유지한다."
+  },
   "historicalEvidenceLimit": "과거 삭제/동일-byte 재작성의 완전한 이벤트 로그는 별도 U2 write ledger로 존재하지 않았다. 이 ledger는 native baseline→current byte delta, 기존 incident/receipt/history와 현재 생성물 inventory를 각각 표현한다. 두 original gap을 복구/수용으로 표시하지 않는다."
 }
 
