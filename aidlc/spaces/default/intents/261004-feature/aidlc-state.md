@@ -288,6 +288,12 @@
 
 
 
+- **Active Unit**: u3-commercial-ordering
+
+- **Unit Stage**: code-generation
+
+- **Unit State**: in-progress
+
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
 
@@ -349,7 +355,7 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-11T13:19:44Z
+- **Last Updated**: 2026-10-11T13:21:40Z
 
 - **Construction Autonomy Mode**: autonomous
 
