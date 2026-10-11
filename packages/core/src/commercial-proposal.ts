@@ -7,19 +7,18 @@ import {
   U3_PROFILE,
 } from '@oms/contracts';
 import type {
-  ConditionBinding,
-  Money,
   Receipt,
   Ref,
   ServiceContext,
   TargetScope,
   U3ConsentInput,
   U3OrderPriceBreakdown,
-  U3Period,
   U3ProposalInput,
   U3ProposalQuery,
   U3ProposalTerms,
   U3ProposalView,
+  U3CapturedLine,
+  U3ResolvedCommercialTerms,
 } from '@oms/contracts';
 import {
   ProtectedTransaction,
@@ -37,6 +36,11 @@ import type { U3RenewalObservation, U3RenewalRegistration } from './u3-renewal-s
 import { proposalTermsFingerprint, validateProposalPrice } from './proposal-terms.js';
 import type { ProposalContent } from './proposal-terms.js';
 import { ref, u3Ref } from './references.js';
+import { currentOrderTerms } from './order-terms.js';
+import { recordedOperation } from './u3-recorded-operation.js';
+import { currentConsentScope, validateConsentScope } from './u3-consent-scope.js';
+import { scopeV2Includes } from './scope-v2.js';
+import type { OrderingPolicy } from './scopes.js';
 
 const exact = (a: unknown, b: unknown) => canonicalJson(a) === canonicalJson(b);
 const refs = (values: Ref[]) => [
@@ -142,53 +146,15 @@ export class CommercialProposal {
         'PROPOSAL_TARGET_STATE',
         '거절된 주문의 조건을 적용 대상으로 제안할 수 없습니다.',
       );
-      // 구매 스냅샷은 주문당 하나이며 과거 주문 참조가 현재 상태 개정과 달라도 bytes를 바꾸지 않는다.
+      const current = await currentOrderTerms(scope, target.targetOrderRef, this.agreement.basis);
       requireCondition(
-        target.originalTermsRef.owner === 'OrderAcceptance' &&
-          target.originalTermsRef.entity === 'PurchaseTermsSnapshot' &&
-          exact(order.purchaseTermsRef, target.originalTermsRef) &&
-          Array.isArray(order.changeApplicationRefs) &&
-          order.changeApplicationRefs.length === 0,
+        exact(current.reference, target.originalTermsRef),
         409,
         'PROPOSAL_ORIGINAL_TERMS',
-        '정확한 원래 구매 조건 또는 명시 적용 결과 소유 경로가 필요합니다.',
+        '다음 제안은 실제 현재 적용 조건 원본을 가리켜야 합니다.',
       );
-      const snapshot = await scope.current(target.originalTermsRef),
-        parent = snapshot.orderRef as Ref;
-      const originalOrder = await this.historical(parent);
-      confirmed(
-        parent.owner === 'OrderAcceptance' &&
-          parent.entity === 'Order' &&
-          parent.id === target.targetOrderRef.id &&
-          parent.revision <= target.targetOrderRef.revision &&
-          exact(originalOrder.enterpriseRef, order.enterpriseRef) &&
-          exact(originalOrder.purchaseTermsRef, target.originalTermsRef),
-      );
-      const captured = snapshot.capturedLines as {
-        productRef: Ref;
-        quantity: number;
-        purchasePrice: Money | null;
-        priceKnowledge: string;
-        agreedPeriod: U3Period | null;
-        conditionBindings: ConditionBinding[];
-      }[];
-      confirmed(
-        captured.every((line) => line.priceKnowledge === 'KNOWN' && line.purchasePrice !== null),
-      );
-      const terms: U3ProposalTerms = {
-        termsRecordRef: target.originalTermsRef,
-        lines: captured.map((line) => ({
-          productRef: line.productRef,
-          quantity: line.quantity,
-          price: line.purchasePrice!,
-          period: line.agreedPeriod,
-          conditionRefs: refs(line.conditionBindings.map((value) => value.sourceRef)),
-        })),
-      };
-      const price = snapshot.priceBreakdown as U3OrderPriceBreakdown;
-      validateProposalPrice(terms, price, this.store.schema);
-      confirmed(price.knowledge === 'KNOWN');
-      return { terms, price, renewal: null };
+      // 원래 미확인 총액은 미확인 그대로 비교한다. 새 제안의 확인 금액으로 추정하지 않는다.
+      return { terms: current.terms, price: current.price, renewal: null };
     }
     const renewal = await this.renewal.current({
       entitlementRef: target.targetEntitlementRef!,
@@ -209,10 +175,11 @@ export class CommercialProposal {
     original: U3ProposalTerms,
     proposed: U3ProposalTerms,
     digest: string,
-  ): Promise<void> {
+  ): Promise<{ offerRef: Ref; terms: U3ResolvedCommercialTerms }[]> {
     confirmed(original.lines.length === proposed.lines.length);
     const corporate: Ref[] = [],
-      conditionRefs: Ref[] = [];
+      conditionRefs: Ref[] = [],
+      resolved: { offerRef: Ref; terms: U3ResolvedCommercialTerms }[] = [];
     for (const [index, line] of proposed.lines.entries()) {
       const prior = original.lines[index]!;
       confirmed(prior.productRef.id === line.productRef.id && prior.quantity === line.quantity);
@@ -241,6 +208,7 @@ export class CommercialProposal {
       corporate.push(...current.agreementRevisionRefs);
       for (const binding of current.conditionBindings)
         for (const evidence of binding.evidenceRefs) await scope.current(evidence);
+      resolved.push({ offerRef: offer!, terms: current });
     }
     if (proposed.termsRecordRef.entity === 'AgreementHistory') {
       const history = await scope.current(proposed.termsRecordRef);
@@ -261,6 +229,7 @@ export class CommercialProposal {
       targetEnterpriseRef: target.targetScope.enterpriseRef,
       approvalDigest: digest,
     });
+    return resolved;
   }
   private async costs(
     scope: U3Transaction,
@@ -401,6 +370,241 @@ export class CommercialProposal {
       undefined,
       proof,
     );
+  }
+  async recordedConsent(scope: U3Transaction, reference: Ref) {
+    const consent = await scope.current(reference);
+    confirmed(consent.modelVersion === 2 && consent.decision === 'ACCEPT');
+    const displayed = await this.historical(consent.proposalRef as Ref),
+      current = await this.store.currentProtected(
+        'CommercialProposal',
+        (consent.proposalRef as Ref).id,
+      );
+    confirmed(current?.modelVersion === 2);
+    const proposalRef = u3Ref('CommercialProposal', current!, this.store.schema),
+      proposal = await this.currentProposal(scope, proposalRef),
+      content = this.content(proposal);
+    requireCondition(
+      proposal.result === 'CONSENTED' &&
+        proposalRef.revision === (consent.proposalRef as Ref).revision + 1 &&
+        content.proposalRevision === consent.proposalRevision &&
+        exact(this.content(displayed), content) &&
+        exact(consent.enterpriseRef, proposal.enterpriseRef),
+      409,
+      'CONSENT_PRESENTATION_CHANGED',
+      '동의한 정확한 제안 내용과 현재 동의 기록이 필요합니다.',
+    );
+    const recorded = await recordedOperation(scope, this.agreement.basis, {
+      owner: 'CommercialAgreement',
+      operation: 'recordConsent',
+      afterRef: proposalRef,
+      beforeRef: consent.proposalRef as Ref,
+      resultRef: reference,
+      target: { kind: 'RECORD', recordRef: consent.proposalRef as Ref },
+      targetScope: content.targetScope,
+      audience: 'CUSTOMER',
+    });
+    confirmed(
+      exact(recorded.history.actorAccountRef, consent.actorAccountRef) &&
+        recorded.receipt.principalId === (consent.actorAccountRef as Ref).id &&
+        Date.parse(String(consent.occurredAt)) <= Date.parse(String(recorded.history.occurredAt)),
+    );
+    const originalInput: U3ConsentInput = {
+      meta: {
+        clientRequestId: String(recorded.receipt.idempotencyKey),
+        expectedRevision: (consent.proposalRef as Ref).revision,
+        reason: String(recorded.history.reason),
+        evidenceRefs: recorded.history.evidenceRefs as Ref[],
+      },
+      targetScope: content.targetScope,
+      proposalRef: consent.proposalRef as Ref,
+      proposalRevision: content.proposalRevision,
+      termsFingerprint: String(proposal.termsFingerprint),
+      decision: 'ACCEPT',
+    };
+    this.store.schema.validateUri(U3_PROFILE + '#/$defs/ConsentInput', originalInput);
+    confirmed(recorded.receipt.requestFingerprint === fingerprint(originalInput));
+    return { consent, proposal, proposalRef, content };
+  }
+  private async currentConsentAuthority(
+    scope: U3Transaction,
+    consent: ModelData,
+    target: TargetScope,
+  ): Promise<void> {
+    const references = consent.evidenceRefs as Ref[],
+      sources: { ref: Ref; data: ModelData }[] = [];
+    confirmed(references.some((reference) => exact(reference, consent.proposalRef)));
+    for (const reference of references) {
+      if (exact(reference, consent.proposalRef)) continue; // 내용 개정은 위의 보호 역사/현재 제안으로 검증한다.
+      sources.push({ ref: reference, data: await scope.current(reference) });
+    }
+    const one = (entity: string) => {
+      const rows = sources.filter((value) => value.ref.entity === entity);
+      confirmed(rows.length === 1);
+      return rows[0]!;
+    };
+    const account = one('Account'),
+      security = one('AccountSecurityState'),
+      binding = one('ProviderBinding'),
+      membership = one('EnterpriseMembership'),
+      enterprise = one('Enterprise'),
+      fence = one('EnterpriseAccessFence');
+    const actor = consent.actorAccountRef as Ref;
+    confirmed(
+      exact(account.ref, actor) &&
+        account.data.active &&
+        (security.data.accountRef as Ref).id === actor.id &&
+        security.data.epoch === (await this.store.currentEpoch()) &&
+        binding.data.active &&
+        binding.data.audience === 'CUSTOMER' &&
+        (binding.data.accountRef as Ref).id === actor.id &&
+        membership.data.active &&
+        (membership.data.accountRef as Ref).id === actor.id &&
+        (membership.data.enterpriseRef as Ref).id === target.enterpriseRef.id &&
+        exact(enterprise.ref, target.enterpriseRef) &&
+        enterprise.data.approvalState === 'APPROVED' &&
+        enterprise.data.usageEnabled &&
+        (fence.data.enterpriseRef as Ref).id === target.enterpriseRef.id,
+    );
+    const original = await this.store.readRevision(
+      'Enterprise',
+      target.enterpriseRef.id,
+      target.organisationRevision,
+    );
+    confirmed(
+      original &&
+        target.contextPolicyRef.id === target.enterpriseRef.id &&
+        target.contextPolicyRef.revision === target.organisationRevision &&
+        target.enterpriseRef.revision === target.organisationRevision,
+    );
+    for (const reference of [target.departmentRef, target.siteRef])
+      if (reference) {
+        const organisation = await scope.current(reference);
+        confirmed(
+          organisation.active && (organisation.enterpriseRef as Ref).id === target.enterpriseRef.id,
+        );
+      }
+    let allowed = false;
+    for (const grant of sources.filter((value) => value.ref.entity === 'CustomerRoleGrant')) {
+      if (
+        grant.data.revokedAt !== null ||
+        Date.parse(String(grant.data.effectiveFrom)) > this.now().getTime() ||
+        (grant.data.membershipRef as Ref).id !== membership.ref.id
+      )
+        continue;
+      const role = sources.find(
+        (value) =>
+          value.ref.entity === 'CustomerRole' && value.ref.id === (grant.data.roleRef as Ref).id,
+      );
+      if (!role || role.data.modelVersion !== 2) continue; // 구형 역할은 동의 권한으로 추정하지 않는다.
+      const state = sources.find(
+        (value) => value.ref.entity === 'RoleRevisionState' && exact(value.data.roleRef, role.ref),
+      );
+      confirmed(state && state.data.modelVersion === 2);
+      if (!state!.data.active) continue;
+      confirmed((role.data.enterpriseRef as Ref).id === target.enterpriseRef.id);
+      for (const reference of state!.data.scopeRefs as Ref[]) {
+        const stored = sources.find((value) => exact(value.ref, reference));
+        confirmed(stored);
+        const predicate = currentConsentScope(stored!.data, state!.data);
+        confirmed(
+          exact(predicate.enterpriseRef, target.enterpriseRef) &&
+            predicate.sourcePolicyRevision === target.organisationRevision,
+        );
+        if (
+          scopeV2Includes(
+            predicate,
+            'contract.consent',
+            target,
+            original!.orderingContextPolicy as OrderingPolicy,
+            'BUSINESS',
+            validateConsentScope,
+          )
+        )
+          allowed = true;
+      }
+    }
+    requireCondition(
+      allowed,
+      403,
+      'ACTION_DENIED',
+      '동의한 고객의 현재 대상별 동의 권한이 필요합니다.',
+    );
+    // 이 fence는 현재 사업 권위를 검증한다. 고객의 새 로그인/새 MFA를 증명하지 않는다.
+  }
+  async currentApplicationEvidence(scope: U3Transaction, consentRef: Ref) {
+    const source = await this.recordedConsent(scope, consentRef);
+    await this.currentConsentAuthority(scope, source.consent, source.content.targetScope);
+    await this.proposalEvidence(scope, source.proposal, String(source.proposal.termsFingerprint));
+    await this.costs(
+      scope,
+      source.content.priceBreakdown,
+      source.content.targetScope.enterpriseRef,
+      String(source.proposal.termsFingerprint),
+    );
+    validateProposalPrice(
+      source.content.proposedTerms,
+      source.content.priceBreakdown,
+      this.store.schema,
+    );
+    return source;
+  }
+  async applicationSource(
+    scope: U3Transaction,
+    consentRef: Ref,
+    orderRef: Ref,
+    targetScope: TargetScope,
+    newTermsRef: Ref,
+  ) {
+    const source = await this.currentApplicationEvidence(scope, consentRef);
+    requireCondition(
+      exact(source.content.targetOrderRef, orderRef) &&
+        exact(source.content.targetScope, targetScope) &&
+        exact(source.proposal.proposedTermsRef, newTermsRef) &&
+        exact(source.content.proposedTerms.termsRecordRef, newTermsRef),
+      409,
+      'CONSENT_TARGET_CHANGED',
+      '동의한 정확한 주문·새 조건·고정 대상에만 적용합니다.',
+    );
+    const resolved = await this.currentTerms(
+      scope,
+      { ...source.content, originalTermsRef: source.content.originalTerms.termsRecordRef },
+      source.content.originalTerms,
+      source.content.proposedTerms,
+      String(source.proposal.termsFingerprint),
+    );
+    const captured: U3CapturedLine[] = [];
+    for (const [index, line] of source.content.proposedTerms.lines.entries()) {
+      // 같은 phase에서 실제 보호 원본·가격·기간·기업 승인을 검증한 결과만 재사용한다.
+      // 적용 전후 applicationSource 호출은 각각 독립적으로 다시 조회한다.
+      const { offerRef: offer, terms: current } = resolved[index]!;
+      const payment = current.conditionBindings.find(
+          (binding) => binding.conditionKey === 'PAYMENT',
+        ),
+        completion = current.conditionBindings.find(
+          (binding) => binding.conditionKey === 'COMPLETION',
+        );
+      requireCondition(
+        payment?.conditionKey === 'PAYMENT' && completion?.conditionKey === 'COMPLETION',
+        503,
+        'U3_PROOF_UNCONFIRMED',
+        '현재 제안의 지급·완료 조건이 필요합니다.',
+      );
+      captured.push({
+        productRef: line.productRef,
+        commonOfferRevisionRef: offer,
+        agreementRevisionRefs: current.agreementRevisionRefs,
+        conditionBindings: current.conditionBindings,
+        quantity: line.quantity,
+        paymentMode: payment.value.mode,
+        requestedActivationDate: null,
+        purchasePrice: line.price,
+        priceKnowledge: 'KNOWN',
+        paymentTermsRef: payment.value.termsRef,
+        agreedPeriod: line.period,
+        completionBasisRef: completion.value,
+      });
+    }
+    return { ...source, captured };
   }
   async create(
     context: ServiceContext,
@@ -641,6 +845,32 @@ export class CommercialProposal {
                   original.termsFingerprint === proposal.termsFingerprint,
               );
             }
+            const applications = await this.agreement.basis.collection(
+              scope,
+              'OrderChangeApplication',
+              { proposalRef: { id: input.targetRef.id }, actualApplicationResult: 'APPLIED' },
+            );
+            for (const application of applications) {
+              confirmed(
+                content.targetOrderRef &&
+                  (application.orderRef as Ref).id === content.targetOrderRef.id,
+              );
+              const currentOrder = await this.store.currentProtected(
+                'Order',
+                (application.orderRef as Ref).id,
+              );
+              confirmed(currentOrder);
+              const current = await currentOrderTerms(
+                scope,
+                u3Ref('Order', currentOrder!, this.store.schema),
+                this.agreement.basis,
+              );
+              confirmed(
+                (current.order.changeApplicationRefs as Ref[]).some((reference) =>
+                  exact(reference, u3Ref('OrderChangeApplication', application, this.store.schema)),
+                ) && exact(application.proposalRef, input.targetRef),
+              );
+            }
             const states: Record<string, U3ProposalView['state']> = {
               OPEN: 'AWAITING_CONSENT',
               CONSENTED: 'ACCEPTED',
@@ -654,7 +884,10 @@ export class CommercialProposal {
               proposalRef: input.targetRef,
               termsFingerprint: String(proposal.termsFingerprint),
               consentRefs: consents.map((value) => ref('CustomerConsent', value)),
-              state: states[String(proposal.result)]!,
+              state: applications.length ? 'APPLIED' : states[String(proposal.result)]!,
+              applicationRefs: applications.map((application) =>
+                u3Ref('OrderChangeApplication', application, this.store.schema),
+              ),
             };
             await scope.assertPremises();
             await this.ingress(context, ingressProof);
@@ -664,6 +897,7 @@ export class CommercialProposal {
               sourceRefs: refs([
                 input.targetRef,
                 ...data.consentRefs,
+                ...data.applicationRefs!,
                 proposal.originalTermsRef as Ref,
                 proposal.proposedTermsRef as Ref,
               ]),

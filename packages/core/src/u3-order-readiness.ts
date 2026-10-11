@@ -23,6 +23,7 @@ export interface U3ReadinessLine extends U3OrderLineInput {
 export interface U3ReadinessRequest {
   orderRef: Ref;
   purchaseTermsRef: Ref;
+  currentTermsRef: Ref;
   enterpriseRef: Ref;
   targetScope: TargetScope;
   productType: 'HARDWARE' | 'SOFTWARE';
@@ -134,13 +135,22 @@ export class U3OrderReadiness {
       request.priceBreakdown,
     );
     this.store.schema.validate('Id', request.epoch);
-    for (const reference of [request.orderRef, request.purchaseTermsRef, request.enterpriseRef])
+    for (const reference of [
+      request.orderRef,
+      request.purchaseTermsRef,
+      request.currentTermsRef,
+      request.enterpriseRef,
+    ])
       this.store.schema.validateUri(U3_PROFILE + '#/$defs/Ref', reference);
     confirmed(
       request.orderRef.owner === 'OrderAcceptance' &&
         request.orderRef.entity === 'Order' &&
         request.purchaseTermsRef.owner === 'OrderAcceptance' &&
         request.purchaseTermsRef.entity === 'PurchaseTermsSnapshot' &&
+        request.currentTermsRef.owner === 'OrderAcceptance' &&
+        ['PurchaseTermsSnapshot', 'OrderChangeApplication'].includes(
+          request.currentTermsRef.entity,
+        ) &&
         exact(request.enterpriseRef, request.targetScope.enterpriseRef) &&
         request.provisionChoice === 'FULL' &&
         ['PREPAY', 'POSTPAY'].includes(request.paymentKind) &&

@@ -74,11 +74,31 @@ describe('U3 결정의 목적/출처 완전성 — 단위, 실제 원본 대조�
       new U3CurrentBasis({} as ProtectedStore, () => at).requireRegistration(),
     ).toThrow();
   });
-  it('두 필수 출처 각각의 목적/현재 확인자 권위를 확인한다', async () => {
+  it('두 필수 출처를 각각 검사하고 동일한 정확 확인자의 현재 권위를 전후 한 번씩 확인한다', async () => {
     const f = host();
     await f.basis.evidence(f.scope, refs, 'CONTRACT_AGREEMENT', account, null);
-    expect(f.issuer).toHaveBeenCalledTimes(4);
+    expect(f.issuer).toHaveBeenCalledTimes(2);
     expect(f.issuer).toHaveBeenCalledWith(authority, 'identity.person.verify', f.scope.transaction);
+  });
+  it('다른 확인자는 합치지 않으며 같은 확인자도 다음 phase에서 다시 검사한다', async () => {
+    const f = host(),
+      second = { ...authority, id: 'other-confirmer' };
+    f.data[second.id] = { active: true };
+    f.data.b!.authorityRef = second;
+    await f.basis.evidence(f.scope, refs, 'CONTRACT_AGREEMENT', account, null);
+    expect(f.issuer).toHaveBeenCalledTimes(4);
+    expect(f.issuer).toHaveBeenCalledWith(second, 'identity.person.verify', f.scope.transaction);
+    f.issuer.mockClear();
+    await f.basis.evidence(f.scope, refs, 'CONTRACT_AGREEMENT', account, null);
+    expect(f.issuer).toHaveBeenCalledTimes(4);
+  });
+  it('확인자의 후단 현재 권위가 회수되면 앞선 검사 결과를 재사용하지 않는다', async () => {
+    const f = host();
+    f.issuer.mockResolvedValueOnce(undefined).mockRejectedValueOnce(new Error('합성 권위 회수'));
+    await expect(
+      f.basis.evidence(f.scope, refs, 'CONTRACT_AGREEMENT', account, null),
+    ).rejects.toThrow('합성 권위 회수');
+    expect(f.issuer).toHaveBeenCalledTimes(2);
   });
   it('필수 두 출처 중 하나가 빠지면 HOLD한다', async () => {
     const f = host();
@@ -199,10 +219,10 @@ describe('서버 등록 real-owner 포트 — mocked callback 계약만 검증, 
     );
     await expect(pending).rejects.toMatchObject({ code: 'U3_PROOF_UNCONFIRMED' });
     expect(owner.verifyEvidence).toHaveBeenCalledOnce();
-    expect(f.issuer).toHaveBeenCalledTimes(2);
+    expect(f.issuer).toHaveBeenCalledTimes(1);
     late?.();
     await Promise.resolve();
-    expect(f.issuer).toHaveBeenCalledTimes(2);
+    expect(f.issuer).toHaveBeenCalledTimes(1);
   });
   it('운영의 local 합성 등록을 차단하고 서버 등록 real 포트만 지원한다', () => {
     vi.stubEnv('NODE_ENV', 'production');

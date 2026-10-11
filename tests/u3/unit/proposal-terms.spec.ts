@@ -157,6 +157,43 @@ describe('실제 registry3 제안·동의 생산자/소비자 계약', () => {
       expect(() =>
         schema.validateUri(U3_PROFILE + '#/$defs/ProposalView', { ...data, ...changed }),
       ).toThrow();
+    const applicationRef = fixtureRef('OrderAcceptance', 'OrderChangeApplication');
+    const applied: U3ProposalView = {
+      ...data,
+      state: 'APPLIED',
+      applicationRefs: [applicationRef],
+    };
+    expect(schema.validateUri(U3_PROFILE + '#/$defs/ProposalView', applied)).toEqual(applied);
+    const appliedOutput = {
+      ...output,
+      data: applied,
+      sourceRefs: [...output.sourceRefs, applicationRef],
+    };
+    const outputUri = registry.lookup('CommercialAgreement', 'readProposal', 3).output;
+    expect(schema.validateUri(outputUri, appliedOutput)).toEqual(appliedOutput);
+    expect(() => schema.validate('ProposalViewResult', appliedOutput)).toThrow();
+    for (const changed of [
+      { applicationRefs: [] },
+      { applicationRefs: [fixtureRef('CommercialAgreement', 'OrderChangeApplication')] },
+      { applicationRefs: [fixtureRef('OrderAcceptance', 'AcceptanceDecision')] },
+      { applicationRefs: [{ ...applicationRef, unregistered: true }] },
+      {
+        targetOrderRef: null,
+        targetEntitlementRef: fixtureRef('SoftwareLifecycle', 'EnterpriseEntitlement'),
+        targetRenewalCycleRef: fixtureRef('SoftwareLifecycle', 'RenewalCycle'),
+      },
+    ]) {
+      const invalid = { ...applied, ...changed };
+      expect(() => schema.validateUri(U3_PROFILE + '#/$defs/ProposalView', invalid)).toThrow();
+      expect(() => schema.validateUri(outputUri, { ...appliedOutput, data: invalid })).toThrow();
+    }
+    expect(() => schema.validateUri(outputUri, { ...output, data: applied })).toThrow();
+    expect(() =>
+      schema.validateUri(outputUri, {
+        ...appliedOutput,
+        sourceRefs: [...output.sourceRefs, { ...applicationRef, revision: 2 }],
+      }),
+    ).toThrow();
   });
 });
 describe('원 단위 제안 비용의 입력 정합성', () => {

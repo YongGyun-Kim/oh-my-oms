@@ -82,10 +82,15 @@ export async function seedU2Enterprise(store: ProtectedStore) {
       true,
       proof,
     );
-    return identity.authenticate(completed.sessionToken!, audience, randomUUID(), proof);
+    // 실제 MFA 세션 token은 이 함수의 비노출 closure 안에만 보관한다.
+    const authenticateRequest = () =>
+      identity.authenticate(completed.sessionToken!, audience, randomUUID(), proof);
+    return { context: await authenticateRequest(), authenticateRequest };
   };
-  const customer = await login(customerId, 'CUSTOMER'),
-    staff = await login(staffId, 'STAFF');
+  const customerLogin = await login(customerId, 'CUSTOMER'),
+    staffLogin = await login(staffId, 'STAFF'),
+    customer = customerLogin.context,
+    staff = staffLogin.context;
   await store.execute(
     {
       principalId: 'synthetic-private-bootstrap',
@@ -202,5 +207,7 @@ export async function seedU2Enterprise(store: ProtectedStore) {
     member,
     fenceId,
     now,
+    authenticateRequest: (audience: 'CUSTOMER' | 'STAFF') =>
+      (audience === 'CUSTOMER' ? customerLogin : staffLogin).authenticateRequest(),
   };
 }

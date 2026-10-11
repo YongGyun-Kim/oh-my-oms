@@ -24,6 +24,7 @@ function fixture() {
   const request: U3ReadinessRequest = {
     orderRef: fixtureRef('OrderAcceptance', 'Order'),
     purchaseTermsRef: fixtureRef('OrderAcceptance', 'PurchaseTermsSnapshot'),
+    currentTermsRef: fixtureRef('OrderAcceptance', 'PurchaseTermsSnapshot'),
     enterpriseRef: input.targetScope.enterpriseRef,
     targetScope: input.targetScope,
     productType: 'HARDWARE',

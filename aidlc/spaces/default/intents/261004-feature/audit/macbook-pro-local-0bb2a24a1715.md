@@ -51268,3 +51268,252 @@
 **Context**: construction > u3-commercial-ordering > code-generation > applied-terms-model-verification-20261012.md
 
 ---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:52:55Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 변경 적용·현재 조건 resolver 계층과 시험 15개 파일을 작성·포맷하고 소스를 고정했습니다. 실제 가격 변경 후 다음 제안, 중복 방지, 권한·보호·U7 경계 검증 명령을 Luna에 전달했습니다.\n\n검사 결과는 아직 없습니다. 원래 구매 원상과 다른 소유자의 기록은 유지하며 Step11–14는 미완료입니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:53:40Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Order-change slice 검증은 TypeScript 단계에서 중단됐습니다. `packages/core/src/commercial-proposal.ts:567`에서 `ProposalContent`에 필요한 `originalTermsRef`가 없어 TS2345가 발생했습니다. 지침에 따라 나머지 네 명령은 실행하지 않았고 새 테스트 보고서는 생성되지 
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T22:54:26Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-change-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-change-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:54:40Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: `originalTerms.termsRecordRef`를 필수 `originalTermsRef`로 명시 전달하도록 한 줄 수정했습니다. 타입·검증 요구사항은 유지했습니다.\n\n소스를 고정하고 파일 해시를 전달했습니다. 타입 재검증 결과를 기다립니다.
+
+---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T22:55:17Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:56:22Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: 검증 결과를 root에 전달했습니다. TypeScript 검사는 통과했고, U3 unit은 254건 중 253 pass·1 fail로 종료했습니다. 실패 때문에 지시된 integration 및 ESLint 검사는 실행하지 않았습니다.
+
+---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T22:56:43Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T22:57:20Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-change-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-change-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:00:26Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 4개 파일의 출력 계약 보완과 시험 작성을 마쳤고, 전체 소스 쓰기를 고정했습니다.\n\n`APPLIED`에는 주문 대상·정확한 적용 참조·출처가 필요합니다. 기존 거절 시험도 유지했습니다. 새 보고서 경로와 Luna 검증 명령을 전달했으며, Step11–14는 검증 전 미완료 상태입니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:02:57Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: tsc와 U3 unit 검사는 통과했습니다(254/254). `order-change.spec.ts` 통합 검사는 9/9 실패했으며, 모두 요청 기한 만료 오류였습니다. 지시에 따라 후속 통합 회귀와 ESLint는 실행하지 않았고, source identity와 16개 파일 해시는 전후 동일했습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T23:05:59Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-change-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-change-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:06:24Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 현재 실패는 fixture가 여러 별도 요청에 최초 로그인 문맥의 10초 기한을 재사용하는 문제로 좁혀졌습니다. 첫 실패는 적용 전 `recordConsent` 준비 단계입니다.\n\n실제 기존 MFA 세션으로 요청마다 `authenticate`해 문맥을 받는 최소 수정안을 전달했습니다. 제품 예산·권한·잠금 검사는 유지하며, 소스는 아직 고정 상태입니다. 취
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T23:08:17Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-change-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-change-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:10:15Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 테스트 전용 6파일 수정 후 전체 쓰기를 고정했습니다. 정상 요청마다 기존 실제 MFA 세션으로 새 문맥을 받고, 사람 참조도 현재 보호 원본과 대조합니다.\n\n제품 제한 시간·권한·잠금은 그대로입니다. 새 Luna 명령과 보고서 경로를 전달했고, Step11–14는 검증 전 미완료로 유지합니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:14:29Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: tsc는 통과했습니다. `order-change.spec.ts` 통합 검사는 9건 중 5건 통과·4건 실패했습니다. 실패 후속 검사 3개는 중단했고, fresh source identity와 20개 파일 해시는 전후 동일했습니다. 상세 원인과 보고서 경로를 root에 전달했습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:16:59Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 남은 실패를 구분했습니다.\n\n- 변조 제안은 더 앞선 공통 보호 검사에서 정상 거절됩니다.\n- 별도 보호 실패 후에는 primary 개정2와 보호 개정1이 달라 `currentProtected` 거절이 정상입니다.\n- runner 해제는 3초 DB 트랜잭션 제한과 반복 조회가 원인 후보입니다. PG 오류 코드·발생 시간으로 확정할 계획을 전달했습니다.\n\n소
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T23:21:30Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-change-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-change-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:22:09Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 검증된 조건 조회 결과의 같은 단계 내 재사용과 정확 확인자 중복 제거를 적용했습니다. 전후 재검사·모든 근거 검사·시간 제한은 유지했습니다.\n\n두 실패 시험도 실제 primary/보호 상태를 구분하도록 정정했습니다. 전체 쓰기를 고정하고 새 Luna 명령을 전달했으며, Step11–14는 아직 미완료입니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:23:53Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: tsc는 통과했습니다. U3 unit은 256건 중 255건 통과, 1건 실패했습니다. 실패로 인해 나머지 검사는 중단했습니다. source identity와 22개 파일 해시는 전후 동일하며, 상세 결과를 root에 전달했습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:25:55Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 취소 시험의 두 검사 횟수만 `2→1`로 정정하고 전체 쓰기를 고정했습니다. 거절·늦은 응답 차단 주장은 유지했으며, 새 보고서 경로와 파일 SHA를 전달했습니다.
+
+---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T23:28:40Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T23:32:29Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-change-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-change-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:33:16Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: tsc, U3 unit 256/256, order-change 통합 9/9, 지정 회귀 57/57, U2 회귀 10/10이 통과했습니다. ESLint는 `commercial-proposal.ts:10`의 미사용 `ConditionBinding`과 `order-change.ts:4`의 미사용 `Ref`로 실패했습니다. fresh source identity와
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T23:33:31Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-change-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-change-verification-20261012.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T23:33:42Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-change-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-change-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:33:44Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 미사용 `ConditionBinding`, `Ref` import 두 줄만 제거했습니다. 소스를 다시 고정하고 정확한 변경 내용과 SHA를 전달했습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T23:34:22Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: 두 import 제거본에서 TypeScript와 지정 ESLint가 모두 통과했습니다(exit 0). fresh source identity와 22개 파일 해시는 전후 동일합니다. unit·integration 검사는 반복하지 않았습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T23:34:34Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-change-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-change-verification-20261012.md
+
+---

@@ -22,12 +22,15 @@ export async function seedProposalAuthority(store: ProtectedStore, software = fa
       ...fixtureMeta(revision),
       clientRequestId: randomUUID(),
     });
-  const staffRole = await new U3StaffAccess(store, f.seller.now).defineRole(f.seller.staff, {
-    meta: meta(),
-    label: '합성 제안·조회 직원',
-    actions: ['contract.propose', 'order.read'],
-  });
-  await new StaffAccess(store, f.seller.now).grantRole(f.seller.staff, {
+  const staffRole = await new U3StaffAccess(store, f.seller.now).defineRole(
+    await f.requestContext(f.seller.staff),
+    {
+      meta: meta(),
+      label: '합성 제안·조회 직원',
+      actions: ['contract.propose', 'order.read'],
+    },
+  );
+  await new StaffAccess(store, f.seller.now).grantRole(await f.requestContext(f.seller.staff), {
     meta: meta(),
     accountRef: f.registrant.actorAccountRef!,
     roleRef: staffRole.targetRef!,
@@ -35,16 +38,20 @@ export async function seedProposalAuthority(store: ProtectedStore, software = fa
   });
   const roles = new U3CustomerAccess(f.seller.access, f.seller.now);
   const consentRole = await roles.defineRole(
-    f.seller.customer,
+    await f.requestContext(f.seller.customer),
     consentRoleInput(f.seller.enterpriseRef),
   );
   async function grant(decision: 'GRANT' | 'REVOKE' = 'GRANT') {
-    return f.seller.access.grantCustomerRole(f.seller.customer, f.seller.enterpriseRef, {
-      meta: meta(decision === 'GRANT' ? null : 1),
-      accountRef: f.seller.customer.actorAccountRef!,
-      roleRef: consentRole.targetRef!,
-      decision,
-    });
+    return f.seller.access.grantCustomerRole(
+      await f.requestContext(f.seller.customer),
+      f.seller.enterpriseRef,
+      {
+        meta: meta(decision === 'GRANT' ? null : 1),
+        accountRef: f.seller.customer.actorAccountRef!,
+        roleRef: consentRole.targetRef!,
+        decision,
+      },
+    );
   }
   const targetScope: TargetScope = {
     ...fixtureScope(),
@@ -191,7 +198,7 @@ export async function seedProposalAuthority(store: ProtectedStore, software = fa
     syntheticCommercialEvidence,
   );
   async function input(): Promise<U3ProposalInput> {
-    const resolved = await agreement.resolve(f.seller.customer, {
+    const resolved = await agreement.resolve(await f.requestContext(f.seller.customer), {
       targetScope,
       productRef,
       commonOfferRevisionRef: offerRef,
@@ -242,9 +249,13 @@ export async function seedProposalAuthority(store: ProtectedStore, software = fa
     data.productRefs = [productRef];
     data.commercialTermsRef = offerRef;
     data.provisionTermsRef = offerRef;
-    const registered = await agreement.register(f.registrant, data, ingress);
+    const registered = await agreement.register(
+      await f.requestContext(f.registrant),
+      data,
+      ingress,
+    );
     return agreement.approve(
-      f.approver,
+      await f.requestContext(f.approver),
       agreementApprovalInput(registered.targetRef!, data.agreementEvidenceRefs),
       ingress,
     );

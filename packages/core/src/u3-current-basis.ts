@@ -210,7 +210,7 @@ export class U3CurrentBasis {
     );
     const policies = new Map<string, { policy: ModelData; kinds: Set<string> }>();
     const ownerSources: Ref[] = [accountRef];
-    const confirmers: Ref[] = [];
+    const confirmers = new Map<string, Ref>();
     const synthetic = this.registration.kind === 'LOCAL_SYNTHETIC';
     for (const reference of references) {
       confirmed(
@@ -249,13 +249,8 @@ export class U3CurrentBasis {
           exact(binding.accountRef, accountRef),
       );
       await scope.current(authorityRef);
-      await this.authorization.requireStaffSource(
-        authorityRef,
-        'identity.person.verify',
-        scope.transaction,
-      );
       ownerSources.push(reference, policyRef, bindingRef, authorityRef);
-      confirmers.push(authorityRef);
+      confirmers.set(canonicalJson(authorityRef), authorityRef);
       const key = canonicalJson(policyRef);
       if (!policies.has(key)) policies.set(key, { policy, kinds: new Set() });
       policies.get(key)!.kinds.add(String(evidence.sourceKind));
@@ -267,6 +262,13 @@ export class U3CurrentBasis {
           required.every((kind) => this.registration.sourceKinds.includes(kind) && kinds.has(kind)),
       );
     }
+    // 모든 proof-kind는 위에서 개별 검증했다. 동일한 정확 확인자만 phase 안에서 중복 제거한다.
+    for (const confirmer of confirmers.values())
+      await this.authorization.requireStaffSource(
+        confirmer,
+        'identity.person.verify',
+        scope.transaction,
+      );
     await this.ownerProof(
       scope,
       'verifyEvidence',
@@ -276,7 +278,7 @@ export class U3CurrentBasis {
       ownerSources,
       context,
     );
-    for (const confirmer of confirmers)
+    for (const confirmer of confirmers.values())
       await this.authorization.requireStaffSource(
         confirmer,
         'identity.person.verify',

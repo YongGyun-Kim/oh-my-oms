@@ -2319,7 +2319,26 @@
                 ]
               }
             },
-            "state": { "enum": ["AWAITING_CONSENT", "ACCEPTED", "DECLINED", "STALE", "UNVERIFIED"] }
+            "state": {
+              "enum": ["AWAITING_CONSENT", "ACCEPTED", "APPLIED", "DECLINED", "STALE", "UNVERIFIED"]
+            },
+            "applicationRefs": {
+              "type": "array",
+              "maxItems": 100,
+              "uniqueItems": true,
+              "items": {
+                "allOf": [
+                  { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "owner": { "const": "OrderAcceptance" },
+                      "entity": { "const": "OrderChangeApplication" }
+                    }
+                  }
+                ]
+              }
+            }
           },
           "required": [
             "proposalRef",
@@ -2817,7 +2836,8 @@
           "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
         },
         "priceBreakdown": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderPriceBreakdown" },
-        "currentTermsRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" }
+        "currentTermsRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+        "appliedTerms": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AppliedTerms" }
       },
       "required": [
         "orderRef",

@@ -6,6 +6,7 @@ import type {
   U3AppliedTerms,
   U3OrderLineInput,
   U3OrderView,
+  U3ProposalView,
 } from './u3-types.js';
 
 const equal = (a: unknown, b: unknown) => canonicalJson(a) === canonicalJson(b);
@@ -84,6 +85,28 @@ function validateSnapshot(view: U3OrderView): void {
     equal(set(view.lines.flatMap((line) => line.conditionBindings)), set(view.conditionBindings)),
     '주문 전체 조건 매핑의 합집합이 다릅니다.',
   );
+  if (view.appliedTerms) {
+    const applied = view.appliedTerms;
+    validateU3Semantics('AppliedTerms', applied);
+    check(
+      equal(applied.targetScope, view.targetScope) &&
+        applied.capturedLines.length === view.lines.length &&
+        applied.capturedLines.every(
+          (line, index) =>
+            line.productRef.id === view.lines[index]!.productRef.id &&
+            line.quantity === view.lines[index]!.quantity &&
+            equal(line.agreedPeriod, view.lines[index]!.agreedPeriod),
+        ),
+      '현재 적용 조건은 원래 주문의 기업·전체 상품/수량·합의 기간을 보존해야 합니다.',
+    );
+  }
+}
+function validateProposalView(view: U3ProposalView): void {
+  if (view.state === 'APPLIED')
+    check(
+      view.targetOrderRef !== null && (view.applicationRefs?.length ?? 0) > 0,
+      '적용 완료 표시는 주문 대상과 정확한 주문 조건 적용 참조가 필요합니다.',
+    );
 }
 // Runs only after closed AJV validation. Cross-field meaning is not source trust:
 // owners still verify current protected sources, authority, purpose and targets.
@@ -188,9 +211,26 @@ export function validateU3Semantics(definition: string, value: unknown): void {
       '첫 배포 주문은 단일 지급 종류만 지원합니다.',
     );
   }
-  if (definition === 'OrderView') validateSnapshot(value as U3OrderView);
-  if (definition === 'OrderViewResult' && data.knowledge === 'KNOWN')
-    validateSnapshot(data.data as U3OrderView);
+  if (definition === 'OrderView') {
+    const view = value as U3OrderView;
+    validateSnapshot(view);
+  }
+  if (definition === 'OrderViewResult' && data.knowledge === 'KNOWN') {
+    const view = data.data as U3OrderView;
+    validateSnapshot(view);
+  }
+  if (definition === 'ProposalView') validateProposalView(value as U3ProposalView);
+  if (definition === 'ProposalViewResult' && data.knowledge === 'KNOWN') {
+    const view = data.data as U3ProposalView;
+    validateProposalView(view);
+    if (view.state === 'APPLIED')
+      check(
+        view.applicationRefs!.every((reference) =>
+          (data.sourceRefs as Ref[]).some((source) => equal(source, reference)),
+        ),
+        '적용 완료 출력의 출처는 정확한 모든 주문 조건 적용 참조를 포함해야 합니다.',
+      );
+  }
   if (definition === 'ProposalInput') {
     const order = data.targetOrderRef !== null;
     check(

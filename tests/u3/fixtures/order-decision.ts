@@ -71,7 +71,7 @@ export async function seedDecisionOrder(
     f.productRef = productRef;
     f.offerRef = offerRef;
   }
-  const resolved = await f.agreement.resolve(f.seller.customer, {
+  const resolved = await f.agreement.resolve(await f.requestContext(f.seller.customer), {
     targetScope: f.targetScope,
     productRef: f.productRef,
     commonOfferRevisionRef: f.offerRef,
@@ -118,7 +118,7 @@ export async function seedDecisionOrder(
     async (proof) => proof === f.ingress,
     syntheticCommercialEvidence,
   );
-  const receipt = await submitter.submit(f.seller.customer, input);
+  const receipt = await submitter.submit(await f.requestContext(f.seller.customer), input);
   const sourceRefs: Record<U3ReadinessOwner, Ref> = {
     FinancialSettlement: {
       owner: 'FinancialSettlement',

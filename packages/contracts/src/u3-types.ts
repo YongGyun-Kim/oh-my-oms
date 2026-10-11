@@ -165,7 +165,8 @@ export interface U3ProposalView {
   termsFingerprint: string;
   agreementEvidenceRefs: Ref[];
   consentRefs: Ref[];
-  state: 'AWAITING_CONSENT' | 'ACCEPTED' | 'DECLINED' | 'STALE' | 'UNVERIFIED';
+  state: 'AWAITING_CONSENT' | 'ACCEPTED' | 'APPLIED' | 'DECLINED' | 'STALE' | 'UNVERIFIED';
+  applicationRefs?: Ref[];
 }
 export interface U3OrderLineInput {
   productRef: Ref;
@@ -237,6 +238,7 @@ export interface U3OrderView {
   basisRefs: Ref[];
   priceBreakdown?: U3OrderPriceBreakdown;
   currentTermsRef?: Ref;
+  appliedTerms?: U3AppliedTerms;
 }
 export type U3ApplyOrderChangeInput = {
   meta: CommandMeta;

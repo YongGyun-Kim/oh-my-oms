@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { fingerprint } from '@oms/contracts';
+import { canonicalJson, fingerprint } from '@oms/contracts';
 import { StaffAccess, U3StaffAccess, ref, UNREGISTERED_U3_EVIDENCE } from '@oms/core';
 import type { U3EvidenceRegistration } from '@oms/core';
 import type { ProtectedStore, ModelData } from '@oms/persistence';
@@ -25,13 +25,16 @@ export async function seedAgreementAuthority(
   const seller = await seedU3CommandAuthority(store),
     reviewer = await seedU3CommandAuthority(store);
   const meta = () => ({ ...fixtureMeta(), clientRequestId: randomUUID() });
-  const role = await new U3StaffAccess(store, seller.now).defineRole(seller.staff, {
-    meta: meta(),
-    label: '합성 계약 승인/출처 확인',
-    actions: ['contract.approve', 'identity.person.verify'],
-  });
+  const role = await new U3StaffAccess(store, seller.now).defineRole(
+    await requestContext(seller.staff),
+    {
+      meta: meta(),
+      label: '합성 계약 승인/출처 확인',
+      actions: ['contract.approve', 'identity.person.verify'],
+    },
+  );
   for (const actor of [seller.staff, reviewer.staff])
-    await new StaffAccess(store, seller.now).grantRole(seller.staff, {
+    await new StaffAccess(store, seller.now).grantRole(await requestContext(seller.staff), {
       meta: meta(),
       accountRef: actor.actorAccountRef!,
       roleRef: role.targetRef!,
@@ -235,6 +238,29 @@ export async function seedAgreementAuthority(
       offerRef,
       agreementProof.map((value) => ref('VerificationEvidence', value)),
     );
+  // 별도 요청은 기존 실제 MFA 세션에서 새 문맥을 받는다. 음성 시험의 문맥을 보정하지 않는다.
+  async function requestContext(previous: ServiceContext): Promise<ServiceContext> {
+    const source = [seller, reviewer].find(
+      (fixture) =>
+        (previous.audience === 'STAFF' ? fixture.staff : fixture.customer).principalId ===
+        previous.principalId,
+    );
+    if (!source || (previous.audience !== 'CUSTOMER' && previous.audience !== 'STAFF'))
+      throw new Error('등록된 fixture 요청자만 새 요청 문맥을 받을 수 있습니다.');
+    const current = await source.authenticateRequest(previous.audience);
+    if (!previous.verifiedPersonRef) return current;
+    const link = await store.currentProtected('VerifiedPersonLink', previous.verifiedPersonRef.id);
+    if (
+      !link ||
+      canonicalJson(ref('VerifiedPersonLink', link)) !==
+        canonicalJson(previous.verifiedPersonRef) ||
+      !(link.accountRefs as Ref[]).some(
+        (reference) => canonicalJson(reference) === canonicalJson(current.actorAccountRef),
+      )
+    )
+      throw new Error('현재 보호된 정확한 사람·계정 연결이 필요합니다.');
+    return { ...current, verifiedPersonRef: ref('VerifiedPersonLink', link) };
+  }
   return {
     seller,
     reviewer,
@@ -250,5 +276,6 @@ export async function seedAgreementAuthority(
     productRef,
     offerRef,
     write,
+    requestContext,
   };
 }

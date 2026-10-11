@@ -14,6 +14,8 @@ import type {
   U3ResolvedCommercialTerms,
   U3OrderDecisionInput,
   U3PriceConfirmation,
+  U3ApplyOrderChangeInput,
+  U3AppliedTerms,
 } from '@oms/contracts';
 import {
   requireCondition,
@@ -46,6 +48,10 @@ import type {
 import type { Assessment } from './order-assessment.js';
 import { resolveConditionBindings } from './commercial-terms.js';
 import { withinEffectiveWindow } from './catalog-conditions.js';
+import { CommercialProposal } from './commercial-proposal.js';
+import { currentOrderTerms } from './order-terms.js';
+import { U3AfterSalesSource } from './u3-after-sales-source.js';
+import type { U3AfterSalesRegistration } from './u3-after-sales-source.js';
 export class OrderAcceptance {
   private readonly authorization: Authorization;
   private readonly commands: Commands;
@@ -332,16 +338,21 @@ export class U3OrderAcceptance {
   readonly commands: U3Commands;
   readonly agreement: CommercialAgreement;
   readonly readiness: U3OrderReadiness;
+  readonly proposals: CommercialProposal;
+  readonly afterSales: U3AfterSalesSource;
   constructor(
     readonly store: ProtectedStore,
     readonly now: () => Date,
     private readonly staffIngress: (proof: unknown) => Promise<boolean>,
     evidence?: U3EvidenceRegistration,
     readiness: U3ReadinessRegistration[] = [],
+    afterSales?: U3AfterSalesRegistration,
   ) {
     this.commands = new U3Commands(store, now);
     this.agreement = new CommercialAgreement(store, now, staffIngress, evidence);
     this.readiness = new U3OrderReadiness(store, now, readiness);
+    this.proposals = new CommercialProposal(store, now, staffIngress, evidence);
+    this.afterSales = new U3AfterSalesSource(store, now, afterSales);
   }
   private async ingress(context: ServiceContext, proof: unknown): Promise<void> {
     requireCondition(
@@ -674,12 +685,7 @@ export class U3OrderAcceptance {
       'ORDER_ALREADY_DECIDED',
       '전체 수락·거절 후 새 판단으로 기존 결과를 덮어쓸 수 없습니다.',
     );
-    requireCondition(
-      (order.changeApplicationRefs as Ref[]).length === 0,
-      503,
-      'ORDER_APPLIED_SOURCE_UNCONFIRMED',
-      '실제 적용 조건 소유 경로를 먼저 확인해야 합니다.',
-    );
+    const current = await currentOrderTerms(scope, input.targetRef, this.agreement.basis);
     const snapshotRef = order.purchaseTermsRef as Ref;
     await scope.current(snapshotRef);
     const snapshot = await this.commands.repository.current(snapshotRef),
@@ -762,47 +768,32 @@ export class U3OrderAcceptance {
       );
       lines.push(line);
     }
-    const terms: U3ProposalTerms = {
-      termsRecordRef: snapshotRef,
-      lines: captured.map((line) => ({
-        productRef: line.productRef as Ref,
-        quantity: Number(line.quantity),
-        price: line.purchasePrice as U3ProposalTerms['lines'][number]['price'],
-        period: line.agreedPeriod as U3ProposalTerms['lines'][number]['period'],
-        conditionRefs: [
-          ...new Map(
-            (line.conditionBindings as ConditionBinding[]).map((binding) => [
-              canonicalJson(binding.sourceRef),
-              binding.sourceRef,
-            ]),
-          ).values(),
-        ],
-      })),
-    };
+    const terms = current.terms;
     const request: U3ReadinessRequest = {
       orderRef: input.targetRef,
       purchaseTermsRef: snapshotRef,
+      currentTermsRef: current.reference,
       enterpriseRef: input.targetScope.enterpriseRef,
       targetScope: input.targetScope,
       productType: order.productType as U3ReadinessRequest['productType'],
       paymentKind: order.paymentKind as U3ReadinessRequest['paymentKind'],
       provisionChoice: 'FULL',
-      priceBreakdown: snapshot.priceBreakdown as U3OrderPriceBreakdown,
-      lines: lines.map((line, index) => ({
+      priceBreakdown: current.price,
+      lines: current.captured.map((line, index) => ({
         lineRef: (order.lineRefs as Ref[])[index]!,
         productRef: line.productRef as Ref,
         commonOfferRevisionRef: line.commonOfferRevisionRef as Ref,
         agreementRevisionRefs: line.agreementRevisionRefs as Ref[],
         conditionBindings: line.conditionBindings as ConditionBinding[],
         quantity: Number(line.quantity),
-        paymentMode: line.requestedPaymentMode as 'PREPAY' | 'POSTPAY',
+        paymentMode: line.paymentMode,
         requestedActivationDate: line.requestedActivationDate as string | null,
         agreedPeriod: line.agreedPeriod as U3ReadinessRequest['lines'][number]['agreedPeriod'],
       })),
       epoch: await this.store.currentEpoch(),
       decisionDigest: fingerprint(input),
     };
-    return { order, snapshot, lines, terms, receipt, request };
+    return { order, snapshot, lines, terms, receipt, request, current };
   }
   private async commercialReadiness(
     scope: U3Transaction,
@@ -848,6 +839,13 @@ export class U3OrderAcceptance {
       );
       for (const binding of line.conditionBindings)
         for (const evidence of binding.evidenceRefs) await scope.current(evidence);
+    }
+    if (original.current.application) {
+      await this.proposals.currentApplicationEvidence(
+        scope,
+        original.current.application.consentRef as Ref,
+      );
+      return;
     }
     const confirmation = snapshot.priceConfirmation as U3PriceConfirmation | null | undefined;
     requireCondition(
@@ -1054,6 +1052,186 @@ export class U3OrderAcceptance {
       ),
     );
   }
+  async apply(
+    context: ServiceContext,
+    input: U3ApplyOrderChangeInput,
+    ingressProof: unknown = null,
+  ): Promise<Receipt> {
+    await this.ingress(context, ingressProof);
+    return this.budget(context, () =>
+      this.commands.run(
+        context,
+        'OrderAcceptance',
+        'applyApprovedChange',
+        { kind: 'NONE' },
+        input,
+        { scope: input.targetScope },
+        async (scope) => {
+          const current = await currentOrderTerms(scope, input.orderRef, this.agreement.basis),
+            order = current.order;
+          requireCondition(
+            canonicalJson(order.targetScope) === canonicalJson(input.targetScope),
+            404,
+            'NOT_FOUND',
+            '해당 기업·고정 조직의 주문 변경만 적용할 수 있습니다.',
+          );
+          requireCondition(
+            input.changeKind === 'REVIEW_PRICE_CHANGE'
+              ? order.state === 'REVIEW' && input.afterSalesDecisionRef === null
+              : order.state === 'ACCEPTED' && input.afterSalesDecisionRef !== null,
+            409,
+            'ORDER_CHANGE_STATE',
+            '수락 전 가격 변경과 수락 후 U7 변경의 현재 상태를 구분해야 합니다.',
+          );
+          const used = await this.agreement.basis.collection(scope, 'OrderChangeApplication', {
+            consentRef: { id: input.customerConsentRef.id },
+            actualApplicationResult: 'APPLIED',
+          });
+          requireCondition(
+            used.length === 0,
+            409,
+            'CONSENT_ALREADY_APPLIED',
+            '한 정확한 동의의 적용은 한 번만 기록합니다.',
+          );
+          const source = await this.proposals.applicationSource(
+            scope,
+            input.customerConsentRef,
+            input.orderRef,
+            input.targetScope,
+            input.newTermsRef,
+          );
+          requireCondition(
+            canonicalJson(source.proposal.originalTermsRef) === canonicalJson(current.reference) &&
+              canonicalJson(source.content.originalTerms) === canonicalJson(current.terms) &&
+              canonicalJson(source.content.originalPriceBreakdown) === canonicalJson(current.price),
+            409,
+            'ORDER_CHANGE_ORIGINAL',
+            '제안의 원래 조건은 실제 현재 적용 조건과 같아야 합니다.',
+          );
+          const captured: U3AppliedTerms['capturedLines'] = [];
+          for (const [index, line] of source.captured.entries()) {
+            const product = await scope.current(line.productRef);
+            const previous = current.captured[index];
+            requireCondition(
+              previous &&
+                product.productType === order.productType &&
+                line.productRef.id === previous.productRef.id &&
+                line.quantity === previous.quantity &&
+                line.paymentMode === order.paymentKind &&
+                canonicalJson(line.agreedPeriod) === canonicalJson(previous.agreedPeriod) &&
+                canonicalJson(line.paymentTermsRef) === canonicalJson(previous.paymentTermsRef) &&
+                canonicalJson(line.completionBasisRef) ===
+                  canonicalJson(previous.completionBasisRef) &&
+                canonicalJson(
+                  line.conditionBindings.find((binding) => binding.conditionKey === 'PROVISION')
+                    ?.value,
+                ) ===
+                  canonicalJson(
+                    previous.conditionBindings.find(
+                      (binding) => binding.conditionKey === 'PROVISION',
+                    )?.value,
+                  ),
+              409,
+              'ORDER_CHANGE_BOUNDARY',
+              '가격 변경은 같은 상품/수량/단일 지급/FULL/합의 기간·이행 조건을 보존해야 합니다.',
+            );
+            captured.push({ ...line, requestedActivationDate: previous.requestedActivationDate });
+          }
+          requireCondition(
+            captured.length === current.captured.length,
+            409,
+            'ORDER_CHANGE_BOUNDARY',
+            '전체 주문 입력행을 보존해야 합니다.',
+          );
+          const digest = fingerprint(input),
+            epoch = await this.store.currentEpoch();
+          const afterSalesRequest =
+            input.changeKind === 'ACCEPTED_AFTERSALES_CHANGE'
+              ? {
+                  decisionRef: input.afterSalesDecisionRef,
+                  orderRef: input.orderRef,
+                  proposalRef: source.proposalRef,
+                  proposalRevision: source.content.proposalRevision,
+                  termsFingerprint: String(source.proposal.termsFingerprint),
+                  consentRef: input.customerConsentRef,
+                  newTermsRef: input.newTermsRef,
+                  targetScope: input.targetScope,
+                  epoch,
+                  applicationDigest: digest,
+                }
+              : null;
+          const u7 = afterSalesRequest ? await this.afterSales.current(afterSalesRequest) : null;
+          const appliedTerms: U3AppliedTerms = {
+            terms: source.content.proposedTerms,
+            capturedLines: captured,
+            priceBreakdown: source.content.priceBreakdown,
+            targetScope: input.targetScope,
+            proposalRevision: source.content.proposalRevision,
+            termsFingerprint: String(source.proposal.termsFingerprint),
+          };
+          const application: ModelData = {
+            modelVersion: 2,
+            orderChangeApplicationId: randomUUID(),
+            orderRef: input.orderRef,
+            afterSalesDecisionRef: input.afterSalesDecisionRef,
+            consentRef: input.customerConsentRef,
+            previousTermsRef: current.reference,
+            changedTermsRef: input.newTermsRef,
+            actualApplicationResult: 'APPLIED',
+            expectedOrderRevision: input.orderRef.revision,
+            proposalRef: source.proposalRef,
+            changeKind: input.changeKind,
+            revision: 1,
+            appliedTerms,
+          };
+          await scope.transaction.put('OrderChangeApplication', application);
+          const applicationRef = u3Ref('OrderChangeApplication', application, this.store.schema),
+            after = {
+              ...order,
+              changeApplicationRefs: [...(order.changeApplicationRefs as Ref[]), applicationRef],
+              revision: input.orderRef.revision + 1,
+            };
+          await scope.transaction.put('Order', after, input.orderRef.revision);
+          const again = await this.proposals.applicationSource(
+            scope,
+            input.customerConsentRef,
+            input.orderRef,
+            input.targetScope,
+            input.newTermsRef,
+          );
+          requireCondition(
+            canonicalJson([source.proposal, source.consent, source.captured]) ===
+              canonicalJson([again.proposal, again.consent, again.captured]),
+            409,
+            'ORDER_CHANGE_SOURCE_CHANGED',
+            '동일 적용 직전의 제안·동의·현재 근거가 변경됐습니다.',
+          );
+          if (afterSalesRequest) {
+            const observed = await this.afterSales.current(afterSalesRequest);
+            requireCondition(
+              canonicalJson([observed.binding, observed.facts]) ===
+                canonicalJson([
+                  u7!.binding,
+                  { ...u7!.facts, observedAt: observed.facts.observedAt },
+                ]),
+              409,
+              'ORDER_CHANGE_SOURCE_CHANGED',
+              '같은 U7 결정 원본의 개정/대상/허용 상태를 재확인해야 합니다.',
+            );
+          }
+          await this.ingress(context, ingressProof);
+          const target = u3Ref('Order', after, this.store.schema);
+          return {
+            target,
+            refs: [target, applicationRef],
+            before: input.orderRef,
+            state: 'RESULT_RECORDED',
+            notice: true,
+          };
+        },
+      ),
+    );
+  }
   async read(
     context: ServiceContext,
     input: U3OrderQuery,
@@ -1085,12 +1263,7 @@ export class U3OrderAcceptance {
               'NOT_FOUND',
               '해당 기업·조직의 주문을 확인할 수 없습니다.',
             );
-            requireCondition(
-              (order.changeApplicationRefs as Ref[]).length === 0,
-              503,
-              'ORDER_APPLIED_SOURCE_UNCONFIRMED',
-              '정확한 적용 조건 소유 경로를 확인해야 합니다.',
-            );
+            const current = await currentOrderTerms(scope, input.targetRef, this.agreement.basis);
             const snapshot = await scope.current(order.purchaseTermsRef as Ref),
               decision = await scope.current(order.acceptanceRef as Ref),
               choice = await scope.current(order.provisionChoiceRef as Ref);
@@ -1158,11 +1331,14 @@ export class U3OrderAcceptance {
               agreementRevisionRefs: snapshot.agreementRevisionRefs as Ref[],
               conditionBindings: snapshot.conditionBindings as ConditionBinding[],
               provisionChoice: 'FULL',
-              consentRef: choice.consentRef as Ref | null,
+              consentRef: current.application
+                ? (current.application.consentRef as Ref)
+                : (choice.consentRef as Ref | null),
               acceptance: decision.acceptance as U3OrderView['acceptance'],
               basisRefs: decision.basisRefs as Ref[],
-              priceBreakdown: snapshot.priceBreakdown as U3OrderPriceBreakdown,
-              currentTermsRef: order.purchaseTermsRef as Ref,
+              priceBreakdown: current.price,
+              currentTermsRef: current.reference,
+              ...(current.applied ? { appliedTerms: current.applied } : {}),
             };
             await scope.assertPremises();
             await this.ingress(context, ingressProof);
