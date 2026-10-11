@@ -348,9 +348,9 @@
     "contract": "u3-commercial",
     "version": 3,
     "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
-    "action": null,
+    "action": "order.read",
     "kind": "query",
-    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ProposalQuery",
     "output": "urn:oms:contract:u3-commercial:2#/$defs/ProposalViewResult",
     "targetKind": "RECORD",
     "targetSchema": {

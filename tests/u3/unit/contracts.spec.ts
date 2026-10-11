@@ -10,6 +10,7 @@ import {
   OmsError,
 } from '@oms/contracts';
 import type { Operation, Receipt, U3OrderInput } from '@oms/contracts';
+import { consentInput, proposalInput } from '../fixtures/proposal-input.js';
 import { fixtureContext, fixtureRef } from '../fixtures/identity.js';
 import {
   fixtureMeta,
@@ -298,15 +299,7 @@ describe('정확한 제안·동의·수락 전후 changeKind', () => {
       expect(() => validate('ApplyOrderChangeInput', { ...change(), ...replacement })).toThrow();
   });
   it('제안은 주문 하나 또는 정확한 SW 권한·회차 쌍이며 둘 다/둘 없음은 거절한다', () => {
-    const proposal = {
-      meta: fixtureMeta(),
-      targetOrderRef: fixtureRef('OrderAcceptance', 'Order'),
-      targetEntitlementRef: null,
-      targetRenewalCycleRef: null,
-      originalTermsRef: fixtureRef('OrderAcceptance', 'PurchaseTermsSnapshot'),
-      proposedTermsRef: fixtureRef('CommercialAgreement', 'AgreementHistory'),
-      agreementEvidenceRefs: [],
-    };
+    const proposal = proposalInput();
     expect(validate('ProposalInput', proposal)).toEqual(proposal);
     expect(
       validate('ProposalInput', {
@@ -323,12 +316,7 @@ describe('정확한 제안·동의·수락 전후 changeKind', () => {
       expect(() => validate('ProposalInput', { ...proposal, ...partial })).toThrow();
   });
   it('고객 ACCEPT는 정확한 제안 개정에 결합하고 논리 AGREE·직원 주장으로 바꾸지 않는다', () => {
-    const consent = {
-      meta: fixtureMeta(1),
-      proposalRef: fixtureRef('CommercialAgreement', 'CommercialProposal'),
-      proposalRevision: 1,
-      decision: 'ACCEPT',
-    };
+    const consent = consentInput();
     expect(validate('ConsentInput', consent)).toEqual(consent);
     for (const replacement of [
       { proposalRevision: 2 },

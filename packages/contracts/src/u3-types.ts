@@ -99,18 +99,73 @@ export interface U3AgreementApprovalInput {
 }
 export interface U3ProposalInput {
   meta: CommandMeta;
+  targetScope: TargetScope;
   targetOrderRef: Ref | null;
   targetEntitlementRef: Ref | null;
   targetRenewalCycleRef: Ref | null;
   originalTermsRef: Ref;
   proposedTermsRef: Ref;
+  proposedTerms: U3ProposalTerms;
+  priceBreakdown: U3OrderPriceBreakdown;
+  supersedesRef: Ref | null;
   agreementEvidenceRefs: Ref[];
 }
 export interface U3ConsentInput {
   meta: CommandMeta;
+  targetScope: TargetScope;
   proposalRef: Ref;
   proposalRevision: number;
+  termsFingerprint: string;
   decision: 'ACCEPT' | 'DECLINE';
+}
+export interface U3ProposalLine {
+  productRef: Ref;
+  quantity: number;
+  price: Money;
+  period: U3Period | null;
+  conditionRefs: Ref[];
+}
+export interface U3ProposalTerms {
+  termsRecordRef: Ref;
+  lines: U3ProposalLine[];
+}
+export type U3Knowledge = 'KNOWN' | 'UNKNOWN' | 'CONFLICT' | 'UNAVAILABLE';
+export interface U3PriceAdjustment {
+  itemId: string;
+  kind: 'TAX' | 'SHIPPING' | 'FEE' | 'DISCOUNT';
+  knowledge: U3Knowledge;
+  amount: Money | null;
+  position: 'SEPARATE' | 'UNIT_PRICE' | 'OTHER_ITEM' | 'NOT_APPLICABLE';
+  includedInItemId: string | null;
+  evidenceRefs: Ref[];
+  confirmedByRef: Ref | null;
+}
+export interface U3OrderPriceBreakdown {
+  lineAmounts: (Money | null)[];
+  productAmount: Money | null;
+  adjustments: U3PriceAdjustment[];
+  total: Money | null;
+  knowledge: U3Knowledge;
+}
+export interface U3ProposalQuery {
+  targetRef: Ref;
+  targetScope: TargetScope;
+}
+export interface U3ProposalView {
+  proposalRef: Ref;
+  proposalRevision: number;
+  targetScope: TargetScope;
+  targetOrderRef: Ref | null;
+  targetEntitlementRef: Ref | null;
+  targetRenewalCycleRef: Ref | null;
+  originalTerms: U3ProposalTerms;
+  proposedTerms: U3ProposalTerms;
+  originalPriceBreakdown: U3OrderPriceBreakdown;
+  priceBreakdown: U3OrderPriceBreakdown;
+  termsFingerprint: string;
+  agreementEvidenceRefs: Ref[];
+  consentRefs: Ref[];
+  state: 'AWAITING_CONSENT' | 'ACCEPTED' | 'DECLINED' | 'STALE' | 'UNVERIFIED';
 }
 export interface U3OrderLineInput {
   productRef: Ref;

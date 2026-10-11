@@ -50588,3 +50588,74 @@
 **Context**: construction > u3-commercial-ordering > code-generation > consent-authority-implementation-20261012.md
 
 ---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T19:48:05Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T19:59:28Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 소스 쓰기를 중지하고 Luna 검사 명령과 새 보고서 경로를 전달했습니다.\n\n제안 DTO·원래/새 비용·조건 fingerprint 검증 및 실제 등록 스키마 시험을 작성했습니다. 실제 제안 저장·고객 동의·수동 갱신 서비스와 Step11/12는 아직 미완료입니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:00:43Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Proposal contract slice 검증 결과입니다.\n\n- U3 unit: 229/229 통과, `success: true`\n- U1 legacy contract unit: 15/15 통과, `success: true`\n- ESLint: 종료 코드 0\n- TypeScript: 종료 코드 2. [proposal-terms.spec.ts](/Users/
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:02:24Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 타입 추론을 수정하고, `KNOWN`의 누락 행 금액·소계 거절 시험을 추가했습니다. `UNKNOWN`의 null과 확인된 0원을 구분합니다.\n\n소스 쓰기를 중지했고 새 Luna 검사 명령을 전달했습니다. Step11/12는 아직 미완료입니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:05:00Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 금액의 임의 `MAX_SAFE_INTEGER` 상한을 제거하고, BigInt 결과를 기존 Money 계약으로 검증하도록 맞췄습니다. 큰 금액의 정확한 계산과 4096자리 표현 경계 시험을 추가했습니다.\n\n소스를 고정했고 새 Luna 검사 명령을 전달했습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T20:05:49Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Proposal contract money fix 검증이 통과했습니다. TypeScript와 ESLint는 종료 코드 0이며, U3 unit은 232/232 테스트 통과, `success: true`입니다. 실패·pending·todo는 0입니다.\n\n시작과 종료 source identity는 동일합니다: HEAD `a7eda64a268570e8ae53f90
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T20:05:53Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/proposal-contract-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > proposal-contract-verification-20261012.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T20:07:08Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/proposal-contract-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > proposal-contract-verification-20261012.md
+
+---

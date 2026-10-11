@@ -148,6 +148,11 @@ export function validateU3Semantics(definition: string, value: unknown): void {
         : data.targetEntitlementRef !== null && data.targetRenewalCycleRef !== null,
       '주문 또는 정확한 SW 권한·갱신 회차를 선택해야 합니다.',
     );
+    check(
+      equal(data.proposedTermsRef, (data.proposedTerms as { termsRecordRef: Ref }).termsRecordRef),
+      '제안 조건과 조건을 고정한 정확한 원본 개정이 다릅니다.',
+    );
+    validateU3Semantics('OrderPriceBreakdown', data.priceBreakdown);
   }
   if (definition === 'ConsentInput') {
     check(
