@@ -48183,3 +48183,324 @@
 **Unit**: u3-commercial-ordering
 
 ---
+
+## Human Turn
+**Timestamp**: 2026-10-11T07:47:47Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T07:48:08Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-design-questions.md
+
+---
+
+## Summary Confirmation Recorded
+**Timestamp**: 2026-10-11T07:48:09Z
+**Event**: SUMMARY_CONFIRMATION_RECORDED
+**Stage**: functional-design
+**Details**: Looks correct
+**Checkpoint**: Consolidated Summary Confirmation
+**Questions File**: aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Questions SHA-256**: a817798339649c8cbb0b3f86dc53aa9b022312f62c6a0893c4613774b5c3d04f
+**Hash Scope**: confirmed-content-v2
+**Unit**: u3-commercial-ordering
+**Person Reply**: <send_user_message_question_reply>\n[{"answer":"Looks correct — 이 기준으로 작성","question":"U3 기능 설계 기준 전체를 확인해주세요: ① KRW 단가는 원 단위 정수이며 소수는 자동 반올림하지 않음 ② 같은 기업·상품의 상충하는 승인 조건은 적용 차단하고 기존 조건·주문 스냅샷 보존 ③ 주문 한 건 최대 100입력행, 초과 자동 분할·절삭 없음 ④ 단가×수량·합계는 OMS 계산, 세금 포함 여부·추가 비용·할인은 직원이 확인한 원 단위 금액과 근거로 등록하며 미확인을 0원으로 처","questionItemId":"[\"request_user_input_async\",\"call_98474edb42b040fa8a858bf8032aba57\",0]"}]\n</send_user_message_question_reply>
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T07:49:49Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a129f0-26f3-7471-9f29-db4e63de698f
+**Message**: Mermaid ER 다이어그램을 임시 디렉터리의 실제 Mermaid parser로 검증했습니다. `mermaid.parse(diagram)`이 통과했고, 저장소 파일은 수정하지 않았습니다.
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T07:52:20Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/entities.md
+**Context**: construction > u3-commercial-ordering > functional-design > entities.md
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T07:54:05Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/rules.md
+**Context**: construction > u3-commercial-ordering > functional-design > rules.md
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T07:54:56Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/traceability.json
+**Context**: construction > u3-commercial-ordering > functional-design > traceability.json
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Sensor Fired
+**Timestamp**: 2026-10-11T07:54:57Z
+**Event**: SENSOR_FIRED
+**Fire id**: 7eb797c0
+**Sensor ID**: traceability
+**Stage slug**: functional-design
+**Output path**: aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/traceability.json
+
+---
+
+## Sensor Failed
+**Timestamp**: 2026-10-11T07:54:57Z
+**Event**: SENSOR_FAILED
+**Fire id**: 7eb797c0
+**Sensor ID**: traceability
+**Stage slug**: functional-design
+**Output path**: aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/traceability.json
+**Detail path**: aidlc/spaces/default/intents/261004-feature/.aidlc-engine/sensors/functional-design/traceability-7eb797c0.md
+**Findings count**: 163
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T07:59:35Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-spec.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-spec.md
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T08:00:23Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/entities.md
+**Context**: construction > u3-commercial-ordering > functional-design > entities.md
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T08:00:23Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/rules.md
+**Context**: construction > u3-commercial-ordering > functional-design > rules.md
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T08:00:23Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-spec.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-spec.md
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Review Requested
+**Timestamp**: 2026-10-11T08:00:49Z
+**Event**: REVIEW_REQUESTED
+**Stage**: functional-design
+**Reviewer**: aidlc-architecture-reviewer-agent
+**Unit**: u3-commercial-ordering
+**Iteration**: 1
+**Artifact Fingerprint**: sha256:43f7662fc4af0ac07f4cb0f36e88a8985b41e54f11cc279b2b48aebf032dc652
+**Request Id**: review:e9b4c6aa94ea467f5cbd21eb3597b6bb
+**Review File**: .aidlc-engine/reviews/functional-design/units/u3-commercial-ordering/f047ef2c1a8e4a4e/1.e9b4c6aa94ea467f5cbd21eb3597b6bb.review.md
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T08:01:00Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/.aidlc-engine/reviewer-dispatch.json
+**Context**: .aidlc-engine > reviewer-dispatch.json
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T08:01:43Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a129f0-26f3-7471-9f29-db4e63de698f
+**Message**: 검사 결과: YAML/JSON 파싱, 18개 엔티티·29개 규칙의 고유성 및 필수 키, 42개 AC의 upstream 일치와 중복 없음, OK 35·Deferred 7, BR 타깃과 역방향 orphan 검사, Markdown 링크 31개, 유니코드 검사, `git diff --check`가 통과했습니다.\n\n참조 검사에서는 own-entity 관계 16개와 
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T08:06:28Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/.aidlc-engine/reviews/functional-design/units/u3-commercial-ordering/f047ef2c1a8e4a4e/1.e9b4c6aa94ea467f5cbd21eb3597b6bb.review.md
+**Context**: .aidlc-engine > reviews > functional-design > units > u3-commercial-ordering > f047ef2c1a8e4a4e > 1.e9b4c6aa94ea467f5cbd21eb3597b6bb.review.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T08:06:52Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-architecture-reviewer-agent
+**Agent ID**: 01a129fb-323e-7081-bb33-fbf23a3e394a
+**Message**: **Reviewer:** aidlc-architecture-reviewer-agent\n\n**NOT-READY — Major 4건**\n\n- R-01: 주문의 필수 TargetScope 보존 누락.\n- R-02: 다품목에 적용된 복수 기업 계약 개정의 보존 경로 부족.\n- R-03: 미정의 참조 7종·23회 및 공통 Ref 매핑 공백.\n- R-04: 수락 전 
+
+---
+
+## Review Completed
+**Timestamp**: 2026-10-11T08:07:00Z
+**Event**: REVIEW_COMPLETED
+**Stage**: functional-design
+**Reviewer**: aidlc-architecture-reviewer-agent
+**Unit**: u3-commercial-ordering
+**Iteration**: 1
+**Verdict**: NOT-READY
+**Request Fingerprint**: sha256:43f7662fc4af0ac07f4cb0f36e88a8985b41e54f11cc279b2b48aebf032dc652
+**Artifact Fingerprint**: sha256:43f7662fc4af0ac07f4cb0f36e88a8985b41e54f11cc279b2b48aebf032dc652
+**Request Id**: review:e9b4c6aa94ea467f5cbd21eb3597b6bb
+**Review Record**: .aidlc-engine/reviews/functional-design/units/u3-commercial-ordering/f047ef2c1a8e4a4e/1.json
+**Review Record Digest**: sha256:728f8e273a855196ade1c89fc4fdae8389465abb8f56586ceef23fe35e16530c
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T08:09:10Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/entities.md
+**Context**: construction > u3-commercial-ordering > functional-design > entities.md
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T08:10:39Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/rules.md
+**Context**: construction > u3-commercial-ordering > functional-design > rules.md
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T08:10:40Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-spec.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-spec.md
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T08:11:15Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/entities.md
+**Context**: construction > u3-commercial-ordering > functional-design > entities.md
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T08:11:15Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-spec.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-spec.md
+**Summary Authorization Id**: d8f7908a64f666ee7da23acfb1af118b34b444ceaf26476878fb7b25324e3bfa
+
+---
+
+## Review Requested
+**Timestamp**: 2026-10-11T08:11:44Z
+**Event**: REVIEW_REQUESTED
+**Stage**: functional-design
+**Reviewer**: aidlc-architecture-reviewer-agent
+**Unit**: u3-commercial-ordering
+**Iteration**: 2
+**Artifact Fingerprint**: sha256:411450ecf8fcd39aab8921e2637e452ea7b844cbbc0930acdf6009141a425539
+**Request Id**: review:e76855924b329d8f424648d63e9bf892
+**Review File**: .aidlc-engine/reviews/functional-design/units/u3-commercial-ordering/f047ef2c1a8e4a4e/2.e76855924b329d8f424648d63e9bf892.review.md
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T08:11:45Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/.aidlc-engine/reviewer-dispatch.json
+**Context**: .aidlc-engine > reviewer-dispatch.json
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T08:12:51Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a129f0-26f3-7471-9f29-db4e63de698f
+**Message**: 재검사가 통과했습니다. 지정 AC 42개와 OK 35·Deferred 7이 일치하고, C00 기준 직접 참조 58개와 관계 endpoint 16개의 invalid는 0입니다. 타입·값 매핑, 주문 변경 v2 조건, 링크, Mermaid 도식 일치, 유니코드 검사도 통과했으며 `git diff --check`는 종료 코드 0이었습니다. 문서는 수정하지 않았습
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T08:15:05Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/.aidlc-engine/reviews/functional-design/units/u3-commercial-ordering/f047ef2c1a8e4a4e/2.e76855924b329d8f424648d63e9bf892.review.md
+**Context**: .aidlc-engine > reviews > functional-design > units > u3-commercial-ordering > f047ef2c1a8e4a4e > 2.e76855924b329d8f424648d63e9bf892.review.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T08:15:20Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-architecture-reviewer-agent
+**Agent ID**: 01a129fb-323e-7081-bb33-fbf23a3e394a
+**Message**: **Reviewer:** aidlc-architecture-reviewer-agent\n\n**READY — iteration2**\n\nR-01–R-04 모두 **Resolved**입니다. 새 발견 사항은 없습니다.\n\n독립 검증: 원본 참조58개 유효, 18엔티티·29BR 고유, 42AC 정확 일치(OK35/Deferred7), orphan0, 링크30개 정상.
+
+---
+
+## Review Completed
+**Timestamp**: 2026-10-11T08:15:27Z
+**Event**: REVIEW_COMPLETED
+**Stage**: functional-design
+**Reviewer**: aidlc-architecture-reviewer-agent
+**Unit**: u3-commercial-ordering
+**Iteration**: 2
+**Verdict**: READY
+**Request Fingerprint**: sha256:411450ecf8fcd39aab8921e2637e452ea7b844cbbc0930acdf6009141a425539
+**Artifact Fingerprint**: sha256:411450ecf8fcd39aab8921e2637e452ea7b844cbbc0930acdf6009141a425539
+**Request Id**: review:e76855924b329d8f424648d63e9bf892
+**Review Record**: .aidlc-engine/reviews/functional-design/units/u3-commercial-ordering/f047ef2c1a8e4a4e/2.json
+**Review Record Digest**: sha256:9d53c49b716f74caaf8ee61ffc3a3ffa4e8183fb3a6039824ebdadb55d6467ec
+
+---
+
+## Unit Completed
+**Timestamp**: 2026-10-11T08:15:27Z
+**Event**: UNIT_COMPLETED
+**Stage**: functional-design
+**Unit**: u3-commercial-ordering
+**Run floor**: STAGE_JUMPED:2026-10-04T17:59:13Z#1
+
+---
