@@ -246,15 +246,16 @@
 
 
 
-- **Active Unit**: u2-identity-enterprise-access
 
-- **Unit Stage**: nfr-requirements
 
-- **Unit State**: paused
 
-- **Unit Pause Reason**: 기존 U2 NFR Requirements/NFR Design/Infrastructure Design 산출물의 일괄 Keep/Modify/Redo 재사용 선택을 기다림. 제안 제품 수정은 U1 격리 fixture 두 파일만 해당.
 
-- **Unit Next Action**: 사용자의 재사용 선택을 기록해 명시한 세 단계에 적용하고, 현재 단계 unit resume 및 필요한 재개 검토 후 code-generation의 두 파일 보완 계획을 준비한다.
+
+
+
+
+
+
 
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
@@ -317,7 +318,7 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-11T03:26:58Z
+- **Last Updated**: 2026-10-11T04:34:01Z
 
 - **Construction Autonomy Mode**: autonomous
 
