@@ -276,17 +276,12 @@
 
 
 
-- **Active Unit**: u3-commercial-ordering
-
-- **Unit Stage**: nfr-design
-
-- **Unit State**: paused
 
 
 
-- **Unit Pause Reason**: U3 상세 설계 전체 기준의 실제 사용자 확인을 기다린다
 
-- **Unit Next Action**: Looks correct 응답을 기록한 후 상세 설계 산출물 3개를 작성·검증·검토한다
+
+
 
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
@@ -349,7 +344,7 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-11T12:45:27Z
+- **Last Updated**: 2026-10-11T13:02:23Z
 
 - **Construction Autonomy Mode**: autonomous
 
