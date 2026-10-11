@@ -1,5 +1,5 @@
 import { canonicalJson, requireCondition, type SchemaValidator } from '@oms/contracts';
-import type { Ref } from '@oms/contracts';
+import type { Ref, U3AppliedTerms } from '@oms/contracts';
 import { U3_MODELS } from './u3-model-catalog.js';
 import { U3_SUPPORT_MODELS } from './u3-support-models.js';
 import { validateModel, rowModelVersion, type ModelData } from './model-catalog.js';
@@ -144,7 +144,7 @@ export function validateU3ModelConstraints(
   }
   // CustomerConsent.proposalRef는 보호된 저장 개정, proposalRevision은 내용 개정이다.
   // 정확한 둘의 결합은 현재 CommercialProposal을 확인하는 소유 서비스에서 검증한다.
-  if (model === 'OrderChangeApplication')
+  if (model === 'OrderChangeApplication') {
     check(
       data.changeKind === 'REVIEW_PRICE_CHANGE'
         ? data.afterSalesDecisionRef === null
@@ -152,6 +152,34 @@ export function validateU3ModelConstraints(
             (data.afterSalesDecisionRef as Ref)?.entity === 'AfterSalesDecisionRecord',
       '수락 전/후 변경의 U7 근거 분기가 다릅니다.',
     );
+    if (data.appliedTerms !== undefined && data.appliedTerms !== null) {
+      const applied = data.appliedTerms as U3AppliedTerms;
+      check(
+        data.actualApplicationResult === 'APPLIED' &&
+          same(data.changedTermsRef, applied.terms.termsRecordRef),
+        '적용 값은 성공한 실제 기록과 정확한 새 조건 원본에 결합되어야 합니다.',
+      );
+    }
+  }
+}
+// 과거 누락 원상은 역사 decoder에서 보존한다. 현재 적용 조건으로 쓰는 경로는 완전한 값을 요구한다.
+export function decodeAppliedTerms(data: ModelData, schema: SchemaValidator): U3AppliedTerms {
+  validateModel('OrderChangeApplication', data, schema);
+  requireCondition(
+    data.modelVersion === 2 &&
+      data.actualApplicationResult === 'APPLIED' &&
+      data.appliedTerms !== undefined &&
+      data.appliedTerms !== null,
+    503,
+    'APPLIED_TERMS_UNCONFIRMED',
+    '완전한 실제 적용 조건 원본을 확인해야 합니다.',
+  );
+  return structuredClone(
+    schema.validateUri<U3AppliedTerms>(
+      'urn:oms:contract:u3-commercial:2#/$defs/AppliedTerms',
+      data.appliedTerms,
+    ),
+  );
 }
 export function decodeU3Model(
   model: string,

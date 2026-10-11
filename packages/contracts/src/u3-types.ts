@@ -185,6 +185,22 @@ export interface U3OrderInput {
   partialConsentRef: null;
   priceConfirmation?: U3PriceConfirmation | null;
 }
+export interface U3CapturedLine extends U3OrderLineInput {
+  purchasePrice: Money | null;
+  priceKnowledge: U3Knowledge;
+  paymentTermsRef: Ref | null;
+  agreedPeriod: U3Period | null;
+  completionBasisRef: Ref | null;
+}
+// 적용 결과에 고정한 인라인 값이다. 원본 확인·현재 권한은 소유 서비스가 별도로 대조한다.
+export interface U3AppliedTerms {
+  terms: U3ProposalTerms;
+  capturedLines: U3CapturedLine[];
+  priceBreakdown: U3OrderPriceBreakdown;
+  targetScope: TargetScope;
+  proposalRevision: number;
+  termsFingerprint: string;
+}
 export interface U3PriceConfirmation {
   priceBreakdown: U3OrderPriceBreakdown;
   confirmedByRef: Ref;

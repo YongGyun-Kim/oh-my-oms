@@ -607,6 +607,31 @@
       "minItems": 1,
       "maxItems": 100
     },
+    "AppliedTerms": {
+      "type": "object",
+      "properties": {
+        "terms": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ProposalTerms" },
+        "capturedLines": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CapturedLines" },
+        "priceBreakdown": {
+          "allOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderPriceBreakdown" },
+            { "properties": { "knowledge": { "const": "KNOWN" } } }
+          ]
+        },
+        "targetScope": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope" },
+        "proposalRevision": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Revision" },
+        "termsFingerprint": { "type": "string", "pattern": "^[a-f0-9]{64}$", "maxLength": 64 }
+      },
+      "required": [
+        "terms",
+        "capturedLines",
+        "priceBreakdown",
+        "targetScope",
+        "proposalRevision",
+        "termsFingerprint"
+      ],
+      "additionalProperties": false
+    },
     "PriceAdjustment": {
       "type": "object",
       "properties": {

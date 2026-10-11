@@ -51133,3 +51133,138 @@
 **Context**: construction > u3-commercial-ordering > code-generation > order-decision-verification-20261012.md
 
 ---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:19:21Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: AppliedTerms 모델 계층 8개 파일을 작성·포맷하고 소스를 고정했습니다. 선택 nullable JSONB 필드 하나만 추가했으며, 과거 누락/null 원상은 보존합니다.\n\nLuna 검증 명령·새 보고서 경로·해시를 전달했습니다. 적용 서비스와 resolver는 아직 구현하지 않았고 Step11–14는 미완료입니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:20:42Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Applied terms model 검증 결과입니다.\n\n- TypeScript: 종료 코드 0\n- U3 unit: 249/249 통과, `success: true`\n- Integration: 14개 중 11개 통과, 3개 실패. Migration compatibility는 11/11 통과했습니다. Applied-terms model 테스트 3개는 fixtu
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T22:21:16Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/applied-terms-model-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > applied-terms-model-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:21:49Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: fixture에 실제 역할 부여 호출 한 줄만 추가하고 소스를 고정했습니다. 파일 해시와 새 Luna 재검증 명령을 전달했습니다.\n\n권한·모델 검증은 그대로이며, 적용 서비스와 resolver는 아직 작성하지 않았습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:22:41Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Fixture 수정 후 TypeScript 검사는 종료 코드 0입니다. Applied-terms integration은 3개 중 2개 통과, 1개 실패로 종료 코드 1입니다. 마지막 테스트에서 `replayRows`가 `RequestKey`를 재생하는 중 `u1_request_key_pkey` 중복 키 오류가 발생했습니다. 위치는 [applied-terms
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T22:23:26Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/applied-terms-model-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > applied-terms-model-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:24:04Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 재연 시험의 복구 준비 한 줄만 수정했습니다. 해당 후보의 접수 키만 제거하고 전체 보호 payload를 재연하며, 다른 요청 키와 제품 복구 구현은 유지합니다.\n\n소스를 고정했고 해시·새 Luna 검증 명령을 전달했습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:25:09Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: RequestKey replay-precondition 재검증 결과입니다.\n\n- TypeScript: 종료 코드 0\n- Applied-terms integration: 3개 중 2개 통과, 1개 실패\n- 지시에 따라 실패 후 ESLint는 실행하지 않았습니다.\n\n남은 실패는 [applied-terms-model.spec.ts](/Users/gyun/Proj
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T22:26:14Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/applied-terms-model-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > applied-terms-model-verification-20261012.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T22:26:19Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/applied-terms-model-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > applied-terms-model-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:26:40Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 보호 DB SQL이 `row2 → modelVersion2`만 검사하고, 반대 방향인 `row1 + modelVersion2`를 놓치는 것으로 확인했습니다.\n\n그 조합을 거절하는 조건 하나를 추가하는 수정안을 전달했습니다. 구형 행과 RequestKey는 유지하며, 소스는 아직 변경하지 않았습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:27:26Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: SQL에 `row1 + modelVersion2`를 거절하는 조건 한 줄을 추가하고 소스를 고정했습니다. 기존 구형·RequestKey·정상 혼합 원상 규칙은 유지했습니다.\n\n파일 해시와 새 모델/migration 검증 명령을 전달했습니다. 실제 재검증 결과는 아직 없습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T22:28:55Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Bidirectional version-guard 수정 검증이 모두 통과했습니다.\n\n- TypeScript와 ESLint: 종료 코드 0\n- Applied-terms 및 migration integration: 14/14 통과\n- 지정 U1 legacy 회귀: 필터 대상 3개 통과, 나머지 13개는 의도적으로 skip\n\n시작·종료 source identit
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T22:29:12Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/applied-terms-model-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > applied-terms-model-verification-20261012.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T22:29:13Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/applied-terms-model-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > applied-terms-model-verification-20261012.md
+
+---

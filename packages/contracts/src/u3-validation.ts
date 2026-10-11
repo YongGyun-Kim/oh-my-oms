@@ -1,7 +1,12 @@
 import { canonicalJson } from './canonical.js';
 import { requireCondition } from './errors.js';
 import type { Ref } from './types.js';
-import type { ConditionBinding, U3OrderLineInput, U3OrderView } from './u3-types.js';
+import type {
+  ConditionBinding,
+  U3AppliedTerms,
+  U3OrderLineInput,
+  U3OrderView,
+} from './u3-types.js';
 
 const equal = (a: unknown, b: unknown) => canonicalJson(a) === canonicalJson(b);
 const set = (values: unknown[]) => [...new Set(values.map(canonicalJson))].sort();
@@ -90,6 +95,52 @@ export function validateU3Semantics(definition: string, value: unknown): void {
     check(
       new Set(bindings.map((binding) => binding.conditionKey)).size === bindings.length,
       '조건 항목을 중복할 수 없습니다.',
+    );
+  }
+  if (definition === 'AppliedTerms') {
+    const applied = value as U3AppliedTerms;
+    validateU3Semantics('CapturedLines', applied.capturedLines);
+    validateU3Semantics('OrderPriceBreakdown', applied.priceBreakdown);
+    check(
+      applied.terms.lines.length === applied.capturedLines.length &&
+        applied.priceBreakdown.lineAmounts.length === applied.capturedLines.length,
+      '적용 조건·전체 행·확인 행 금액의 수가 다릅니다.',
+    );
+    let subtotal = 0n;
+    for (const [index, line] of applied.capturedLines.entries()) {
+      const term = applied.terms.lines[index]!;
+      check(
+        line.priceKnowledge === 'KNOWN' &&
+          line.purchasePrice !== null &&
+          line.paymentTermsRef !== null &&
+          line.completionBasisRef !== null &&
+          equal(line.productRef, term.productRef) &&
+          line.quantity === term.quantity &&
+          equal(line.purchasePrice, term.price) &&
+          equal(line.agreedPeriod, term.period) &&
+          equal(
+            set(line.conditionBindings.map((binding) => binding.sourceRef)),
+            set(term.conditionRefs),
+          ),
+        '적용한 모든 조건/가격/기간/수량은 고정된 제안 값과 같아야 합니다.',
+      );
+      check(
+        line.paymentMode === applied.capturedLines[0]!.paymentMode,
+        '적용 조건도 주문의 단일 지급 종류를 보존해야 합니다.',
+      );
+      const amount = BigInt(term.price.value) * BigInt(term.quantity);
+      check(
+        equal(applied.priceBreakdown.lineAmounts[index], {
+          currency: 'KRW',
+          value: amount.toString(),
+        }),
+        '적용한 행 금액과 단가×수량이 다릅니다.',
+      );
+      subtotal += amount;
+    }
+    check(
+      equal(applied.priceBreakdown.productAmount, { currency: 'KRW', value: subtotal.toString() }),
+      '적용한 상품 소계가 모든 행 금액과 다릅니다.',
     );
   }
   if (definition === 'ProductInput')
