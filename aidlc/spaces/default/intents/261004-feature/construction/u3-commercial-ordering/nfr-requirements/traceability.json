@@ -1,0 +1,102 @@
+{
+  "stage": "nfr-requirements",
+  "unit": "u3-commercial-ordering",
+  "scope": "first-release-pilot-library",
+  "meaning": "OK는 이 Unit의 적용 요구사항 정의 연결이며 코드·검사·운영 목표 달성 증거가 아니다. Deferred는 원래 전체 실증/후속 범위를 보존하며 해당 파생 요구사항의 첫 배포 기본 보호 의무를 면제하지 않는다.",
+  "upstream_ids": [
+    "NFR1",
+    "NFR2",
+    "NFR3",
+    "NFR4",
+    "NFR5",
+    "NFR6",
+    "NFR7",
+    "NFR8",
+    "NFR9",
+    "NFR10",
+    "NFR11",
+    "NFR12",
+    "NFR13",
+    "NFR14"
+  ],
+  "coverage": [
+    {
+      "id": "NFR1",
+      "status": "OK",
+      "target": "NFR1.1, NFR1.2, NFR1.3, NFR1.4, NFR1.5"
+    },
+    {
+      "id": "NFR2",
+      "status": "Deferred",
+      "target": "NFR2.1",
+      "reason": "99.9% 목표와 업무별 실패 구분을 보존한다. 30일 운영 실증은 U10 후속이다."
+    },
+    {
+      "id": "NFR3",
+      "status": "Deferred",
+      "target": "NFR3.1",
+      "reason": "30분 복구 목표와 원본 대조 근거를 보존한다. 재해·야간 복구 실증은 U10 후속이다."
+    },
+    {
+      "id": "NFR4",
+      "status": "Deferred",
+      "target": "NFR4.1, NFR4.2",
+      "reason": "성공 접수의 안전한 기록·중복 방지는 첫 배포 필수다. 정의한 전체 장애 범위 RPO0 실증은 U10 후속이며 달성으로 선언하지 않는다."
+    },
+    {
+      "id": "NFR5",
+      "status": "OK",
+      "target": "NFR5.1, NFR5.2, NFR5.3, NFR5.4, NFR5.5, NFR5.6"
+    },
+    {
+      "id": "NFR6",
+      "status": "Deferred",
+      "target": "NFR6.1",
+      "reason": "원래 정상 부하의 p95·오류율·측정 의미는 보존한다. 실측 용량은 미확인이며 첫 배포의 짧은 시험 조건은 시험 설계에서 확인한다."
+    },
+    {
+      "id": "NFR7",
+      "status": "Deferred",
+      "target": "NFR7.1",
+      "reason": "대량100k/50분과 원래 집중·회복 시험은 사용자 보류이며 후속으로 보존한다."
+    },
+    {
+      "id": "NFR8",
+      "status": "Deferred",
+      "target": "NFR8.1",
+      "reason": "기존 점검·중단·안내 기준을 보존한다. 실제 절차·중단 집계·배포 검증은 U10/U7 경계이며 미실증이다."
+    },
+    {
+      "id": "NFR9",
+      "status": "OK",
+      "target": "NFR9.1, NFR9.2, NFR9.3"
+    },
+    {
+      "id": "NFR10",
+      "status": "Deferred",
+      "target": "NFR10.1",
+      "reason": "기술 실패·대조 근거와 복구 시도 시작부터 통지 의무를 보존한다. 실제 두 경로 발송·수신은 U10/U7의 미실증 항목이다."
+    },
+    {
+      "id": "NFR11",
+      "status": "OK",
+      "target": "NFR11.1, NFR11.2, NFR11.3"
+    },
+    {
+      "id": "NFR12",
+      "status": "Deferred",
+      "target": "NFR12.1, NFR12.2",
+      "reason": "한국어·KRW·PC1280 조건은 첫 배포에 적용한다. 원래 모바일 완료·영어 확장과 실제 UI 검증은 U8/U9의 후속/연계 책임이다."
+    },
+    {
+      "id": "NFR13",
+      "status": "OK",
+      "target": "NFR13.1, NFR13.2, NFR13.3, NFR13.4"
+    },
+    {
+      "id": "NFR14",
+      "status": "OK",
+      "target": "NFR14.1, NFR14.2"
+    }
+  ]
+}
