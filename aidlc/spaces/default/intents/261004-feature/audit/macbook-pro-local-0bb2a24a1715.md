@@ -50363,3 +50363,66 @@
 **Context**: construction > u3-commercial-ordering > code-generation > agreement-verification-20261012.md
 
 ---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T18:38:04Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 고객 변경 요청·승인 예외의 부분 구현과 시험 작성을 마치고 소스 쓰기를 중지했습니다. Luna용 검사 명령과 새 보고서 경로를 전달했습니다.\n\n제안·고객 동의·수동 갱신은 아직 남아 있으며, Step11/12는 미완료로 유지합니다.
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T18:38:41Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/change-request-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > change-request-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T18:40:18Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: 지정된 검증 결과입니다.\n\n- TypeScript: 종료 코드 2. [commercial-change-input.spec.ts](<project-dir>/tests/u3/unit/commercial-change-input.spec.ts:130)의 string 값이 null 타입에 할당되지 않는 TS2322 오류입니다.\n- U3 
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T18:41:07Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/change-request-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > change-request-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T18:44:23Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 과거 부모 참조와 현재 계약 개정을 분리해 검증하도록 수정했습니다. 원본 bytes를 보존하며 소속·승인 개정·현재 부모 변조를 거절하는 회귀 시험을 추가했습니다.\n\n소스 쓰기를 중지했고 Luna 재검증 명령을 전달했습니다. Step11/12는 미완료입니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T18:46:46Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Change/exception slice 검증이 모두 통과했습니다.\n\n- TypeScript 및 ESLint: 종료 코드 0\n- U3 unit: 191/191 통과\n- Integration: 27/27 통과 — change-request 12개, agreement 10개, owner-port 5개\n\n두 JSON 보고서 모두 `success: true`이고 
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T18:47:25Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/change-request-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > change-request-verification-20261012.md
+
+---

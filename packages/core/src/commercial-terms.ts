@@ -1,5 +1,5 @@
 import { canonicalJson, requireCondition } from '@oms/contracts';
-import type { ConditionBinding, EffectiveWindow, Ref } from '@oms/contracts';
+import type { ConditionBinding, EffectiveWindow, Ref, U3OfferExceptionInput } from '@oms/contracts';
 import type { ModelData } from '@oms/persistence';
 import { withinEffectiveWindow } from './catalog-conditions.js';
 
@@ -70,4 +70,52 @@ export function resolveConditionBindings(
   }
   for (const [key, value] of corporate) resolved.set(key, value);
   return [...resolved.values()];
+}
+
+export function approvedExceptionTerms(agreement: ModelData, input: U3OfferExceptionInput) {
+  requireCondition(
+    agreement.modelVersion === 2 && agreement.state === 'APPROVED' && agreement.approvalRef,
+    409,
+    'EXCEPTION_APPROVAL_REQUIRED',
+    '입력이나 현재 포인터만으로 예외를 승인할 수 없습니다.',
+  );
+  const bindings = agreement.conditionBindings as ConditionBinding[],
+    visibility = bindings.filter((value) => value.conditionKey === 'VISIBILITY'),
+    price = bindings.filter((value) => value.conditionKey === 'PRICE');
+  requireCondition(
+    visibility.length === 1 &&
+      visibility[0]!.value === input.visibility &&
+      price.length <= 1 &&
+      canonicalJson(price[0]?.value ?? null) === canonicalJson(input.price) &&
+      [...visibility, ...price].every(
+        (value) =>
+          canonicalJson(value.sourceRef) === canonicalJson(input.agreementRevisionRef) &&
+          value.evidenceRefs.length > 0,
+      ),
+    409,
+    'EXCEPTION_CONTENT_MISMATCH',
+    '공개·가격·근거는 정확한 승인 개정의 조건과 일치해야 합니다.',
+  );
+  const window = structuredClone(agreement.effectiveWindow as EffectiveWindow);
+  for (const binding of [...visibility, ...price]) {
+    const candidate = binding.effectiveWindow;
+    requireCondition(
+      overlappingWindows(window, candidate),
+      409,
+      'EXCEPTION_EFFECTIVE_WINDOW',
+      '승인과 조건이 함께 유효한 구간이 필요합니다.',
+    );
+    const start = Date.parse(candidate.startAt) - Date.parse(window.startAt);
+    if (start > 0) {
+      window.startAt = candidate.startAt;
+      window.startInclusive = candidate.startInclusive;
+    } else if (start === 0) window.startInclusive &&= candidate.startInclusive;
+    if (candidate.endAt !== null) {
+      if (window.endAt === null || Date.parse(candidate.endAt) < Date.parse(window.endAt)) {
+        window.endAt = candidate.endAt;
+        window.endInclusive = candidate.endInclusive;
+      } else if (candidate.endAt === window.endAt) window.endInclusive &&= candidate.endInclusive;
+    }
+  }
+  return { visible: input.visibility, price: input.price, effectiveWindow: window };
 }
