@@ -48791,3 +48791,131 @@
 **Run floor**: STAGE_JUMPED:2026-10-04T17:59:13Z#1
 
 ---
+
+## Human Turn
+**Timestamp**: 2026-10-11T10:24:07Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Session Resume
+**Timestamp**: 2026-10-11T10:28:45Z
+**Event**: SESSION_RESUMED
+**Source**: resume
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T10:28:45Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T10:29:02Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T10:29:23Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Unit Started
+**Timestamp**: 2026-10-11T10:31:55Z
+**Event**: UNIT_STARTED
+**Stage**: nfr-design
+**Unit**: u3-commercial-ordering
+**Run floor**: STAGE_JUMPED:2026-10-04T17:59:13Z#1
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T10:35:45Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a129f0-26f3-7471-9f29-db4e63de698f
+**Message**: 합성 JSON 크기는 1행·조건 2개에서 2,140바이트, 100행·조건 2개에서 139,948바이트, 100행·조건 4개에서 228,748바이트였습니다. 두 100행 사례는 64KiB를 넘고 1MiB 이내입니다.\n\n조건 매핑 하위 필드명은 v2 스키마가 아직 없어 계산용으로 가정했습니다. 따라서 크기 비교 결과이며 정식 스키마 적합성이나 실제 처리 용량을
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T10:37:47Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/nfr-design/nfr-design-questions.md
+**Context**: construction > u3-commercial-ordering > nfr-design > nfr-design-questions.md
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-11T10:37:47Z
+**Event**: DECISION_RECORDED
+**Stage**: nfr-design
+**Decision**: U3 주문 제출·조건 변경 JSON의 요청 본문 한도를 어떻게 둘까요?
+**Options**: A. U3 주문 입력만1MiB로 한다,B. 모든 접점64KiB를 유지한다,X. Other (please specify)
+**Unit**: u3-commercial-ordering
+
+---
+
+## Unit Paused
+**Timestamp**: 2026-10-11T10:37:57Z
+**Event**: UNIT_PAUSED
+**Stage**: nfr-design
+**Unit**: u3-commercial-ordering
+**Run floor**: STAGE_JUMPED:2026-10-04T17:59:13Z#1
+**Reason**: U3 주문 JSON 크기 한도의 실제 사용자 선택을 기다린다
+**Next Action**: 답변을 받은 후 재개·기록하고 상세 설계 전체 내용을 묶어 확인한 뒤 3개 산출물을 작성한다
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T10:42:10Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T10:42:50Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T12:04:09Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Session Resume
+**Timestamp**: 2026-10-11T12:36:55Z
+**Event**: SESSION_RESUMED
+**Source**: resume
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T12:36:56Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T12:37:32Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---

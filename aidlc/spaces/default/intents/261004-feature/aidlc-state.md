@@ -276,6 +276,16 @@
 
 
 
+- **Active Unit**: u3-commercial-ordering
+
+- **Unit Stage**: nfr-design
+
+- **Unit State**: paused
+
+- **Unit Pause Reason**: U3 주문 JSON 크기 한도의 실제 사용자 선택을 기다린다
+
+- **Unit Next Action**: 답변을 받은 후 재개·기록하고 상세 설계 전체 내용을 묶어 확인한 뒤 3개 산출물을 작성한다
+
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
 
@@ -337,7 +347,7 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-11T09:47:52Z
+- **Last Updated**: 2026-10-11T10:37:57Z
 
 - **Construction Autonomy Mode**: autonomous
 
