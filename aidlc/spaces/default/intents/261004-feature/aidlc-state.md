@@ -283,6 +283,16 @@
 
 
 
+- **Active Unit**: u3-commercial-ordering
+
+- **Unit Stage**: infrastructure-design
+
+- **Unit State**: paused
+
+- **Unit Pause Reason**: U3 파일럿 CI·전환 설계 전체 기준의 실제 사용자 확인을 기다린다
+
+- **Unit Next Action**: Looks correct 응답 후 CI 전달 설계와 추적 산출물 2개를 작성·검증·검토한다
+
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
 
@@ -344,7 +354,7 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-11T13:02:23Z
+- **Last Updated**: 2026-10-11T13:08:37Z
 
 - **Construction Autonomy Mode**: autonomous
 
