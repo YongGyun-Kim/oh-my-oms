@@ -13,7 +13,12 @@ import {
   StaffAccess,
   WorkInquiry,
 } from '@oms/core';
-import { ProtectedStore } from '@oms/persistence';
+import {
+  ProtectedStore,
+  backfillU2SecurityState,
+  currentSecurityMatches,
+  U2_STAFF_FENCE_ID,
+} from '@oms/persistence';
 import { initializeDatabases } from './migrate.js';
 import { localSources } from './databases.js';
 import { resetSyntheticDatabases } from './reset.js';
@@ -27,6 +32,27 @@ if (
 )
   throw new Error('명시적 합성 로컬 profile만 실행할 수 있습니다.');
 const sources = localSources();
+const u2E2e = process.env.OMS_U1_DATABASE_PROFILE === 'e2e-isolated';
+if (u2E2e) {
+  // Validate the existing isolated sources before initialize/reset/backfill writes.
+  for (const [source, database, port, user] of [
+    [sources.primaryApp, 'oms_u1_e2e', '15432', 'u1_verify_app'],
+    [sources.journalAppend, 'oms_u1_journal_e2e', '25432', 'u1_verify_journal_append'],
+  ] as const) {
+    const options = source.options as { type?: string; url?: string };
+    if (options.type !== 'postgres' || typeof options.url !== 'string')
+      throw new Error('명시 PostgreSQL fixture 설정이 필요합니다.');
+    const url = new URL(options.url);
+    if (
+      url.protocol !== 'postgresql:' ||
+      url.hostname !== '127.0.0.1' ||
+      url.port !== port ||
+      url.pathname !== '/' + database ||
+      url.username !== user
+    )
+      throw new Error('등록된 합성 E2E primary/journal 대상만 준비합니다.');
+  }
+}
 await initializeDatabases();
 for (const source of Object.values(sources)) await source.initialize();
 if (process.argv.includes('--reset-synthetic'))
@@ -63,11 +89,24 @@ for (const [id, audience] of [
   ['staff', 'STAFF'],
 ] as const)
   if (!(await store.read('Account', id))) await seedSyntheticAccount(store, id, audience);
+if (u2E2e) await backfillU2SecurityState(store);
 if (
   (await store.list('StaffRoleGrant', { equals: { accountRef: { id: 'staff' } }, limit: 1 }))
     .length === 0
 )
   await seedMinimumStaffManager(store, 'staff', now());
+if (u2E2e) {
+  const fence = await store.currentProtected('StaffAuthorityFence', U2_STAFF_FENCE_ID);
+  if (
+    !fence ||
+    !currentSecurityMatches(
+      'StaffAuthorityFence',
+      fence,
+      await store.read('StaffAuthorityFence', U2_STAFF_FENCE_ID),
+    )
+  )
+    throw new Error('보호된 현재 staff fence 준비가 필요합니다.');
+}
 const identity = new IdentityRecovery(store, new SyntheticIdentityProvider(false, credentials), {
   synthetic: true,
   verifierKey: Buffer.from(profile.verifier, 'hex'),
