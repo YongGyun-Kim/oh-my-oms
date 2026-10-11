@@ -47949,3 +47949,237 @@
 **Context**: construction > u3-commercial-ordering > functional-design > functional-design-questions.md
 
 ---
+
+## Decision Recorded
+**Timestamp**: 2026-10-11T07:21:34Z
+**Event**: DECISION_RECORDED
+**Stage**: functional-design
+**Decision**: 첫 배포의 KRW 상품 단가에 원 미만 소수를 허용할까요?
+**Options**: A. 원 단위 정수,B. 소수 단가 허용,X. Other (please specify)
+**Unit**: u3-commercial-ordering
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T07:22:34Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T07:23:00Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-design-questions.md
+
+---
+
+## Question Answered
+**Timestamp**: 2026-10-11T07:23:00Z
+**Event**: QUESTION_ANSWERED
+**Stage**: functional-design
+**Details**: A. 원 단위 정수
+**Unit**: u3-commercial-ordering
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T07:24:44Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-design-questions.md
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-11T07:24:44Z
+**Event**: DECISION_RECORDED
+**Stage**: functional-design
+**Decision**: 같은 기업·상품의 가격이나 지급 조건이 서로 충돌하고 유효 기간이 겹치면 첫 배포에서 어떻게 처리할까요?
+**Options**: A. 충돌하는 조건은 적용 차단,B. 충돌 상태로 승인 보관,X. Other (please specify)
+**Unit**: u3-commercial-ordering
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T07:26:41Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T07:27:39Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-design-questions.md
+
+---
+
+## Question Answered
+**Timestamp**: 2026-10-11T07:27:39Z
+**Event**: QUESTION_ANSWERED
+**Stage**: functional-design
+**Details**: A. 충돌하는 조건은 적용 차단
+**Unit**: u3-commercial-ordering
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T07:29:51Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-design-questions.md
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-11T07:29:51Z
+**Event**: DECISION_RECORDED
+**Stage**: functional-design
+**Decision**: 첫 배포에서 주문 한 건에 담을 수 있는 품목 수의 최대값을 어떻게 정할까요?
+**Options**: A. 최대100품목으로 시작,B. 최대50품목으로 시작,X. Other (please specify)
+**Unit**: u3-commercial-ordering
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T07:31:56Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T07:32:27Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-design-questions.md
+
+---
+
+## Question Answered
+**Timestamp**: 2026-10-11T07:32:27Z
+**Event**: QUESTION_ANSWERED
+**Stage**: functional-design
+**Details**: A. 최대100품목으로 시작
+**Unit**: u3-commercial-ordering
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T07:35:28Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-design-questions.md
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-11T07:35:29Z
+**Event**: DECISION_RECORDED
+**Stage**: functional-design
+**Decision**: 첫 배포의 세금·배송비·할인 계산을 어디까지 자동화할까요?
+**Options**: A. 확인된 금액 입력과 합계 검증,B. 규칙 기반 자동 계산도 포함,X. Other (please specify)
+**Unit**: u3-commercial-ordering
+
+---
+
+## Unit Paused
+**Timestamp**: 2026-10-11T07:38:17Z
+**Event**: UNIT_PAUSED
+**Stage**: functional-design
+**Unit**: u3-commercial-ordering
+**Run floor**: STAGE_JUMPED:2026-10-04T17:59:13Z#1
+**Reason**: Q4 금액 계산 범위의 실제 사용자 답변을 기다리는 중이며 질문 제시는 기록됨
+**Next Action**: 실제 Q4 답변 수신 후 재개하여 답변을 기록하고 확인 요약을 준비한다
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T07:41:41Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+**Reply**: command
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-11T07:41:41Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+**Reply**: command
+
+---
+
+## Unit Resumed
+**Timestamp**: 2026-10-11T07:42:22Z
+**Event**: UNIT_RESUMED
+**Stage**: functional-design
+**Unit**: u3-commercial-ordering
+**Run floor**: STAGE_JUMPED:2026-10-04T17:59:13Z#1
+
+---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T07:42:22Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T07:46:10Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-design-questions.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T07:46:19Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-design-questions.md
+
+---
+
+## Question Answered
+**Timestamp**: 2026-10-11T07:46:19Z
+**Event**: QUESTION_ANSWERED
+**Stage**: functional-design
+**Details**: A. 확인된 금액 입력과 합계 검증
+**Unit**: u3-commercial-ordering
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T07:46:43Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-design-questions.md
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-11T07:46:44Z
+**Event**: DECISION_RECORDED
+**Stage**: functional-design
+**Decision**: Does this all look correct before I generate the artifact?
+**Options**: Looks correct,Request changes
+**Checkpoint**: Consolidated Summary Confirmation
+**Questions File**: aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Unit**: u3-commercial-ordering
+
+---
