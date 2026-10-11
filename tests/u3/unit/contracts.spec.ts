@@ -445,7 +445,36 @@ describe('registry 입력·대상·producer 경계', () => {
     const operations = JSON.parse(
       readFileSync('packages/contracts/schemas/u3-operations-v2.json', 'utf8'),
     ) as Operation[];
-    expect(operations.length).toBe(27);
+    expect(operations.length).toBe(31);
+    expect(
+      operations
+        .filter(
+          (operation) =>
+            operation.owner === 'EnterpriseAccess' && operation.name.includes('CustomerRole'),
+        )
+        .map((operation) => [operation.name, operation.action, operation.input]),
+    ).toEqual([
+      [
+        'defineCustomerRole',
+        'role.manage',
+        'urn:oms:contract:u3-commercial:2#/$defs/ConsentRoleInput',
+      ],
+      [
+        'reviseCustomerRole',
+        'role.manage',
+        'urn:oms:contract:u3-commercial:2#/$defs/ConsentRoleRevisionInput',
+      ],
+      [
+        'deactivateCustomerRole',
+        'role.manage',
+        'urn:oms:contract:u3-commercial:2#/$defs/ConsentRoleDeactivateInput',
+      ],
+      [
+        'readCustomerRoles',
+        'role.manage',
+        'urn:oms:contract:u3-commercial:2#/$defs/ConsentRolePageInput',
+      ],
+    ]);
     const registry = registryFixture();
     for (const operation of operations) {
       expect(operation.version).toBe(3);

@@ -126,6 +126,12 @@ export class EnterpriseQuery {
       : [];
     const customerRoles = [];
     for (const role of roles) {
+      requireCondition(
+        role.modelVersion !== 2,
+        409,
+        'U3_ROLE_READ_PROFILE_REQUIRED',
+        '새 동의 역할은 명시 U3 조회 계약으로 확인해야 합니다. 구형 빈 역할로 투영하지 않습니다.',
+      );
       const scopes = [];
       for (const scopeRef of role.actionScopeRefs as Ref[]) {
         const scope = await store.currentProtected('ActionScope', scopeRef.id);
@@ -476,6 +482,12 @@ export class U2AccessDirectory {
         const row = (await authorization.lookup(model, String(candidate[id])))!;
         last = String(row[id]);
         if (kind === 'roles') {
+          requireCondition(
+            row.modelVersion !== 2,
+            409,
+            'U3_ROLE_READ_PROFILE_REQUIRED',
+            '새 동의 역할은 명시 U3 조회 계약으로 확인해야 합니다.',
+          );
           const state = await authorization.currentRoleState('CustomerRole', String(row.roleId)),
             active = state?.active !== false;
           if (query.filter !== 'ALL' && active !== (query.filter === 'ACTIVE')) continue;

@@ -1,6 +1,54 @@
 [
   {
     "owner": "EnterpriseAccess",
+    "name": "defineCustomerRole",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ConsentRoleInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "ENTERPRISE"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "reviseCustomerRole",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ConsentRoleRevisionInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "RECORD"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "deactivateCustomerRole",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ConsentRoleDeactivateInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "RECORD"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readCustomerRoles",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ConsentRolePageInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/ConsentRolePage",
+    "targetKind": "ENTERPRISE"
+  },
+  {
+    "owner": "EnterpriseAccess",
     "name": "defineStaffRole",
     "contract": "u3-commercial",
     "version": 3,
@@ -345,7 +393,7 @@
     "contract": "u3-commercial",
     "version": 3,
     "audience": ["CUSTOMER"],
-    "action": null,
+    "action": "contract.consent",
     "kind": "command",
     "input": "urn:oms:contract:u3-commercial:2#/$defs/ConsentInput",
     "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",

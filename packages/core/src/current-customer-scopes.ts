@@ -38,6 +38,12 @@ export async function currentCustomerScopes(
       'CONTEXT_ROLE_CHANGED',
       '현재 기업/역할 원본을 대조해야 합니다.',
     );
+    requireCondition(
+      role.modelVersion !== 2,
+      409,
+      'U3_ROLE_READ_PROFILE_REQUIRED',
+      '새 동의 권한은 명시 U3 역할 조회 계약으로 확인해야 합니다. 구형 빈 역할로 투영하지 않습니다.',
+    );
     const state = await authorization.currentRoleState('CustomerRole', String(role.roleId));
     if (state) {
       requireCondition(

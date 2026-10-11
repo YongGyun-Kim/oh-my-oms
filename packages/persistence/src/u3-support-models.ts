@@ -12,21 +12,27 @@ const legacy = (
 export const U3_SUPPORT_MODELS: readonly Model[] = Object.freeze(
   [
     legacy.find((model) => model.name === 'StaffRole')!,
+    legacy.find((model) => model.name === 'CustomerRole')!,
     U2_MODELS.find((model) => model.name === 'RoleRevisionState')!,
+    U2_MODELS.find((model) => model.name === 'ScopeV2')!,
   ].map((model) => ({
     ...model,
     attributes: [
       { name: 'modelVersion', type: 'PositiveInteger', required: true, allowed_values: ['2'] },
-      ...model.attributes.map((attribute) =>
-        attribute.name === 'actions'
-          ? {
-              ...attribute,
-              type:
-                'U3Contract:' +
-                (model.name === 'StaffRole' ? 'LegacyStaffActionProjection' : 'StaffActionList'),
-            }
-          : attribute,
-      ),
+      ...model.attributes.map((attribute) => {
+        if (attribute.name === 'actions')
+          return {
+            ...attribute,
+            type:
+              'U3Contract:' +
+              (model.name === 'StaffRole' ? 'LegacyStaffActionProjection' : 'RoleStateActions'),
+          };
+        if (model.name === 'ScopeV2' && attribute.name === 'predicate')
+          return { ...attribute, type: 'U3Contract:ConsentScope' };
+        if (model.name === 'ScopeV2' && attribute.name === 'action')
+          return { ...attribute, type: 'U3Contract:ConsentAction' };
+        return attribute;
+      }),
       { name: 'sourceContract', type: 'U3Contract:SourceContract', required: true },
     ],
   })),

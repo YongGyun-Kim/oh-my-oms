@@ -67,10 +67,10 @@ export function validateU2ModelConstraints(model: string, data: ModelData): void
       );
   if (model === 'RoleRevisionState') {
     requireCondition(
-      !data.sourceContract || data.staffRoleRef !== null,
+      !data.sourceContract || data.staffRoleRef !== null || data.modelVersion === 2,
       400,
       'MODEL_U3_STAFF_PROFILE',
-      'U3 직원 행위 profile을 고객 범위에 적용할 수 없습니다.',
+      '새 고객 행위는 명시 model2 decoder에서만 검증합니다.',
     );
     requireCondition(
       (data.roleRef !== null) !== (data.staffRoleRef !== null),

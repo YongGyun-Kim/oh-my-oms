@@ -13,6 +13,40 @@ export function validateU3ModelConstraints(
   data: ModelData,
   schema: SchemaValidator,
 ): void {
+  if (data.modelVersion === 2 && U3_SUPPORT_MODELS.some((entry) => entry.name === model)) {
+    if (model === 'CustomerRole')
+      check(
+        (data.actionScopeRefs as Ref[]).length === 0,
+        '새 동의 역할은 구형 범위 투영을 권위로 사용하지 않습니다.',
+      );
+    if (model === 'RoleRevisionState') {
+      if (data.roleRef !== null) {
+        check(
+          data.staffRoleRef === null && (data.actions as unknown[]).length === 0,
+          '새 고객 역할의 직원 행위 혼합은 허용하지 않습니다.',
+        );
+        check(
+          data.active === false || (data.scopeRefs as Ref[]).length > 0,
+          '활성 새 고객 역할의 명시 동의 술어가 필요합니다.',
+        );
+      } else {
+        check(
+          (data.scopeRefs as Ref[]).length === 0,
+          '직원 역할에 고객 동의 범위를 섞을 수 없습니다.',
+        );
+        schema.validateUri('urn:oms:contract:u3-commercial:2#/$defs/StaffActionList', data.actions);
+      }
+    }
+    if (model === 'ScopeV2') {
+      const predicate = data.predicate as { enterpriseRef: Ref; action: string; kind: string };
+      check(
+        same(data.enterpriseRef, predicate.enterpriseRef) &&
+          data.action === predicate.action &&
+          data.kind === predicate.kind,
+        '동의 술어와 실제 저장 기업·행위·종류가 다릅니다.',
+      );
+    }
+  }
   if (!U3_MODELS.some((entry) => entry.name === model) || data.modelVersion !== 2) return;
   if (model === 'Product') {
     check(

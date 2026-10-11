@@ -3,6 +3,158 @@
   "$id": "urn:oms:contract:u3-commercial:2",
   "title": "U3 commercial profile revision 2 — registry version 3; common 1/2 preserved",
   "$defs": {
+    "ConsentAction": { "const": "contract.consent" },
+    "RoleStateActions": {
+      "anyOf": [
+        { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/StaffActionList" },
+        { "type": "array", "maxItems": 0 }
+      ]
+    },
+    "ConsentScope": {
+      "type": "object",
+      "properties": {
+        "enterpriseRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope/properties/enterpriseRef"
+        },
+        "action": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConsentAction" },
+        "kind": {
+          "enum": [
+            "DEPARTMENT_SITE",
+            "SITE_ALL_DEPARTMENTS",
+            "DEPARTMENT_ALL_SITES",
+            "ENTERPRISE_ALL"
+          ]
+        },
+        "departmentSelector": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/DepartmentSelector"
+        },
+        "siteSelector": { "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/SiteSelector" },
+        "sourcePolicyRevision": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Revision" }
+      },
+      "required": [
+        "enterpriseRef",
+        "action",
+        "kind",
+        "departmentSelector",
+        "siteSelector",
+        "sourcePolicyRevision"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        { "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/ScopeV2/allOf/0" },
+        { "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/ScopeV2/allOf/1" },
+        { "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/ScopeV2/allOf/2" },
+        { "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/ScopeV2/allOf/3" }
+      ]
+    },
+    "ConsentRoleInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommandMeta" },
+        "enterpriseRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope/properties/enterpriseRef"
+        },
+        "label": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "predicates": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConsentPredicates" }
+      },
+      "required": ["meta", "enterpriseRef", "label", "predicates"],
+      "additionalProperties": false
+    },
+    "ConsentPredicates": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 200,
+      "uniqueItems": true,
+      "items": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConsentScope" }
+    },
+    "CustomerRoleRef": {
+      "allOf": [
+        { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+        {
+          "properties": {
+            "owner": { "const": "EnterpriseAccess" },
+            "entity": { "const": "CustomerRole" }
+          }
+        }
+      ]
+    },
+    "ConsentRoleRevisionInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/MutationMeta" },
+        "roleRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CustomerRoleRef" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "predicates": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConsentPredicates" }
+      },
+      "required": ["meta", "roleRef", "label", "predicates"],
+      "additionalProperties": false
+    },
+    "ConsentRoleDeactivateInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/MutationMeta" },
+        "roleRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CustomerRoleRef" }
+      },
+      "required": ["meta", "roleRef"],
+      "additionalProperties": false
+    },
+    "ConsentRolePageInput": {
+      "type": "object",
+      "properties": {
+        "enterpriseRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope/properties/enterpriseRef"
+        },
+        "cursor": {
+          "anyOf": [{ "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Id" }, { "type": "null" }]
+        },
+        "pageSize": { "type": "integer", "minimum": 1, "maximum": 100 }
+      },
+      "required": ["enterpriseRef", "cursor", "pageSize"],
+      "additionalProperties": false
+    },
+    "ConsentRolePage": {
+      "type": "object",
+      "properties": {
+        "profile": { "const": "urn:oms:contract:u3-commercial:2" },
+        "viewKind": { "const": "CONSENT_ROLES" },
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "properties": {
+              "roleRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CustomerRoleRef" },
+              "modelVersion": { "const": 2 },
+              "sourceContract": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/SourceContract"
+              },
+              "label": { "type": "string", "minLength": 1, "maxLength": 4096 },
+              "active": { "type": "boolean" },
+              "predicates": {
+                "type": "array",
+                "maxItems": 200,
+                "items": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConsentScope" }
+              }
+            },
+            "required": [
+              "roleRef",
+              "modelVersion",
+              "sourceContract",
+              "label",
+              "active",
+              "predicates"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "nextCursor": {
+          "anyOf": [{ "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Id" }, { "type": "null" }]
+        },
+        "observedAt": { "$ref": "urn:oms:contract:common:2#/$defs/Instant" }
+      },
+      "required": ["profile", "viewKind", "items", "nextCursor", "observedAt"],
+      "additionalProperties": false
+    },
     "AgreementRegistrationInput": {
       "type": "object",
       "properties": {
@@ -2073,7 +2225,42 @@
       ]
     },
     "Receipt": {
-      "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      "type": "object",
+      "properties": {
+        "requestId": { "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/requestId" },
+        "requestState": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/requestState"
+        },
+        "owner": { "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/owner" },
+        "targetRef": {
+          "anyOf": [{ "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" }, { "type": "null" }]
+        },
+        "resultRefs": {
+          "type": "array",
+          "minItems": 0,
+          "items": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" }
+        },
+        "acceptedAt": { "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/acceptedAt" },
+        "updatedAt": { "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/updatedAt" },
+        "statusRevision": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/statusRevision"
+        },
+        "retryAfterMilliseconds": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/retryAfterMilliseconds"
+        }
+      },
+      "required": [
+        "requestId",
+        "requestState",
+        "owner",
+        "targetRef",
+        "resultRefs",
+        "acceptedAt",
+        "updatedAt",
+        "statusRevision",
+        "retryAfterMilliseconds"
+      ],
+      "additionalProperties": false
     },
     "OrderLineInput": {
       "type": "object",

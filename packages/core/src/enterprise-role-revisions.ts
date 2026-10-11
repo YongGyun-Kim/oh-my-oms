@@ -8,6 +8,7 @@ import { ref } from './references.js';
 import { validateScopeV2, scopeV2WithinManagement } from './scope-v2.js';
 import { decodeLegacyScope } from './scope-compatibility.js';
 import type { OrderingPolicy } from './scopes.js';
+import { currentConsentScope } from './u3-consent-scope.js';
 import { STAFF_ACTIONS } from './scopes.js';
 import {
   currentManagementScopes,
@@ -36,7 +37,11 @@ export async function currentRolePredicates(
         'SCOPE_REVISION',
         '현재 역할 술어가 필요합니다.',
       );
-      result.push(validateScopeV2(scope.predicate as ScopeV2));
+      result.push(
+        state.modelVersion === 2 || scope.modelVersion === 2
+          ? currentConsentScope(scope, state)
+          : validateScopeV2(scope.predicate as ScopeV2),
+      );
     }
     return result;
   }

@@ -99,6 +99,7 @@ function columnType(attribute: Attribute): EntitySchemaColumnOptions['type'] {
       'OptionalPurpose',
       'ReceiptState',
       'CustomerAction',
+      'U3Contract:ConsentAction',
       'ScopeKind',
       'KnowledgeState',
     ].includes(attribute.type)

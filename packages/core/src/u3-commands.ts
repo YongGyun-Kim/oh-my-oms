@@ -213,9 +213,13 @@ export class U3Commands {
       const action = operation.action ?? access.customerAction;
       requireCondition(
         action &&
-          ['product.read', 'order.submit', 'order.read', 'contract.change.request'].includes(
-            action,
-          ),
+          [
+            'product.read',
+            'order.submit',
+            'order.read',
+            'contract.change.request',
+            'contract.consent',
+          ].includes(action),
         403,
         'U3_CUSTOMER_ACTION',
         '고객 대상의 명시 업무 행위가 필요합니다.',

@@ -16,6 +16,7 @@ import type { OrderingPolicy } from './scopes.js';
 import { ref } from './references.js';
 import { decodeLegacyScope } from './scope-compatibility.js';
 import { requireManagedChange, scopeV2Includes } from './scope-v2.js';
+import { currentConsentScope } from './u3-consent-scope.js';
 
 export type ManagementAccess = Pick<
   EnterpriseAccess,
@@ -137,6 +138,11 @@ export async function currentMembershipManagement(
           '현재 술어가 필요합니다.',
         );
         sources.push(ref('ScopeV2', row));
+        if (state.modelVersion === 2 || row.modelVersion === 2) {
+          currentConsentScope(row, state);
+          // 현재 동의 출처는 fence에 남기되 기업 관리 권한으로 투영하지 않는다.
+          continue;
+        }
         scopes.push(row.predicate as ScopeV2);
       }
       continue;

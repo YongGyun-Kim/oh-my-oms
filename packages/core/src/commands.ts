@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
-import { fingerprint, requireCondition } from '@oms/contracts';
+import { fingerprint, requireCondition, U3_PROFILE } from '@oms/contracts';
+import { recordedSourceContract } from '@oms/persistence';
 import type { CommandMeta, Receipt, Ref, ServiceContext, TargetScope } from '@oms/contracts';
 import type {
   ModelData,
@@ -100,7 +101,9 @@ export class Commands {
   }
   receipt(record: ModelData): Receipt {
     const refs = record.resultRefs as Ref[];
-    return this.store.schema.validate<Receipt>('Receipt', {
+    // 호출자는 보호 prefix에서 읽은 원본을 전달한다. 요청 본문의 version/profile로 선택하지 않는다.
+    const source = recordedSourceContract(record, this.store.schema);
+    const output = {
       requestId: record.requestId,
       requestState: record.requestState,
       owner: record.owner,
@@ -110,6 +113,9 @@ export class Commands {
       updatedAt: record.updatedAt,
       statusRevision: record.revision,
       retryAfterMilliseconds: null,
-    });
+    };
+    return source.knowledge === 'KNOWN'
+      ? this.store.schema.validateUri<Receipt>(U3_PROFILE + '#/$defs/Receipt', output)
+      : this.store.schema.validate<Receipt>('Receipt', output);
   }
 }

@@ -1,10 +1,16 @@
 import { requireCondition, ExecutionBudget, canonicalJson } from '@oms/contracts';
 import type { ActionScope, Ref, ServiceContext, TargetScope, ScopeV2 } from '@oms/contracts';
 import type { ModelData, ProtectedStore, ProtectedTransaction } from '@oms/persistence';
-import { currentSecurityMatches, sameSessionAuthority } from '@oms/persistence';
+import {
+  currentSecurityMatches,
+  sameSessionAuthority,
+  rowModelVersion,
+  validateModel,
+} from '@oms/persistence';
 import { scopeIncludes } from './scopes.js';
 import type { OrderingPolicy } from './scopes.js';
 import { scopeV2Includes } from './scope-v2.js';
+import { currentConsentScope, validateConsentScope } from './u3-consent-scope.js';
 export class Authorization {
   constructor(
     readonly store: ProtectedStore,
@@ -154,15 +160,46 @@ export class Authorization {
     const state = visible[0]
       ? await this.lookup('RoleRevisionState', String(visible[0].roleStateId), transaction)
       : null;
-    if (kind === 'StaffRole') {
-      const role = await this.lookup('StaffRole', id, transaction);
+    {
+      const own =
+        kind === 'CustomerRole' && typeof transaction?.rows === 'function'
+          ? transaction.rows().find((row) => row.model === kind && row.id === id)
+          : undefined;
+      let role: ModelData | null;
+      if (own) {
+        // 호출 소유자가 검증하고 기록한 자체 역할 after-image만 예외다.
+        // 외부 primary 오염은 보호 before-image 조회에서, 무등록 tx 변경은 전체 원상 대조에서 거절한다.
+        const original = await this.store.currentProtected(kind, id);
+        validateModel(kind, own.data, this.store.schema);
+        const current = await transaction!.get(kind, id);
+        requireCondition(
+          original &&
+            !own.deleted &&
+            current &&
+            own.schemaVersion === rowModelVersion(kind, original) &&
+            rowModelVersion(kind, own.data) === rowModelVersion(kind, original) &&
+            canonicalJson(own.data.sourceContract ?? null) ===
+              canonicalJson(original.sourceContract ?? null) &&
+            canonicalJson(own.data.enterpriseRef) === canonicalJson(original.enterpriseRef) &&
+            own.data.roleId === id &&
+            own.data.revision === own.revision &&
+            own.revision === Number(original.revision) + 1 &&
+            canonicalJson(current) === canonicalJson(own.data),
+          503,
+          'CURRENT_AUTH_NOT_PROTECTED',
+          '정확한 소속/profile의 원래 보호 역할 또는 등록된 자체 변경만 허용합니다.',
+        );
+        role = current;
+      } else {
+        role = await this.lookup(kind, id, transaction);
+      }
       requireCondition(
         role?.modelVersion !== 2 ||
           (state?.modelVersion === 2 &&
             canonicalJson(state.sourceContract) === canonicalJson(role.sourceContract)),
         503,
         'U3_ROLE_STATE_REQUIRED',
-        '새 직원 역할은 같은 profile의 보호된 현재 행위 원본이 필요합니다.',
+        '새 역할은 같은 profile의 보호된 현재 행위 원본이 필요합니다.',
       );
       requireCondition(
         state?.modelVersion !== 2 || role?.modelVersion === 2,
@@ -361,15 +398,45 @@ export class Authorization {
             'SCOPE_REVISION',
             '현재 완성 술어 개정이 필요합니다.',
           );
+          const modern = scope.modelVersion === 2 || state.modelVersion === 2;
+          const predicate = modern
+            ? currentConsentScope(scope, state)
+            : (scope.predicate as ScopeV2);
+          if (modern) {
+            requireCondition(
+              canonicalJson(predicate.enterpriseRef) === canonicalJson(target.enterpriseRef) &&
+                predicate.sourcePolicyRevision === target.organisationRevision,
+              409,
+              'U3_CONSENT_POLICY',
+              '동의 대상과 현재 조직 정책의 정확한 개정이 필요합니다.',
+            );
+            for (const selector of [predicate.departmentSelector, predicate.siteSelector]) {
+              if (selector.kind !== 'EXACT') continue;
+              const organisation = await this.lookup(
+                selector.ref.entity,
+                selector.ref.id,
+                transaction,
+              );
+              requireCondition(
+                organisation?.active &&
+                  organisation.revision === selector.ref.revision &&
+                  (organisation.enterpriseRef as Ref).id === target.enterpriseRef.id,
+                409,
+                'U3_CONSENT_ORGANISATION',
+                '동의 범위의 현재 활성 조직 개정이 필요합니다.',
+              );
+            }
+          }
           if (
             scopeV2Includes(
-              scope.predicate as ScopeV2,
+              predicate,
               action,
               target,
               original,
               ['organisation.manage', 'user.manage', 'role.manage'].includes(action)
                 ? 'MANAGEMENT'
                 : 'BUSINESS',
+              modern ? validateConsentScope : undefined,
             )
           )
             allowed = true;

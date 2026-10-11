@@ -20,6 +20,8 @@ import type { ModelData, WriteRequest } from '@oms/persistence';
 import { replayRows } from '../../../packages/persistence/src/recovery-replay.js';
 import { initializeU3Databases, resetU3Databases, u3Sources } from '../fixtures/databases.js';
 import { modernProduct, legacyProduct, legacyOffer, sourceContract } from '../fixtures/models.js';
+import { seedU3CommandAuthority } from '../fixtures/command-authority.js';
+import { consentPredicate } from '../fixtures/consent-role.js';
 
 const schema = new SchemaValidator();
 const request = (key = randomUUID(), current = true): WriteRequest => ({
@@ -108,7 +110,9 @@ describe('U3 명시 expand migration·과거 원상·최소 역할', () => {
     expect(columns).toHaveLength(U3_MODELS.length + U3_SUPPORT_MODELS.length);
     expect(U3_SUPPORT_MODELS.map((model) => model.name)).toEqual([
       'StaffRole',
+      'CustomerRole',
       'RoleRevisionState',
+      'ScopeV2',
     ]);
     expect((await sources.primaryAdmin.query('SELECT current_database() AS name'))[0].name).toBe(
       'oms_u3_verification',
@@ -150,6 +154,49 @@ describe('U3 명시 expand migration·과거 원상·최소 역할', () => {
       sources.journalAppend.query('UPDATE u1_protected_entry SET digest=digest'),
     ).rejects.toThrow();
     await expect(sources.journalAppend.query('SELECT * FROM u2_vault.material')).rejects.toThrow();
+  });
+  it('기존 ScopeV2.action varchar·모델1 행·보호 bytes를 재실행 migration에서도 보존한다', async () => {
+    const fixture = await seedU3CommandAuthority(store),
+      oldScope = {
+        scopeId: randomUUID(),
+        revision: 1,
+        enterpriseRef: fixture.enterpriseRef,
+        action: 'order.read',
+        kind: 'ENTERPRISE_ALL',
+        predicate: { ...consentPredicate(fixture.enterpriseRef), action: 'order.read' },
+      };
+    await store.execute(
+      { ...request(randomUUID(), false), owner: 'EnterpriseAccess' },
+      async (tx) => tx.put('ScopeV2', oldScope),
+    );
+    const bytes = canonicalJson(oldScope),
+      protectedBefore = await sources.journalAdmin.query(
+        'SELECT payload_text,digest FROM u1_protected_entry ORDER BY commit_order',
+      ),
+      column = await sources.primaryAdmin.query(
+        "SELECT data_type,character_maximum_length FROM information_schema.columns WHERE table_schema='public' AND table_name='u1_scope_v2' AND column_name='action'",
+      );
+    expect(column).toEqual([{ data_type: 'character varying', character_maximum_length: 4096 }]);
+    const ddl = await sources.primaryAdmin.driver.createSchemaBuilder().log();
+    expect(
+      ddl.upQueries.some((statement) =>
+        /\b(DROP\s+TABLE|DROP\s+COLUMN|TRUNCATE|DELETE\s+FROM)\b/i.test(statement.query),
+      ),
+    ).toBe(false);
+    await migrateU3Models(sources.primaryAdmin);
+    await migrateU3Models(sources.primaryAdmin);
+    expect(canonicalJson(await store.currentProtected('ScopeV2', oldScope.scopeId))).toBe(bytes);
+    expect(
+      await sources.journalAdmin.query(
+        'SELECT payload_text,digest FROM u1_protected_entry ORDER BY commit_order',
+      ),
+    ).toEqual(protectedBefore);
+    const physical = (await sources.primaryAdmin
+      .getRepository('ScopeV2')
+      .findOneBy({ scopeId: oldScope.scopeId }))!;
+    expect(physical.action).toBe('order.read');
+    expect(physical.modelVersion).toBeNull();
+    expect(storedModelData('ScopeV2', physical)).toEqual(oldScope);
   });
   it('신규 U3 쓰기의 누락/위조 profile·registry/model downgrade는 commit 전 실패다', async () => {
     for (const source of [

@@ -15,6 +15,8 @@ import { currentRolePredicates } from './enterprise-role-revisions.js';
 import { decodeLegacyScope } from './scope-compatibility.js';
 import { scopeV2WithinManagement, requireManagedChange } from './scope-v2.js';
 import { u2EnterpriseFenceId } from '@oms/persistence';
+import { validateConsentScope } from './u3-consent-scope.js';
+import { validateScopeV2 } from './scope-v2.js';
 export async function defineCustomerRole(
   host: EnterpriseInternal,
   context: ServiceContext,
@@ -179,6 +181,7 @@ export async function grantCustomerRole(
         memberTarget,
         current.orderingContextPolicy as OrderingPolicy,
         await currentRolePredicates(host, role, transaction),
+        role.modelVersion === 2 ? validateConsentScope : validateScopeV2,
       );
     },
     async (transaction) => {

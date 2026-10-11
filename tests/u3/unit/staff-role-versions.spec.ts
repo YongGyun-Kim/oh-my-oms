@@ -41,13 +41,15 @@ const currentState = {
   sourceContract: U3_SOURCE_CONTRACT,
 };
 describe('C01 지원 모델의 실제 버전과 닫힌 U3 행위', () => {
-  it('18개 업무 모델과 별개 지원2개를 실제 modelVersion2로 등록한다', () => {
+  it('18개 업무 모델과 별개 지원4개를 실제 modelVersion2로 등록한다', () => {
     expect(U3_MODELS).toHaveLength(18);
     expect(U3_SUPPORT_MODELS.map((model) => model.name)).toEqual([
       'StaffRole',
+      'CustomerRole',
       'RoleRevisionState',
+      'ScopeV2',
     ]);
-    expect(U3_PERSISTENCE_MODELS).toHaveLength(20);
+    expect(U3_PERSISTENCE_MODELS).toHaveLength(22);
     for (const model of U3_SUPPORT_MODELS)
       expect(model.attributes.find((attribute) => attribute.name === 'modelVersion')).toMatchObject(
         { required: true, allowed_values: ['2'] },

@@ -22,8 +22,9 @@ export function scopeV2Includes(
   target: TargetScope,
   original: OrderingPolicy,
   mode: 'BUSINESS' | 'HISTORICAL' | 'MANAGEMENT' = 'BUSINESS',
+  validate: (value: ScopeV2) => ScopeV2 = validateScopeV2,
 ): boolean {
-  validateScopeV2(scope);
+  validate(scope);
   if (scope.action !== action || !sameRef(scope.enterpriseRef, target.enterpriseRef)) return false;
   if (original.departmentUsage === 'UNSET' || original.siteUsage === 'UNSET')
     return (
@@ -51,8 +52,9 @@ export function scopeV2WithinManagement(
   candidate: ScopeV2,
   management: readonly ScopeV2[],
   action: string,
+  validateCandidate: (value: ScopeV2) => ScopeV2 = validateScopeV2,
 ): boolean {
-  validateScopeV2(candidate);
+  validateCandidate(candidate);
   const axisContains = (outer: AxisSelector, inner: AxisSelector) =>
     outer.kind === 'ALL' ||
     (outer.kind === inner.kind &&
@@ -74,6 +76,7 @@ export function requireManagedChange(
   after: TargetScope,
   original: OrderingPolicy,
   rolePredicates: readonly ScopeV2[] = [],
+  validateRolePredicate: (value: ScopeV2) => ScopeV2 = validateScopeV2,
 ): void {
   requireCondition(
     management.length <= 2000,
@@ -91,7 +94,9 @@ export function requireManagedChange(
     '변경 전후의 현재 관리 범위가 필요합니다.',
   );
   requireCondition(
-    rolePredicates.every((predicate) => scopeV2WithinManagement(predicate, management, action)),
+    rolePredicates.every((predicate) =>
+      scopeV2WithinManagement(predicate, management, action, validateRolePredicate),
+    ),
     403,
     'MANAGEMENT_ROLE_SCOPE',
     '역할 전체가 현재 관리 범위 안에 있어야 합니다.',
