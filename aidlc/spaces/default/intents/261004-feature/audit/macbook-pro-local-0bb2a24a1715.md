@@ -47812,3 +47812,140 @@
 **Message**: ## Subagent Summary: Code Generation\n\n**Produced**\n- summary에 현재 수리·선택 검증과 역사적 proof를 구분해 추가했습니다.\n- manifest: 기존218경로+수리3경로=**221**, 중복·누락0.\n- ledger: 기존 원문을 보존하고 별도 수리 증거 블록 추가.\n- 현재 Step1–5 체크, Step
 
 ---
+
+## Change Accepted
+**Timestamp**: 2026-10-11T07:00:50Z
+**Event**: CHANGE_ACCEPTED
+**Stage**: code-generation
+**Unit**: u1-integrated-foundation
+**Checkpoint**: review-receipt
+**Changed**: .github/workflows/u1-validation.yml, .gitignore, Dockerfile, apps/api/src/application.ts, apps/api/src/authentication.ts, apps/api/src/main.ts, apps/api/src/observation.ts, apps/api/src/operations.ts, apps/customer-web/next.config.mjs, apps/staff-web/next.config.mjs (and 73 more)
+**Recorded**: sha256:c9340c75d17b2b35fffa1912f408e7d84b9f795dd53fcc08b619a408ff8a7cc1
+**Current**: sha256:970141522dafe661ec4928df9c6708e3d919e66ba115c157e3ace29097bc9ebd
+**Details**: .github/workflows/u1-validation.yml, .gitignore, Dockerfile, apps/api/src/application.ts, apps/api/src/authentication.ts, apps/api/src/main.ts, apps/api/src/observation.ts, apps/api/src/operations.ts, apps/customer-web/next.config.mjs, apps/staff-web/next.config.mjs (and 73 more) changed after the integrated foundation Unit was reviewed; carrying on.
+
+---
+
+## Review Requested
+**Timestamp**: 2026-10-11T07:00:51Z
+**Event**: REVIEW_REQUESTED
+**Stage**: code-generation
+**Reviewer**: aidlc-architecture-reviewer-agent
+**Unit**: u2-identity-enterprise-access
+**Iteration**: 1
+**Recovery**: stale-receipt
+**Recovery Cause**: artifact
+**Artifact Fingerprint**: sha256:57d4e1f69a1c44eb357cf589fa6b0e9ba38a9e0c5759bd0d7ce897c8d312aa3b
+**Request Id**: review:93921d0ac4a5eee0d931fb651aef31f5
+**Source Fingerprint**: fbfb0e458826d668c94b54054c48f8bd459da1ccbb1ab522602f053b3382cfe5
+**Unit Source Fingerprint**: sha256:4462e9c4c97ee488cfd79ae4f96160f29e6a02b637c6e389ee0822abce5edf7e
+**Review File**: .aidlc-engine/reviews/code-generation/units/u2-identity-enterprise-access/bea298894dd0a5a7/1.93921d0ac4a5eee0d931fb651aef31f5.review.md
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T07:01:43Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/.aidlc-engine/reviewer-dispatch.json
+**Context**: .aidlc-engine > reviewer-dispatch.json
+
+---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T07:03:57Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T07:07:55Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-architecture-reviewer-agent
+**Agent ID**: 01a126ee-68ba-7211-bf78-807323b8c2ec
+**Message**: **Reviewer:** aidlc-architecture-reviewer-agent\n\nREADY — Critical0, Major2 Unresolved(R-01/R-02), 신규 finding0. 판정 규칙 Major≤2를 적용했습니다.\n\n[정식 reviewFile](<project-dir>/aidlc/spaces/defaul
+
+---
+
+## Review Completed
+**Timestamp**: 2026-10-11T07:08:12Z
+**Event**: REVIEW_COMPLETED
+**Stage**: code-generation
+**Reviewer**: aidlc-architecture-reviewer-agent
+**Unit**: u2-identity-enterprise-access
+**Iteration**: 1
+**Verdict**: READY
+**Request Fingerprint**: sha256:57d4e1f69a1c44eb357cf589fa6b0e9ba38a9e0c5759bd0d7ce897c8d312aa3b
+**Artifact Fingerprint**: sha256:57d4e1f69a1c44eb357cf589fa6b0e9ba38a9e0c5759bd0d7ce897c8d312aa3b
+**Request Id**: review:93921d0ac4a5eee0d931fb651aef31f5
+**Request Source Fingerprint**: fbfb0e458826d668c94b54054c48f8bd459da1ccbb1ab522602f053b3382cfe5
+**Source Fingerprint**: fbfb0e458826d668c94b54054c48f8bd459da1ccbb1ab522602f053b3382cfe5
+**Unit Source Fingerprint**: sha256:4462e9c4c97ee488cfd79ae4f96160f29e6a02b637c6e389ee0822abce5edf7e
+**Review Record**: .aidlc-engine/reviews/code-generation/units/u2-identity-enterprise-access/bea298894dd0a5a7/1.json
+**Review Record Digest**: sha256:80a46dca43d7d89385d754f7d867a0ee5fba24ace0bd9b1d071702d9724a8acf
+
+---
+
+## Unit Completed
+**Timestamp**: 2026-10-11T07:08:30Z
+**Event**: UNIT_COMPLETED
+**Stage**: code-generation
+**Unit**: u2-identity-enterprise-access
+**Run floor**: GATE_REJECTED:2026-10-11T03:17:47Z#1
+
+---
+
+## Checkpoint Verification Recorded
+**Timestamp**: 2026-10-11T07:10:28Z
+**Event**: CHECKPOINT_VERIFICATION_RECORDED
+**Unit**: u2-identity-enterprise-access
+**Kind**: unit
+**Stage**: code-generation
+**Stages**: functional-design, nfr-requirements, nfr-design, infrastructure-design, code-generation
+**Verification Id**: 468c2cac-cae7-4941-9798-3e19a62f3367
+**Fingerprint**: sha256:f5b4ab5a59fe1544b3c298166602320d2c011fb0de695bd7374b56a969ccfb93
+**Command SHA-256**: c55e775d9822f4f9c21a7b5d9394ad8fe97ad5998faee9c755ad280427f55890
+**Exit Code**: 0
+**Verified**: true
+**Run floor**: GATE_REJECTED:2026-10-11T03:17:47Z#1
+
+---
+
+## Gate Approved
+**Timestamp**: 2026-10-11T07:11:50Z
+**Event**: GATE_APPROVED
+**Unit**: u2-identity-enterprise-access
+**Stage**: code-generation
+**Stages**: functional-design, nfr-requirements, nfr-design, infrastructure-design, code-generation
+**Gate Stages**: functional-design, nfr-requirements, nfr-design, infrastructure-design, code-generation
+**Gate Scope**: unit-end
+**Checkpoint**: construction-unit
+**Fingerprint**: sha256:f5b4ab5a59fe1544b3c298166602320d2c011fb0de695bd7374b56a969ccfb93
+**Run floor**: GATE_REJECTED:2026-10-11T03:17:47Z#1
+**Run floors**: {"functional-design":"GATE_REJECTED:2026-10-11T03:17:47Z#1","nfr-requirements":"GATE_REJECTED:2026-10-11T03:17:47Z#1","nfr-design":"GATE_REJECTED:2026-10-11T03:17:47Z#1","infrastructure-design":"GATE_REJECTED:2026-10-11T03:17:47Z#1","code-generation":"GATE_REJECTED:2026-10-11T03:17:47Z#1"}
+**Verification Command SHA-256**: c55e775d9822f4f9c21a7b5d9394ad8fe97ad5998faee9c755ad280427f55890
+**Verification Id**: 468c2cac-cae7-4941-9798-3e19a62f3367
+**Approved Evidence**: {"functional-design":["sha256:a19dd88054307bc7099dacd52e19a4cad3ed806c487db18c7f23927f4dae980a",null],"nfr-requirements":["sha256:03b4458c61cffac633054fa3107bc90b82d7877105c6a049aab4876e927288d0",null],"nfr-design":["sha256:7b70f0419d5e0f6a244e5589db8b14bc31b6a50bd223a9ece3b7cf8742384af3",null],"infrastructure-design":["sha256:fc02b4ebcf7863291cafa351a4bdc1b494384cad5c78b3aed763ee9877662278",null],"code-generation":["sha256:57d4e1f69a1c44eb357cf589fa6b0e9ba38a9e0c5759bd0d7ce897c8d312aa3b","sha256:4462e9c4c97ee488cfd79ae4f96160f29e6a02b637c6e389ee0822abce5edf7e"]}
+**Autonomous**: true
+
+---
+
+## Unit Started
+**Timestamp**: 2026-10-11T07:20:26Z
+**Event**: UNIT_STARTED
+**Stage**: functional-design
+**Unit**: u3-commercial-ordering
+**Run floor**: STAGE_JUMPED:2026-10-04T17:59:13Z#1
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T07:20:27Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/functional-design/functional-design-questions.md
+**Context**: construction > u3-commercial-ordering > functional-design > functional-design-questions.md
+
+---
