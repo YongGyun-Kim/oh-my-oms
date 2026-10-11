@@ -7,6 +7,7 @@ import type {
   U3AfterSalesRegistration,
 } from '@oms/core';
 import { ProtectedStore, ProtectedTransaction, decodeAppliedTerms } from '@oms/persistence';
+import { QueryFailedError } from 'typeorm';
 import { initializeU3Databases, resetU3Databases, u3Sources } from '../fixtures/databases.js';
 import { seedOrderChange } from '../fixtures/order-change.js';
 import { orderQuery } from '../fixtures/order-input.js';
@@ -367,6 +368,131 @@ describe('실제 가격 변경·정확한 동의·한 번 적용·다음 제안�
     expect(
       await store.list('OrderChangeApplication', {
         equals: { actualApplicationResult: 'APPLIED' },
+      }),
+    ).toHaveLength(1);
+    expect(await original(f)).toBe(bytes);
+  });
+  it('같은 현재 개정의 전체 수락과 가격 적용은 한 경로만 성공하고 패자 효과를 남기지 않는다', async () => {
+    const f = await seedOrderChange(store),
+      bytes = await original(f),
+      decision = f.decision('ACCEPT', f.orderRef),
+      application = f.application();
+    expect(decision.meta.clientRequestId).not.toBe(application.meta.clientRequestId);
+    const contexts = await Promise.all([
+      f.requestContext(f.registrant),
+      f.requestContext(f.registrant),
+    ]);
+    const outcomes = await Promise.allSettled([
+      f.orders.decide(contexts[0]!, decision, f.ingress),
+      f.orders.apply(contexts[1]!, application, f.ingress),
+    ]);
+    expect(outcomes.filter((value) => value.status === 'fulfilled')).toHaveLength(1);
+    expect(outcomes.filter((value) => value.status === 'rejected')).toHaveLength(1);
+    const winnerIndex = outcomes.findIndex((value) => value.status === 'fulfilled'),
+      loserIndex = outcomes.findIndex((value) => value.status === 'rejected'),
+      winner = outcomes[winnerIndex],
+      loser = outcomes[loserIndex];
+    if (!winner || winner.status !== 'fulfilled' || !loser || loser.status !== 'rejected')
+      throw new Error('수락/적용 경쟁은 정확히 한 성공과 한 거절이어야 합니다.');
+    if (loser.reason instanceof QueryFailedError) {
+      expect(loser.reason.driverError.code).toBe('55P03');
+      const context = await f.requestContext(f.registrant);
+      await expect(
+        loserIndex === 0
+          ? f.orders.decide(context, decision, f.ingress)
+          : f.orders.apply(context, application, f.ingress),
+      ).rejects.toMatchObject({ code: 'STALE_U3_REFERENCE' });
+    } else expect(loser.reason).toMatchObject({ code: 'STALE_U3_REFERENCE' });
+    const loserKey = (loserIndex === 0 ? decision : application).meta.clientRequestId;
+    expect(
+      await store.list('RequestReceipt', { equals: { idempotencyKey: loserKey } }),
+    ).toHaveLength(0);
+    expect(
+      await sources.primaryApp
+        .getRepository('RequestReceipt')
+        .countBy({ idempotencyKey: loserKey }),
+    ).toBe(0);
+    const order = (await store.currentProtected('Order', f.orderRef.id))!,
+      applications = await store.list('OrderChangeApplication', {
+        equals: { orderRef: { id: f.orderRef.id } },
+      }),
+      decisions = await store.list('AcceptanceDecision', {
+        equals: { orderRef: { id: f.orderRef.id } },
+      });
+    expect(winner.value.targetRef).toEqual({ ...f.orderRef, revision: 2 });
+    expect(order).toMatchObject({ revision: 2, state: winnerIndex === 0 ? 'ACCEPTED' : 'REVIEW' });
+    expect(applications).toHaveLength(winnerIndex === 1 ? 1 : 0);
+    expect(decisions).toHaveLength(winnerIndex === 0 ? 2 : 1);
+    expect(order.changeApplicationRefs).toEqual(
+      winnerIndex === 1
+        ? [
+            winner.value.resultRefs.find(
+              (reference) => reference.entity === 'OrderChangeApplication',
+            ),
+          ]
+        : [],
+    );
+    expect(
+      await store.list('OrderHistory', {
+        equals: { afterRef: { id: f.orderRef.id, revision: 2 } },
+      }),
+    ).toHaveLength(1);
+    expect(await original(f)).toBe(bytes);
+  });
+  it('같은 현재 개정·동의의 다른 key 동시 적용은 한 적용만 보호하고 패자의 정확 재시도도 stale다', async () => {
+    const f = await seedOrderChange(store),
+      bytes = await original(f),
+      inputs = [f.application(), f.application()];
+    expect(inputs[0]!.customerConsentRef).toEqual(inputs[1]!.customerConsentRef);
+    expect(inputs[0]!.meta.clientRequestId).not.toBe(inputs[1]!.meta.clientRequestId);
+    const contexts = await Promise.all(inputs.map(() => f.requestContext(f.registrant))),
+      outcomes = await Promise.allSettled(
+        inputs.map((input, index) => f.orders.apply(contexts[index]!, input, f.ingress)),
+      );
+    expect(outcomes.filter((value) => value.status === 'fulfilled')).toHaveLength(1);
+    expect(outcomes.filter((value) => value.status === 'rejected')).toHaveLength(1);
+    const loserIndex = outcomes.findIndex((value) => value.status === 'rejected'),
+      loser = outcomes[loserIndex],
+      winner = outcomes.find((value) => value.status === 'fulfilled');
+    if (!loser || loser.status !== 'rejected' || !winner || winner.status !== 'fulfilled')
+      throw new Error('동시 적용은 정확히 한 성공과 한 거절이어야 합니다.');
+    if (loser.reason instanceof QueryFailedError) {
+      expect(loser.reason.driverError.code).toBe('55P03');
+      await expect(
+        f.orders.apply(await f.requestContext(f.registrant), inputs[loserIndex]!, f.ingress),
+      ).rejects.toMatchObject({ code: 'STALE_U3_REFERENCE' });
+    } else expect(loser.reason).toMatchObject({ code: 'STALE_U3_REFERENCE' });
+    const loserKey = inputs[loserIndex]!.meta.clientRequestId;
+    expect(
+      await store.list('RequestReceipt', { equals: { idempotencyKey: loserKey } }),
+    ).toHaveLength(0);
+    expect(
+      await sources.primaryApp
+        .getRepository('RequestReceipt')
+        .countBy({ idempotencyKey: loserKey }),
+    ).toBe(0);
+    const applicationRef = winner.value.resultRefs.find(
+        (reference) => reference.entity === 'OrderChangeApplication',
+      )!,
+      order = (await store.currentProtected('Order', f.orderRef.id))!;
+    expect(winner.value.targetRef).toEqual({ ...f.orderRef, revision: 2 });
+    expect(order).toMatchObject({
+      state: 'REVIEW',
+      revision: 2,
+      changeApplicationRefs: [applicationRef],
+    });
+    expect(
+      await store.list('OrderChangeApplication', {
+        equals: { consentRef: { id: f.consentRef.id } },
+      }),
+    ).toHaveLength(1);
+    expect(await sources.primaryApp.getRepository('OrderChangeApplication').count()).toBe(1);
+    expect(
+      await store.list('AcceptanceDecision', { equals: { orderRef: { id: f.orderRef.id } } }),
+    ).toHaveLength(1); // 실제 제출의 초기 HOLD만 있고 적용은 수락 판단을 만들지 않는다.
+    expect(
+      await store.list('OrderHistory', {
+        equals: { afterRef: { id: f.orderRef.id, revision: 2 } },
       }),
     ).toHaveLength(1);
     expect(await original(f)).toBe(bytes);

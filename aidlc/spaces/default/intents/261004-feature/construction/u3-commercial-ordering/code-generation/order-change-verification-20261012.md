@@ -62,4 +62,10 @@ ESLint만 종료 코드 1로 실패했다. commercial-proposal.ts:10의 미사�
 
 ## 남은 작업
 
-Step 11–14의 완료 여부는 구현 담당자가 승인 계획 전체와 대조한다. HTTP/worker·파일럿 CI·전체 coverage·공통 품질/별도 리뷰는 이후 작업이다. 대량 부하·전체 DR·AWS 배포는 수행하지 않는다.
+Step 11–14는 아래 명시 경쟁 구간 보완을 포함한 U3 라이브러리 구현/시험으로 완료했다. 실제 U6/U7 운영 생산자는 후속 소유자 작업이며 현재 기본 미등록 차단을 유지한다. Step 15–20의 HTTP/worker·파일럿 CI·전체 coverage·공통 품질/최종 문서·별도 리뷰는 남아 있다. 대량 부하·전체 DR·AWS 배포는 수행하지 않는다.
+
+## 명시 경쟁 구간 보완
+
+승인 Step14와 BR3.8의 수락/조건 변경 경쟁 대조에서 실제 동시 호출 시험이 빠진 것을 발견했다. 첫 구현·검증을 a2f75bb로 push한 뒤 order-change.spec.ts에 decide와 apply 경쟁, 같은 개정·동의/다른 key의 apply와 apply 경쟁 두 사례를 추가했다. 제품·fixture는 변경하지 않았다. 한 승자·한 패자, 실제 QueryFailedError의 55P03만 제한적으로 허용한 뒤 패자 동일 입력의 stale 거절, 패자의 primary/보호 접수 없음, 승자의 정확 Order2·이력/적용 건수와 원래 Snapshot/OrderLine의 불변을 검사한다. 수락이 이기면 application 0건·직원 판단 1건, 적용이 이기면 application 1건·초기 HOLD만 남는 차이도 확인한다.
+
+Luna의 TypeScript·단일 파일 ESLint는 종료 코드 0이며 order-change-race-integration-20261012.json은 기존 9개와 새 경쟁 2개, 총 11/11 PASS·실패/pending/todo 0·success=true이다. root가 실제 JSON count를 확인했고 Luna가 미처리 오류 0을 보고했다. 검사 전후 HEAD는 a2f75bb41f33c549154af53e4d2a9339360a38c6, source/runtime 지문은 dfe2efa5b5eb380e668fa989ca5f5fb270e8aca712368e2d0887955ef1e689eb, 시험 파일 SHA-256은 e59354b8ed4982107679e99929091acab3cded09e0af50c39d4d150e58fc1b65로 각각 동일했다. 이것으로 Step14의 명시 경쟁 구간을 보완했다. 운영 U6/U7 생산자나 전체 DR 실증 완료를 의미하지 않는다.
