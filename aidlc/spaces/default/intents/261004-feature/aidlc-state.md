@@ -241,6 +241,12 @@
 
 
 
+- **Active Unit**: u2-identity-enterprise-access
+
+- **Unit Stage**: functional-design
+
+- **Unit State**: in-progress
+
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
 
@@ -302,7 +308,7 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-10T18:04:52Z
+- **Last Updated**: 2026-10-11T03:20:29Z
 
 - **Construction Autonomy Mode**: autonomous
 
