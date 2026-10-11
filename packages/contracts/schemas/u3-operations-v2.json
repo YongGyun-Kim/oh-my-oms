@@ -521,7 +521,7 @@
     "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
     "action": "order.read",
     "kind": "query",
-    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OrderQuery",
     "output": "urn:oms:contract:u3-commercial:2#/$defs/OrderViewResult",
     "targetKind": "NONE"
   },

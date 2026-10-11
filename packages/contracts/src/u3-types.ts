@@ -183,6 +183,16 @@ export interface U3OrderInput {
   lines: U3OrderLineInput[];
   provisionChoice: 'FULL';
   partialConsentRef: null;
+  priceConfirmation?: U3PriceConfirmation | null;
+}
+export interface U3PriceConfirmation {
+  priceBreakdown: U3OrderPriceBreakdown;
+  confirmedByRef: Ref;
+  evidenceRefs: Ref[];
+}
+export interface U3OrderQuery {
+  targetRef: Ref;
+  targetScope: TargetScope;
 }
 export interface U3OrderLineView {
   orderLineRef: Ref;
@@ -209,9 +219,12 @@ export interface U3OrderView {
   consentRef: Ref | null;
   acceptance: 'REVIEW_REQUIRED' | 'ACCEPTED' | 'DECLINED' | 'UNVERIFIED';
   basisRefs: Ref[];
+  priceBreakdown?: U3OrderPriceBreakdown;
+  currentTermsRef?: Ref;
 }
 export type U3ApplyOrderChangeInput = {
   meta: CommandMeta;
+  targetScope: TargetScope;
   orderRef: Ref;
   customerConsentRef: Ref;
   newTermsRef: Ref;
@@ -221,6 +234,7 @@ export type U3ApplyOrderChangeInput = {
 );
 export interface U3OrderDecisionInput {
   meta: CommandMeta;
+  targetScope: TargetScope;
   targetRef: Ref;
   decision: 'ACCEPT' | 'REJECT' | 'HOLD';
   basisRefs: Ref[];

@@ -89,6 +89,14 @@ export function validateU3ModelConstraints(
     });
   }
   if (model === 'PurchaseTermsSnapshot') {
+    if (data.priceConfirmation !== undefined && data.priceConfirmation !== null)
+      check(
+        same(
+          (data.priceConfirmation as { priceBreakdown: unknown }).priceBreakdown,
+          data.priceBreakdown,
+        ),
+        '불변 스냅샷의 확인 전체 금액과 저장 금액이 다릅니다.',
+      );
     const lines = data.capturedLines as {
       agreementRevisionRefs: Ref[];
       commonOfferRevisionRef: Ref;

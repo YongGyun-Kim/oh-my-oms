@@ -2551,6 +2551,12 @@
         },
         "partialConsentRef": {
           "type": "null"
+        },
+        "priceConfirmation": {
+          "anyOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/PriceConfirmation" },
+            { "type": "null" }
+          ]
         }
       },
       "required": [
@@ -2784,7 +2790,9 @@
         },
         "basisRefs": {
           "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
-        }
+        },
+        "priceBreakdown": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderPriceBreakdown" },
+        "currentTermsRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" }
       },
       "required": [
         "orderRef",
@@ -2808,6 +2816,7 @@
         "meta": {
           "$ref": "urn:oms:contract:u3-commercial:2#/$defs/MutationMeta"
         },
+        "targetScope": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope" },
         "orderRef": {
           "allOf": [
             {
@@ -2878,6 +2887,7 @@
       },
       "required": [
         "meta",
+        "targetScope",
         "orderRef",
         "changeKind",
         "afterSalesDecisionRef",
@@ -2935,6 +2945,7 @@
         "meta": {
           "$ref": "urn:oms:contract:u3-commercial:2#/$defs/MutationMeta"
         },
+        "targetScope": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope" },
         "targetRef": {
           "allOf": [
             {
@@ -2960,7 +2971,48 @@
           "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
         }
       },
-      "required": ["meta", "targetRef", "decision", "basisRefs"],
+      "required": ["meta", "targetScope", "targetRef", "decision", "basisRefs"],
+      "additionalProperties": false
+    },
+    "PriceConfirmation": {
+      "type": "object",
+      "properties": {
+        "priceBreakdown": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderPriceBreakdown" },
+        "confirmedByRef": {
+          "allOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+            {
+              "type": "object",
+              "properties": {
+                "owner": { "const": "IdentityRecovery" },
+                "entity": { "const": "Account" }
+              }
+            }
+          ]
+        },
+        "evidenceRefs": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs" }
+      },
+      "required": ["priceBreakdown", "confirmedByRef", "evidenceRefs"],
+      "additionalProperties": false
+    },
+    "OrderQuery": {
+      "type": "object",
+      "properties": {
+        "targetRef": {
+          "allOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+            {
+              "type": "object",
+              "properties": {
+                "owner": { "const": "OrderAcceptance" },
+                "entity": { "const": "Order" }
+              }
+            }
+          ]
+        },
+        "targetScope": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope" }
+      },
+      "required": ["targetRef", "targetScope"],
       "additionalProperties": false
     },
     "ProductViewResult": {

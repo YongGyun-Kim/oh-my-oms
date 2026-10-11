@@ -11,7 +11,7 @@ import {
 } from '@oms/contracts';
 import type { Operation, Receipt, U3OrderInput } from '@oms/contracts';
 import { consentInput, proposalInput } from '../fixtures/proposal-input.js';
-import { fixtureContext, fixtureRef } from '../fixtures/identity.js';
+import { fixtureContext, fixtureRef, fixtureScope } from '../fixtures/identity.js';
 import {
   fixtureMeta,
   orderFixture,
@@ -261,6 +261,7 @@ describe('모든 입력행의 조건·계약 개정과 snapshot 합집합', () =
 describe('정확한 제안·동의·수락 전후 changeKind', () => {
   const change = () => ({
     meta: fixtureMeta(1),
+    targetScope: fixtureScope(),
     orderRef: fixtureRef('OrderAcceptance', 'Order'),
     changeKind: 'REVIEW_PRICE_CHANGE',
     afterSalesDecisionRef: null,
@@ -329,6 +330,7 @@ describe('정확한 제안·동의·수락 전후 changeKind', () => {
   it('직원 전체 판단의 ACCEPT/REJECT/HOLD와 현재 원본 개정을 구별한다', () => {
     const data = {
       meta: fixtureMeta(1),
+      targetScope: fixtureScope(),
       targetRef: fixtureRef('OrderAcceptance', 'Order'),
       decision: 'HOLD',
       basisRefs: [],
@@ -425,7 +427,7 @@ describe('registry 입력·대상·producer 경계', () => {
       registry.invoke('OrderAcceptance', 'readAcceptedOrder', 3, {
         context: fixtureContext(),
         target: { kind: 'NONE' },
-        data: { targetRef: view.orderRef },
+        data: { targetRef: view.orderRef, targetScope: view.targetScope },
       }),
     ).rejects.toMatchObject({ code: 'INVALID_PRODUCER' });
   });

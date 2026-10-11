@@ -50847,3 +50847,173 @@
 **Context**: construction > u3-commercial-ordering > code-generation > proposal-service-verification-20261012.md
 
 ---
+
+## Session Compacted
+**Timestamp**: 2026-10-11T21:21:40Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T21:25:05Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 소스 11개 파일 작성·포맷을 마치고 쓰기를 중지했습니다. Luna용 타입·단위·격리 통합·영향 회귀·lint 명령과 새 보고서 경로를 전달했습니다.\n\n실제 검사는 아직 실행하지 않았습니다. Step11–14는 미완료이며, 전체 수락·변경 적용·AppliedTerms 연결은 이번 제출/조회 계층 검증 후 진행합니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T21:28:21Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Order submission/snapshot slice 검사 결과입니다.\n\n- TypeScript: 종료 코드 2. [order-submission.spec.ts](<project-dir>/tests/u3/integration/order-submission.spec.ts:76)에서 Promise의 `agreementEviden
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-11T21:29:46Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-submission-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-submission-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T21:30:02Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 시험 파일 2개만 수정했습니다.\n\n- 비동기 fixture 결과를 `await`하여 실제 근거 목록을 전달합니다.\n- producer 오류 시험에 유효한 `targetScope`를 추가해 원래 검증 목적을 유지합니다.\n\n소스 쓰기를 중지했고 Luna 재검증 명령·새 보고서 경로를 전달했습니다. 제품 코드는 변경하지 않았으며 Step11–14는 미완료입니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T21:32:03Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Order submission 테스트 수정 후 결과입니다.\n\n- TypeScript와 지정 ESLint: 종료 코드 0\n- U3 unit: 242/242 통과\n- Order submission integration: 7개 중 5개 통과, 2개 실패\n\n첫 실패는 기업 우선 가격 시나리오에서 상품 금액 합계 검증 오류입니다. 호출 경로는 `proposal-te
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T21:34:27Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-submission-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-submission-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T21:35:00Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 두 원인을 좁게 수정하고 소스 쓰기를 중지했습니다.\n\n- 시험 금액 객체 공유를 제거해 상품 소계 1,800원과 최종 1,900원을 독립 검증합니다.\n- 100행은 모두 저장·보호하면서 접수 결과는 전체 행을 소유한 집계 참조로 반환합니다.\n\nLuna 재검증 명령과 새 보고서 경로를 전달했습니다. Step11–14는 미완료입니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T21:35:55Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-submission-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-submission-verification-20261012.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T21:36:11Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-submission-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-submission-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T21:36:47Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Order submission 수정 검증 결과입니다.\n\n- TypeScript와 지정 ESLint: 종료 코드 0\n- Integration: 7개 중 6개 통과, 1개 실패\n\n기업 우선 가격 오류는 통과했습니다. 남은 실패는 [order-submission.spec.ts](<project-dir>/tests/u3/integrat
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T21:37:36Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-submission-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-submission-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T21:37:46Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 음성 시험 한 곳만 수정하고 소스 쓰기를 중지했습니다. 실제 스키마를 통과하는 잘못된 조건 개정으로 `ORDER_CONDITIONS_CHANGED`를 검증합니다.\n\n제품 코드는 그대로이며, Luna 재검증 명령과 새 보고서 경로를 전달했습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T21:39:29Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: Order submission의 stale-condition 검증 결과입니다.\n\n- TypeScript와 ESLint: 종료 코드 0\n- Integration: 7개 중 6개 통과, 1개 실패\n\n남은 실패는 [order-submission.spec.ts](<project-dir>/tests/u3/integration/order-
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T21:41:06Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 참조 매핑은 유지하고 PRICE 금액만 바꾸도록 시험 한 곳을 수정했습니다. 실제 입력 검증 뒤 현재 조건 불일치를 확인하는 시험이며, 아직 실행하지 않았습니다.\n\n소스를 고정하고 Luna 재검증 명령·새 보고서 경로를 전달했습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T21:41:12Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-submission-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-submission-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-11T21:42:48Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: 마지막 Order submission negative fixture 검증이 모두 통과했습니다.\n\n- TypeScript와 ESLint: 종료 코드 0\n- Order submission integration: 7/7 통과\n- 실패·pending·todo·unhandled error: 0\n- JSON 보고서: `success: true`\n\n시작·종료 sourc
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T21:43:32Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-submission-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-submission-verification-20261012.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T21:44:04Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/order-submission-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > order-submission-verification-20261012.md
+
+---
