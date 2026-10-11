@@ -48919,3 +48919,87 @@
 **State Validity**: valid
 
 ---
+
+## Human Turn
+**Timestamp**: 2026-10-11T12:42:37Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Unit Resumed
+**Timestamp**: 2026-10-11T12:42:54Z
+**Event**: UNIT_RESUMED
+**Stage**: nfr-design
+**Unit**: u3-commercial-ordering
+**Run floor**: STAGE_JUMPED:2026-10-04T17:59:13Z#1
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T12:43:02Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/nfr-design/nfr-design-questions.md
+**Context**: construction > u3-commercial-ordering > nfr-design > nfr-design-questions.md
+
+---
+
+## Question Answered
+**Timestamp**: 2026-10-11T12:43:02Z
+**Event**: QUESTION_ANSWERED
+**Stage**: nfr-design
+**Details**: A. 주문 입력만 1MiB (추천)
+**Unit**: u3-commercial-ordering
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T12:44:33Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/nfr-design/nfr-design-questions.md
+**Context**: construction > u3-commercial-ordering > nfr-design > nfr-design-questions.md
+
+---
+
+## Error Logged
+**Timestamp**: 2026-10-11T12:44:33Z
+**Event**: ERROR_LOGGED
+**Tool**: aidlc-log
+**Command**: aidlc-log engine log decision --stage nfr-design --unit u3-commercial-ordering --checkpoint summary-confirmation --questions-file aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/nfr-design/nfr-design-questions.md --decision Does this all look correct before I generate the artifact? --options Looks correct,Request changes
+**Error**: Summary confirmation questions file aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/nfr-design/nfr-design-questions.md is invalid: unsupported H2 heading "Sources" after the consolidated summary; only Q<n>, "Requested Changes Feedback", or one "Assumption Confirmation" section may follow.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-11T12:44:53Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/nfr-design/nfr-design-questions.md
+**Context**: construction > u3-commercial-ordering > nfr-design > nfr-design-questions.md
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-11T12:44:53Z
+**Event**: DECISION_RECORDED
+**Stage**: nfr-design
+**Decision**: Does this all look correct before I generate the artifact?
+**Options**: Looks correct,Request changes
+**Checkpoint**: Consolidated Summary Confirmation
+**Questions File**: aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/nfr-design/nfr-design-questions.md
+**Unit**: u3-commercial-ordering
+
+---
+
+## Unit Paused
+**Timestamp**: 2026-10-11T12:45:27Z
+**Event**: UNIT_PAUSED
+**Stage**: nfr-design
+**Unit**: u3-commercial-ordering
+**Run floor**: STAGE_JUMPED:2026-10-04T17:59:13Z#1
+**Reason**: U3 상세 설계 전체 기준의 실제 사용자 확인을 기다린다
+**Next Action**: Looks correct 응답을 기록한 후 상세 설계 산출물 3개를 작성·검증·검토한다
+
+---
