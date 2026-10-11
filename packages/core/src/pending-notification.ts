@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { Ref, ServiceContext, TargetScope } from '@oms/contracts';
 import type { ProtectedTransaction } from '@oms/persistence';
+import type { WriteRequest } from '@oms/persistence';
 import { ref } from './references.js';
 // Registered SYSTEM purpose: derive only a minimal in-app notice from this committed owner fact.
 export async function enqueueMinimumNotice(
@@ -11,6 +12,7 @@ export async function enqueueMinimumNotice(
   scope: TargetScope | null,
   epoch: string,
   now: Date,
+  sourceContract?: WriteRequest['sourceContract'],
 ): Promise<Ref> {
   const workId = randomUUID();
   const factId = randomUUID();
@@ -28,6 +30,7 @@ export async function enqueueMinimumNotice(
     supersedesFactRef: null,
     evidenceRefs: [],
     occurredAt: now.toISOString(),
+    ...(sourceContract ? { sourceContract } : {}),
   };
   const permit = {
     permitId: randomUUID(),
@@ -64,6 +67,7 @@ export async function enqueueMinimumNotice(
     leaseOwner: null,
     leaseUntil: null,
     leaseGeneration: 1,
+    ...(sourceContract ? { sourceContract } : {}),
   };
   await transaction.put('FactEnvelope', fact);
   await transaction.put('ExecutionPermit', permit);

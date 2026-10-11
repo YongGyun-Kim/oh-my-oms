@@ -1,7 +1,8 @@
 import type { DataSource, EntityManager } from 'typeorm';
 import { requireCondition } from '@oms/contracts';
 import { MODELS, tableName } from './model-catalog.js';
-import { U3_MODELS } from './u3-model-catalog.js';
+import { U3_MODELS, U3_PERSISTENCE_MODELS } from './u3-model-catalog.js';
+import { U2_MODELS } from './u2-model-catalog.js';
 import { migrateMaterialModels } from './migration.js';
 
 const quoted = (name: string) => {
@@ -26,8 +27,8 @@ const requiredFields = (model: (typeof U3_MODELS)[number]) =>
 export async function applyU3ModelConstraints(
   manager: Pick<EntityManager, 'query'>,
 ): Promise<void> {
-  for (const current of U3_MODELS) {
-    const legacy = MODELS.find((old) => old.name === current.name);
+  for (const current of U3_PERSISTENCE_MODELS) {
+    const legacy = [...MODELS, ...U2_MODELS].find((old) => old.name === current.name);
     if (!legacy) continue;
     const name = tableName(current.name),
       constraint = 'u3_' + name + '_version';

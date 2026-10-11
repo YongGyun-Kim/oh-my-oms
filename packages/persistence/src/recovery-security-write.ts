@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import { fingerprint } from '@oms/contracts';
-import { modelDefinition } from './model-catalog.js';
+import { fingerprint, requireCondition, U3_PROFILE } from '@oms/contracts';
+import { modelDefinition, rowModelVersion, validateModel } from './model-catalog.js';
 import type { ModelData } from './model-catalog.js';
-import type { ProtectedStore } from './protected-store.js';
+import type { ProtectedStore, WriteRequest } from './protected-store.js';
 export async function writeRecoveredSecurityTransition(
   store: ProtectedStore,
   input: {
@@ -16,6 +16,22 @@ export async function writeRecoveredSecurityTransition(
   },
 ): Promise<void> {
   const { epoch, checkId, model, id, previous, current, evidenceId } = input;
+  validateModel(model, previous, store.schema);
+  validateModel(model, current, store.schema);
+  const version = rowModelVersion(model, current);
+  requireCondition(
+    rowModelVersion(model, previous) === version,
+    503,
+    'RECOVERY_MODEL_VERSION',
+    '복구 확인으로 원래 모델 버전을 바꾸지 않습니다.',
+  );
+  const sourceContract =
+    version === 2
+      ? store.schema.validateUri<NonNullable<WriteRequest['sourceContract']>>(
+          U3_PROFILE + '#/$defs/SourceContract',
+          current.sourceContract,
+        )
+      : undefined;
   const definition = modelDefinition(model);
   const securityKey = 'recovery-security-' + randomUUID();
   const securityInput = {
@@ -42,6 +58,7 @@ export async function writeRecoveredSecurityTransition(
       },
       correlationId: checkId,
       epoch,
+      ...(sourceContract ? { sourceContract } : {}),
     },
     async (transaction, requestId) => {
       await transaction.put(model, current, Number(previous.revision));
@@ -69,6 +86,7 @@ export async function writeRecoveredSecurityTransition(
         updatedAt: recordedAt,
         revision: 1,
         correlationId: checkId,
+        ...(sourceContract ? { sourceContract } : {}),
       });
       await transaction.put(
         definition.owner === 'IdentityRecovery' ? 'IdentityHistory' : 'AccessHistory',

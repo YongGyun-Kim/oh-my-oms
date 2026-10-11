@@ -5,7 +5,7 @@ import { EntitySchema } from 'typeorm';
 import { validateAttribute } from './model-attribute.js';
 import { U2_MODELS } from './u2-model-catalog.js';
 import { validateU2ModelConstraints } from './u2-model-decoder.js';
-import { U3_MODELS, physicalU3Model } from './u3-model-catalog.js';
+import { U3_MODELS, U3_PERSISTENCE_MODELS, physicalU3Model } from './u3-model-catalog.js';
 import { validateU3ModelConstraints } from './u3-model-decoder.js';
 
 export interface Attribute {
@@ -32,7 +32,8 @@ const catalog = JSON.parse(
 // Preserve the U1 catalog's public versioned projection for old consumers.
 // Physical registration and current decoders use the additive full catalog.
 export const MODELS = Object.freeze(catalog.entities);
-const u3ByName = new Map(U3_MODELS.map((model) => [model.name, model]));
+const legacyModels = [...MODELS, ...U2_MODELS];
+const u3ByName = new Map(U3_PERSISTENCE_MODELS.map((model) => [model.name, model]));
 export const ALL_MODELS = Object.freeze([
   ...MODELS.map<Model>((model) => {
     const current = u3ByName.get(model.name);
@@ -52,7 +53,10 @@ export const ALL_MODELS = Object.freeze([
       };
     return model;
   }),
-  ...U2_MODELS,
+  ...U2_MODELS.map<Model>((model) => {
+    const current = u3ByName.get(model.name);
+    return current ? physicalU3Model(model, current) : model;
+  }),
   ...U3_MODELS.filter((model) => !MODELS.some((old) => old.name === model.name)),
 ]);
 requireCondition(
@@ -228,7 +232,7 @@ export function modelForData(name: string, data: ModelData): Model {
   const current = u3ByName.get(name);
   if (!current) return modelDefinition(name);
   if (data.modelVersion === 2) return current;
-  const legacy = MODELS.find((model) => model.name === name);
+  const legacy = legacyModels.find((model) => model.name === name);
   requireCondition(
     data.modelVersion === undefined && legacy,
     400,
@@ -243,7 +247,7 @@ export function rowModelVersion(name: string, data: ModelData): 1 | 2 {
 // Physical NULLs introduced by expand migration are not invented legacy fields.
 export function storedModelData(name: string, physical: ModelData): ModelData {
   const u3 = u3ByName.get(name),
-    legacy = MODELS.find((model) => model.name === name);
+    legacy = legacyModels.find((model) => model.name === name);
   if (!u3)
     return Object.fromEntries(
       modelDefinition(name)

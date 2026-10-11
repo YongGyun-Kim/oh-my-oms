@@ -1,4 +1,4 @@
-import { requireCondition, ExecutionBudget } from '@oms/contracts';
+import { requireCondition, ExecutionBudget, canonicalJson } from '@oms/contracts';
 import type { ActionScope, Ref, ServiceContext, TargetScope, ScopeV2 } from '@oms/contracts';
 import type { ModelData, ProtectedStore, ProtectedTransaction } from '@oms/persistence';
 import { currentSecurityMatches, sameSessionAuthority } from '@oms/persistence';
@@ -151,8 +151,27 @@ export class Authorization {
         'CURRENT_AUTH_NOT_PROTECTED',
         '현재 역할 상태의 보호가 필요합니다.',
       );
-    if (!visible[0]) return null;
-    return this.lookup('RoleRevisionState', String(visible[0].roleStateId), transaction);
+    const state = visible[0]
+      ? await this.lookup('RoleRevisionState', String(visible[0].roleStateId), transaction)
+      : null;
+    if (kind === 'StaffRole') {
+      const role = await this.lookup('StaffRole', id, transaction);
+      requireCondition(
+        role?.modelVersion !== 2 ||
+          (state?.modelVersion === 2 &&
+            canonicalJson(state.sourceContract) === canonicalJson(role.sourceContract)),
+        503,
+        'U3_ROLE_STATE_REQUIRED',
+        '새 직원 역할은 같은 profile의 보호된 현재 행위 원본이 필요합니다.',
+      );
+      requireCondition(
+        state?.modelVersion !== 2 || role?.modelVersion === 2,
+        503,
+        'U3_ROLE_PROFILE_MIX',
+        '새 행위 원본과 구형 역할 의미를 섞을 수 없습니다.',
+      );
+    }
+    return state;
   }
   async requireStaff(
     context: ServiceContext,

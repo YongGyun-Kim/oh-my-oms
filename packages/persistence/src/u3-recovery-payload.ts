@@ -1,10 +1,10 @@
 import { canonicalJson, requireCondition } from '@oms/contracts';
-import { U3_MODELS } from './u3-model-catalog.js';
+import { U3_PERSISTENCE_MODELS } from './u3-model-catalog.js';
 import type { ModelData } from './model-catalog.js';
 import { assertNoRawRecoverySecrets } from './u2-recovery-payload.js';
 
 export function validateU3RecoveryImage(model: string, version: number, data: ModelData): void {
-  if (!U3_MODELS.some((entry) => entry.name === model)) {
+  if (!U3_PERSISTENCE_MODELS.some((entry) => entry.name === model)) {
     requireCondition(
       version === 1,
       503,

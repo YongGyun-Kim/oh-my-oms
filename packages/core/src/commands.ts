@@ -1,7 +1,12 @@
 import { randomUUID } from 'node:crypto';
 import { fingerprint, requireCondition } from '@oms/contracts';
 import type { CommandMeta, Receipt, Ref, ServiceContext, TargetScope } from '@oms/contracts';
-import type { ModelData, ProtectedStore, ProtectedTransaction } from '@oms/persistence';
+import type {
+  ModelData,
+  ProtectedStore,
+  ProtectedTransaction,
+  WriteRequest,
+} from '@oms/persistence';
 import { ref } from './references.js';
 export interface ChangeResult {
   target: Ref | null;
@@ -24,6 +29,7 @@ export class Commands {
     history: string,
     authorize: (transaction?: ProtectedTransaction) => Promise<void>,
     apply: (transaction: ProtectedTransaction, requestId: string) => Promise<ChangeResult>,
+    sourceContract?: WriteRequest['sourceContract'],
   ): Promise<Receipt> {
     this.store.schema.validate('CommandMeta', input.meta);
     await authorize();
@@ -39,6 +45,7 @@ export class Commands {
         input,
         correlationId: context.correlationId,
         epoch: await this.store.currentEpoch(),
+        ...(sourceContract ? { sourceContract } : {}),
       },
       async (transaction, requestId) => {
         await authorize(transaction);
@@ -71,11 +78,17 @@ export class Commands {
           owner,
           targetScope: result.scope,
           requestState: result.state,
-          resultRefs: [...result.refs, ref(history, historyRecord)],
+          resultRefs: [
+            ...result.refs,
+            sourceContract
+              ? { ...ref(history, historyRecord), revision: historyRecord.sourceRevision }
+              : ref(history, historyRecord),
+          ],
           acceptedAt: now,
           updatedAt: now,
           revision: 1,
           correlationId: context.correlationId,
+          ...(sourceContract ? { sourceContract } : {}),
         });
       },
     );

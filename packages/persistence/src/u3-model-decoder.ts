@@ -1,6 +1,7 @@
 import { canonicalJson, requireCondition, type SchemaValidator } from '@oms/contracts';
 import type { Ref } from '@oms/contracts';
 import { U3_MODELS } from './u3-model-catalog.js';
+import { U3_SUPPORT_MODELS } from './u3-support-models.js';
 import { validateModel, rowModelVersion, type ModelData } from './model-catalog.js';
 
 const check = (condition: unknown, message: string) =>
@@ -128,4 +129,17 @@ export function recordedSourceContract(
     data.sourceContract,
   );
   return { knowledge: 'KNOWN', ...value };
+}
+export function decodeU3SupportModel(
+  model: string,
+  version: number,
+  data: ModelData,
+  schema: SchemaValidator,
+): ModelData {
+  check(
+    U3_SUPPORT_MODELS.some((entry) => entry.name === model) && [1, 2].includes(version),
+    '등록된 C01 지원 모델/decoder 버전이 필요합니다.',
+  );
+  check(rowModelVersion(model, data) === version, '지원 모델의 실제 원상 버전이 다릅니다.');
+  return validateModel(model, data, schema);
 }

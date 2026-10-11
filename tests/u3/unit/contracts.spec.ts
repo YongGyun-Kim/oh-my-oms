@@ -445,7 +445,7 @@ describe('registry 입력·대상·producer 경계', () => {
     const operations = JSON.parse(
       readFileSync('packages/contracts/schemas/u3-operations-v2.json', 'utf8'),
     ) as Operation[];
-    expect(operations.length).toBe(23);
+    expect(operations.length).toBe(27);
     const registry = registryFixture();
     for (const operation of operations) {
       expect(operation.version).toBe(3);

@@ -1,5 +1,5 @@
 import type { SchemaValidator } from '@oms/contracts';
-import { validateModel, type ModelData } from './model-catalog.js';
+import { validateModel, rowModelVersion, type ModelData } from './model-catalog.js';
 import { U2_MODELS } from './u2-model-catalog.js';
 import { requireCondition } from '@oms/contracts';
 export function validateU2ModelConstraints(model: string, data: ModelData): void {
@@ -67,6 +67,12 @@ export function validateU2ModelConstraints(model: string, data: ModelData): void
       );
   if (model === 'RoleRevisionState') {
     requireCondition(
+      !data.sourceContract || data.staffRoleRef !== null,
+      400,
+      'MODEL_U3_STAFF_PROFILE',
+      'U3 직원 행위 profile을 고객 범위에 적용할 수 없습니다.',
+    );
+    requireCondition(
       (data.roleRef !== null) !== (data.staffRoleRef !== null),
       400,
       'MODEL_ROLE_KIND',
@@ -93,5 +99,11 @@ export function decodeU2Model(
 ): ModelData {
   if (version !== 1 || !U2_MODELS.some((entry) => entry.name === model))
     throw new Error('지원하는 U2 모델/decoder 버전이 아닙니다.');
+  requireCondition(
+    rowModelVersion(model, data) === 1,
+    400,
+    'U2_MODEL_VERSION',
+    '구형 decoder는 새 지원 모델 version2를 읽을 수 없습니다.',
+  );
   return validateModel(model, data, schema);
 }

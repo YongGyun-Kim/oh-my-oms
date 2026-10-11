@@ -5,6 +5,8 @@ export * from './identity.js';
 export * from './scopes.js';
 export * from './authorization.js';
 export * from './commands.js';
+export * from './u3-commands.js';
+export * from './u3-staff-access.js';
 export * from './enterprise-verification.js';
 export * from './enterprise-access.js';
 export * from './staff-access.js';

@@ -5,6 +5,10 @@ import { modelDefinition, primaryAttribute, validateModel } from './model-catalo
 import type { ModelData } from './model-catalog.js';
 import { ProtectedStore } from './protected-store.js';
 import { writeRecoveredSecurityTransition } from './recovery-security-write.js';
+import {
+  registeredRecoveryObservationProfile,
+  validateRecoverySecurityObservation,
+} from './recovery-security-observation.js';
 import { currentSecurityMatches } from './security-state.js';
 import {
   RECOVERY_SECURITY_MODELS,
@@ -12,6 +16,9 @@ import {
   canonicalSecurityData,
 } from './recovery-security-policy.js';
 export interface RecoverySecurityObservation {
+  observationVersion?: 2;
+  sourceContract?: { profile: 'urn:oms:contract:u3-commercial:2'; registryVersion: 3 };
+  modelVersion?: 1 | 2 | null;
   checkId: string;
   model: string;
   id: string;
@@ -24,6 +31,7 @@ export interface RecoverySecurityObservation {
 }
 export interface CurrentSecurityAuthority {
   readonly kind: 'REGISTERED_CURRENT_OWNER' | 'SYNTHETIC' | 'UNREGISTERED';
+  readonly observationProfile?: string | null;
   begin(
     epoch: string,
     faultAt: string,
@@ -58,6 +66,7 @@ export async function reconcileRecoveredSecurity(
     'RECOVERY_SECURITY_SOURCE_UNREGISTERED',
     '실제 현재 신원/권한 owner 또는 명시 합성 oracle 등록이 필요합니다.',
   );
+  const observationProfile = registeredRecoveryObservationProfile(authority);
   store.schema.validate('Id', epoch);
   const fault = Date.parse(faultAt);
   requireCondition(
@@ -123,10 +132,7 @@ export async function reconcileRecoveredSecurity(
           id,
           AbortSignal.any([signal, AbortSignal.timeout(5000)]),
         );
-        store.schema.validateUri(
-          'urn:oms:contract:foundation:1#/$defs/RecoverySecurityObservation',
-          observation,
-        );
+        validateRecoverySecurityObservation(store.schema, observationProfile, observation);
         requireCondition(
           observation.checkId === check.checkId &&
             observation.model === model &&

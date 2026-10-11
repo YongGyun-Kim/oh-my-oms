@@ -1,5 +1,93 @@
 [
   {
+    "owner": "EnterpriseAccess",
+    "name": "defineStaffRole",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/StaffRoleInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "reviseStaffRole",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/StaffRoleRevisionInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": {
+          "allOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+            {
+              "type": "object",
+              "properties": {
+                "owner": { "const": "EnterpriseAccess" },
+                "entity": { "const": "StaffRole" }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "deactivateStaffRole",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/StaffRoleDeactivateInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": {
+          "allOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+            {
+              "type": "object",
+              "properties": {
+                "owner": { "const": "EnterpriseAccess" },
+                "entity": { "const": "StaffRole" }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readStaffRoles",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/StaffRolePageInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/StaffRolePage",
+    "targetKind": "NONE"
+  },
+  {
     "owner": "ProductCatalog",
     "name": "registerProduct",
     "contract": "u3-commercial",

@@ -11,7 +11,7 @@ import {
 } from './model-catalog.js';
 import type { ModelData } from './model-catalog.js';
 import type { RecoveryRow } from './recovery-types.js';
-import { U3_MODELS } from './u3-model-catalog.js';
+import { U3_PERSISTENCE_MODELS } from './u3-model-catalog.js';
 
 export class ProtectedTransaction {
   private readonly changes = new Map<string, RecoveryRow>();
@@ -29,7 +29,12 @@ export class ProtectedTransaction {
         'urn:oms:contract:u3-commercial:2#/$defs/SourceContract',
         this.sourceContract,
       );
-    if (this.sourceContract && ['RequestReceipt', 'WorkItem', 'FactEnvelope'].includes(model)) {
+    if (
+      this.sourceContract &&
+      ['RequestReceipt', 'WorkItem', 'FactEnvelope', 'StaffRole', 'RoleRevisionState'].includes(
+        model,
+      )
+    ) {
       this.schema.validateUri(
         'urn:oms:contract:u3-commercial:2#/$defs/SourceContract',
         data.sourceContract,
@@ -41,7 +46,7 @@ export class ProtectedTransaction {
         '접수/전달 원본의 실제 등록 계약을 보존해야 합니다.',
       );
     }
-    if (!U3_MODELS.some((entry) => entry.name === model)) return;
+    if (!U3_PERSISTENCE_MODELS.some((entry) => entry.name === model)) return;
     requireCondition(
       data.modelVersion !== 2 || this.sourceContract !== undefined,
       400,

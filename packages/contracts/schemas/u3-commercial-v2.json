@@ -3,6 +3,227 @@
   "$id": "urn:oms:contract:u3-commercial:2",
   "title": "U3 commercial profile revision 2 — registry version 3; common 1/2 preserved",
   "$defs": {
+    "RecoverySecurityObservation": {
+      "type": "object",
+      "properties": {
+        "observationVersion": { "const": 2 },
+        "sourceContract": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/SourceContract" },
+        "modelVersion": { "enum": [1, 2, null] },
+        "checkId": { "$ref": "urn:oms:contract:common:2#/$defs/Id" },
+        "model": {
+          "enum": [
+            "Account",
+            "VerifiedPersonLink",
+            "ProviderBinding",
+            "MfaEnrollment",
+            "RecoveryCodeSet",
+            "Enterprise",
+            "EnterpriseMembership",
+            "Department",
+            "BusinessSite",
+            "CustomerRole",
+            "ActionScope",
+            "CustomerRoleGrant",
+            "StaffRole",
+            "StaffRoleGrant",
+            "RecoveryCodeSecurityState",
+            "AccountSecurityState",
+            "EnterpriseAccessFence",
+            "StaffAuthorityFence",
+            "RegisteredContact",
+            "VerificationPolicy",
+            "VerificationEvidence",
+            "PersonVerification",
+            "ScopeV2",
+            "RoleRevisionState",
+            "MembershipInvitation",
+            "RecoveryCase",
+            "RecoveryVerification",
+            "PartyClaimContext",
+            "RecoveryHandoffGrant",
+            "ClaimReceipt",
+            "EnrollmentAuthority",
+            "EmergencyRecoveryCase",
+            "EmergencyOperatorAuthority",
+            "AdministratorRestoration",
+            "IdentityExecutionSlot",
+            "IdentityOperationResult",
+            "SecurityTombstone"
+          ]
+        },
+        "id": { "$ref": "urn:oms:contract:common:2#/$defs/Id" },
+        "sourceOwner": { "enum": ["IdentityRecovery", "EnterpriseAccess"] },
+        "sourceRevision": {
+          "anyOf": [{ "$ref": "urn:oms:contract:common:2#/$defs/Revision" }, { "type": "null" }]
+        },
+        "currentData": {
+          "anyOf": [{ "type": "object", "maxProperties": 100 }, { "type": "null" }]
+        },
+        "evidenceId": { "$ref": "urn:oms:contract:common:2#/$defs/Id" },
+        "observedAt": { "$ref": "urn:oms:contract:common:2#/$defs/Instant" },
+        "knowledge": { "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"] }
+      },
+      "required": [
+        "observationVersion",
+        "sourceContract",
+        "modelVersion",
+        "checkId",
+        "model",
+        "id",
+        "sourceOwner",
+        "sourceRevision",
+        "currentData",
+        "evidenceId",
+        "observedAt",
+        "knowledge"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": { "properties": { "currentData": { "type": "null" } } },
+          "then": { "properties": { "modelVersion": { "type": "null" } } },
+          "else": { "properties": { "modelVersion": { "enum": [1, 2] } } }
+        }
+      ]
+    },
+    "StaffActionList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 17,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "application.read",
+          "enterprise.approve",
+          "enterprise.initial-administrator.designate",
+          "product.register",
+          "product.revise",
+          "product.read",
+          "order.read",
+          "order.review.read",
+          "staff.role.manage",
+          "identity.recovery.verify",
+          "identity.person.verify",
+          "enterprise.administrator.restore",
+          "contract.register",
+          "contract.approve",
+          "contract.propose",
+          "order.decide",
+          "order.change.apply"
+        ]
+      }
+    },
+    "LegacyStaffActionProjection": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 9,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "application.read",
+          "enterprise.approve",
+          "enterprise.initial-administrator.designate",
+          "product.register",
+          "product.revise",
+          "product.read",
+          "order.read",
+          "order.review.read",
+          "staff.role.manage"
+        ]
+      }
+    },
+    "StaffRoleInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:common:2#/$defs/CommandMeta" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "actions": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/StaffActionList" }
+      },
+      "required": ["meta", "label", "actions"],
+      "additionalProperties": false
+    },
+    "StaffRoleRevisionInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:common:2#/$defs/CommandMeta" },
+        "roleRef": {
+          "allOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+            {
+              "type": "object",
+              "properties": {
+                "owner": { "const": "EnterpriseAccess" },
+                "entity": { "const": "StaffRole" }
+              }
+            }
+          ]
+        },
+        "label": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "actions": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/StaffActionList" }
+      },
+      "required": ["meta", "roleRef", "label", "actions"],
+      "additionalProperties": false
+    },
+    "StaffRoleDeactivateInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:common:2#/$defs/CommandMeta" },
+        "roleRef": {
+          "allOf": [
+            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+            {
+              "type": "object",
+              "properties": {
+                "owner": { "const": "EnterpriseAccess" },
+                "entity": { "const": "StaffRole" }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["meta", "roleRef"],
+      "additionalProperties": false
+    },
+    "StaffRolePage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "properties": {
+              "roleRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+              "label": { "type": "string", "minLength": 1, "maxLength": 4096 },
+              "actions": {
+                "type": "array",
+                "maxItems": 17,
+                "uniqueItems": true,
+                "items": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/StaffActionList/items" }
+              },
+              "active": { "type": "boolean" }
+            },
+            "required": ["roleRef", "label", "actions", "active"],
+            "additionalProperties": false
+          }
+        },
+        "nextCursor": { "type": ["string", "null"], "maxLength": 128 },
+        "observedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["items", "nextCursor", "observedAt"],
+      "additionalProperties": false
+    },
+    "StaffRolePageInput": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "anyOf": [{ "$ref": "urn:oms:contract:common:2#/$defs/Id" }, { "type": "null" }]
+        },
+        "pageSize": { "type": "integer", "minimum": 1, "maximum": 100 }
+      },
+      "required": ["cursor", "pageSize"],
+      "additionalProperties": false
+    },
     "SourceContract": {
       "type": "object",
       "properties": {

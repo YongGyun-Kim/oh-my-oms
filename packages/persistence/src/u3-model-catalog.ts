@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import type { Model } from './model-catalog.js';
+import { U3_SUPPORT_MODELS } from './u3-support-models.js';
 
 // File lineage v1 contains the first U3 current layout (model version 2).
 // Existing names keep their stable physical keys; logical aliases are documented.
@@ -11,6 +12,7 @@ export const U3_MODELS: readonly Model[] = Object.freeze(
   ).entities,
 );
 export const U3_MODEL_VERSION = 2;
+export const U3_PERSISTENCE_MODELS = Object.freeze([...U3_MODELS, ...U3_SUPPORT_MODELS]);
 
 export function physicalU3Model(legacy: Model | undefined, current: Model): Model {
   if (!legacy) return current;

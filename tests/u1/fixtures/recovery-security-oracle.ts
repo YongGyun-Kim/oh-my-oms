@@ -1,7 +1,16 @@
 import { createHash, randomUUID } from 'node:crypto';
-import { canonicalJson } from '@oms/contracts';
+import { canonicalJson, SchemaValidator, U3_PROFILE } from '@oms/contracts';
 import type { DataSource } from 'typeorm';
-import { RECOVERY_SECURITY_MODELS, modelDefinition, primaryAttribute } from '@oms/persistence';
+import {
+  RECOVERY_SECURITY_MODELS,
+  modelDefinition,
+  primaryAttribute,
+  rowModelVersion,
+  U3_SOURCE_CONTRACT,
+  registeredRecoveryObservationProfile,
+  storedModelData,
+  validateModel,
+} from '@oms/persistence';
 import type {
   CurrentSecurityAuthority,
   ModelData,
@@ -17,6 +26,7 @@ export async function captureSyntheticSecuritySnapshot(
   if (process.env.NODE_ENV === 'production')
     throw new Error('실제 신원/권한을 합성 oracle로 승인할 수 없습니다.');
   const rows: Record<string, ModelData> = {};
+  const schema = new SchemaValidator();
   for (const model of RECOVERY_SECURITY_MODELS) {
     const definition = modelDefinition(model),
       key = primaryAttribute(definition).name;
@@ -31,11 +41,7 @@ export async function captureSyntheticSecuritySnapshot(
       const page = await query.getMany();
       for (const row of page) {
         const id = String(row[key]);
-        rows[model + '/' + id] = Object.fromEntries(
-          definition.attributes
-            .filter((field) => row[field.name] !== undefined)
-            .map((field) => [field.name, row[field.name]]),
-        );
+        rows[model + '/' + id] = validateModel(model, storedModelData(model, row), schema);
         cursor = id;
       }
       if (page.length < 25) break;
@@ -53,9 +59,13 @@ export class SyntheticCurrentSecurityOracle implements CurrentSecurityAuthority 
   private checkGeneration = 0;
   private readonly observed = new Set<string>();
   private digest = createHash('sha256');
-  constructor(readonly snapshot: SyntheticSecuritySnapshot) {
+  constructor(
+    readonly snapshot: SyntheticSecuritySnapshot,
+    readonly observationProfile?: string,
+  ) {
     if (process.env.NODE_ENV === 'production')
       throw new Error('운영에 합성 현재 보안 oracle을 등록할 수 없습니다.');
+    registeredRecoveryObservationProfile(this);
   }
   update(model: string, id: string, data: ModelData): void {
     this.snapshot.rows[model + '/' + id] = structuredClone(data);
@@ -84,6 +94,13 @@ export class SyntheticCurrentSecurityOracle implements CurrentSecurityAuthority 
     if (this.observed.has(key)) throw new Error('동일 보안 원본을 중복 관측할 수 없습니다.');
     this.observed.add(key);
     const result: RecoverySecurityObservation = {
+      ...(this.observationProfile === U3_PROFILE
+        ? {
+            observationVersion: 2 as const,
+            sourceContract: U3_SOURCE_CONTRACT,
+            modelVersion: data ? rowModelVersion(model, data) : null,
+          }
+        : {}),
       checkId,
       model,
       id,
