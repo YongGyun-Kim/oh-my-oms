@@ -56,9 +56,10 @@ export function convertCoverage(
   source: SourceIdentity,
   root = process.cwd(),
   readSource: (path: string) => string = (path) => readFileSync(path, 'utf8'),
+  inventory: readonly string[] = productInventory(source),
 ): Record<string, FileLines> {
   requireCondition(object(raw), 503, 'COVERAGE_FORMAT', '실제 Istanbul JSON object가 필요합니다.');
-  const expected = productInventory(source),
+  const expected = inventory,
     files: Record<string, FileLines> = {};
   for (const [absolute, value] of Object.entries(raw)) {
     requireCondition(
