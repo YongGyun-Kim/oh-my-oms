@@ -177,3 +177,23 @@ DB 없는 reporter probe는 기본 suite 밖에서 BASELINE/SAFE를 각각 실�
 private probe 폴더는0700·로그0600이다. source-manifest176개 경로와 실제 전체 Git 변경+신규5경로176개를 root가 대조해 누락/추가0·모든 파일 존재를 확인했다. 실제 phase 연결의 관련 통합4파일은 아직 실행 중이며 새 전체 CI/80%·보안·공식 리뷰·main 머지는 미완료다.
 
 관련 통합 실행은 종료 코드0으로 끝났다. received-code-phase-integration-20261012.json의 실제4파일37/37 PASS·fail/pending/todo/failedSuite0·success=true를 root도 확인했다. Luna가19개 입력의 전후 SHA 일치를 확인했고 private 통합 로그는0600이다. APPLY_REVIEW 2568.236ms·APPLY_RESPONSE_LOSS2649.275ms·HTTP_APPLY2803.397ms(그 안의 protectedExecute2630.977ms)·READ_1001920.292ms를 관측했다. 중첩 시간을 합산하지 않고 계측 overhead를 포함한 로컬 수치로 제한한다. 실제 CI의 받은 오류를 새 source에서 확인하기 전 DB 시간 초과나 업무 실패의 확정 원인으로 해석하지 않는다. source/시간/100행/보호/권한/80% 기준을 유지했다.
+
+## ef17200의 실제 CI 관측
+
+안전한 오류/phase 관측과 검증 기록은ef17200315539d6de079fea8e621fe26b1a02d63으로 커밋·push했다. 실제 CI run38210116465의 PR checkout HEADa889f07a44a8927218ea205524839b844cd6894d와 branch HEAD를 구분한다. 새 U1 성공 artifact의 sourceDigest는4328dc4b1a92c0477f3955c749340de16093f01615ee195799aef837da5c4ac4다.
+
+root가 U1의 unit571/571·integration168/168·같은739개 coverage 재실행을 확인했다. 각각 fail/pending/todo/failedSuite0·success=true이고 validation-u1은 pilot-current·위 checkout/digest·각 검사 passed/observed/fresh=true·exit0·signal/errorCode=null·expired/logFailed=false다. U2/U3와 project 전체80%·품질·보안은 아직 진행 중이다. 이전 CI 실패와 Step19/20 미완료는 그대로 유지한다.
+
+run38210116465은 전체 failure로 종료됐다. U1·U2는 success, U3 integration159개 중151 PASS/8 FAIL·pending/todo0·failedSuites8·success=false다. U3 unit은 완료했으나 통합은 observed=true·exit1·expired/logFailed=false·새 VALID_COUNTS이며 receipt/report validation 오류는 없다. 같은 sourceDigest를 확인했다. project 전체80%·품질·보안은 선행 실패로 skipped다.
+
+새 안전 summary의 received는 실제 오류를 보존했다. APPLY_PROTECTION과100행 판단 후단 변조 사례의 메서드 rejectedErrors에서 SQLSTATE25P04를 관측했다. 이는 [PostgreSQL17 공식 오류 코드](https://www.postgresql.org/docs/17/errcodes-appendix.html)의 transaction_timeout이다. 해당 protectedExecute는 약3004ms였고 실제 설정 transaction_timeout3000과 대조했다. 나머지 HTTP_APPLY/APPLY_REVIEW/APPLY_RESPONSE_LOSS/DECISION_100/READ_100에서도 약3002~3008ms에 QUERY_RUNNER_RELEASED를 관측했지만 직접25P04가 없는 사례까지 동일 DB 오류를 받은 것으로 표현하지 않는다. HTTP 실제 응답은503/REQUEST_UNAVAILABLE다.
+
+100행 제출 자체 protectedExecute1851.296ms는 성공했고 후속 READ_1003113.126ms가 실패했다. HTTP_APPLY의 currentProtected1085회/1929.778ms·transactionGet1027회/477.645ms, APPLY_REVIEW의 currentProtected1104회·transactionGet1053회,100행 판단의 validateUri7913회/1926.344ms, READ_100의 validateUri9121회/2163.850ms를 구분해 관측했다. 중첩 시간은 합산하지 않는다. 별도 order-change 순번10은 phase 없는 ASSERTION/UNKNOWN이므로 확정 원인을 만들지 않는다.
+
+소스에서 확인한 같은 phase 중복 조회를 제거하되 최종 현재성/권한/보호 대조를 유지하는 좁은 수정과 후단 변조 거절 시험을 진행한다. 새 DB 구조·전역/phase간 현재성 cache·시간/100행/80% 완화는 하지 않는다. 실제 새 source 재검증·별도 리뷰·main 머지는 미완료다.
+
+## 같은 구간의 조회·상품 원본 재사용 검증
+
+currentOrderTerms에서 같은 조회 구간에 검증한 snapshot/choice/lines를 출력에 재사용하고 applicationSource의 검증된 Product를 정확 u3Ref와 대조해 apply 경계에 전달했다. 독립적인 applicationSource 전후·권한/근거/U7와 최종 assertPremises는 유지한다. 후단100번째 primary 행 변조 거절과 application 기록 뒤 Product 미보호 개정 변경의 전체 rollback 시험을 추가했다.
+
+Luna의4파일 TypeScript·ESLint·Prettier는 종료 코드0이고 same-phase-read-product-integration-20261012.json의 두 실제 파일21/21 PASS·fail/pending/todo/failedSuite0·success=true를 root도 확인했다. 네 파일 SHA는 검사 전후 동일했다. 로컬 READ_100은1445.695ms/1337.722ms이며 APPLY_RESPONSE_LOSS는2929.544ms였다. 계측 overhead를 포함하고 중첩 시간을 합산하지 않는다. 부분적인 개선이 모든 CI 실패를 해결했다는 증거가 아니며, 적용의 직원 권위검증에서 발견한 동일 StaffRole 연속 재조회만 추가로 줄이되 전후 권위검증·grant 전체 scan은 유지한다. 실제 새 전체 CI와 공식 리뷰는 미완료다.

@@ -175,11 +175,11 @@ export class CommercialProposal {
     original: U3ProposalTerms,
     proposed: U3ProposalTerms,
     digest: string,
-  ): Promise<{ offerRef: Ref; terms: U3ResolvedCommercialTerms }[]> {
+  ): Promise<{ product: ModelData; offerRef: Ref; terms: U3ResolvedCommercialTerms }[]> {
     confirmed(original.lines.length === proposed.lines.length);
     const corporate: Ref[] = [],
       conditionRefs: Ref[] = [],
-      resolved: { offerRef: Ref; terms: U3ResolvedCommercialTerms }[] = [];
+      resolved: { product: ModelData; offerRef: Ref; terms: U3ResolvedCommercialTerms }[] = [];
     for (const [index, line] of proposed.lines.entries()) {
       const prior = original.lines[index]!;
       confirmed(prior.productRef.id === line.productRef.id && prior.quantity === line.quantity);
@@ -208,7 +208,7 @@ export class CommercialProposal {
       corporate.push(...current.agreementRevisionRefs);
       for (const binding of current.conditionBindings)
         for (const evidence of binding.evidenceRefs) await scope.current(evidence);
-      resolved.push({ offerRef: offer!, terms: current });
+      resolved.push({ product, offerRef: offer!, terms: current });
     }
     if (proposed.termsRecordRef.entity === 'AgreementHistory') {
       const history = await scope.current(proposed.termsRecordRef);
@@ -604,7 +604,7 @@ export class CommercialProposal {
         completionBasisRef: completion.value,
       });
     }
-    return { ...source, captured };
+    return { ...source, captured, products: resolved.map((value) => value.product) };
   }
   async create(
     context: ServiceContext,

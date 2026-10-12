@@ -1113,7 +1113,15 @@ export class U3OrderAcceptance {
           );
           const captured: U3AppliedTerms['capturedLines'] = [];
           for (const [index, line] of source.captured.entries()) {
-            const product = await scope.current(line.productRef);
+            const product = source.products[index];
+            requireCondition(
+              product &&
+                canonicalJson(u3Ref('Product', product, this.store.schema)) ===
+                  canonicalJson(line.productRef),
+              409,
+              'ORDER_CHANGE_BOUNDARY',
+              '같은 phase에서 검증한 정확한 상품 원본이 필요합니다.',
+            );
             const previous = current.captured[index];
             requireCondition(
               previous &&
@@ -1267,9 +1275,10 @@ export class U3OrderAcceptance {
               '해당 기업·조직의 주문을 확인할 수 없습니다.',
             );
             const current = await currentOrderTerms(scope, input.targetRef, this.agreement.basis);
-            const snapshot = await scope.current(order.purchaseTermsRef as Ref),
+            // 같은 조회 phase의 검증된 원본을 재사용한다. 최종 전제는 별도로 다시 대조한다.
+            const snapshot = current.snapshot,
               decision = await scope.current(order.acceptanceRef as Ref),
-              choice = await scope.current(order.provisionChoiceRef as Ref);
+              choice = current.choice;
             const captured = snapshot.capturedLines as ModelData[],
               lines: U3OrderLineView[] = [];
             requireCondition(
@@ -1283,10 +1292,11 @@ export class U3OrderAcceptance {
               '원래 주문의 전체 행·FULL 선택·스냅샷·판단 원본 연결이 필요합니다.',
             );
             for (const [index, lineRef] of (order.lineRefs as Ref[]).entries()) {
-              const line = await scope.current(lineRef),
+              const line = current.lines[index],
                 source = captured[index];
               requireCondition(
-                source &&
+                line &&
+                  source &&
                   Number(line.position) === index + 1 &&
                   (line.orderRef as Ref).id === input.targetRef.id &&
                   line.priceKnowledge === 'KNOWN',

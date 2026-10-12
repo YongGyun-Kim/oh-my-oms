@@ -319,6 +319,59 @@ describe('실제 가격 변경·정확한 동의·한 번 적용·다음 제안�
     expect(await store.list('OrderChangeApplication')).toHaveLength(0);
     expect(await original(f)).toBe(bytes);
   });
+  it('같은 phase Product 재사용 이후 primary 상품 개정 변조는 적용 전체를 rollback한다', async () => {
+    const f = await seedOrderChange(store),
+      input = f.application(),
+      bytes = await original(f);
+    const product = (await store.currentProtected('Product', f.productRef.id))!;
+    const put = ProtectedTransaction.prototype.put;
+    let changed = false;
+    const tamper = vi
+      .spyOn(ProtectedTransaction.prototype, 'put')
+      .mockImplementation(async function (
+        this: ProtectedTransaction,
+        model,
+        data,
+        expectedRevision,
+      ) {
+        await put.call(this, model, data, expectedRevision);
+        if (model === 'OrderChangeApplication' && !changed) {
+          changed = true;
+          await sources.primaryAdmin
+            .getRepository('Product')
+            .update({ productId: f.productRef.id }, { revision: Number(product.revision) + 1 });
+        }
+      });
+    const context = await f.requestContext(f.registrant);
+    await expect(f.orders.apply(context, input, f.ingress)).rejects.toMatchObject({
+      code: 'CURRENT_AUTH_NOT_PROTECTED',
+    });
+    tamper.mockRestore();
+    expect(changed).toBe(true);
+    expect(await store.list('OrderChangeApplication')).toHaveLength(0);
+    expect(await sources.primaryAdmin.getRepository('OrderChangeApplication').count()).toBe(0);
+    expect((await store.currentProtected('Order', f.orderRef.id))!.revision).toBe(1);
+    expect(
+      await sources.primaryAdmin
+        .getRepository('RequestReceipt')
+        .countBy({ idempotencyKey: input.meta.clientRequestId }),
+    ).toBe(0);
+    expect(await store.read('Product', f.productRef.id)).toEqual(product);
+    await expect(store.currentProtected('Product', f.productRef.id)).rejects.toMatchObject({
+      code: 'CURRENT_AUTH_NOT_PROTECTED',
+    });
+    expect(
+      await f.orders.commands.original(
+        await f.requestContext(f.registrant),
+        'OrderAcceptance',
+        'applyApprovedChange',
+        { kind: 'NONE' },
+        input,
+        { scope: f.targetScope },
+      ),
+    ).toMatchObject({ knowledge: 'UNKNOWN', reasonCode: 'NO_ORIGINAL' });
+    expect(await original(f)).toBe(bytes);
+  });
   it('application 이후 실패와 별도 보호 실패는 주문·적용·접수를 성공으로 표시하지 않는다', async (test) => {
     const f = await seedOrderChange(store),
       bytes = await original(f),

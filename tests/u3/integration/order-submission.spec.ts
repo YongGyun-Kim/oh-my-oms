@@ -6,6 +6,7 @@ import { U3OrderAcceptance } from '@oms/core';
 import {
   ProtectedStore,
   ProtectedTransaction,
+  U3Transaction,
   decodePayload,
   migrateU3Models,
   U3_SOURCE_CONTRACT,
@@ -269,6 +270,54 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
     await expect(submit(normal)).rejects.toMatchObject({
       code: 'ORDER_CONDITIONS_CHANGED',
     });
+  });
+  it('100행 조회의 같은 phase 원본 재사용 뒤 마지막 primary 행 변조는 최종 대조에서 거절한다', async (test) => {
+    const receipt = await submit(await input(100));
+    const order = (await store.currentProtected('Order', receipt.targetRef!.id))!;
+    const last = (order.lineRefs as Ref[])[99]!;
+    const snapshotRef = order.purchaseTermsRef as Ref;
+    const snapshot = canonicalJson(
+      await store.currentProtected('PurchaseTermsSnapshot', snapshotRef.id),
+    );
+    const protectedLast = (await store.currentProtected('OrderLine', last.id))!;
+    const beforeReceipts = await sources.primaryAdmin.getRepository('RequestReceipt').count();
+    const beforeDecisions = await sources.primaryAdmin.getRepository('AcceptanceDecision').count();
+    const assertPremises = U3Transaction.prototype.assertPremises;
+    let changed = false;
+    const tamper = vi
+      .spyOn(U3Transaction.prototype, 'assertPremises')
+      .mockImplementation(async function (this: U3Transaction) {
+        if (!changed) {
+          changed = true;
+          await sources.primaryAdmin
+            .getRepository('OrderLine')
+            .update({ lineId: last.id }, { quantity: 2 });
+        }
+        return assertPremises.call(this);
+      });
+    const context = await f.requestContext(f.seller.customer);
+    await expect(
+      profileU3Budget(
+        'READ_100',
+        context,
+        () => orders.read(context, orderQuery(receipt.targetRef!, f.targetScope)),
+        test,
+      ),
+    ).rejects.toMatchObject({ code: 'CURRENT_AUTH_NOT_PROTECTED' });
+    tamper.mockRestore();
+    expect(changed).toBe(true);
+    expect(await store.currentProtected('Order', receipt.targetRef!.id)).toEqual(order);
+    expect(await store.read('OrderLine', last.id)).toEqual(protectedLast);
+    await expect(store.currentProtected('OrderLine', last.id)).rejects.toMatchObject({
+      code: 'CURRENT_AUTH_NOT_PROTECTED',
+    });
+    expect(
+      canonicalJson(await store.currentProtected('PurchaseTermsSnapshot', snapshotRef.id)),
+    ).toBe(snapshot);
+    expect(await sources.primaryAdmin.getRepository('RequestReceipt').count()).toBe(beforeReceipts);
+    expect(await sources.primaryAdmin.getRepository('AcceptanceDecision').count()).toBe(
+      beforeDecisions,
+    );
   });
   it('빈 추가 목록/KNOWN/직원 Ref만으로 적용 없음이나0원을 확인하지 않고 실제 모든 근거를 요구한다', async () => {
     const value = await input(1, true);
