@@ -17,6 +17,7 @@ import { registeredOrderInput, orderQuery } from '../fixtures/order-input.js';
 import { assertProtectedCandidate } from '../fixtures/protected-candidate.js';
 import { buildCommonOffer } from '../../../packages/core/src/catalog-conditions.js';
 import { catalogInput } from '../fixtures/catalog.js';
+import { QueryFailedError } from 'typeorm';
 
 describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계', () => {
   const sources = u3Sources();
@@ -267,6 +268,63 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
     await expect(orders.submit(f.seller.customer, missing)).rejects.toThrow();
     const unconfirmed = await orders.submit(f.seller.customer, await input());
     expect((await view(unconfirmed)).priceBreakdown!.total).toBeNull();
+  });
+  it('새 행 batch의 중복 식별자와 deferred FK 실패는 주문·접수·보호 후보 전체를 rollback한다', async () => {
+    async function counts() {
+      const rows = await Promise.all(
+        [
+          'Order',
+          'OrderLine',
+          'PurchaseTermsSnapshot',
+          'ProvisionChoice',
+          'AcceptanceDecision',
+          'RequestReceipt',
+          'FactEnvelope',
+        ].map((model) => sources.primaryAdmin.getRepository(model).count()),
+      );
+      const candidates = await sources.primaryAdmin.query(
+        'SELECT count(*)::integer AS count FROM u1_recovery_candidate',
+      );
+      return [...rows, Number(candidates[0].count)];
+    }
+    const write = ProtectedTransaction.prototype.putNewBatch;
+    for (const failureKind of ['duplicate', 'foreign-key'] as const) {
+      const value = await input(2),
+        context = await f.requestContext(f.seller.customer),
+        before = await counts();
+      const failure = vi
+        .spyOn(ProtectedTransaction.prototype, 'putNewBatch')
+        .mockImplementation(async function (this: ProtectedTransaction, model, records) {
+          const changed = records.map((record) => structuredClone(record));
+          if (model === 'OrderLine') {
+            if (failureKind === 'duplicate') changed[1]!.lineId = changed[0]!.lineId;
+            else changed[1]!.productRef = { ...(changed[1]!.productRef as Ref), id: randomUUID() };
+          }
+          await write.call(this, model, changed);
+        });
+      const attempted = orders.submit(context, value);
+      if (failureKind === 'duplicate')
+        await expect(attempted).rejects.toMatchObject({ code: 'NEW_BATCH_CONFLICT' });
+      else {
+        await expect(attempted).rejects.toBeInstanceOf(QueryFailedError);
+        await attempted.catch((error: unknown) => {
+          if (!(error instanceof QueryFailedError)) throw error;
+          expect(error.driverError.code).toBe('23503');
+        });
+      }
+      failure.mockRestore();
+      expect(await counts()).toEqual(before);
+      expect(
+        await orders.commands.original(
+          context,
+          'OrderAcceptance',
+          'submitOrder',
+          { kind: 'NONE' },
+          value,
+          { scope: f.targetScope },
+        ),
+      ).toMatchObject({ knowledge: 'UNKNOWN', requestId: null, reasonCode: 'NO_ORIGINAL' });
+    }
   });
   it('후단 실패는 전체 그래프를 rollback하고 보호 commit 이후 응답 유실은 동일 원래 접수만 재사용한다', async () => {
     const value = await input(),

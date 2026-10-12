@@ -274,7 +274,13 @@
       "path": "tests/u1/fixtures/recovery-security-oracle.ts"
     },
     {
+      "path": "tests/u1/integration/deployment-compatibility.spec.ts"
+    },
+    {
       "path": "tests/u2/fixtures/enterprise.ts"
+    },
+    {
+      "path": "tests/u2/integration/http-primary-ac.spec.ts"
     },
     {
       "path": "tests/u2/integration/runtime-security.spec.ts"

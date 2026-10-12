@@ -34,7 +34,7 @@ import {
   profileCurrentInvitation,
   profileValidateU2Receipt,
 } from '../../../scripts/u2/performance.js';
-import { writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 describe('주 책임 수락 경계의 현재 HTTP 연결·전체 UI/실활성은 후속 검증', () => {
   const sources = u2Sources(),
     store = new ProtectedStore(sources.primaryApp, sources.journalAppend);
@@ -42,6 +42,7 @@ describe('주 책임 수락 경계의 현재 HTTP 연결·전체 UI/실활성은
   beforeAll(async () => {
     await initializeU2Databases();
     for (const s of Object.values(sources)) await s.initialize();
+    mkdirSync('.reports/u2/selected', { recursive: true, mode: 0o700 });
   });
   beforeEach(async () => resetU2Databases(sources.primaryAdmin, sources.journalAdmin));
   afterEach(async () => {

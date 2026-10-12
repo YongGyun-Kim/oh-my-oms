@@ -151,6 +151,55 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
     expect(assessments[99]!.assessments[2]!.knowledge).toBe('UNKNOWN');
     expect(await originalBytes(f)).toBe(bytes);
   });
+  it('같은 phase 행을 재사용해도 마지막 행의 후단 미보호 변경은 최종 대조에서 판단 전체를 rollback한다', async () => {
+    const f = await seedDecisionOrder(store, 100);
+    const original = (await store.currentProtected('Order', f.receipt.targetRef!.id))!;
+    const last = (original.lineRefs as Ref[])[99]!;
+    const snapshot = canonicalJson(
+      await store.currentProtected('PurchaseTermsSnapshot', (original.purchaseTermsRef as Ref).id),
+    );
+    const before = await sources.primaryAdmin.getRepository('AcceptanceDecision').count();
+    const sourcesForDecision = f.registrations();
+    const owner = sourcesForDecision.find((source) => source.owner === 'HardwareFulfillment')!;
+    if (owner.kind === 'UNREGISTERED') throw new Error('정확한 합성 준비 callback이 필요합니다.');
+    const read = owner.readReadiness;
+    owner.readReadiness = async (binding, signal) => {
+      const observation = await read(binding, signal);
+      await sources.primaryAdmin
+        .getRepository('OrderLine')
+        .update({ lineId: last.id }, { quantity: 2 });
+      return observation;
+    };
+    const input = f.decision(),
+      context = await f.requestContext(f.registrant);
+    const orders = f.service(sourcesForDecision);
+    await expect(orders.decide(context, input, f.ingress)).rejects.toMatchObject({
+      code: 'CURRENT_AUTH_NOT_PROTECTED',
+    });
+    expect(await store.currentProtected('Order', f.receipt.targetRef!.id)).toEqual(original);
+    expect(await sources.primaryAdmin.getRepository('AcceptanceDecision').count()).toBe(before);
+    expect(
+      canonicalJson(
+        await store.currentProtected(
+          'PurchaseTermsSnapshot',
+          (original.purchaseTermsRef as Ref).id,
+        ),
+      ),
+    ).toBe(snapshot);
+    await expect(store.currentProtected('OrderLine', last.id)).rejects.toMatchObject({
+      code: 'CURRENT_AUTH_NOT_PROTECTED',
+    });
+    expect(
+      await orders.commands.original(
+        context,
+        'OrderAcceptance',
+        'decideOrder',
+        { kind: 'RECORD', recordRef: input.targetRef },
+        input,
+        { scope: f.targetScope },
+      ),
+    ).toMatchObject({ knowledge: 'UNKNOWN', requestId: null, reasonCode: 'NO_ORIGINAL' });
+  });
   it('총액 UNKNOWN은 준비 소유자 KNOWN만으로 수락하지 않는다', async () => {
     const f = await seedDecisionOrder(store, 1, false);
     const held = await f.service().decide(f.registrant, f.decision(), f.ingress);

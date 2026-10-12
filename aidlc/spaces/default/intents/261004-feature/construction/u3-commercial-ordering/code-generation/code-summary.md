@@ -40,6 +40,8 @@ CI 실패 요약은 종료/보고서 상태·허용 검증 코드·엄격한 수
 
 U3 전체18파일의 기본600초 collector 종료는 완료11파일/104시험 표시시간587.215초와 남은7파일 과거63.618초로 조사했다. U3 integration 프로세스만20분, coverage만30분으로 명시하고 서비스10초·DB3초·stmt2초·lock최대500ms·개별test/hook30초·순차파일·전체분모는 유지했다. coverage30분은 아직 실제 V8 수행 여유 가정이다.
 
+깨끗한 CI에서 필요한 증거 폴더는 각 U1/U2 시험이 소유 경로만0700으로 준비하고 실제0600 쓰기를 유지한다. U1 보고서 쓰기 오류도 전파하며 연결 정리는 finally로 보장한다. 100행 주문의 새 OrderLine은 기존 revision1/정확 버전/고유ID/INSERT/FK·commit 검증을 가진 putNewBatch로 저장한다. 판단은 같은 phase에서 currentOrderTerms가 검증한 snapshot/choice/lines를 재사용하고 독립적인 최종 assertPremises·현재 권한/보호 대조를 유지한다. 실제 CI 받은 DB 오류 코드는 미확정이며 검증된 중복 작업을 줄인 개선으로 기록한다.
+
 ## 시험 증거와 미완료
 
 계층별 원문과 실패/수정/재검증은 이 디렉터리의 contracts/models/repository/catalog/agreement/proposal/order/host/pilot-ci 검증 기록에 보존된다. 최근 별도 검증에서 주문 적용11개(기존9+경쟁2), HTTP6개 및 기존U1HTTP25/U2HTTP22, worker6개 및 영향U1/U2 회귀가 통과했다. 각각 당시 source의 경계 증거이며 최종 전체 CI 성공으로 확대하지 않는다.
@@ -48,7 +50,9 @@ HEAD25d8583의 로컬 실제 U1기여는 unit571·integration168·동일739개 c
 
 새 예산 선택의 대상시험 pilot-ci10/10·TypeScript/지정ESLint는 통과했으며3개TS 파일 지문이 전후 같았다. 새 전체unit281개나 새로운 CI/coverage 성공은 아직 주장하지 않는다. docs/최종 source 고정 후 실제 CI가 같은 최종HEAD/source/lock/image의 전체 기여·품질/보안을 확인해야 한다. Luna의8파일 format/JSON/manifest/traceability 검사도 통과했고 전후 파일 지문이 같았다. root가 전체 Git 변경166경로와 신규 README를 manifest167경로에 대조해 누락/불필요 주장이 없는 것을 확인했다.
 
-이후 안전 진단 선택14개, U2 보고서 보존 선택9개, U3 취소/진단 선택19개도 각각 당시 source에서 통과했다. 타입/린트/선택 포맷과168경로 manifest·104ID·AC Deferred7의 strict 검사를 확인했다. 06a5b35의 실제 CI에서는 U2 unit464/465·U3 unit284/285와 U1 integration assertion168/168이었지만 U1 failedSuite1로 전체 세 작업이 실패했고 project는 차단됐다. 이 실패는 품질 기록에 보존하고 다음 source의 CI를 별도로 확인한다. 현재 manifest는 새 U2 회귀 수정까지168개 경로다.
+이후 안전 진단 선택14개, U2 보고서 보존 선택9개, U3 취소/진단 선택19개도 각각 당시 source에서 통과했다. 타입/린트/선택 포맷과168경로 manifest·104ID·AC Deferred7의 strict 검사를 확인했다. 06a5b35의 실제 CI에서는 U2 unit464/465·U3 unit284/285와 U1 integration assertion168/168이었지만 U1 failedSuite1로 전체 세 작업이 실패했고 project는 차단됐다. 이 실패는 품질 기록에 보존하고 다음 source의 CI를 별도로 확인한다.
+
+759e578에서는 세 Unit의 단위가 통과했고 U1의 실제 보고서 쓰기 suite 오류와 U2의 보고서 파일 쓰기2건, U3의100행 통합2건으로 전체 CI는 실패했다. 이후 보고서 폴더 수정의 U1 선택8개·U2 선택7개, 주문 접수/판단·일괄 저장 duplicate/FK rollback·후단 마지막 행 변조 거절20개, 주문 변경 회귀11개가 로컬에서 각각 통과했다. 해당 타입·린트·포맷과 최종170경로 manifest 대조도 통과했지만 전체 CI·coverage80%·보안 성공으로 확대하지 않는다. 현재 manifest는 실제 U1/U2 증거 폴더 수정까지170개 경로다.
 
 ## 추적과 운영 경계
 

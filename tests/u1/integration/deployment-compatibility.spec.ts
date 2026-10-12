@@ -1,6 +1,6 @@
 import { journalEntries } from '../fixtures/journal-entries.js';
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DeploymentControl, validateRelease } from '@oms/integrations';
 import type {
@@ -55,27 +55,31 @@ beforeEach(async () => {
   ).requestId;
 });
 afterAll(async () => {
-  writeFileSync(
-    '.reports/u1/deployment-compatibility.json',
-    JSON.stringify(
-      {
-        passed: passedCases === 8,
-        cases: passedCases,
-        actualPgOriginalsChecked: true,
-        actualAwsDeploymentPerformed: false,
-        sourceScope:
-          '현재 실제schema/registry/decoder와합성플랫폼제어;실제이전release/staging/승인은미확인',
-        schemaDigest: sha('packages/contracts/schemas/c00-v2.json'),
-        registryDigest: sha('packages/contracts/schemas/operations-v2.json'),
-        recoveryDecoderDigest: sha('packages/persistence/src/recovery-types.ts'),
-        observedAt: new Date().toISOString(),
-      },
-      null,
-      2,
-    ),
-    { mode: 0o600 },
-  );
-  for (const source of Object.values(sources)) if (source.isInitialized) await source.destroy();
+  try {
+    mkdirSync('.reports/u1', { recursive: true, mode: 0o700 });
+    writeFileSync(
+      '.reports/u1/deployment-compatibility.json',
+      JSON.stringify(
+        {
+          passed: passedCases === 8,
+          cases: passedCases,
+          actualPgOriginalsChecked: true,
+          actualAwsDeploymentPerformed: false,
+          sourceScope:
+            '현재 실제schema/registry/decoder와합성플랫폼제어;실제이전release/staging/승인은미확인',
+          schemaDigest: sha('packages/contracts/schemas/c00-v2.json'),
+          registryDigest: sha('packages/contracts/schemas/operations-v2.json'),
+          recoveryDecoderDigest: sha('packages/persistence/src/recovery-types.ts'),
+          observedAt: new Date().toISOString(),
+        },
+        null,
+        2,
+      ),
+      { mode: 0o600 },
+    );
+  } finally {
+    for (const source of Object.values(sources)) if (source.isInitialized) await source.destroy();
+  }
 });
 class Store implements DeploymentControlStore {
   readonly kind = 'SYNTHETIC';

@@ -109,3 +109,21 @@ U1 suite 판정 관측에는 등록된 failed suite 파일/상태/실제 asserti
 Luna가 타입·지정 린트·선택 Prettier를 각각 종료 코드0으로 확인했다. u2-regression-report-absence-fixed-unit-20261012.json은9/9 PASS·success=true, ci-suite-diagnostic-and-deterministic-readiness-unit-20261012.json은19/19 PASS·success=true다. strict manifest/traceability 검사도168경로·104ID(42AC/29BR/33NFR)·원래 Deferred AC7개로 통과했다. 지정5파일 SHA는 전후 동일하다. ci-pilot-proof.ts c8c074c24e27201b7fa5d8118185cd9a84ac27d35cda2cc6abb9807c63684d10, pilot-ci.spec.ts adddd52f17575e661619f64091a2bc34bc000930581780b5291c68dd34eb6995, order-readiness.spec.ts 03bce0338df7138bac10f3b6c55be05bed9402db247c8471a4c0f202910e712c, u1-regression-output.spec.ts bc71f79bae6f06695e7f54a7dd213b421c4bf99cd06b857204e756126feb89a8, source-manifest.json b9ad6e8220779d397fa1297768fcaa7efe45607ebdc029d559bf67b543b03722다.
 
 위 선택 성공은 새 전체 Unit/CI/80%·공통 품질·공식 리뷰나 main 머지 성공이 아니다. 실제 새 source의 CI에서 수정 경로와 U1 failed suite를 함께 확인한다.
+
+## 759e578 CI의 통합 실패와 소유 보고서 준비
+
+새 CI run38200072923은 branch HEAD759e5780d394378601a6785281dc3da0f82788ae·PR checkout mergeSHAa2a85d60d8d3b056bb11bee3cbad8e980d532f9e·sourceDigest232ab0867d43f85ee7fe7c099bd602dd5e2dde89b607d7f79e7b9a3c6d245f22의 failure로 종료됐다. 세 Unit summary는 각각 자신의 unit child가 실제 완료됐음을 기록했다. U1 integration assertion168/168 PASS였으나 failedSuite1·success=false의 실제 파일은 tests/u1/integration/deployment-compatibility.spec.ts(8assertions)다. U2 integration274개 중272 PASS/2 FAIL의 실제 위치는 http-primary-ac.spec.ts 순번5/605행과7/873행이다.
+
+U1 afterAll의 deployment-compatibility.json 쓰기와 U2의 실제 ACK 증거 JSONL 쓰기에 필요한 부모 .reports/u1/.reports/u2/selected가 깨끗한 CI에서는 준비되지 않은 것을 source와 bootstrap 경로에서 확인했다. 실제 OS 오류 코드는 summary에 없으며 새로 관측했다고 주장하지 않는다. U2 업무/HTTP/ACK 단언 뒤 실제 write 위치에서 실패했고 로컬의 기존 폴더 의존을 제거한다. 두 시험의 소유 부모만 recursive/mode0700으로 준비하고 기존0600 쓰기와 모든 업무 단언은 유지한다. U1 write 실패도 전파하면서 finally에서 source.destroy로 정리를 보장한다.
+
+Luna의 타입/지정 린트/포맷은 종료 코드0이다. ci-owned-report-dir-u1-deployment-integration-20261012.json은 단일 파일8/8 PASS, ci-owned-report-dir-u2-http-integration-20261012.json은 단일 파일7/7 PASS다. root가 두 JSON의 fail/pending/todo/failedSuite0·success=true를 직접 확인했다. strict manifest/traceability170경로·104ID·Deferred AC7개 검사도 통과했고 전후3파일 SHA가 동일했다. U1 deployment spec39eff50fe22c5e08c86e113627f57c4244d4e58c3706269c4ee8cf819fa0f3cc, U2 HTTP spec8d0ffb25d6f66574242224619da477a7aa17ac01928f896903d485450cff5654, source-manifest35e1ed4b5d5acb7f600a2d22a732345df55c630934976ffd5fa57d89c2c3a451다.
+
+## 100행 저장·동일 phase 조회 개선
+
+같은 CI의 U3 integration은157개 중155 PASS/2 FAIL·pending/todo0·failedSuites4·success=false였으며 observed=true·exit1·expired=false·새 VALID_COUNTS다. order-decision.spec.ts 순번3와 order-submission.spec.ts 순번3는 모두100행 사례다. 허용 프레임은 protected-transaction.ts77/150의 조회, order-acceptance.ts1006의 판단 저장, u3-repository.ts105의 최종 primary 전제 대조다. 실제 업무/DB 오류 코드나 timeout은 아직 미확정이며 단순히시간 초과라고 선언하지 않는다.
+
+root가 기존 putNewBatch의 HEAD 존재·working 동일과2ce965a 도입을 확인했다. 이 메서드는1~100개 새 revision1/정확 버전/고유ID를 검증하고 upsert 없는 INSERT·FK/COMMIT 제약과 전체 changes 원본 등록을 유지한다. 두 callsite만 개선해 새 OrderLine100개의 개별 get/save를 배치 INSERT로 바꾸고, 같은 currentOrderTerms phase가 검증한 snapshot/choice/lines를 재사용한다. 독립 최종 assertPremises와 현재 권한·보호 전후 대조는 그대로이며 전역/다른 phase cache는 추가하지 않았다. 서비스10초·DB3초·stmt2초·lock500ms·100행과80% 기준은 유지한다.
+
+Luna의 타입·지정 린트·포맷은 종료 코드0이다. order-100-row-batch-same-phase-integration-20261012.json은 두 파일20/20 PASS(접수8/판단12), order-100-row-optimization-change-regression-20261012.json은 한 파일11/11 PASS다. root가 실제 파일 수와 fail/pending/todo/failedSuite0·success=true를 확인했다. 모의 duplicate·실제 deferred FK23503 전체 rollback과 마지막100번째 행의 후단 미보호 변경 거절·판단 rollback·원래 snapshot 보존을 추가하고 기존100행/candidate/응답 유실·재전송·주문 변경 흐름을 검증했다.
+
+전후3파일 SHA는 order-acceptance.ts263f0def760c9400db52c95fdc1f4a77225bf2591480b536ed166ad484bb7a0f, order-submission.spec.ts0c608870f7bb6cf64bea24e51eeccd6f04c795e7fd6023ed814c9c58eae59082, order-decision.spec.tsc7838a955b9817f6a15e9b15fc0e3a3a6fe4a64414c8f9c3637725e6aaef3c04로 동일했다. root의 실제 전체 Git 변경/manifest 대조는170/170·누락/추가0이다. 보호 source/bytes·100행·전제·원자성·시간 기준을 줄이지 않았으며 실제 새 source의 전체 CI/80%·공통 품질/보안·공식 리뷰는 아직 미완료다.

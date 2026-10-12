@@ -425,7 +425,8 @@ export class U3OrderAcceptance {
           const at = this.now().toISOString(),
             digest = fingerprint(input),
             captured: ModelData[] = [],
-            lineRefs: Ref[] = [];
+            lineRefs: Ref[] = [],
+            lineRecords: ModelData[] = [];
           const currentSources = new Map<
             string,
             { product: ModelData; terms: U3ResolvedCommercialTerms }
@@ -516,9 +517,10 @@ export class U3OrderAcceptance {
               conditionBindings: line.conditionBindings,
               revision: 1,
             };
-            await scope.transaction.put('OrderLine', record);
+            lineRecords.push(record);
             lineRefs.push(u3Ref('OrderLine', record, this.store.schema));
           }
+          await scope.transaction.putNewBatch('OrderLine', lineRecords);
           const terms: U3ProposalTerms = {
             termsRecordRef: snapshotRef,
             lines: captured.map((value) => ({
@@ -687,9 +689,10 @@ export class U3OrderAcceptance {
     );
     const current = await currentOrderTerms(scope, input.targetRef, this.agreement.basis);
     const snapshotRef = order.purchaseTermsRef as Ref;
-    await scope.current(snapshotRef);
-    const snapshot = await this.commands.repository.current(snapshotRef),
-      choice = await scope.current(order.provisionChoiceRef as Ref),
+    // 같은 판단 phase에서 이미 보호 원본/현재 primary를 대조한 값을 재사용한다.
+    // 독립 최종 assertPremises/권한 fence는 그대로 수행한다.
+    const snapshot = current.snapshot,
+      choice = current.choice,
       birth = await this.store.readRevision('Order', input.targetRef.id, 1);
     requireCondition(
       birth?.modelVersion === 2 &&
@@ -742,11 +745,11 @@ export class U3OrderAcceptance {
       'ORDER_SNAPSHOT_UNCONFIRMED',
       '주문 전체 행을 확인해야 합니다.',
     );
-    for (const [index, reference] of (order.lineRefs as Ref[]).entries()) {
-      const line = await scope.current(reference),
-        original = captured[index]!;
+    for (const [index, line] of current.lines.entries()) {
+      const original = captured[index]!;
       requireCondition(
-        line.modelVersion === 2 &&
+        line &&
+          line.modelVersion === 2 &&
           Number(line.position) === index + 1 &&
           canonicalJson(line.orderRef) === canonicalJson(snapshot.orderRef) &&
           line.requestedPaymentMode === order.paymentKind &&
