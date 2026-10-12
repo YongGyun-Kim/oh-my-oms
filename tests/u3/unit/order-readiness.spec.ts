@@ -152,24 +152,59 @@ describe('현재 전체 주문 준비 소유자 등록·정확한 결합·유한
   });
   it('AbortSignal을 무시하는 callback도 부모 남은 기한 안에 차단하고 늦은 결과를 반환하지 않는다', async () => {
     const f = fixture();
+    const controller = new AbortController();
+    let now = Date.now();
+    // 실제 timeout 전파는 U1 시험에서 확인한다. 이 시험은 callback 진입 후 취소를 결정적으로 제어한다.
+    vi.spyOn(AbortSignal, 'timeout').mockReturnValue(controller.signal);
+    const budget = new ExecutionBudget(25, () => now);
+    let entered!: () => void;
+    const started = new Promise<void>((resolve) => {
+      entered = resolve;
+    });
+    let finish!: (value: U3ReadinessObservation) => void;
+    const late = new Promise<U3ReadinessObservation>((resolve) => {
+      finish = resolve;
+    });
+    let binding: U3ReadinessBinding | undefined;
+    let signal: AbortSignal | undefined;
+    const readReadiness = vi.fn(async (value: U3ReadinessBinding, incoming: AbortSignal) => {
+      binding = value;
+      signal = incoming;
+      entered();
+      return late;
+    });
     const registration: U3ReadinessRegistration = {
       kind: 'REGISTERED_OWNER',
       owner: 'HardwareFulfillment',
       ownerRegistration: 'mock-u5',
-      async readReadiness() {
-        return new Promise<U3ReadinessObservation>(() => {});
-      },
+      readReadiness,
     };
-    const began = Date.now();
-    await expect(
-      new ExecutionBudget(25).run(() =>
-        new U3OrderReadiness(f.store, () => new Date(), [registration]).current(
+    const returned = vi.fn();
+    const pending = budget
+      .run(() =>
+        new U3OrderReadiness(f.store, () => new Date(now), [registration]).current(
           'HardwareFulfillment',
           f.request,
         ),
-      ),
-    ).rejects.toMatchObject({ code: 'ORDER_READINESS_UNCONFIRMED' });
-    expect(Date.now() - began).toBeLessThan(1000);
+      )
+      .then(returned);
+    const rejected = expect(pending).rejects.toMatchObject({ code: 'ORDER_READINESS_UNCONFIRMED' });
+    await started;
+    expect(readReadiness).toHaveBeenCalledTimes(1);
+    expect(signal).toBe(budget.signal);
+    expect(budget.remaining()).toBe(25);
+    expect(AbortSignal.timeout).toHaveBeenCalledWith(25);
+    now += 25;
+    controller.abort();
+    await rejected;
+    expect(budget.remaining()).toBe(0);
+    expect(signal?.aborted).toBe(true);
+    expect(binding).toBeDefined();
+    finish(f.observe(binding!));
+    await late;
+    await Promise.resolve();
+    expect(readReadiness).toHaveBeenCalledTimes(1);
+    expect(returned).not.toHaveBeenCalled();
   });
   it('운영 합성 등록·중복 소유자·임의 등록 mode는 차단한다', () => {
     const f = fixture();

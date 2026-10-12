@@ -87,3 +87,25 @@ Luna의8파일 Prettier 검사와 strict JSON/traceability/manifest assertion은
 Luna의 전체 TypeScript·지정 ESLint·선택 Prettier는 모두 종료 코드0이다. pilot-ci-safe-failure-diagnostic-unit-20261012.json은 단일 파일14/14 PASS·실패/pending/todo0·success=true이며 root도 실제 JSON count를 확인했다. mock4개를 추가해 단계/JSON/count·원문 제외·한도·UNKNOWN fallback을 확인했고 전체 Unit/CI 성공으로 확대하지 않는다.
 
 3파일 실행 전후 SHA는 ci-pilot-proof.ts 3894e05e7f4f24718a7138ffdefe73ffd0e59611edb29c24111de068be9c7cf6, pilot-validation.ts 1b1a7fd48f2f31934be544dde8875ae87890ebd6047ecf92dd1e13df306be3e9, pilot-ci.spec.ts 7eb0fffb94eb01c8d362e16ef2b6f6cbc16d9e7b5f37be0ff8946154d1462060로 동일했다. 실제 CI 원인은 아직 미확정이며 새 source의 CI에서 안전 metadata를 확인한다. 이미 주장한 source-manifest 경로3개 안의 변경이며 새 제품 파일/인프라/운영 원본은 만들지 않았다.
+
+## 상세 진단을 포함한 새 CI
+
+관측 보완은06a5b358861da30f7a9da1a36a7015848d492320로 커밋·push했다. 실제 새 run38198940994의 브랜치 HEAD와 PR checkout mergeSHA392e20a129d9a0c0bfa9bd55a3b9c0ba81a031f5를 구분한다. 새 U2/U3 summary의 sourceDigest는36950bc390a7e60ae6fc86577cac5e6df9edb0f95fe29a6ca5d3e6ea992e9391로 동일하다.
+
+U2 unit은465개 중464 PASS·1 FAIL, U3 unit은285개 중284 PASS·1 FAIL이며 둘 다 pending/todo0·success=false다. 실제 execution은 observed=true·exit1·signal=null·expired=false·logFailed=false·errorCode=null이고 artifact exists/fresh=true·VALID_COUNTS이며 receipt/report validation 실패가 아니다. 등록된 실패 위치는 tests/u2/unit/u1-regression-output.spec.ts의 순번1/57행, tests/u3/unit/order-readiness.spec.ts의 순번3/171행이다. 따라서 이번 두 실패는 실제 개별 시험 실패로 판정하며 통합 시간 초과나 보고서 검증 실패로 추정하지 않는다.
+
+현재 U1 작업은 진행 중이고 project 전체 gate는 아직 실행되지 않았다. 공개 summary는 private .reports/u3/github/38198940994에 보존해 source/실패 metadata를 유지했다. 두 사례의 실제 원인을 조사하기 전 제품 제한/시험 단언을 바꾸거나 새 source 성공을 선언하지 않는다.
+
+U1도 실패로 종료됐다. 실제 summary는 completed=[u1-unit]·동일 sourceDigest, u1-integration observed=true·exit1·expired=false·logFailed=false·새 artifact/VALID_COUNTS다. assertion168개가 모두 통과해 fail/pending/todo0이지만 numFailedTestSuites1·success=false이고 assertion 실패 목록은 비어 있다. 실제 Vitest JSON reporter의 suite 판정은 assertion과 독립이며 이를 전체 통합 성공으로 표현하지 않는다. project는 선행 실패로 차단됐다.
+
+## 독립 CI의 시험 전제 정합화
+
+U2 실패는 native 시험57행에서 선행 .reports/u1/unit.json과 integration.json을 무조건 읽은 것이었다. 독립 U2 runner는 그 보고서를 생성/다운로드하지 않으며 실제 regression snapshot은 이미 ENOENT를 null로 보존한다. 시험만 현재 파일의 hash 또는 ENOENT 부재와 전후 equality·실제 archive hash/null을 대조하도록 수정했고 다른 IO 오류는 재throw한다. 가짜 U1 PASS 자료·CI 직렬 의존·제품/shared fixture 변경은 없다.
+
+U3의 부모25ms는 선행 스키마/소유자 확인 시간도 포함한다. 실제 받은 CI 오류 코드는 미확정이며, 시험이 의도한 callback 무응답 취소 전에 wall 시간을 소모할 수 있는 전제를 확인했다. 테스트에서만 ExecutionBudget의 now와 AbortSignal.timeout을 제어해 callback 진입/같은 부모 신호/호출1을 먼저 확인하고25ms 전진+abort 뒤 ORDER_READINESS_UNCONFIRMED와 늦은 결과 미반환을 확인한다. 실제 timer 전파 시험과 제품/서비스/DB 제한은 유지한다.
+
+U1 suite 판정 관측에는 등록된 failed suite 파일/상태/실제 assertion 수 최대10개와 기존 source whitelist 프레임 최대3개를 추가했다. 실제 reporter의 suite.message가 stack을 담지 않으면 빈 프레임을 기록하며 raw message/title을 공개하지 않는다. mock afterAll 형태는 전체 assertion PASS와 suite FAIL의 구분 및 민감 값 제외를 확인한다. U1 실제 suite 원인은 아직 미확정이다.
+
+Luna가 타입·지정 린트·선택 Prettier를 각각 종료 코드0으로 확인했다. u2-regression-report-absence-fixed-unit-20261012.json은9/9 PASS·success=true, ci-suite-diagnostic-and-deterministic-readiness-unit-20261012.json은19/19 PASS·success=true다. strict manifest/traceability 검사도168경로·104ID(42AC/29BR/33NFR)·원래 Deferred AC7개로 통과했다. 지정5파일 SHA는 전후 동일하다. ci-pilot-proof.ts c8c074c24e27201b7fa5d8118185cd9a84ac27d35cda2cc6abb9807c63684d10, pilot-ci.spec.ts adddd52f17575e661619f64091a2bc34bc000930581780b5291c68dd34eb6995, order-readiness.spec.ts 03bce0338df7138bac10f3b6c55be05bed9402db247c8471a4c0f202910e712c, u1-regression-output.spec.ts bc71f79bae6f06695e7f54a7dd213b421c4bf99cd06b857204e756126feb89a8, source-manifest.json b9ad6e8220779d397fa1297768fcaa7efe45607ebdc029d559bf67b543b03722다.
+
+위 선택 성공은 새 전체 Unit/CI/80%·공통 품질·공식 리뷰나 main 머지 성공이 아니다. 실제 새 source의 CI에서 수정 경로와 U1 failed suite를 함께 확인한다.

@@ -34,6 +34,10 @@ KRW는 선언된 정수 문자열 표현과 BigInt로 계산하고 임의 MAX_SA
 
 기존 shared fixture의 현재fence+1 개정 때문에 오래된 '재seed는 항상 revision1 overwrite' 시험 전제를 고쳤다. 실제 고정revision1 tx.put 거절·보호fence 전체 equality·primary개정 보존을 유지했고 제품 guard는 완화하지 않았다. worker의 역사 생산원본 개정과 현재permit을 분리하며 실제 외부 사업owner 기록을 만들지 않는다.
 
+독립 CI의 U2 회귀 시험은 선행 U1 보고서가 없을 때 ENOENT만 null로 보존하고, 존재하는 보고서의 실제 hash/원래 archive를 그대로 대조한다. U1 성공 보고서를 만들어 채우지 않는다. U3 소유자 취소 시험은 원래25ms 예산을 유지하고 테스트의 시계/신호를 제어해 실제 callback 진입 뒤 취소와 늦은 결과 차단을 확인한다. 실제 CI가 받은 오류 코드는 미확정이며 벽시계 의존을 제거한 시험 보완으로 취급한다. 제품/DB 제한은 바꾸지 않았다.
+
+CI 실패 요약은 종료/보고서 상태·허용 검증 코드·엄격한 수치·등록 assertion/suite 파일과 순번·허용 source 프레임만 제한적으로 담는다. 원문/message/title/env/SQL/token은 공개하지 않고 실제 실패나 suite 오류를 성공으로 바꾸지 않는다. U1 suite 원인은 새 상세 요약 확인 전까지 미확정이다.
+
 U3 전체18파일의 기본600초 collector 종료는 완료11파일/104시험 표시시간587.215초와 남은7파일 과거63.618초로 조사했다. U3 integration 프로세스만20분, coverage만30분으로 명시하고 서비스10초·DB3초·stmt2초·lock최대500ms·개별test/hook30초·순차파일·전체분모는 유지했다. coverage30분은 아직 실제 V8 수행 여유 가정이다.
 
 ## 시험 증거와 미완료
@@ -43,6 +47,8 @@ U3 전체18파일의 기본600초 collector 종료는 완료11파일/104시험 �
 HEAD25d8583의 로컬 실제 U1기여는 unit571·integration168·동일739개 coverage 재실행, U2기여는 unit465·integration274·동일739개 coverage 재실행 및 PC5개가 통과했다. coverage 재실행을 새로운 고유시험 수에 더하지 않는다. U3unit280은 통과했지만 통합 child600초 기한 초과(exit143/expired=true)로 새 완료보고서가 없어 U3전체/coverage/project/80%·보안은 판정되지 않았다. 이전 e850ebc U2 실패와 진단/최소수정 결과도 삭제하지 않는다.
 
 새 예산 선택의 대상시험 pilot-ci10/10·TypeScript/지정ESLint는 통과했으며3개TS 파일 지문이 전후 같았다. 새 전체unit281개나 새로운 CI/coverage 성공은 아직 주장하지 않는다. docs/최종 source 고정 후 실제 CI가 같은 최종HEAD/source/lock/image의 전체 기여·품질/보안을 확인해야 한다. Luna의8파일 format/JSON/manifest/traceability 검사도 통과했고 전후 파일 지문이 같았다. root가 전체 Git 변경166경로와 신규 README를 manifest167경로에 대조해 누락/불필요 주장이 없는 것을 확인했다.
+
+이후 안전 진단 선택14개, U2 보고서 보존 선택9개, U3 취소/진단 선택19개도 각각 당시 source에서 통과했다. 타입/린트/선택 포맷과168경로 manifest·104ID·AC Deferred7의 strict 검사를 확인했다. 06a5b35의 실제 CI에서는 U2 unit464/465·U3 unit284/285와 U1 integration assertion168/168이었지만 U1 failedSuite1로 전체 세 작업이 실패했고 project는 차단됐다. 이 실패는 품질 기록에 보존하고 다음 source의 CI를 별도로 확인한다. 현재 manifest는 새 U2 회귀 수정까지168개 경로다.
 
 ## 추적과 운영 경계
 

@@ -52,9 +52,19 @@ function fixture() {
   return { files, calls, deps, report };
 }
 describe('U1 정확 선택 회귀의 출력 격리', () => {
-  it('native 실제 선택 runner는 명시 U2 고유 output에 쓰고 현재 U1 두 보고서의 byte hash를 그대로 보존한다', async () => {
+  it('native 실제 선택 runner는 U2 고유 output에 쓰고 현재 U1 보고서의 실제 hash 또는 부재를 보존한다', async () => {
     const paths = ['.reports/u1/unit.json', '.reports/u1/integration.json'];
-    const before = paths.map((path) => sha256(readFileSync(path)));
+    // 독립 CI runner에는 선행 U1 결과가 없을 수 있다. 실제 부재를 PASS 자료로 채우지 않는다.
+    function snapshotHash(path: string): string | null {
+      try {
+        return sha256(readFileSync(path));
+      } catch (error) {
+        if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT')
+          return null;
+        throw error;
+      }
+    }
+    const before = paths.map(snapshotHash);
     const result = await runU1Regression([
       'unit',
       '--report-key',
@@ -62,7 +72,7 @@ describe('U1 정확 선택 회귀의 출력 격리', () => {
       '--',
       'tests/u1/unit/adapters.spec.ts',
     ]);
-    expect(paths.map((path) => sha256(readFileSync(path)))).toEqual(before);
+    expect(paths.map(snapshotHash)).toEqual(before);
     expect(result.output.startsWith('.reports/u2/regressions/p10-native-wrapper-adapters/')).toBe(
       true,
     );
@@ -70,13 +80,14 @@ describe('U1 정확 선택 회귀의 출력 격리', () => {
     expect(evidence.passed).toBe(true);
     expect(evidence.args).toContain('--outputFile=' + result.output);
     expect(
-      evidence.protectedReports.map((row: { before: string; after: string }) => [
+      evidence.protectedReports.map((row: { before: string | null; after: string | null }) => [
         row.before,
         row.after,
       ]),
     ).toEqual(before.map((hash) => [hash, hash]));
     for (const row of evidence.protectedReports)
-      expect(sha256(readFileSync(row.archive))).toBe(row.before);
+      if (row.before === null) expect(row.archive).toBeNull();
+      else expect(sha256(readFileSync(row.archive))).toBe(row.before);
   }, 30000);
   it('정확 runner/경로/강제 JSON output을 전달하고 원래 bytes/hash를 그대로 둔다', async () => {
     const f = fixture(),

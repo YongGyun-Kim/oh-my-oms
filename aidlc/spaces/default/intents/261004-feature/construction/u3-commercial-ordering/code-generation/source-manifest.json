@@ -286,6 +286,9 @@
       "path": "tests/u2/unit/models.spec.ts"
     },
     {
+      "path": "tests/u2/unit/u1-regression-output.spec.ts"
+    },
+    {
       "path": "tests/u3/fixtures/agreement-input.ts"
     },
     {

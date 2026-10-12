@@ -432,6 +432,7 @@ describe('pilot-current child·보고서·동일 image의 차단 경계', () => 
         'execution',
         'key',
         'reportStatus',
+        'suites',
         'tests',
         'validationFailure',
         'validationErrorCode',
@@ -510,6 +511,80 @@ describe('pilot-current child·보고서·동일 image의 차단 경계', () => 
       reportStatus: 'INVALID',
       tests: null,
       assertions: [],
+    });
+  });
+  it('assertion 전체 통과와 별개의 hook 실패 suite를 등록 파일/숫자/프레임만 최대10개 요약한다', async () => {
+    vi.stubEnv('OMS_U2_SYNTHETIC_PROFILE', 'approved-local-only');
+    const f = memoryPorts();
+    const paths = Array.from(
+      { length: 15 },
+      (_, ordinal) => 'tests/u3/unit/hook-' + ordinal + '.spec.ts',
+    );
+    f.source({
+      ...source,
+      files: {
+        ...source.files,
+        ...Object.fromEntries(paths.map((path) => [path, 'd'.repeat(64)])),
+      },
+    });
+    const spec = pilotCommands(source).find((item) => item.key === 'u3-unit')!;
+    await expect(
+      collectPilotProof(
+        'u3',
+        async () => {
+          const report = testReport(paths);
+          report.success = false;
+          report.numFailedTestSuites = paths.length;
+          for (let index = 0; index < report.testResults.length; index++) {
+            report.testResults[index]!.status = 'failed';
+            Object.assign(report.testResults[index]!, {
+              message:
+                index === 0
+                  ? 'synthetic-private-hook-without-stack'
+                  : 'synthetic-private-hook unknown/private.ts:2:3 scripts/u3/fixture.ts:10:2 scripts/u3/fixture.ts:11:3 scripts/u3/fixture.ts:12:4 scripts/u3/fixture.ts:13:5',
+              title: 'synthetic-private-title',
+            });
+          }
+          report.testResults.push({
+            name: resolve('tests/u3/unit/unregistered-secret.spec.ts'),
+            status: 'failed',
+            assertionResults: [],
+          });
+          f.ports.write(spec.path, bytes(report));
+          return { ...execution, exitCode: 1 };
+        },
+        f.ports,
+      ),
+    ).rejects.toMatchObject({ code: 'PILOT_CHILD_FAILED' });
+    const text = f.ports.read('.reports/u3/pilot/u3-job-summary.json').toString();
+    expect(text).not.toContain('synthetic-private');
+    expect(text).not.toContain('unregistered-secret');
+    expect(text).not.toContain('unknown/private');
+    const failure = JSON.parse(text).failures[0];
+    expect(failure.tests).toMatchObject({
+      numTotalTests: 15,
+      numPassedTests: 15,
+      numFailedTests: 0,
+      numFailedTestSuites: 15,
+      success: false,
+    });
+    expect(failure.assertions).toEqual([]);
+    expect(failure.suites).toHaveLength(10);
+    expect(failure.suites[0]).toEqual({
+      file: paths[0],
+      status: 'failed',
+      assertionCount: 1,
+      frames: [],
+    });
+    expect(failure.suites[1]).toEqual({
+      file: paths[1],
+      status: 'failed',
+      assertionCount: 1,
+      frames: [
+        { path: 'scripts/u3/fixture.ts', line: 10, column: 2 },
+        { path: 'scripts/u3/fixture.ts', line: 11, column: 3 },
+        { path: 'scripts/u3/fixture.ts', line: 12, column: 4 },
+      ],
     });
   });
   it('void·실패·signal·cancel·timeout·log 오류와 없거나 옛 report를 성공으로 바꾸지 않는다', async () => {

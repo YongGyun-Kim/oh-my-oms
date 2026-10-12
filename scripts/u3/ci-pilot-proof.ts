@@ -93,6 +93,64 @@ function validationErrorCode(error: unknown): PilotReceipt['validationErrorCode'
   }
   return 'UNKNOWN_VALIDATION_ERROR';
 }
+function diagnosticFrames(messages: unknown, source: SourceIdentity) {
+  const frames: { path: string; line: number; column: number | null }[] = [];
+  if (!Array.isArray(messages)) return frames;
+  for (const message of messages.slice(0, 3)) {
+    if (typeof message !== 'string') continue;
+    for (const frame of message
+      .slice(0, 65536)
+      .matchAll(
+        /((?:apps|packages|infra|scripts|tests)\/[A-Za-z0-9_./-]+\.(?:ts|tsx|js|mjs)):(\d+)(?::(\d+))?/g,
+      )) {
+      const path = frame[1]!,
+        line = Number(frame[2]),
+        column = frame[3] === undefined ? null : Number(frame[3]);
+      if (
+        Object.hasOwn(source.files, path) &&
+        Number.isSafeInteger(line) &&
+        line > 0 &&
+        (column === null || (Number.isSafeInteger(column) && column > 0))
+      ) {
+        const entry = { path, line, column };
+        if (!frames.some((item) => canonicalJson(item) === canonicalJson(entry)))
+          frames.push(entry);
+      }
+      if (frames.length === 3) return frames;
+    }
+  }
+  return frames;
+}
+function failedSuites(report: Record<string, unknown>, spec: PilotCommand, source: SourceIdentity) {
+  const result: {
+    file: string;
+    status: 'failed';
+    assertionCount: number;
+    frames: ReturnType<typeof diagnosticFrames>;
+  }[] = [];
+  if (spec.scope === 'project' || !Array.isArray(report.testResults)) return result;
+  const expected = new Set(pilotTestInventory(source, spec.scope));
+  for (const suite of report.testResults) {
+    if (
+      !suite ||
+      typeof suite !== 'object' ||
+      typeof suite.name !== 'string' ||
+      suite.status !== 'failed' ||
+      !Array.isArray(suite.assertionResults)
+    )
+      continue;
+    const file = relative(process.cwd(), resolve(suite.name)).replaceAll('\\', '/');
+    if (!expected.has(file)) continue;
+    result.push({
+      file,
+      status: 'failed',
+      assertionCount: suite.assertionResults.length,
+      frames: diagnosticFrames([suite.message], source),
+    });
+    if (result.length === 10) break;
+  }
+  return result;
+}
 function failedAssertions(
   report: Record<string, unknown>,
   spec: PilotCommand,
@@ -123,33 +181,7 @@ function failedAssertions(
     ) {
       const assertion = suite.assertionResults[ordinal];
       if (!assertion || typeof assertion !== 'object' || assertion.status !== 'failed') continue;
-      const frames: { path: string; line: number; column: number | null }[] = [];
-      if (Array.isArray(assertion.failureMessages)) {
-        for (const message of assertion.failureMessages.slice(0, 3)) {
-          if (typeof message !== 'string') continue;
-          for (const frame of message
-            .slice(0, 65536)
-            .matchAll(
-              /((?:apps|packages|infra|scripts|tests)\/[A-Za-z0-9_./-]+\.(?:ts|tsx|js|mjs)):(\d+)(?::(\d+))?/g,
-            )) {
-            const path = frame[1]!,
-              line = Number(frame[2]),
-              column = frame[3] === undefined ? null : Number(frame[3]);
-            if (
-              Object.hasOwn(source.files, path) &&
-              Number.isSafeInteger(line) &&
-              line > 0 &&
-              (column === null || (Number.isSafeInteger(column) && column > 0))
-            ) {
-              const entry = { path, line, column };
-              if (!frames.some((item) => canonicalJson(item) === canonicalJson(entry)))
-                frames.push(entry);
-            }
-            if (frames.length === 3) break;
-          }
-          if (frames.length === 3) break;
-        }
-      }
+      const frames = diagnosticFrames(assertion.failureMessages, source);
       result.push({ file, ordinal: ordinal + 1, status: 'failed', frames });
     }
     if (result.length === 10) break;
@@ -164,6 +196,7 @@ function failedChildDiagnostics(proof: PilotProof, ports: PilotPorts) {
     const artifact = receipt.artifact;
     let tests: Record<string, number | boolean> | null = null;
     let assertions: ReturnType<typeof failedAssertions> = [];
+    let suites: ReturnType<typeof failedSuites> = [];
     let reportStatus: 'NOT_APPLICABLE' | 'MISSING' | 'INVALID' | 'VALID_COUNTS' =
       /^u[123]-(unit|integration)$/.test(spec.key) ? 'MISSING' : 'NOT_APPLICABLE';
     if (reportStatus === 'MISSING' && ports.exists(spec.path)) {
@@ -173,6 +206,7 @@ function failedChildDiagnostics(proof: PilotProof, ports: PilotPorts) {
         if (value && typeof value === 'object' && !Array.isArray(value)) {
           const report = value as Record<string, unknown>;
           assertions = failedAssertions(report, spec, proof.source);
+          suites = failedSuites(report, spec, proof.source);
           if (
             typeof report.success === 'boolean' &&
             vitestCountFields.every(
@@ -262,6 +296,7 @@ function failedChildDiagnostics(proof: PilotProof, ports: PilotPorts) {
             ? receipt.validationErrorCode
             : null,
         assertions,
+        suites,
       },
     ];
   });
