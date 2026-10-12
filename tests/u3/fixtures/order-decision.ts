@@ -14,6 +14,7 @@ import { syntheticCommercialEvidence } from './agreement.js';
 import { registeredOrderInput } from './order-input.js';
 import { buildCommonOffer } from '../../../packages/core/src/catalog-conditions.js';
 import { catalogInput } from './catalog.js';
+import { profileU3Budget } from './budget-profile.js';
 
 // 실제 등록 submit 생산자를 사용하는 로컬 fixture다. 소유자 callback은 운영 원본의 증거가 아니다.
 export async function seedDecisionOrder(
@@ -118,7 +119,13 @@ export async function seedDecisionOrder(
     async (proof) => proof === f.ingress,
     syntheticCommercialEvidence,
   );
-  const receipt = await submitter.submit(await f.requestContext(f.seller.customer), input);
+  const context = await f.requestContext(f.seller.customer);
+  const receipt =
+    count === 100
+      ? await profileU3Budget('DECISION_SEED_SUBMISSION_100', context, () =>
+          submitter.submit(context, input),
+        )
+      : await submitter.submit(context, input);
   const sourceRefs: Record<U3ReadinessOwner, Ref> = {
     FinancialSettlement: {
       owner: 'FinancialSettlement',

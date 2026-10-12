@@ -126,4 +126,32 @@ root가 기존 putNewBatch의 HEAD 존재·working 동일과2ce965a 도입을 �
 
 Luna의 타입·지정 린트·포맷은 종료 코드0이다. order-100-row-batch-same-phase-integration-20261012.json은 두 파일20/20 PASS(접수8/판단12), order-100-row-optimization-change-regression-20261012.json은 한 파일11/11 PASS다. root가 실제 파일 수와 fail/pending/todo/failedSuite0·success=true를 확인했다. 모의 duplicate·실제 deferred FK23503 전체 rollback과 마지막100번째 행의 후단 미보호 변경 거절·판단 rollback·원래 snapshot 보존을 추가하고 기존100행/candidate/응답 유실·재전송·주문 변경 흐름을 검증했다.
 
-전후3파일 SHA는 order-acceptance.ts263f0def760c9400db52c95fdc1f4a77225bf2591480b536ed166ad484bb7a0f, order-submission.spec.ts0c608870f7bb6cf64bea24e51eeccd6f04c795e7fd6023ed814c9c58eae59082, order-decision.spec.tsc7838a955b9817f6a15e9b15fc0e3a3a6fe4a64414c8f9c3637725e6aaef3c04로 동일했다. root의 실제 전체 Git 변경/manifest 대조는170/170·누락/추가0이다. 보호 source/bytes·100행·전제·원자성·시간 기준을 줄이지 않았으며 실제 새 source의 전체 CI/80%·공통 품질/보안·공식 리뷰는 아직 미완료다.
+전후3파일 SHA는 order-acceptance.ts 263f0def760c9400db52c95fdc1f4a77225bf2591480b536ed166ad484bb7a0f, order-submission.spec.ts 0c608870f7bb6cf64bea24e51eeccd6f04c795e7fd6023ed814c9c58eae59082, order-decision.spec.ts c7838a955b9817f6a15e9b15fc0e3a3a6fe4a64414c8f9c3637725e6aaef3c04로 동일했다. root의 실제 전체 Git 변경/manifest 대조는170/170·누락/추가0이다. 보호 source/bytes·100행·전제·원자성·시간 기준을 줄이지 않았으며 실제 새 source의 전체 CI/80%·공통 품질/보안·공식 리뷰는 아직 미완료다.
+
+## 9ca3cfc의 실제 CI U1 기여 통과
+
+보고서 폴더·100행 개선과 검증 기록은9ca3cfc05cecbb11c866c8ec702d99a0f1714712로 커밋·push했다. 현재 실제 CI run38202950687은 해당 branch HEAD이며 PR checkout4461f526d86d85642fed6f0eea0d657cb8351a14의 sourceDigest9ef0f7d8a8f33acde49692adee31bf0f073b8ea15bfd056ece35c80e6f757977에 각 증거를 결합한다. 이전 실패3회는 보존하고 취소/성공 재표기를 하지 않았다.
+
+U1 job114660128439가 실제 success로 완료됐다. 해당 성공 artifact를 private .reports/u3/github/38202950687/u1-current에 내려받아 root가 JSON과 validation을 확인했다. unit571·integration168·같은739개 coverage 재실행은 모두 fail/pending/todo/failedSuite0·success=true다. validation의 u1-unit/u1-integration/u1-coverage는 각각 passed/observed/fresh=true·exit0·signal/errorCode=null·expired/logFailed=false·pilot-current/위 source/checkout HEAD였다. 기존 suite 실패를 지우지 않고 새로운 source에서의 전체 성공을 별도로 기록한다.
+
+739개 coverage 재실행을 새 고유739개로 더하지 않는다. U1 기여 성공만으로3기여80%·전체 품질/보안·실제 전체 CI·최종 리뷰·main 머지 성공을 주장하지 않는다.
+
+## 9ca3cfc CI 종료와 U3 남은 실패
+
+run38202950687은 전체 failure로 종료됐다. U1과 U2 job은 success이며 U2의 상세 성공 artifact 수는 아직 별도로 대조하지 않았다. U3는 unit을 완료했으나 integration159개 중155 PASS/4 FAIL·pending/todo0·failedSuites6·success=false다. 실행은 observed=true·exit1·expired=false·logFailed=false이고 새 artifact/VALID_COUNTS이며 receipt/report validation 오류는 없다. 선행 실패로 project 품질·보안·전체80% 검증은 차단됐다.
+
+실패 위치는 commercial-proposal 순번1, order-decision 순번3·4, order-submission 순번3이다. 공개 summary에는 실제 받은 업무/DB 오류 code가 없으므로 모두 시간 초과라고 단정하지 않는다. proposal의 execution-budget.ts26 프레임은 소스의 EXECUTION_DEADLINE 분기에 대응한다는 추론이며, 정상 create/read/consent가 seed 시점의 요청 budget을 재사용하는 시험 전제를 확인했다. 정상 요청마다 기존 실제 재인증 closure로 새 context를 만드는 정합화를 진행한다.
+
+100행 후단에서는 현재 보호/원본/트랜잭션 조회와 write 목록 탐색이 반복된다. submit의 새100행이 모두 premises인 것은 아니므로 실패를 전제100회만으로 설명하지 않는다. 같은 assertPremises 호출 내 write Map 개선과 테스트 한정 aggregate 시간/횟수 관측으로 실제 병목을 구분한다. 서비스10초·DB3초·statement2초·lock500ms·최대100행·최종 현재성/보호/권한 대조·전체80% 기준은 유지한다. Step19/20·별도 리뷰·main 머지는 미완료다.
+
+root가 같은 run의 U2 성공 artifact와 PC artifact를 private 폴더에 내려받아 확인했다. unit465/465·integration274/274·같은739개 coverage 재실행은 모두 fail/pending/todo/failedSuite0·success=true다. PC 통계는 expected5·skipped/unexpected/flaky0이다. validation-u2는 pilot-current·동일 checkout HEAD/digest이며 u2-unit/u2-integration/u2-coverage/u2-e2e 각각 passed/observed/fresh=true·exit0·signal/errorCode=null·expired/logFailed=false다. 다른 소스나 전체 제품 성공으로 확대하지 않는다.
+
+추가 source 조사에서 submission의 입력 준비/제출/후속 조회와 decision의 긴 seed 뒤 직원 판단도 최초 요청 context를 재사용함을 확인했다. 따라서 현재 CI 프레임을 한 요청10초 초과로 해석하지 않는다. 각 실제 정상 요청은 기존 재인증 closure로 새 context를 받도록 시험 전제를 정합화하며, 명시 부정 actor/기업/외부 ingress/권한 회수/변조 입력 단언은 유지한다. opt-in aggregate 계측은 입력 준비 뒤 실제 요청 context를 사용한다. 계측 자체 overhead가 포함되고 중첩 누적 시간을 합산하지 않는다. 선택 시험 및 새로운 source의 전체 CI 결과는 아직 없다.
+
+## 요청별 예산 정합화의 로컬 검증
+
+Luna가 고정된 제품/시험7경로를 검사했다. TypeScript·지정 ESLint·Prettier는 종료 코드0이다. fresh-request-budget-map-unit-20261012.json은 두 파일22/22 PASS, fresh-request-budget-profile-integration-20261012.json은 세 파일32/32 PASS다. root도 실제 JSON에서 각각 fail/pending/todo/failedSuite0·success=true와 testResults.length2/3을 확인했다. proposal·100행 접수/판단·권한 거절·보호 변조·rollback·재시도·경쟁의 기존 단언을 유지한다.
+
+새 helper는 테스트의 명시 OMS_U3_BUDGET_PROFILE=1에서만 동작하며 원본/식별자/SQL/오류 문자열을 수집하지 않는다. 숫자 집계는 준비 구간 이후 실제 요청을 측정하고 중첩 메서드 시간을 합산하지 않는다. source-manifest171개 경로와 실제 전체 Git 변경+신규 helper171개를 root가 대조해 누락/추가0·전체 파일 존재를 확인했다. 이 로컬 선택 결과는 새 전체 CI/전체80%·보안·별도 리뷰·main 머지의 성공을 의미하지 않는다.
+
+고정7파일의 SHA는 검사 전후 동일했다. 계측된 실제 제출/판단 구간은 SUBMISSION_100 859.772ms, DECISION_100 1634.920ms, 판단용 seed 제출 두 회1094.776ms/1052.294ms이며 각각 요청 진입 잔여9990/9984/9990/9989ms다. 단계별 중첩 시간을 합산하지 않고 계측 overhead를 포함한 로컬 관측으로 제한한다. 이 실행에서100행 요청 자체10초 초과는 관측되지 않았으며 운영 지연/용량 목표나 CI 시간 보장으로 확대하지 않는다.

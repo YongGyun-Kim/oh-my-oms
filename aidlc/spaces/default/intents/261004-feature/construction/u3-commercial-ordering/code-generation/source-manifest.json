@@ -304,6 +304,9 @@
       "path": "tests/u3/fixtures/applied-terms.ts"
     },
     {
+      "path": "tests/u3/fixtures/budget-profile.ts"
+    },
+    {
       "path": "tests/u3/fixtures/catalog.ts"
     },
     {

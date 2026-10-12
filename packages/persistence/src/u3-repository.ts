@@ -94,6 +94,7 @@ export class U3Transaction {
     return raw;
   }
   async assertPremises(): Promise<void> {
+    const writes = new Map(this.transaction.rows().map((row) => [row.model + '/' + row.id, row]));
     for (const { reference, data } of this.premises.values()) {
       const visible = await this.repository.current(reference);
       requireCondition(
@@ -103,9 +104,7 @@ export class U3Transaction {
         '원래 판단 전제의 보호 개정이 변경됐습니다.',
       );
       const raw = await this.transaction.get(reference.entity, reference.id);
-      const written = this.transaction
-        .rows()
-        .find((row) => row.model === reference.entity && row.id === reference.id);
+      const written = writes.get(reference.entity + '/' + reference.id);
       requireCondition(
         raw &&
           !written?.deleted &&

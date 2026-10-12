@@ -7,6 +7,7 @@ import { ProtectedStore, ProtectedTransaction, modelDefinition } from '@oms/pers
 import { initializeU3Databases, resetU3Databases, u3Sources } from '../fixtures/databases.js';
 import { seedDecisionOrder } from '../fixtures/order-decision.js';
 import { assertProtectedCandidate } from '../fixtures/protected-candidate.js';
+import { profileU3Budget } from '../fixtures/budget-profile.js';
 import { orderQuery } from '../fixtures/order-input.js';
 import { catalogInput } from '../fixtures/catalog.js';
 import { randomUUID } from 'node:crypto';
@@ -59,7 +60,7 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
         }),
       ),
       input = f.decision();
-    const receipt = await orders.decide(f.registrant, input, f.ingress),
+    const receipt = await orders.decide(await f.requestContext(f.registrant), input, f.ingress),
       { order, decision } = await result(receipt);
     expect(order).toMatchObject({
       state: 'ACCEPTED',
@@ -78,11 +79,13 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
       ),
     ).toBe(true);
     expect(calls).toBe(4);
-    expect(await orders.decide(f.registrant, input, f.ingress)).toEqual(receipt);
+    expect(await orders.decide(await f.requestContext(f.registrant), input, f.ingress)).toEqual(
+      receipt,
+    );
     expect(calls).toBe(4);
     expect(await originalBytes(f)).toBe(bytes);
     const read = (await orders.read(
-      f.seller.customer,
+      await f.requestContext(f.seller.customer),
       orderQuery(receipt.targetRef!, f.targetScope),
     )) as { data: U3OrderView };
     expect(read.data.acceptance).toBe('ACCEPTED');
@@ -118,14 +121,20 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
   it('기본 미등록은 전체 HOLD/REVIEW이며 나중에 현재 전체 준비가 확인되면 새 개정 판단을 남긴다', async () => {
     const f = await seedDecisionOrder(store),
       bytes = await originalBytes(f);
-    const held = await f.service([]).decide(f.registrant, f.decision(), f.ingress);
+    const held = await f
+      .service([])
+      .decide(await f.requestContext(f.registrant), f.decision(), f.ingress);
     expect(await result(held)).toMatchObject({
       order: { state: 'REVIEW', revision: 2 },
       decision: { decision: 'HOLD', acceptance: 'REVIEW_REQUIRED' },
     });
     const accepted = await f
       .service()
-      .decide(f.registrant, f.decision('ACCEPT', held.targetRef!), f.ingress);
+      .decide(
+        await f.requestContext(f.registrant),
+        f.decision('ACCEPT', held.targetRef!),
+        f.ingress,
+      );
     expect(await result(accepted)).toMatchObject({
       order: { state: 'ACCEPTED', revision: 3 },
       decision: { observedOrderRevision: 2 },
@@ -140,7 +149,10 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
         if (value.binding.owner === 'HardwareFulfillment') value.lines[99]!.readyQuantity = 0;
       }),
     );
-    const receipt = await orders.decide(f.registrant, f.decision(), f.ingress),
+    const context = await f.requestContext(f.registrant);
+    const receipt = await profileU3Budget('DECISION_100', context, () =>
+        orders.decide(context, f.decision(), f.ingress),
+      ),
       value = await result(receipt);
     expect(value.order.state).toBe('REVIEW');
     expect(value.decision.decision).toBe('HOLD');
@@ -191,7 +203,7 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
     });
     expect(
       await orders.commands.original(
-        context,
+        await f.requestContext(context),
         'OrderAcceptance',
         'decideOrder',
         { kind: 'RECORD', recordRef: input.targetRef },
@@ -202,7 +214,9 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
   });
   it('총액 UNKNOWN은 준비 소유자 KNOWN만으로 수락하지 않는다', async () => {
     const f = await seedDecisionOrder(store, 1, false);
-    const held = await f.service().decide(f.registrant, f.decision(), f.ingress);
+    const held = await f
+      .service()
+      .decide(await f.requestContext(f.registrant), f.decision(), f.ingress);
     const value = await result(held);
     expect(value.decision.decision).toBe('HOLD');
     expect(
@@ -227,12 +241,14 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
     if (!price || price.conditionKey !== 'PRICE') throw new Error('가격 조건이 필요합니다.');
     price.value = { currency: 'KRW', value: '1500' };
     await new U3ProductCatalog(store, f.seller.now, async (proof) => proof === f.ingress).register(
-      f.registrant,
+      await f.requestContext(f.registrant),
       draft,
       f.productRef,
       f.ingress,
     );
-    const held = await f.service().decide(f.registrant, f.decision('HOLD'), f.ingress);
+    const held = await f
+      .service()
+      .decide(await f.requestContext(f.registrant), f.decision('HOLD'), f.ingress);
     expect((await result(held)).decision.lineAssessments).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -266,7 +282,11 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
     );
     const again = await f
       .service()
-      .decide(f.registrant, f.decision('ACCEPT', held.targetRef!), f.ingress);
+      .decide(
+        await f.requestContext(f.registrant),
+        f.decision('ACCEPT', held.targetRef!),
+        f.ingress,
+      );
     expect((await result(again)).decision.decision).toBe('HOLD');
     expect(await originalBytes(f)).toBe(bytes);
   });
@@ -286,7 +306,7 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
     ]) {
       const held = await f
         .service(f.registrations(change))
-        .decide(f.registrant, f.decision('ACCEPT', target), f.ingress);
+        .decide(await f.requestContext(f.registrant), f.decision('ACCEPT', target), f.ingress);
       expect((await result(held)).decision.decision).toBe('HOLD');
       target = held.targetRef!;
     }
@@ -302,7 +322,7 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
     ];
     const held = await f
       .service(broken)
-      .decide(f.registrant, f.decision('ACCEPT', target), f.ingress);
+      .decide(await f.requestContext(f.registrant), f.decision('ACCEPT', target), f.ingress);
     expect((await result(held)).decision.decision).toBe('HOLD');
   });
   it('전체 거절에는 사유와 현재 모든 출처의 실제 근거가 필요하고 확정 뒤 결과를 덮어쓰지 않는다', async () => {
@@ -311,21 +331,33 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
       bytes = await originalBytes(f);
     const empty = f.decision('REJECT');
     empty.basisRefs = [];
-    await expect(orders.decide(f.registrant, empty, f.ingress)).rejects.toMatchObject({
+    await expect(
+      orders.decide(await f.requestContext(f.registrant), empty, f.ingress),
+    ).rejects.toMatchObject({
       code: 'ORDER_DECISION_REASON',
     });
     const incomplete = f.decision('REJECT');
     incomplete.basisRefs = incomplete.basisRefs.slice(0, 1);
-    await expect(orders.decide(f.registrant, incomplete, f.ingress)).rejects.toMatchObject({
+    await expect(
+      orders.decide(await f.requestContext(f.registrant), incomplete, f.ingress),
+    ).rejects.toMatchObject({
       code: 'U3_PROOF_UNCONFIRMED',
     });
-    const rejected = await orders.decide(f.registrant, f.decision('REJECT'), f.ingress);
+    const rejected = await orders.decide(
+      await f.requestContext(f.registrant),
+      f.decision('REJECT'),
+      f.ingress,
+    );
     expect(await result(rejected)).toMatchObject({
       order: { state: 'REJECTED' },
       decision: { decision: 'REJECT', acceptance: 'DECLINED' },
     });
     await expect(
-      orders.decide(f.registrant, f.decision('HOLD', rejected.targetRef!), f.ingress),
+      orders.decide(
+        await f.requestContext(f.registrant),
+        f.decision('HOLD', rejected.targetRef!),
+        f.ingress,
+      ),
     ).rejects.toMatchObject({ code: 'ORDER_ALREADY_DECIDED' });
     expect(await originalBytes(f)).toBe(bytes);
   });
@@ -333,7 +365,9 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
     const f = await seedDecisionOrder(store),
       orders = f.service(),
       bytes = await originalBytes(f);
-    await expect(orders.decide(f.registrant, f.decision(), 'external')).rejects.toMatchObject({
+    await expect(
+      orders.decide(await f.requestContext(f.registrant), f.decision(), 'external'),
+    ).rejects.toMatchObject({
       code: 'STAFF_NETWORK_REQUIRED',
     });
     const foreign = f.decision();
@@ -343,9 +377,13 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
       contextPolicyRef: f.reviewer.enterpriseRef,
       organisationRevision: f.reviewer.enterpriseRef.revision,
     };
-    await expect(orders.decide(f.registrant, foreign, f.ingress)).rejects.toThrow();
+    await expect(
+      orders.decide(await f.requestContext(f.registrant), foreign, f.ingress),
+    ).rejects.toThrow();
     const stale = f.decision('ACCEPT', { ...f.receipt.targetRef!, revision: 2 });
-    await expect(orders.decide(f.registrant, stale, f.ingress)).rejects.toMatchObject({
+    await expect(
+      orders.decide(await f.requestContext(f.registrant), stale, f.ingress),
+    ).rejects.toMatchObject({
       code: 'STALE_U3_REFERENCE',
     });
     const requireStaff = orders.commands.authorization.requireStaff.bind(
@@ -370,7 +408,9 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
       }
     });
     const request = f.decision();
-    await expect(orders.decide(f.registrant, request, f.ingress)).rejects.toMatchObject({
+    await expect(
+      orders.decide(await f.requestContext(f.registrant), request, f.ingress),
+    ).rejects.toMatchObject({
       code: 'ACTION_DENIED',
     });
     expect(
@@ -392,7 +432,9 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
         }
       }),
     );
-    await expect(unstable.decide(f.registrant, f.decision(), f.ingress)).rejects.toMatchObject({
+    await expect(
+      unstable.decide(await f.requestContext(f.registrant), f.decision(), f.ingress),
+    ).rejects.toMatchObject({
       code: 'ORDER_READINESS_CHANGED',
     });
     expect((await store.currentProtected('Order', f.receipt.targetRef!.id))!.revision).toBe(1);
@@ -404,7 +446,9 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
         if (model === 'Order' && data.revision === 2)
           throw new OmsError(503, 'SYNTHETIC_DECISION_ROLLBACK', '판단 이후 합성 실패');
       });
-    await expect(f.service().decide(f.registrant, f.decision(), f.ingress)).rejects.toMatchObject({
+    await expect(
+      f.service().decide(await f.requestContext(f.registrant), f.decision(), f.ingress),
+    ).rejects.toMatchObject({
       code: 'SYNTHETIC_DECISION_ROLLBACK',
     });
     failed.mockRestore();
@@ -425,14 +469,18 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
       }
       return validate(uri, data);
     });
-    await expect(orders.decide(f.registrant, input, f.ingress)).rejects.toMatchObject({
+    await expect(
+      orders.decide(await f.requestContext(f.registrant), input, f.ingress),
+    ).rejects.toMatchObject({
       code: 'SYNTHETIC_DECISION_RESPONSE_LOSS',
     });
     lost.mockRestore();
-    const receipt = await orders.decide(f.registrant, input, f.ingress);
+    const receipt = await orders.decide(await f.requestContext(f.registrant), input, f.ingress);
     expect((await result(receipt)).decision.decision).toBe('ACCEPT');
     expect(calls).toBe(4);
-    expect(await orders.decide(f.registrant, input, f.ingress)).toEqual(receipt);
+    expect(await orders.decide(await f.requestContext(f.registrant), input, f.ingress)).toEqual(
+      receipt,
+    );
     expect(calls).toBe(4);
     expect(await originalBytes(f)).toBe(bytes);
   });
@@ -441,8 +489,9 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
       orders = f.service(),
       bytes = await originalBytes(f);
     const inputs = [f.decision(), f.decision()];
+    const contexts = [await f.requestContext(f.registrant), await f.requestContext(f.registrant)];
     const outcomes = await Promise.allSettled(
-      inputs.map((input) => orders.decide(f.registrant, input, f.ingress)),
+      inputs.map((input, index) => orders.decide(contexts[index]!, input, f.ingress)),
     );
     expect(outcomes.filter((value) => value.status === 'fulfilled')).toHaveLength(1);
     expect(outcomes.filter((value) => value.status === 'rejected')).toHaveLength(1);
@@ -454,7 +503,7 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
     if (failed.reason instanceof QueryFailedError) {
       expect(failed.reason.driverError.code).toBe('55P03');
       await expect(
-        orders.decide(f.registrant, inputs[loserIndex]!, f.ingress),
+        orders.decide(await f.requestContext(f.registrant), inputs[loserIndex]!, f.ingress),
       ).rejects.toMatchObject({ code: 'STALE_U3_REFERENCE' });
     } else expect(failed.reason).toMatchObject({ code: 'STALE_U3_REFERENCE' });
     expect(
@@ -479,7 +528,9 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
   it('요청 활성화일과 계약 시작의 불일치는 U6의 정확한 확인 전 HOLD이며 실제/합의 기간을 임의 이동하지 않는다', async () => {
     const f = await seedDecisionOrder(store, 1, true, true, true),
       bytes = await originalBytes(f);
-    const held = await f.service().decide(f.registrant, f.decision(), f.ingress);
+    const held = await f
+      .service()
+      .decide(await f.requestContext(f.registrant), f.decision(), f.ingress);
     expect((await result(held)).decision.decision).toBe('HOLD');
     const resolved = f.service(
       f.registrations((value) => {
@@ -488,7 +539,7 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
       }),
     );
     const accepted = await resolved.decide(
-      f.registrant,
+      await f.requestContext(f.registrant),
       f.decision('ACCEPT', held.targetRef!),
       f.ingress,
     );

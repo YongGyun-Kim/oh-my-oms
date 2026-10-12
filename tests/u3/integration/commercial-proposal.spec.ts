@@ -45,11 +45,13 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
     for (const source of Object.values(sources)) if (source.isInitialized) await source.destroy();
   });
   afterEach(() => vi.restoreAllMocks());
-  const create = async (input?: U3ProposalInput) =>
-    service.create(f.registrant, input ?? (await f.input()), f.ingress);
+  const create = async (input?: U3ProposalInput) => {
+    const value = input ?? (await f.input());
+    return service.create(await f.requestContext(f.registrant), value, f.ingress);
+  };
   const read = async (proposalRef: Ref): Promise<U3ProposalView> => {
     const value = await service.read(
-      f.seller.customer,
+      await f.requestContext(f.seller.customer),
       registeredProposalInput('readProposal', {
         targetRef: proposalRef,
         targetScope: f.targetScope,
@@ -119,11 +121,13 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
     expect(display.originalTerms.lines[0]!.price.value).toBe('1000');
     expect(display.state).toBe('AWAITING_CONSENT');
     const input = await consent(created.targetRef!);
-    await expect(service.recordConsent(f.seller.customer, input)).rejects.toMatchObject({
+    await expect(
+      service.recordConsent(await f.requestContext(f.seller.customer), input),
+    ).rejects.toMatchObject({
       code: 'ACTION_DENIED',
     });
     await f.grant();
-    const receipt = await service.recordConsent(f.seller.customer, input);
+    const receipt = await service.recordConsent(await f.requestContext(f.seller.customer), input);
     expect(receipt.targetRef!.revision).toBe(2);
     const current = await read(receipt.targetRef!);
     const protectedCurrent = (await store.currentProtected(
@@ -194,7 +198,9 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
       }
       return validate(uri, data);
     });
-    await expect(service.recordConsent(f.seller.customer, input)).rejects.toMatchObject({
+    await expect(
+      service.recordConsent(await f.requestContext(f.seller.customer), input),
+    ).rejects.toMatchObject({
       code: 'SYNTHETIC_RESPONSE_LOSS',
     });
     failure.mockRestore();
@@ -202,12 +208,15 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
     expect(receipts).toHaveLength(1);
     const histories = await store.list('AgreementHistory'),
       saved = await store.list('CustomerConsent');
-    const replay = await service.recordConsent(f.seller.customer, input);
+    const replay = await service.recordConsent(await f.requestContext(f.seller.customer), input);
     expect(replay.requestId).toBe(receipts[0]!.requestId);
     expect(await store.list('CustomerConsent')).toEqual(saved);
     expect(await store.list('AgreementHistory')).toEqual(histories);
     await expect(
-      service.recordConsent(f.seller.customer, { ...input, decision: 'DECLINE' }),
+      service.recordConsent(await f.requestContext(f.seller.customer), {
+        ...input,
+        decision: 'DECLINE',
+      }),
     ).rejects.toMatchObject({ code: 'IDEMPOTENCY_CONFLICT' });
   });
   it('명시 새 제안은 이전 OPEN을 대체하고 내용2/저장1의 동의를 정확히 결합한다', async () => {
@@ -225,17 +234,19 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
       revision: 2,
       proposalRevision: 1,
     });
-    await expect(service.recordConsent(f.seller.customer, old)).rejects.toThrow();
+    await expect(
+      service.recordConsent(await f.requestContext(f.seller.customer), old),
+    ).rejects.toThrow();
     const input = await consent(second.targetRef!);
     expect(input.proposalRef.revision).toBe(1);
     expect(input.proposalRevision).toBe(2);
     await expect(
-      service.recordConsent(f.seller.customer, {
+      service.recordConsent(await f.requestContext(f.seller.customer), {
         ...input,
         termsFingerprint: old.termsFingerprint,
       }),
     ).rejects.toMatchObject({ code: 'PROPOSAL_PRESENTATION_CHANGED' });
-    const applied = await service.recordConsent(f.seller.customer, input);
+    const applied = await service.recordConsent(await f.requestContext(f.seller.customer), input);
     expect(await read(applied.targetRef!)).toMatchObject({
       proposalRevision: 2,
       state: 'ACCEPTED',
@@ -253,7 +264,9 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
     await f.write('fixture-revoked-explicit-proposal-evidence', async (tx) => {
       await tx.put('VerificationEvidence', { ...evidence, state: 'REVOKED', revision: 2 }, 1);
     });
-    await expect(service.recordConsent(f.seller.customer, input)).rejects.toThrow();
+    await expect(
+      service.recordConsent(await f.requestContext(f.seller.customer), input),
+    ).rejects.toThrow();
     expect(await store.list('CustomerConsent')).toHaveLength(0);
     expect(await store.currentProtected('CommercialProposal', created.targetRef!.id)).toMatchObject(
       { result: 'OPEN', revision: 1 },
@@ -264,7 +277,9 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
     await f.grant();
     const input = await consent(created.targetRef!);
     await f.approvePrice();
-    await expect(service.recordConsent(f.seller.customer, input)).rejects.toMatchObject({
+    await expect(
+      service.recordConsent(await f.requestContext(f.seller.customer), input),
+    ).rejects.toMatchObject({
       code: 'U3_PROOF_UNCONFIRMED',
     });
     expect(await store.list('CustomerConsent')).toHaveLength(0);
@@ -273,12 +288,17 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
     const created = await create(),
       input = await consent(created.targetRef!);
     await f.grant();
-    await expect(service.recordConsent(f.reviewer.customer, input)).rejects.toThrow();
     await expect(
-      service.recordConsent(f.seller.customer, { ...input, proposalRevision: 2 }),
+      service.recordConsent(await f.requestContext(f.reviewer.customer), input),
+    ).rejects.toThrow();
+    await expect(
+      service.recordConsent(await f.requestContext(f.seller.customer), {
+        ...input,
+        proposalRevision: 2,
+      }),
     ).rejects.toMatchObject({ code: 'PROPOSAL_PRESENTATION_CHANGED' });
     expect(await store.list('CustomerConsent')).toHaveLength(0);
-    const receipt = await service.recordConsent(f.seller.customer, {
+    const receipt = await service.recordConsent(await f.requestContext(f.seller.customer), {
       ...input,
       decision: 'DECLINE',
     });
@@ -299,7 +319,9 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
     await f.grant();
     const response = await consent(created.targetRef!);
     await writeOrder({ state: 'REJECTED' });
-    await expect(service.recordConsent(f.seller.customer, response)).rejects.toThrow();
+    await expect(
+      service.recordConsent(await f.requestContext(f.seller.customer), response),
+    ).rejects.toThrow();
     expect(await store.list('CustomerConsent')).toHaveLength(0);
     const evidence = f.agreementProof[0]!;
     await f.write('fixture-expired-proposal-proof', async (tx) => {
@@ -315,7 +337,7 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
     const result = await create(input);
     expect((await read(result.targetRef!)).originalTerms.termsRecordRef).toEqual(f.snapshotRef);
     await expect(
-      service.create(f.registrant, await f.input(), 'external-ingress'),
+      service.create(await f.requestContext(f.registrant), await f.input(), 'external-ingress'),
     ).rejects.toMatchObject({ code: 'STAFF_NETWORK_REQUIRED' });
     const other = await f.input();
     other.targetOrderRef = input.targetOrderRef;
@@ -358,7 +380,9 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
       termsFingerprint: String(data.termsFingerprint),
       decision: 'ACCEPT',
     };
-    await expect(service.recordConsent(f.seller.customer, input)).rejects.toMatchObject({
+    await expect(
+      service.recordConsent(await f.requestContext(f.seller.customer), input),
+    ).rejects.toMatchObject({
       code: 'U3_PROOF_UNCONFIRMED',
     });
   });
@@ -374,7 +398,9 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
         if (model === 'CommercialProposal' && data.result === 'CONSENTED')
           throw new OmsError(503, 'SYNTHETIC_AFTER_CONSENT', '동의 후 합성 실패');
       });
-    await expect(service.recordConsent(f.seller.customer, input)).rejects.toMatchObject({
+    await expect(
+      service.recordConsent(await f.requestContext(f.seller.customer), input),
+    ).rejects.toMatchObject({
       code: 'SYNTHETIC_AFTER_CONSENT',
     });
     failure.mockRestore();
@@ -382,11 +408,13 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
     expect(await store.currentProtected('CommercialProposal', created.targetRef!.id)).toMatchObject(
       { result: 'OPEN', revision: 1 },
     );
-    await f.roles.deactivateRole(f.seller.customer, {
+    await f.roles.deactivateRole(await f.requestContext(f.seller.customer), {
       meta: f.meta(1),
       roleRef: f.consentRole.targetRef!,
     });
-    await expect(service.recordConsent(f.seller.customer, input)).rejects.toMatchObject({
+    await expect(
+      service.recordConsent(await f.requestContext(f.seller.customer), input),
+    ).rejects.toMatchObject({
       code: 'ACTION_DENIED',
     });
   });
@@ -412,7 +440,9 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
             Number(state.revision),
           );
       });
-    await expect(service.recordConsent(f.seller.customer, input)).rejects.toMatchObject({
+    await expect(
+      service.recordConsent(await f.requestContext(f.seller.customer), input),
+    ).rejects.toMatchObject({
       code: 'CURRENT_AUTH_NOT_PROTECTED',
     });
     revoke.mockRestore();
@@ -470,7 +500,7 @@ describe('제안·정확 고객 동의·수동 갱신의 실제 보호 경계', 
     const created = await create(input);
     await f.grant();
     const result = await service.recordConsent(
-      f.seller.customer,
+      await f.requestContext(f.seller.customer),
       await consent(created.targetRef!),
     );
     expect(await read(result.targetRef!)).toMatchObject({

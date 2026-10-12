@@ -15,6 +15,7 @@ import { seedProposalAuthority } from '../fixtures/proposal.js';
 import { syntheticCommercialEvidence } from '../fixtures/agreement.js';
 import { registeredOrderInput, orderQuery } from '../fixtures/order-input.js';
 import { assertProtectedCandidate } from '../fixtures/protected-candidate.js';
+import { profileU3Budget } from '../fixtures/budget-profile.js';
 import { buildCommonOffer } from '../../../packages/core/src/catalog-conditions.js';
 import { catalogInput } from '../fixtures/catalog.js';
 import { QueryFailedError } from 'typeorm';
@@ -43,8 +44,12 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
   afterAll(async () => {
     for (const source of Object.values(sources)) if (source.isInitialized) await source.destroy();
   });
+  async function submit(value: U3OrderInput | Promise<U3OrderInput>) {
+    const ready = await value;
+    return orders.submit(await f.requestContext(f.seller.customer), ready);
+  }
   async function input(count = 1, confirmation = false): Promise<U3OrderInput> {
-    const resolved = await f.agreement.resolve(f.seller.customer, {
+    const resolved = await f.agreement.resolve(await f.requestContext(f.seller.customer), {
       targetScope: f.targetScope,
       productRef: f.productRef,
       commonOfferRevisionRef: f.offerRef,
@@ -89,14 +94,17 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
   }
   async function view(receipt: Awaited<ReturnType<U3OrderAcceptance['submit']>>) {
     return (
-      (await orders.read(f.seller.customer, orderQuery(receipt.targetRef!, f.targetScope))) as {
+      (await orders.read(
+        await f.requestContext(f.seller.customer),
+        orderQuery(receipt.targetRef!, f.targetScope),
+      )) as {
         knowledge: 'KNOWN';
         data: U3OrderView;
       }
     ).data;
   }
   it('실제 모든 행·FULL·판단·스냅샷·요청/통지를 한 후보에 보호하고 비용 확인 없으면 REVIEW/UNKNOWN이다', async () => {
-    const receipt = await orders.submit(f.seller.customer, await input()),
+    const receipt = await submit(await input()),
       data = await view(receipt);
     expect(data).toMatchObject({
       acceptance: 'REVIEW_REQUIRED',
@@ -134,7 +142,7 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
         (order.acceptanceRef as { id: string }).id,
       ))!.decision,
     ).toBe('HOLD');
-    expect(await orders.submit(f.seller.customer, await input())).not.toEqual(receipt);
+    expect(await submit(await input())).not.toEqual(receipt);
   });
   it('기업 우선 가격과 모든 조건 개정·전체 확인 자료는 불변이며 단가/다른 항목 포함 비용을 중복 계산하지 않는다', async () => {
     await f.approvePrice();
@@ -173,7 +181,7 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
       },
     ];
     confirmation.priceBreakdown.total!.value = '1900';
-    const receipt = await orders.submit(f.seller.customer, value),
+    const receipt = await submit(value),
       data = await view(receipt);
     expect(data.lines.map((line) => line.purchasePrice.value)).toEqual(['900', '900']);
     expect(data.agreementRevisionRefs).toHaveLength(1);
@@ -195,9 +203,13 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
     ).rejects.toThrow();
   });
   it('100행은 전체 보존하고 0/101행·혼합 지급/타입·부분 제공·허위 현재 조건은 원자 기록 전 거절한다', async () => {
-    const receipt = await orders.submit(f.seller.customer, await input(100));
+    const value = await input(100);
+    const context = await f.requestContext(f.seller.customer);
+    const receipt = await profileU3Budget('SUBMISSION_100', context, () =>
+      orders.submit(context, value),
+    );
     const read = (await orders.read(
-      f.seller.customer,
+      await f.requestContext(f.seller.customer),
       orderQuery(receipt.targetRef!, f.targetScope),
     )) as { knowledge: 'KNOWN'; data: U3OrderView; sourceRefs: Ref[] };
     expect(read.knowledge).toBe('KNOWN');
@@ -231,15 +243,13 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
       { lines: Array.from({ length: 101 }, () => normal.lines[0]!) },
       { provisionChoice: 'PARTIAL' },
     ])
-      await expect(
-        orders.submit(f.seller.customer, { ...normal, ...changed } as U3OrderInput),
-      ).rejects.toThrow();
-    await expect(
-      orders.submit(f.seller.customer, { ...normal, productType: 'SOFTWARE' }),
-    ).rejects.toMatchObject({ code: 'ORDER_PRODUCT_TYPE' });
+      await expect(submit({ ...normal, ...changed } as U3OrderInput)).rejects.toThrow();
+    await expect(submit({ ...normal, productType: 'SOFTWARE' })).rejects.toMatchObject({
+      code: 'ORDER_PRODUCT_TYPE',
+    });
     const mixed = await input(2);
     mixed.lines[1]!.paymentMode = 'POSTPAY';
-    await expect(orders.submit(f.seller.customer, mixed)).rejects.toThrow();
+    await expect(submit(mixed)).rejects.toThrow();
     const changedCondition = normal.lines[0]!.conditionBindings.find(
       (binding) => binding.conditionKey === 'PRICE',
     );
@@ -250,23 +260,23 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
       value: (BigInt(changedCondition.value.value) + 1n).toString(),
     };
     registeredOrderInput('submitOrder', normal);
-    await expect(orders.submit(f.seller.customer, normal)).rejects.toMatchObject({
+    await expect(submit(normal)).rejects.toMatchObject({
       code: 'ORDER_CONDITIONS_CHANGED',
     });
   });
   it('빈 추가 목록/KNOWN/직원 Ref만으로 적용 없음이나0원을 확인하지 않고 실제 모든 근거를 요구한다', async () => {
     const value = await input(1, true);
     value.priceConfirmation!.evidenceRefs = [];
-    await expect(orders.submit(f.seller.customer, value)).rejects.toMatchObject({
+    await expect(submit(value)).rejects.toMatchObject({
       code: 'ORDER_PRICE_UNCONFIRMED',
     });
     const wrong = await input(1, true);
     wrong.priceConfirmation!.confirmedByRef = f.seller.customer.actorAccountRef!;
-    await expect(orders.submit(f.seller.customer, wrong)).rejects.toThrow();
+    await expect(submit(wrong)).rejects.toThrow();
     const missing = await input(1, true);
     missing.priceConfirmation!.evidenceRefs = missing.priceConfirmation!.evidenceRefs.slice(0, 1);
-    await expect(orders.submit(f.seller.customer, missing)).rejects.toThrow();
-    const unconfirmed = await orders.submit(f.seller.customer, await input());
+    await expect(submit(missing)).rejects.toThrow();
+    const unconfirmed = await submit(await input());
     expect((await view(unconfirmed)).priceBreakdown!.total).toBeNull();
   });
   it('새 행 batch의 중복 식별자와 deferred FK 실패는 주문·접수·보호 후보 전체를 rollback한다', async () => {
@@ -316,7 +326,7 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
       expect(await counts()).toEqual(before);
       expect(
         await orders.commands.original(
-          context,
+          await f.requestContext(context),
           'OrderAcceptance',
           'submitOrder',
           { kind: 'NONE' },
@@ -336,7 +346,7 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
         if (model === 'ProvisionChoice')
           throw new OmsError(503, 'SYNTHETIC_ORDER_AFTER_ROWS', '행 기록 후 합성 실패');
       });
-    await expect(orders.submit(f.seller.customer, value)).rejects.toMatchObject({
+    await expect(submit(value)).rejects.toMatchObject({
       code: 'SYNTHETIC_ORDER_AFTER_ROWS',
     });
     failure.mockRestore();
@@ -354,12 +364,12 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
       }
       return validate(uri, data);
     });
-    await expect(orders.submit(f.seller.customer, value)).rejects.toMatchObject({
+    await expect(submit(value)).rejects.toMatchObject({
       code: 'SYNTHETIC_ORDER_RESPONSE_LOSS',
     });
     loss.mockRestore();
     const original = await orders.commands.original(
-      f.seller.customer,
+      await f.requestContext(f.seller.customer),
       'OrderAcceptance',
       'submitOrder',
       { kind: 'NONE' },
@@ -367,26 +377,35 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
       { scope: f.targetScope },
     );
     expect(original.knowledge).toBe('KNOWN');
-    const receipt = await orders.submit(f.seller.customer, value),
-      again = await orders.submit(f.seller.customer, value);
+    const receipt = await submit(value),
+      again = await submit(value);
     expect(again).toEqual(receipt);
     await expect(
-      orders.submit(f.seller.customer, { ...value, meta: { ...value.meta, reason: '다른 내용' } }),
+      submit({ ...value, meta: { ...value.meta, reason: '다른 내용' } }),
     ).rejects.toMatchObject({ code: 'IDEMPOTENCY_CONFLICT' });
   });
   it('다른 기업 조회·제출, 외부망 직원 조회, 오래된 offer는 허용하지 않는다', async () => {
     const value = await input(),
-      receipt = await orders.submit(f.seller.customer, value);
-    await expect(orders.submit(f.reviewer.customer, value)).rejects.toThrow();
+      receipt = await submit(value);
     await expect(
-      orders.read(f.reviewer.customer, orderQuery(receipt.targetRef!, f.targetScope)),
+      orders.submit(await f.requestContext(f.reviewer.customer), value),
     ).rejects.toThrow();
     await expect(
-      orders.read(f.registrant, orderQuery(receipt.targetRef!, f.targetScope), 'external'),
+      orders.read(
+        await f.requestContext(f.reviewer.customer),
+        orderQuery(receipt.targetRef!, f.targetScope),
+      ),
+    ).rejects.toThrow();
+    await expect(
+      orders.read(
+        await f.requestContext(f.registrant),
+        orderQuery(receipt.targetRef!, f.targetScope),
+        'external',
+      ),
     ).rejects.toMatchObject({ code: 'STAFF_NETWORK_REQUIRED' });
     const stale = await input();
     stale.lines[0]!.commonOfferRevisionRef.revision = 2;
-    await expect(orders.submit(f.seller.customer, stale)).rejects.toThrow();
+    await expect(submit(stale)).rejects.toThrow();
     expect((await view(receipt)).targetScope).toEqual(f.targetScope);
   });
   it('기간제 SW의 합의 기간을 그대로 캡처하고 요청/실제 설치·이용 기간으로 변경하지 않는다', async () => {
@@ -437,7 +456,7 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
         await tx.put('CommonOfferRevision', built.offer!);
       },
     );
-    const resolved = await f.agreement.resolve(f.seller.customer, {
+    const resolved = await f.agreement.resolve(await f.requestContext(f.seller.customer), {
       targetScope: f.targetScope,
       productRef,
       commonOfferRevisionRef: offerRef,
@@ -460,7 +479,7 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
         },
       ],
     });
-    const receipt = await orders.submit(f.seller.customer, value),
+    const receipt = await submit(value),
       data = await view(receipt);
     expect(data.lines[0]!.agreedPeriod).toEqual(period);
     expect(data.productType).toBe('SOFTWARE');
