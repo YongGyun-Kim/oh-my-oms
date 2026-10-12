@@ -17,7 +17,11 @@ export default defineConfig({
     hookTimeout: 30000,
     fileParallelism: false,
     passWithNoTests: false,
-    reporters: ['default', 'json', ['./scripts/u3/coverage-evidence.ts', { unit }]],
+    reporters: [
+      'default',
+      unit === 'u3' ? './tests/u3/fixtures/safe-json-reporter.ts' : 'json',
+      ['./scripts/u3/coverage-evidence.ts', { unit }],
+    ],
     outputFile: '.reports/u3/pilot/' + unit + '-coverage-tests.json',
     coverage: {
       provider: 'v8',

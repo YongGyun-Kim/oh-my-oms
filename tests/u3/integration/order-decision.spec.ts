@@ -141,8 +141,8 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
     });
     expect(await originalBytes(f)).toBe(bytes);
   });
-  it('100행 중 마지막 한 행만 준비 부족이어도 100행 전체 판단은 HOLD이며 부분 수락하지 않는다', async () => {
-    const f = await seedDecisionOrder(store, 100),
+  it('100행 중 마지막 한 행만 준비 부족이어도 100행 전체 판단은 HOLD이며 부분 수락하지 않는다', async (test) => {
+    const f = await seedDecisionOrder(store, 100, true, false, false, test),
       bytes = await originalBytes(f);
     const orders = f.service(
       f.registrations((value) => {
@@ -150,8 +150,11 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
       }),
     );
     const context = await f.requestContext(f.registrant);
-    const receipt = await profileU3Budget('DECISION_100', context, () =>
-        orders.decide(context, f.decision(), f.ingress),
+    const receipt = await profileU3Budget(
+        'DECISION_100',
+        context,
+        () => orders.decide(context, f.decision(), f.ingress),
+        test,
       ),
       value = await result(receipt);
     expect(value.order.state).toBe('REVIEW');
@@ -163,8 +166,8 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
     expect(assessments[99]!.assessments[2]!.knowledge).toBe('UNKNOWN');
     expect(await originalBytes(f)).toBe(bytes);
   });
-  it('같은 phase 행을 재사용해도 마지막 행의 후단 미보호 변경은 최종 대조에서 판단 전체를 rollback한다', async () => {
-    const f = await seedDecisionOrder(store, 100);
+  it('같은 phase 행을 재사용해도 마지막 행의 후단 미보호 변경은 최종 대조에서 판단 전체를 rollback한다', async (test) => {
+    const f = await seedDecisionOrder(store, 100, true, false, false, test);
     const original = (await store.currentProtected('Order', f.receipt.targetRef!.id))!;
     const last = (original.lineRefs as Ref[])[99]!;
     const snapshot = canonicalJson(
@@ -185,7 +188,14 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
     const input = f.decision(),
       context = await f.requestContext(f.registrant);
     const orders = f.service(sourcesForDecision);
-    await expect(orders.decide(context, input, f.ingress)).rejects.toMatchObject({
+    await expect(
+      profileU3Budget(
+        'DECISION_100',
+        context,
+        () => orders.decide(context, input, f.ingress),
+        test,
+      ),
+    ).rejects.toMatchObject({
       code: 'CURRENT_AUTH_NOT_PROTECTED',
     });
     expect(await store.currentProtected('Order', f.receipt.targetRef!.id)).toEqual(original);

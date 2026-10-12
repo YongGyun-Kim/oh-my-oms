@@ -256,6 +256,9 @@
       "path": "scripts/u3/pilot-commands.ts"
     },
     {
+      "path": "scripts/u3/pilot-safe-diagnostics.ts"
+    },
+    {
       "path": "scripts/u3/pilot-tools.ts"
     },
     {
@@ -361,6 +364,9 @@
       "path": "tests/u3/fixtures/queue.ts"
     },
     {
+      "path": "tests/u3/fixtures/safe-json-reporter.ts"
+    },
+    {
       "path": "tests/u3/integration/applied-terms-model.spec.ts"
     },
     {
@@ -413,6 +419,9 @@
     },
     {
       "path": "tests/u3/integration/worker-handoff.spec.ts"
+    },
+    {
+      "path": "tests/u3/probes/safe-json-reporter.probe.ts"
     },
     {
       "path": "tests/u3/unit/after-sales-source.spec.ts"
@@ -502,10 +511,16 @@
       "path": "tests/u3/unit/role-own-write.spec.ts"
     },
     {
+      "path": "tests/u3/unit/safe-diagnostics.spec.ts"
+    },
+    {
       "path": "tests/u3/unit/staff-role-versions.spec.ts"
     },
     {
       "path": "tests/u3/vitest.coverage.config.ts"
+    },
+    {
+      "path": "tests/u3/vitest.diagnostic-probe.config.ts"
     },
     {
       "path": "tests/u3/vitest.integration.config.ts"

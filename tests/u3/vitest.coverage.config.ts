@@ -10,7 +10,7 @@ export default defineConfig({
     hookTimeout: 30000,
     fileParallelism: false,
     passWithNoTests: false,
-    reporters: ['default', 'json'],
+    reporters: ['default', './tests/u3/fixtures/safe-json-reporter.ts'],
     outputFile: '.reports/u3/coverage.json',
     coverage: {
       provider: 'v8',

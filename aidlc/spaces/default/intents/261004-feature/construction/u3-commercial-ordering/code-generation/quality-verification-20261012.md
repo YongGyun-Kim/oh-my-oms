@@ -155,3 +155,25 @@ Luna가 고정된 제품/시험7경로를 검사했다. TypeScript·지정 ESLin
 새 helper는 테스트의 명시 OMS_U3_BUDGET_PROFILE=1에서만 동작하며 원본/식별자/SQL/오류 문자열을 수집하지 않는다. 숫자 집계는 준비 구간 이후 실제 요청을 측정하고 중첩 메서드 시간을 합산하지 않는다. source-manifest171개 경로와 실제 전체 Git 변경+신규 helper171개를 root가 대조해 누락/추가0·전체 파일 존재를 확인했다. 이 로컬 선택 결과는 새 전체 CI/전체80%·보안·별도 리뷰·main 머지의 성공을 의미하지 않는다.
 
 고정7파일의 SHA는 검사 전후 동일했다. 계측된 실제 제출/판단 구간은 SUBMISSION_100 859.772ms, DECISION_100 1634.920ms, 판단용 seed 제출 두 회1094.776ms/1052.294ms이며 각각 요청 진입 잔여9990/9984/9990/9989ms다. 단계별 중첩 시간을 합산하지 않고 계측 overhead를 포함한 로컬 관측으로 제한한다. 이 실행에서100행 요청 자체10초 초과는 관측되지 않았으며 운영 지연/용량 목표나 CI 시간 보장으로 확대하지 않는다.
+
+## 7d4df31의 실제 CI 검증
+
+요청별 예산 정합화와 로컬 검증 기록은7d4df314d58810eef006037594a9a1441b4029b5로 커밋·push했다. 새 실제 CI run38206085977의 PR checkout HEAD는3d1b4f83e4879b42767975bc61e63fb9e873e285이며 branch HEAD와 구분한다. U1 성공 artifact의 sourceDigest는bc0a6336373fccfd0b921e576fb702fc6624d70715d50b2902354ec2afe36f1a다.
+
+root가 새 U1 성공 artifact의 unit571/571·integration168/168·같은739개 coverage 재실행을 확인했다. 각각 fail/pending/todo/failedSuite0·success=true이고 validation-u1은 pilot-current·위 checkout/digest, 각 u1-unit/u1-integration/u1-coverage가 passed/observed/fresh=true·exit0·signal/errorCode=null·expired/logFailed=false다. U2/U3와 project 전체 품질·보안·80%는 아직 진행 중이다. 이전 실제 실패 기록은 보존한다.
+
+같은 run은 failure로 종료됐다. U1·U2 job은 success이고 U3 integration159개 중152 PASS/7 FAIL·pending/todo0·failedSuites8·success=false다. U3 unit은 완료했고 integration은 observed=true·exit1·expired/logFailed=false·새 artifact/VALID_COUNTS, receipt/report validation 오류는 없다. 같은 sourceDigest/checkout을 확인했다. 선행 실패로 project 필수 검사·보안·전체80%는 skipped였다.
+
+실패 파일/순번은 http-host1, order-change1/3/8, order-decision3/4, order-submission3이며 proposal은 통과했다. actual 받은 업무/DB code는 공개 요약에 없어 로컬32개 PASS나 요청별 예산 수정만으로 CI 문제가 해결됐다고 선언하지 않는다. 다른 정상 요청의 문맥 재사용과 현재 원본/보호 조회 비용, 실제 오류를 안전하게 관측하는 방법을 추가 조사한다. source/시간/100행/보호·권한·80% 기준은 유지하고 미완료 Step19/20을 완료로 바꾸지 않는다.
+
+## 실제 받은 오류 코드의 안전 관측 검증
+
+추가 source 조사에서 order-change는 이미 각 실제 요청에 새 context를 사용하고 HTTP도 요청마다 authenticate한다는 점을 확인했다. 해당 경로에 같은 수정이나 오류코드 추측을 반복하지 않는다. Vitest의 구조화된 오류에서 직접 받은 code/driverError.code를 닫힌 enum으로만 기록하고, matcher actual/expected·message 문자열은 해석하지 않는 시험 reporter를 연결했다. 실제 CI의 reporter 인수 override와 U3 전체 커버리지 설정까지 연결하며 기존 JSON counts/output·실패 차단은 부모 reporter대로 유지한다.
+
+첫 TypeScript 검사는 테스트 metadata의 TS2339로 종료 코드2였고 단위 검사를 실행하지 않았다. TaskMeta의 전용3개 unknown 입력 선언을 정식 병합한 뒤 Luna의 타입·지정 ESLint·19파일 Prettier가 종료 코드0, 받은 오류 진단/collector 단위 두 파일21/21 PASS·fail/pending/todo/failedSuite0·success=true로 확인됐다. root도 해당 JSON count와 실제 파일 수2를 확인했다.
+
+DB 없는 reporter probe는 기본 suite 밖에서 BASELINE/SAFE를 각각 실제 Vitest로 실행했다. 두 실행은 의도된 exit1이며 각4개 중1 PASS/3 FAIL·pending/todo0·failedSuite1·success=false·실제 파일 수1이다. 원래 count/파일·assertion status가 동일했고, SAFE의 직접 오류 EXECUTION_DEADLINE·직접 driver SQLSTATE55P03·matcher UNKNOWN과 READ_100 phase를 확인했다. 정상 예상 rejection에는 실패 meta가 없고 안전 meta에 private sentinel이 없었다. root도 실제 두 JSON에서 이 사실을 대조했다. 이 제어된3 FAIL을 실제 U3 업무 회귀 실패 또는 통과로 표현하지 않는다.
+
+private probe 폴더는0700·로그0600이다. source-manifest176개 경로와 실제 전체 Git 변경+신규5경로176개를 root가 대조해 누락/추가0·모든 파일 존재를 확인했다. 실제 phase 연결의 관련 통합4파일은 아직 실행 중이며 새 전체 CI/80%·보안·공식 리뷰·main 머지는 미완료다.
+
+관련 통합 실행은 종료 코드0으로 끝났다. received-code-phase-integration-20261012.json의 실제4파일37/37 PASS·fail/pending/todo/failedSuite0·success=true를 root도 확인했다. Luna가19개 입력의 전후 SHA 일치를 확인했고 private 통합 로그는0600이다. APPLY_REVIEW 2568.236ms·APPLY_RESPONSE_LOSS2649.275ms·HTTP_APPLY2803.397ms(그 안의 protectedExecute2630.977ms)·READ_1001920.292ms를 관측했다. 중첩 시간을 합산하지 않고 계측 overhead를 포함한 로컬 수치로 제한한다. 실제 CI의 받은 오류를 새 source에서 확인하기 전 DB 시간 초과나 업무 실패의 확정 원인으로 해석하지 않는다. source/시간/100행/보호/권한/80% 기준을 유지했다.

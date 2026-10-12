@@ -15,6 +15,7 @@ import { registeredOrderInput } from './order-input.js';
 import { buildCommonOffer } from '../../../packages/core/src/catalog-conditions.js';
 import { catalogInput } from './catalog.js';
 import { profileU3Budget } from './budget-profile.js';
+import type { TestContext } from 'vitest';
 
 // 실제 등록 submit 생산자를 사용하는 로컬 fixture다. 소유자 callback은 운영 원본의 증거가 아니다.
 export async function seedDecisionOrder(
@@ -23,6 +24,7 @@ export async function seedDecisionOrder(
   confirmedPrice = true,
   software = false,
   term = false,
+  diagnosticTest?: TestContext,
 ) {
   const f = await seedProposalAuthority(store, software);
   const evidence = (await f.input()).agreementEvidenceRefs;
@@ -122,8 +124,11 @@ export async function seedDecisionOrder(
   const context = await f.requestContext(f.seller.customer);
   const receipt =
     count === 100
-      ? await profileU3Budget('DECISION_SEED_SUBMISSION_100', context, () =>
-          submitter.submit(context, input),
+      ? await profileU3Budget(
+          'DECISION_SEED_SUBMISSION_100',
+          context,
+          () => submitter.submit(context, input),
+          diagnosticTest,
         )
       : await submitter.submit(context, input);
   const sourceRefs: Record<U3ReadinessOwner, Ref> = {

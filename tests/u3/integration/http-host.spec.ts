@@ -1,6 +1,6 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import { gzipSync } from 'node:zlib';
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { canonicalJson } from '@oms/contracts';
 import type { Receipt, Ref, U3OrderInput, U3OrderView, U3ProposalView } from '@oms/contracts';
 import {
@@ -23,6 +23,7 @@ import { seedOrderChange } from '../fixtures/order-change.js';
 import { syntheticCommercialEvidence } from '../fixtures/agreement.js';
 import { registeredOrderInput } from '../fixtures/order-input.js';
 import { consentRoleInput } from '../fixtures/consent-role.js';
+import { profileU3Budget, recordHttpObservation } from '../fixtures/budget-profile.js';
 
 // password/MFA·권한·보호 저장은 실제 경로로 실행한다. 외부 소유자 원본은 로컬 합성이다.
 describe('명시 U3 HTTP host·실제 세션·유한 raw JSON 경계', () => {
@@ -179,6 +180,7 @@ describe('명시 U3 HTTP host·실제 세션·유한 raw JSON 경계', () => {
     await staffHost?.app.close();
     for (const source of Object.values(sources)) if (source.isInitialized) await source.destroy();
   });
+  afterEach(() => vi.restoreAllMocks());
   async function raw(
     client: SyntheticHttpClient,
     path: string,
@@ -235,7 +237,7 @@ describe('명시 U3 HTTP host·실제 세션·유한 raw JSON 경계', () => {
       },
     });
   }
-  it('정확1MiB 주문·조건 적용은 보호202/원래 결과 재시도·현재 조회와 스냅샷 불변을 연결한다', async () => {
+  it('정확1MiB 주문·조건 적용은 보호202/원래 결과 재시도·현재 조회와 스냅샷 불변을 연결한다', async (test) => {
     await customer.authenticate(f.seller.customer.principalId);
     await staff.authenticate(f.registrant.principalId);
     const input = await submission(),
@@ -267,12 +269,13 @@ describe('명시 U3 HTTP host·실제 세션·유한 raw JSON 경계', () => {
         await store.currentProtected('PurchaseTermsSnapshot', snapshotRef.id),
       ),
       change = f.application(),
-      applied = await raw(
-        staff,
-        '/order-condition-applications',
-        padded(change, 1048576),
-        headers(change),
+      applied = await profileU3Budget(
+        'HTTP_APPLY',
+        null,
+        () => raw(staff, '/order-condition-applications', padded(change, 1048576), headers(change)),
+        test,
       );
+    recordHttpObservation(test, applied.response.status, applied.body);
     expect(applied.response.status, safeStatus(applied.response.status, applied.body)).toBe(202);
     const appliedReceipt = store.schema.validateUri<Receipt>(
       staffHost!.registry.lookup('OrderAcceptance', 'applyApprovedChange', 3).output,

@@ -8,6 +8,10 @@ import type {
 } from '@oms/core';
 import { ProtectedStore, ProtectedTransaction, decodeAppliedTerms } from '@oms/persistence';
 import { QueryFailedError } from 'typeorm';
+import type { TestContext } from 'vitest';
+import type { U3ApplyOrderChangeInput } from '@oms/contracts';
+import type { DiagnosticPhase } from '../../../scripts/u3/pilot-safe-diagnostics.js';
+import { profileU3Budget } from '../fixtures/budget-profile.js';
 import { initializeU3Databases, resetU3Databases, u3Sources } from '../fixtures/databases.js';
 import { seedOrderChange } from '../fixtures/order-change.js';
 import { orderQuery } from '../fixtures/order-input.js';
@@ -28,6 +32,15 @@ describe('실제 가격 변경·정확한 동의·한 번 적용·다음 제안�
   afterAll(async () => {
     for (const source of Object.values(sources)) if (source.isInitialized) await source.destroy();
   });
+  async function observedApply(
+    test: TestContext,
+    phase: DiagnosticPhase,
+    f: Awaited<ReturnType<typeof seedOrderChange>>,
+    input: U3ApplyOrderChangeInput,
+  ) {
+    const context = await f.requestContext(f.registrant);
+    return profileU3Budget(phase, context, () => f.orders.apply(context, input, f.ingress), test);
+  }
   async function original(f: Awaited<ReturnType<typeof seedOrderChange>>) {
     const order = (await store.currentProtected('Order', f.orderRef.id))!;
     return canonicalJson({
@@ -74,13 +87,13 @@ describe('실제 가격 변경·정확한 동의·한 번 적용·다음 제안�
       return observation;
     },
   });
-  it('실제1000→900 기업 승인·제안·동의→REVIEW 적용→다음 제안이 현재900을 원래 조건으로 읽는다', async () => {
+  it('실제1000→900 기업 승인·제안·동의→REVIEW 적용→다음 제안이 현재900을 원래 조건으로 읽는다', async (test) => {
     const f = await seedOrderChange(store),
       bytes = await original(f),
       input = f.application();
     expect(f.display.originalTerms.lines[0]!.price.value).toBe('1000');
     expect(f.display.proposedTerms.lines[0]!.price.value).toBe('900');
-    const receipt = await f.orders.apply(await f.requestContext(f.registrant), input, f.ingress),
+    const receipt = await observedApply(test, 'APPLY_REVIEW', f, input),
       applicationRef = receipt.resultRefs.find(
         (reference) => reference.entity === 'OrderChangeApplication',
       )!;
@@ -167,7 +180,7 @@ describe('실제 가격 변경·정확한 동의·한 번 적용·다음 제안�
     });
     expect(await original(f)).toBe(bytes);
   });
-  it('동일 key 응답 유실은 원래 결과를 재사용하고 다른 key의 같은 동의는 두 번 적용하지 않는다', async () => {
+  it('동일 key 응답 유실은 원래 결과를 재사용하고 다른 key의 같은 동의는 두 번 적용하지 않는다', async (test) => {
     const f = await seedOrderChange(store),
       input = f.application(),
       bytes = await original(f),
@@ -180,9 +193,7 @@ describe('실제 가격 변경·정확한 동의·한 번 적용·다음 제안�
       }
       return validate(uri, data);
     });
-    await expect(
-      f.orders.apply(await f.requestContext(f.registrant), input, f.ingress),
-    ).rejects.toMatchObject({
+    await expect(observedApply(test, 'APPLY_RESPONSE_LOSS', f, input)).rejects.toMatchObject({
       code: 'SYNTHETIC_APPLY_RESPONSE_LOSS',
     });
     lost.mockRestore();
@@ -308,7 +319,7 @@ describe('실제 가격 변경·정확한 동의·한 번 적용·다음 제안�
     expect(await store.list('OrderChangeApplication')).toHaveLength(0);
     expect(await original(f)).toBe(bytes);
   });
-  it('application 이후 실패와 별도 보호 실패는 주문·적용·접수를 성공으로 표시하지 않는다', async () => {
+  it('application 이후 실패와 별도 보호 실패는 주문·적용·접수를 성공으로 표시하지 않는다', async (test) => {
     const f = await seedOrderChange(store),
       bytes = await original(f),
       put = ProtectedTransaction.prototype.put;
@@ -319,9 +330,7 @@ describe('실제 가격 변경·정확한 동의·한 번 적용·다음 제안�
         if (model === 'OrderChangeApplication')
           throw new OmsError(503, 'SYNTHETIC_APPLY_ROLLBACK', '적용 기록 이후 합성 실패');
       });
-    await expect(
-      f.orders.apply(await f.requestContext(f.registrant), f.application(), f.ingress),
-    ).rejects.toMatchObject({
+    await expect(observedApply(test, 'APPLY_ROLLBACK', f, f.application())).rejects.toMatchObject({
       code: 'SYNTHETIC_APPLY_ROLLBACK',
     });
     failed.mockRestore();
@@ -331,9 +340,7 @@ describe('실제 가격 변경·정확한 동의·한 번 적용·다음 제안�
       .spyOn(store, 'protect')
       .mockRejectedValue(new OmsError(503, 'SYNTHETIC_APPLY_PROTECTION', '별도 보호 합성 실패'));
     const input = f.application();
-    await expect(
-      f.orders.apply(await f.requestContext(f.registrant), input, f.ingress),
-    ).rejects.toThrow();
+    await expect(observedApply(test, 'APPLY_PROTECTION', f, input)).rejects.toThrow();
     protect.mockRestore();
     expect((await store.read('Order', f.orderRef.id))!.revision).toBe(1);
     expect(

@@ -202,15 +202,21 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
         .update({ purchaseTermsId: data.purchaseTermsSnapshotRef.id }, { priceBreakdown: {} }),
     ).rejects.toThrow();
   });
-  it('100행은 전체 보존하고 0/101행·혼합 지급/타입·부분 제공·허위 현재 조건은 원자 기록 전 거절한다', async () => {
+  it('100행은 전체 보존하고 0/101행·혼합 지급/타입·부분 제공·허위 현재 조건은 원자 기록 전 거절한다', async (test) => {
     const value = await input(100);
     const context = await f.requestContext(f.seller.customer);
-    const receipt = await profileU3Budget('SUBMISSION_100', context, () =>
-      orders.submit(context, value),
+    const receipt = await profileU3Budget(
+      'SUBMISSION_100',
+      context,
+      () => orders.submit(context, value),
+      test,
     );
-    const read = (await orders.read(
-      await f.requestContext(f.seller.customer),
-      orderQuery(receipt.targetRef!, f.targetScope),
+    const reader = await f.requestContext(f.seller.customer);
+    const read = (await profileU3Budget(
+      'READ_100',
+      reader,
+      () => orders.read(reader, orderQuery(receipt.targetRef!, f.targetScope)),
+      test,
     )) as { knowledge: 'KNOWN'; data: U3OrderView; sourceRefs: Ref[] };
     expect(read.knowledge).toBe('KNOWN');
     expect(read.data.lines).toHaveLength(100);

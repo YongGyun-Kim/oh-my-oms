@@ -30,14 +30,20 @@ export function pilotCommands(source: SourceIdentity): PilotCommand[] {
       commands.push({
         key: unit + '-' + layer,
         scope: unit,
-        environment,
+        environment:
+          unit === 'u3' && layer === 'integration'
+            ? { ...environment, OMS_U3_BUDGET_PROFILE: '1' }
+            : environment,
         command: [
           'npm',
           'run',
           'test:' + unit + ':' + layer,
           '--',
           '--reporter=default',
-          '--reporter=json',
+          '--reporter=' +
+            (unit === 'u3' && layer === 'integration'
+              ? './tests/u3/fixtures/safe-json-reporter.ts'
+              : 'json'),
           '--outputFile=' + path,
         ],
         path,
@@ -47,7 +53,11 @@ export function pilotCommands(source: SourceIdentity): PilotCommand[] {
     commands.push({
       key: unit + '-coverage',
       scope: unit,
-      environment: { ...environment, OMS_PILOT_COVERAGE_UNIT: unit },
+      environment: {
+        ...environment,
+        OMS_PILOT_COVERAGE_UNIT: unit,
+        ...(unit === 'u3' ? { OMS_U3_BUDGET_PROFILE: '1' } : {}),
+      },
       command: [
         'npx',
         '--no-install',

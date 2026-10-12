@@ -22,6 +22,7 @@ import { validatePilotImage } from '../../../scripts/u3/pilot-tools.js';
 import { pilotProductInventory, pilotTestInventory } from '../../../scripts/u3/runtime-source.js';
 import { buildPilotCoverageEvidence } from '../../../scripts/u3/coverage-evidence.js';
 import { aggregatePilotCoverage } from '../../../scripts/u3/coverage-aggregate.js';
+import { observedError } from '../../../scripts/u3/pilot-safe-diagnostics.js';
 
 const text = 'const a = 1;',
   product = 'scripts/u3/fixture.ts',
@@ -416,6 +417,7 @@ describe('pilot-current child·보고서·동일 image의 차단 경계', () => 
         file: 'tests/u3/unit/fixture.spec.ts',
         ordinal: ordinal + 1,
         status: 'failed',
+        received: null,
         frames: [
           { path: 'scripts/u3/fixture.ts', line: 10, column: 2 },
           { path: 'scripts/u3/fixture.ts', line: 11, column: 3 },
@@ -438,6 +440,97 @@ describe('pilot-current child·보고서·동일 image의 차단 경계', () => 
         'validationErrorCode',
       ].sort(),
     );
+  });
+  it('최종 failed의 닫힌 received meta만 공개하고 passed 예상 rejection·오염 meta는 제외한다', async () => {
+    vi.stubEnv('OMS_U2_SYNTHETIC_PROFILE', 'approved-local-only');
+    const valid = {
+      version: 1,
+      errors: [
+        observedError({
+          code: 'EXECUTION_DEADLINE',
+          message: 'private-secret',
+          token: 'private-secret',
+        }),
+      ],
+      phases: [{ phase: 'READ_100', milliseconds: 1, requestRemainingAtEntry: 9999, methods: {} }],
+      http: [{ phase: 'HTTP_APPLY', status: 503, code: 'REQUEST_UNAVAILABLE' }],
+    };
+    for (const poisoned of [false, true]) {
+      const f = memoryPorts(),
+        spec = pilotCommands(source).find((item) => item.key === 'u3-unit')!;
+      await expect(
+        collectPilotProof(
+          'u3',
+          async () => {
+            const report = testReport(['tests/u3/unit/fixture.spec.ts']);
+            f.ports.write(
+              spec.path,
+              bytes({
+                ...report,
+                success: false,
+                numTotalTests: 2,
+                numPassedTests: 1,
+                numFailedTests: 1,
+                numFailedTestSuites: 1,
+                testResults: [
+                  {
+                    name: resolve('tests/u3/unit/fixture.spec.ts'),
+                    status: 'failed',
+                    assertionResults: [
+                      { status: 'passed', title: 'private-secret', meta: { u3SafeFailure: valid } },
+                      {
+                        status: 'failed',
+                        title: 'private-secret',
+                        failureMessages: ['private-secret'],
+                        meta: {
+                          u3SafeFailure: poisoned ? { ...valid, token: 'private-secret' } : valid,
+                        },
+                      },
+                    ],
+                  },
+                ],
+              }),
+            );
+            return { ...execution, exitCode: 1 };
+          },
+          f.ports,
+        ),
+      ).rejects.toMatchObject({ code: 'PILOT_CHILD_FAILED' });
+      const text = f.ports.read('.reports/u3/pilot/u3-job-summary.json').toString();
+      expect(text).not.toContain('private-secret');
+      const failure = JSON.parse(text).failures[0];
+      expect(failure.assertions).toEqual([
+        {
+          file: 'tests/u3/unit/fixture.spec.ts',
+          ordinal: 2,
+          status: 'failed',
+          frames: [],
+          received: poisoned ? null : valid,
+        },
+      ]);
+      expect(failure.tests).toMatchObject({
+        numTotalTests: 2,
+        numPassedTests: 1,
+        numFailedTests: 1,
+        success: false,
+      });
+    }
+    const commands = pilotCommands(source);
+    expect(commands.find((command) => command.key === 'u3-integration')!.command).toContain(
+      '--reporter=./tests/u3/fixtures/safe-json-reporter.ts',
+    );
+    expect(
+      commands.find((command) => command.key === 'u3-integration')!.environment
+        .OMS_U3_BUDGET_PROFILE,
+    ).toBe('1');
+    expect(
+      commands.find((command) => command.key === 'u3-coverage')!.environment.OMS_U3_BUDGET_PROFILE,
+    ).toBe('1');
+    for (const key of ['u1-integration', 'u2-integration', 'u3-unit']) {
+      const command = commands.find((item) => item.key === key)!;
+      expect(command.command).toContain('--reporter=json');
+      expect(command.environment).not.toHaveProperty('OMS_U3_BUDGET_PROFILE');
+    }
   });
   it('누락·무효 JSON·문자열 count는 실패 요약에서도 실제 count로 승격하지 않는다', async () => {
     for (const mode of ['missing', 'json', 'count'] as const) {

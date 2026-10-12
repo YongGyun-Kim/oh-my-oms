@@ -58,9 +58,15 @@ HEAD25d8583의 로컬 실제 U1기여는 unit571·integration168·동일739개 c
 
 추가 조사에서 정상 proposal·주문 입력 준비/접수/조회·seed 후 판단이 최초 요청의 시간 예산을 여러 요청에 재사용한 시험 전제를 확인했다. 각 요청은 기존 실제 재인증 closure로 새 context를 사용하며 부정 actor·기업·외부망·권한회수·변조 입력·경쟁 단언을 유지한다. 제품 변경은 한 assertPremises 호출에서 write Map을 한 번 만드는 것으로 제한했고 독립 최종 현재성/보호 대조를 유지했다. 서비스10초·DB3초·statement2초·lock500ms·100행·80% 기준은 바꾸지 않았다.
 
-Luna의 해당 타입/린트/포맷·선택 단위22개·관련 통합3파일32개는 통과했다. opt-in 테스트 helper는 고정 phase/메서드의 숫자 집계만 제공하며 계측 overhead를 포함하고 중첩 누적 시간을 합산하지 않는다. 현재 manifest는 이 테스트 helper를 포함한 실제171개 경로이고 root의 전체 Git 대조에 누락/추가가 없다. 새 소스의 전체 CI·coverage80%·보안·별도 리뷰·공식 완료는 아직 미완료다.
+Luna의 해당 타입/린트/포맷·선택 단위22개·관련 통합3파일32개는 통과했다. opt-in 테스트 helper는 고정 phase/메서드의 숫자 집계만 제공하며 계측 overhead를 포함하고 중첩 누적 시간을 합산하지 않는다. 당시 manifest는 이 테스트 helper를 포함한 실제171개 경로였고 root의 전체 Git 대조에 누락/추가가 없었다. 새 소스의 전체 CI·coverage80%·보안·별도 리뷰·공식 완료는 아직 미완료다.
 
 ## 추적과 운영 경계
+
+7d4df314의 실제 CI run38206085977에서 U3 제안 시험은 통과했지만 통합159개 중152 PASS/7 FAIL로 현재 전체 검증은 계속 차단됐다. 이전 로컬32개와 제출/판단의 숫자 집계 성공을 CI 성공으로 확대하지 않는다. 실제 최종 오류 코드는 기존 문자열 JSON 요약에서 확인할 수 없으므로 제품·DB 예산/현재성 검사를 추측으로 변경하지 않았다.
+
+시험 전용 JsonReporter subclass는 부모의 JSON counts/output을 유지하며 최종 failed 사례에서만 실제 오류의 허용 code/SQLSTATE와 닫힌 phase 숫자를 meta로 기록한다. 메서드의 관측 rejection과 최종 시험 오류는 구분하며 passed 예상 rejection은 실패 집계에서 제외한다. HTTP는 실제 받은 status/problem type의 정확 enum만 사용한다. 미확인 값은 UNKNOWN이고 message/title/actual/expected/SQL/token을 추측·공개하지 않는다. 계측 overhead를 포함하고 중첩 시간을 합산하지 않는다. 기본 include 밖의 DB 없는3 FAIL/1 PASS reporter probe는 exit1이 의도된 진단 연결 검사다. 실제 BASELINE/SAFE의 counts/status 보존·받은 오류/SQLSTATE·matcher UNKNOWN·정상 예상 rejection 제외·민감 sentinel 제외를 확인했다. 제어된3 FAIL은 실제 업무 회귀 판정에 합산하지 않는다.
+
+타입 metadata 오류를 수정한 뒤 Luna의 TypeScript·지정 ESLint·Prettier·진단 단위21개·관련 통합4파일37개는 모두 통과했다. root가 실제 report count/bool과 probe를 대조했고 source176경로의 실제 전체 Git 대조에 누락/추가가 없다. 같은19경로 SHA는 검사 전후 동일했다. 로컬 HTTP_APPLY의 보호 실행2630.977ms와 READ_100 전체1920.292ms는 계측 overhead를 포함한 관측이며 CI 실패 원인/운영 용량의 확정 증거가 아니다. 새 관측 source의 전체 CI·전체80%·보안·별도 리뷰·main 머지는 미완료다.
 
 [traceability.json](traceability.json)은 할당42AC·29BR·33상세NFR를 모두 열거한다. OK는 실제 존재하는 구현/시험 경로 연결이지 그때의 운영목표 달성 인증이 아니다. 원래7개 AC Deferred와 NFR 설계의 후속 실증을 보존한다. 국내경로/실제보관정책 같은 원본 확인을 코드guard/문서로 달성했다고 표현하지 않는다.
 

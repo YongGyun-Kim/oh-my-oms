@@ -22,6 +22,7 @@ import {
 } from './pilot-validation.js';
 import type { PilotProof, PilotReceipt } from './pilot-validation.js';
 import { pilotCoveragePath } from './coverage-evidence.js';
+import { safeFailure } from './pilot-safe-diagnostics.js';
 
 export interface PilotPorts extends ProofPorts {
   archive(path: string): void;
@@ -161,6 +162,7 @@ function failedAssertions(
     ordinal: number;
     status: 'failed';
     frames: { path: string; line: number; column: number | null }[];
+    received: ReturnType<typeof safeFailure>;
   }[] = [];
   if (spec.scope === 'project' || !Array.isArray(report.testResults)) return result;
   const expected = new Set(pilotTestInventory(source, spec.scope));
@@ -182,7 +184,13 @@ function failedAssertions(
       const assertion = suite.assertionResults[ordinal];
       if (!assertion || typeof assertion !== 'object' || assertion.status !== 'failed') continue;
       const frames = diagnosticFrames(assertion.failureMessages, source);
-      result.push({ file, ordinal: ordinal + 1, status: 'failed', frames });
+      result.push({
+        file,
+        ordinal: ordinal + 1,
+        status: 'failed',
+        frames,
+        received: safeFailure(assertion.meta?.u3SafeFailure),
+      });
     }
     if (result.length === 10) break;
   }
