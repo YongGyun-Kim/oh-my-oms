@@ -51688,3 +51688,155 @@
 **Context**: construction > u3-commercial-ordering > code-generation > host-verification-20261012.md
 
 ---
+
+## Session Compacted
+**Timestamp**: 2026-10-12T00:13:48Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T00:22:04Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: HTTP 소스·시험 9개 파일을 고정했습니다. SHA와 Luna용 정확 검증 명령·새 보고서 경로를 전달했습니다.\n\n아직 검증 전이며 Step15/16, worker·CI는 미완료입니다. 결과까지 쓰기를 중지합니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T00:22:33Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: TypeScript 검사가 `tests/u3/unit/http-contracts.spec.ts`의 Request/ProcessEnv 타입 오류로 exit 2였습니다. 실패 시 중단 지시에 따라 unit, integration, ESLint는 실행하지 않았습니다. source identity와 지정 9개 파일 해시는 전후 동일하며 결과를 root에 전달했습니
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-12T00:23:08Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/host-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > host-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T00:23:38Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 단위 시험 파일의 타입 대역만 수정하고 다시 고정했습니다. 제품 코드·검증·단언은 유지했습니다.\n\n새 SHA와 검증 명령을 전달했으며, Luna 결과를 기다립니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T00:25:39Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: tsc와 U3 unit 264/264는 통과했습니다. HTTP host 통합은 6건 중 3건 실패해 지시에 따라 ESLint를 중단했습니다. source identity와 지정 9개 파일 해시는 전후 동일하며 실패 위치를 root에 전달했습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-12T00:27:22Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/host-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > host-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T00:29:57Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 선택자 오류는 아니었습니다. 합성 fixture가 직원별 bootstrap 링크와 새 확인 링크를 함께 저장해 현재 링크가 2개였습니다.\n\n제품의 고유성 검증은 유지해야 합니다. HTTP 전용 fixture의 정확한 보호 링크 준비를 정합화하는 최소안을 전달했으며, 소스는 아직 변경하지 않았습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-12T00:30:31Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/host-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > host-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T00:31:45Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: HTTP 시험 파일만 정합화하고 고정했습니다. 제품의 고유성·보호 검증은 유지했고, 중복 링크 거절 사례와 안전한 오류 코드 단언을 추가했습니다.\n\n새 SHA와 검증 명령을 전달했습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T00:32:26Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: tsc가 `http-host.spec.ts:554:88`의 TS2339 오류로 실패했습니다. 지시에 따라 통합 및 ESLint는 실행하지 않았고, source identity와 지정 9개 파일 해시는 전후 동일했습니다. 결과를 root에 전달했습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-12T00:33:10Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/host-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > host-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T00:33:19Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: 시험 대역의 타입만 명시하고 다시 고정했습니다. 제품 코드·실행 값·단언은 유지했습니다.\n\n새 SHA와 검증 명령을 전달했습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T00:35:32Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: HTTP 통합 테스트 6/6과 ESLint가 통과했고, tsc도 통과했습니다. source identity와 지정 9개 파일 해시는 전후 동일하며 결과를 root에 전달했습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-12T00:35:56Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/host-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > host-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T00:36:56Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: U1 HTTP 회귀 25/25와 U2 HTTP 회귀 22/22가 모두 통과했습니다. 격리 검증 DB 준비가 완료됐고, source identity 및 지정 9개 파일 해시는 전후 동일합니다. 결과를 root에 전달했습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-12T00:37:10Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/host-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > host-verification-20261012.md
+
+---

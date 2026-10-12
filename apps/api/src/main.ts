@@ -36,9 +36,13 @@ import type { IdentityU2Runtime } from '@oms/core';
 import { OmsError } from '@oms/contracts';
 import { apiObservationOperations } from './observation.js';
 import { createApi } from './application.js';
+import type { ApiOwners } from './operations.js';
+import { createU3Owners } from './u3-operations.js';
+import { u3RuntimeRequested } from './u3-runtime.js';
 // One API execution role serves two strictly separate audience compositions.
 // Origin selects a registered transport; it NEVER establishes staff identity/ingress/grant.
 export async function startApi(environment: NodeJS.ProcessEnv = process.env) {
+  const u3Requested = u3RuntimeRequested(environment);
   const config = runtimeApiConfiguration(environment);
   const resources = await runtimeStore(
     { ...config.customer, vaultUrl: config.u2?.vaultUrl },
@@ -113,7 +117,7 @@ export async function startApi(environment: NodeJS.ProcessEnv = process.env) {
       },
       u2,
     );
-    const owners = {
+    const owners: ApiOwners = {
       store,
       identity,
       enterprise: new EnterpriseAccess(store, new UnregisteredEnterpriseVerification(), now, false),
@@ -127,6 +131,7 @@ export async function startApi(environment: NodeJS.ProcessEnv = process.env) {
       identityConsumer: consumer,
       personRegistration: 'UNREGISTERED' as const,
     };
+    if (u3Requested) owners.u3 = createU3Owners(owners, { staffIngress: async () => false });
     const composition = async (audience: 'CUSTOMER' | 'STAFF') => {
       const options = audience === 'CUSTOMER' ? config.customer : config.staff;
       return createApi(owners, {

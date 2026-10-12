@@ -39,6 +39,15 @@ import type { PartyCookieMaterial } from './u2-authentication.js';
 import { bindU2Operations } from './u2-operations.js';
 import { U2_API_ROUTES, u2RouteInput } from './u2-routes.js';
 import type { U2ApiRoute } from './u2-routes.js';
+import {
+  U3_API_ROUTES,
+  matchU3Route,
+  u3BodyLimit,
+  u3RouteInput,
+  u3RouteTarget,
+} from './u3-routes.js';
+import type { U3ApiRoute } from './u3-routes.js';
+import { u3PersonContext } from './u3-person-context.js';
 @Module({})
 class ApiHostModule {}
 export async function createApi(owners: ApiOwners, configuration: ApiSecurityConfiguration) {
@@ -70,7 +79,27 @@ export async function createApi(owners: ApiOwners, configuration: ApiSecurityCon
   observeHttp(server, configuration.telemetry, configuration.audience);
   server.use(processHttpAdmission.handle);
   server.use(captureRequestBudget);
-  server.use(express.json({ limit: '64kb', strict: true, type: 'application/json' }));
+  const smallJson = express.json({
+      limit: 65536,
+      strict: true,
+      type: 'application/json',
+      inflate: !owners.u3,
+    }),
+    orderJson = express.json({
+      limit: 1048576,
+      strict: true,
+      type: 'application/json',
+      inflate: false,
+    });
+  server.use((request, response, next) => {
+    const selected = owners.u3 ? matchU3Route(request.method, request.path) : undefined;
+    // 서버의 고정 경로에 맞는 parser 하나만 실행한다. raw-body가 실제 byte 상한을 검사한다.
+    if (selected && request.method === 'POST' && !request.is('application/json')) {
+      next(new OmsError(415, 'JSON_CONTENT_TYPE_REQUIRED', '등록된 JSON 입력이 필요합니다.'));
+      return;
+    }
+    (u3BodyLimit(selected) === 1048576 ? orderJson : smallJson)(request, response, next);
+  });
   const guarded =
     (handler: (request: Request, response: Response) => Promise<void>) =>
     (request: Request, response: Response, next: NextFunction) => {
@@ -162,9 +191,22 @@ export async function createApi(owners: ApiOwners, configuration: ApiSecurityCon
       });
     }),
   );
-  for (const route of [...API_ROUTES, ...U2_API_ROUTES]) {
+  const routes = owners.u3
+    ? [
+        ...U3_API_ROUTES,
+        ...API_ROUTES.filter(
+          (legacy) =>
+            !U3_API_ROUTES.some(
+              (current) => current.method === legacy.method && current.path === legacy.path,
+            ),
+        ),
+        ...U2_API_ROUTES,
+      ]
+    : [...API_ROUTES, ...U2_API_ROUTES];
+  for (const route of routes) {
+    const u3 = 'u3' in route ? (route as U3ApiRoute) : null;
     const u2 = 'version' in route ? (route as U2ApiRoute) : null;
-    const version = u2?.version ?? 2;
+    const version = u3 ? 3 : (u2?.version ?? 2);
     const operation = registry.lookup(route.owner, route.operation, version);
     if (!operation.audience.includes(configuration.audience)) continue;
     server[route.method](
@@ -174,9 +216,21 @@ export async function createApi(owners: ApiOwners, configuration: ApiSecurityCon
         owners.store.schema.validate('Id', correlation);
         response.setHeader('X-Correlation-Id', String(correlation));
         requireCondition(
-          !['x-principal-id', 'x-role', 'x-mfa-verified', 'x-staff-network'].some(
-            (key) => request.headers[key] !== undefined,
-          ),
+          ![
+            'x-principal-id',
+            'x-role',
+            'x-mfa-verified',
+            'x-staff-network',
+            ...(u3
+              ? [
+                  'x-api-version',
+                  'x-contract-version',
+                  'x-registry-version',
+                  'x-source-contract',
+                  'x-operation',
+                ]
+              : []),
+          ].some((key) => request.headers[key] !== undefined),
           400,
           'CLIENT_AUTHORITY_FORBIDDEN',
           '서버 신원과 권한을 입력할 수 없습니다.',
@@ -225,12 +279,14 @@ export async function createApi(owners: ApiOwners, configuration: ApiSecurityCon
             authenticationCall.run(call, () =>
               u2HttpCall.run(u2Call, async () => {
                 await configuration.activationAdmission?.();
-                const target = routeTarget(route, request);
+                const target = u3 ? u3RouteTarget(u3, request) : routeTarget(route, request);
                 if (u2?.operation === 'issueInvitationPurpose' && target.kind === 'RECORD')
                   target.recordRef.owner = 'EnterpriseAccess';
-                let data = u2
-                  ? u2RouteInput(u2, request, target)
-                  : routeInput(route, request, target);
+                let data = u3
+                  ? u3RouteInput(u3, request, target)
+                  : u2
+                    ? u2RouteInput(u2, request, target)
+                    : routeInput(route, request, target);
                 if (u2?.operation === 'reobserveHandoff') {
                   requireCondition(
                     request.headers.origin === configuration.origin,
@@ -263,7 +319,7 @@ export async function createApi(owners: ApiOwners, configuration: ApiSecurityCon
                   );
                   data = { ...submitted, partySecret: material.partySecret };
                 }
-                const context = route.public
+                let context = route.public
                   ? ({
                       attemptId:
                         u2 && (data as { challengeId?: string }).challengeId
@@ -290,6 +346,13 @@ export async function createApi(owners: ApiOwners, configuration: ApiSecurityCon
                       );
                 // Canonical input is checked before transport execution evidence is recorded.
                 owners.store.schema.validateUri(operation.input, data);
+                if (u3 && !route.public && 'principalId' in context)
+                  context = await u3PersonContext(
+                    owners.store,
+                    context,
+                    owners.now,
+                    owners.u3!.agreement.basis.registration.personPurpose,
+                  );
                 await (u2 && (route.public || u2.contextKind === 'PURPOSE')
                   ? u2Rate.admit(
                       call.network,
@@ -507,7 +570,11 @@ export async function createApi(owners: ApiOwners, configuration: ApiSecurityCon
               ? 413
               : (error as { type?: string })?.type === 'entity.parse.failed'
                 ? 400
-                : 503,
+                : ['encoding.unsupported', 'charset.unsupported'].includes(
+                      (error as { type?: string })?.type ?? '',
+                    )
+                  ? 415
+                  : 503,
             'REQUEST_UNAVAILABLE',
             '요청의 원래 결과를 확인하세요.',
           );

@@ -51,6 +51,18 @@ const primaryAtomicCommands = new Set([
   'ProductCatalog:registerProduct',
   'ProductCatalog:reviseProduct',
   'OrderAcceptance:submitOrder',
+  'CommercialAgreement:registerAgreement',
+  'CommercialAgreement:approveAgreement',
+  'CommercialAgreement:requestContractChange',
+  'CommercialAgreement:registerOfferException',
+  'CommercialAgreement:createProposal',
+  'CommercialAgreement:recordConsent',
+  'OrderAcceptance:decideOrder',
+  'OrderAcceptance:applyApprovedChange',
+  'EnterpriseAccess:reviseStaffRole',
+  'EnterpriseAccess:deactivateStaffRole',
+  'EnterpriseAccess:reviseCustomerRole',
+  'EnterpriseAccess:deactivateCustomerRole',
   'NotificationDelivery:recordNoticeRead',
 ]);
 export function isPrimaryAtomicCommand(owner: string, operation: string): boolean {
