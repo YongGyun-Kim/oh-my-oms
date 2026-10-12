@@ -25,3 +25,13 @@ Luna의 고정 Node 22.23.3 TypeScript와 지정 ESLint는 종료 코드 0이다
 ## 기존 호스트 영향 회귀
 
 U1 contract-bindings/http-boundaries의 24/24와 U2 http-access의 10/10이 통과했다. 두 npm 명령은 소유된 격리 검증 DB 준비를 거쳐 종료 코드 0을 반환했다. root가 in-process-host-u1-regression-20261012.json과 in-process-host-u2-regression-20261012.json의 실제 count·success를 확인했다. 실패/pending/todo 0·success=true이며 검사 전후 source/runtime 지문·HEAD와 선택 7개 SHA는 위 첫 연결 검사와 동일했다. 대량 부하·전체 DR·실제 AWS 배포는 실행하지 않는다.
+
+## 보호 조회 8개 연결
+
+첫 호스트 계층은 4f1d0ed로 커밋하고 origin/feat/u1-integrated-foundation에 push했다. 후속 계층에서 실제 계약 readAgreement/effectiveAgreement와 세 업무 소유자의 history/diagnostic 6개를 연결했다. U3OwnerQuery는 보호된 현재 참조·기업/조직/현재 권한 전후·현재 승인과 유효 구간/근거·이력 개정을 확인한다. 미래 또는 승인 미확인 효력은 UNKNOWN으로 표시한다. 제안·동의 참조는 보호된 자료와 현재 읽기 범위 안에서만 반환한다.
+
+고정 TargetScope가 없던 기존 조회 입력을 U3 전용 닫힌 OwnerRecordQuery(targetRef,targetScope)로 보완했다. 실제 U3 참조를 반환하도록 조회 응답 alias도 정합화했다. 이는 현재 구현 과정의 계약 보완이며 이전 승인 wire에 이미 같은 필드가 있었다고 주장하지 않는다. 이전 공통 계약 1/2는 보존하며 현재 대상 범위를 기업 전체로 추정하지 않는다.
+
+진단은 기존 OwnerDiagnostics와 별도 읽기 전용 DB 역할을 재사용하고 일반 writer 연결·미등록·다른 owner/request를 거절한다. 로컬 fixture는 기존 진단 login을 비노출로 사용하고 소유된 U3 격리 DB의 metadata view만 읽도록 준비한다. 새로운 운영 역할·비밀 파일·서비스를 만들지 않으며 이를 실제 운영 진단 구성으로 표시하지 않는다. 제품·계약·fixture·시험 8개 파일을 고정해 단위 2개와 통합 4개를 추가했다. HTTP/parser·worker와 Step15–16 전체는 미완료다.
+
+TypeScript·지정 ESLint는 종료 코드 0이다. owner-query-unit-20261012.json은 260/260 PASS, owner-query-integration-20261012.json은 새 조회 4개와 이전 in-process-host 4개, 총 8/8 PASS다. root가 실제 JSON count를 확인했으며 실패/pending/todo 0·success=true, Luna가 미처리 오류 0을 확인했다. 검사 전후 HEAD는 4f1d0ed782676f4ddb2559783f74023635ce7035, source/runtime 지문은 368d33688b05e7554e168952a3b217ad0abf8cd3a82f2eef72bfe42e5b361e6c로 동일했고 선택 8개 파일 SHA도 동일했다.

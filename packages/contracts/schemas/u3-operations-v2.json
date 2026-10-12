@@ -73,15 +73,23 @@
     "targetSchema": {
       "type": "object",
       "properties": {
-        "kind": { "const": "RECORD" },
+        "kind": {
+          "const": "RECORD"
+        },
         "recordRef": {
           "allOf": [
-            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
             {
               "type": "object",
               "properties": {
-                "owner": { "const": "EnterpriseAccess" },
-                "entity": { "const": "StaffRole" }
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "StaffRole"
+                }
               }
             }
           ]
@@ -105,15 +113,23 @@
     "targetSchema": {
       "type": "object",
       "properties": {
-        "kind": { "const": "RECORD" },
+        "kind": {
+          "const": "RECORD"
+        },
         "recordRef": {
           "allOf": [
-            { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
             {
               "type": "object",
               "properties": {
-                "owner": { "const": "EnterpriseAccess" },
-                "entity": { "const": "StaffRole" }
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "StaffRole"
+                }
               }
             }
           ]
@@ -440,7 +456,7 @@
     "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
     "action": null,
     "kind": "query",
-    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OwnerRecordQuery",
     "output": "urn:oms:contract:u3-commercial:2#/$defs/AgreementViewResult",
     "targetKind": "NONE"
   },
@@ -545,8 +561,8 @@
     "audience": ["STAFF", "SYSTEM"],
     "action": null,
     "kind": "query",
-    "input": "urn:oms:contract:common:2#/$defs/DiagnosticInput",
-    "output": "urn:oms:contract:common:2#/$defs/DiagnosticView",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/DiagnosticInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/DiagnosticView",
     "targetKind": "NONE"
   },
   {
@@ -557,8 +573,8 @@
     "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
     "action": null,
     "kind": "query",
-    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
-    "output": "urn:oms:contract:common:2#/$defs/HistoryView",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OwnerRecordQuery",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/HistoryView",
     "targetKind": "NONE"
   },
   {
@@ -569,8 +585,8 @@
     "audience": ["STAFF", "SYSTEM"],
     "action": null,
     "kind": "query",
-    "input": "urn:oms:contract:common:2#/$defs/DiagnosticInput",
-    "output": "urn:oms:contract:common:2#/$defs/DiagnosticView",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/DiagnosticInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/DiagnosticView",
     "targetKind": "NONE"
   },
   {
@@ -581,8 +597,8 @@
     "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
     "action": null,
     "kind": "query",
-    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
-    "output": "urn:oms:contract:common:2#/$defs/HistoryView",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OwnerRecordQuery",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/HistoryView",
     "targetKind": "NONE"
   },
   {
@@ -593,8 +609,8 @@
     "audience": ["STAFF", "SYSTEM"],
     "action": null,
     "kind": "query",
-    "input": "urn:oms:contract:common:2#/$defs/DiagnosticInput",
-    "output": "urn:oms:contract:common:2#/$defs/DiagnosticView",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/DiagnosticInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/DiagnosticView",
     "targetKind": "NONE"
   },
   {
@@ -605,8 +621,8 @@
     "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
     "action": null,
     "kind": "query",
-    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
-    "output": "urn:oms:contract:common:2#/$defs/HistoryView",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OwnerRecordQuery",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/HistoryView",
     "targetKind": "NONE"
   }
 ]

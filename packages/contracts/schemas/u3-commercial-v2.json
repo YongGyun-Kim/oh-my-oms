@@ -3,6 +3,273 @@
   "$id": "urn:oms:contract:u3-commercial:2",
   "title": "U3 commercial profile revision 2 — registry version 3; common 1/2 preserved",
   "$defs": {
+    "HistoryView": {
+      "type": "object",
+      "properties": {
+        "historyRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+          },
+          "maxItems": 100
+        },
+        "sourceFactRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        },
+        "correctionRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+          },
+          "maxItems": 100
+        },
+        "observedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u3-commercial:2#/$defs/HistoryItem"
+          },
+          "minItems": 0,
+          "maxItems": 100
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "historyRefs",
+        "sourceFactRefs",
+        "correctionRefs",
+        "observedAt",
+        "items",
+        "nextCursor"
+      ],
+      "additionalProperties": false
+    },
+    "HistoryItem": {
+      "type": "object",
+      "properties": {
+        "historyRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+        },
+        "actorAccountRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verifiedPersonRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "occurredAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "beforeRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "afterRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidenceRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        },
+        "requestId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "resultRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        },
+        "correctionOf": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceRevision": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+        }
+      },
+      "required": [
+        "historyRef",
+        "actorAccountRef",
+        "verifiedPersonRef",
+        "occurredAt",
+        "reason",
+        "beforeRef",
+        "afterRef",
+        "evidenceRefs",
+        "requestId",
+        "resultRefs",
+        "correctionOf",
+        "sourceRevision"
+      ],
+      "additionalProperties": false
+    },
+    "DiagnosticInput": {
+      "type": "object",
+      "properties": {
+        "owner": {
+          "type": "string",
+          "enum": [
+            "IdentityRecovery",
+            "EnterpriseAccess",
+            "ProductCatalog",
+            "CommercialAgreement",
+            "OrderAcceptance",
+            "FinancialSettlement",
+            "HardwareFulfillment",
+            "SoftwareLifecycle",
+            "AfterSalesDecision",
+            "NotificationDelivery",
+            "OperationalAssurance"
+          ],
+          "maxLength": 4096
+        },
+        "requestRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:common:2#/$defs/Id"
+          },
+          "minItems": 0
+        },
+        "factRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        },
+        "from": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "to": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        }
+      },
+      "required": ["owner", "requestRefs", "factRefs", "from", "to"],
+      "additionalProperties": false
+    },
+    "DiagnosticView": {
+      "type": "object",
+      "properties": {
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "acknowledgedRequestRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:common:2#/$defs/Id"
+          },
+          "minItems": 0
+        },
+        "storedReceiptRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        },
+        "committedFactRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        },
+        "pendingWorkRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        },
+        "historyRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        },
+        "correctionRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        },
+        "coverage": {
+          "type": "string",
+          "enum": ["COMPLETE", "PARTIAL", "UNAVAILABLE"],
+          "maxLength": 4096
+        },
+        "observedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "owner",
+        "acknowledgedRequestRefs",
+        "storedReceiptRefs",
+        "committedFactRefs",
+        "pendingWorkRefs",
+        "historyRefs",
+        "correctionRefs",
+        "coverage",
+        "observedAt",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "OwnerRecordQuery": {
+      "type": "object",
+      "properties": {
+        "targetRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+        },
+        "targetScope": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["targetRef", "targetScope"],
+      "additionalProperties": false
+    },
     "OriginalReceiptProbe": {
       "oneOf": [
         {
@@ -2288,7 +2555,72 @@
       ]
     },
     "AgreementView": {
-      "$ref": "urn:oms:contract:common:2#/$defs/AgreementView"
+      "type": "object",
+      "properties": {
+        "enterpriseRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+        },
+        "approvedRevisionRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "offerExceptionRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        },
+        "commercialTermsRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "provisionTermsRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "renewalTermsRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "proposalRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        },
+        "consentRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs"
+        }
+      },
+      "required": [
+        "enterpriseRef",
+        "approvedRevisionRef",
+        "offerExceptionRefs",
+        "commercialTermsRef",
+        "provisionTermsRef",
+        "renewalTermsRef",
+        "proposalRefs",
+        "consentRefs"
+      ],
+      "additionalProperties": false
     },
     "ProposalView": {
       "allOf": [

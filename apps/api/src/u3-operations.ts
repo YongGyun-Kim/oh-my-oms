@@ -13,6 +13,7 @@ import {
   U3OrderAcceptance,
   U3ProductCatalog,
   U3StaffAccess,
+  U3OwnerQuery,
 } from '@oms/core';
 import type {
   U3AfterSalesRegistration,
@@ -21,6 +22,8 @@ import type {
   U3RenewalRegistration,
 } from '@oms/core';
 import type { ApiOwners } from './operations.js';
+import type { OwnerDiagnostics } from '@oms/persistence';
+import type { U3OwnerRecordQuery, U3AgreementPageQuery } from '@oms/core';
 import { authenticationCall } from './authentication.js';
 
 export interface U3ApiConfiguration {
@@ -29,6 +32,7 @@ export interface U3ApiConfiguration {
   readiness?: U3ReadinessRegistration[];
   renewal?: U3RenewalRegistration;
   afterSales?: U3AfterSalesRegistration;
+  diagnostics?: OwnerDiagnostics;
 }
 export interface U3ApiOwners {
   catalog: U3ProductCatalog;
@@ -38,20 +42,22 @@ export interface U3ApiOwners {
   orders: U3OrderAcceptance;
   staff: U3StaffAccess;
   customer: U3CustomerAccess;
+  queries: U3OwnerQuery;
 }
 // 서버가 명시 구성한 소유자만 사용한다. 요청 body의 profile/등록 주장은 해석하지 않는다.
 export function createU3Owners(owners: ApiOwners, configuration: U3ApiConfiguration): U3ApiOwners {
   const { store, now } = owners,
-    catalog = new U3ProductCatalog(store, now, configuration.staffIngress);
-  return {
-    catalog,
-    products: new U3CatalogQuery(catalog),
-    agreement: new CommercialAgreement(
+    catalog = new U3ProductCatalog(store, now, configuration.staffIngress),
+    agreement = new CommercialAgreement(
       store,
       now,
       configuration.staffIngress,
       configuration.evidence,
-    ),
+    );
+  return {
+    catalog,
+    products: new U3CatalogQuery(catalog),
+    agreement,
     proposals: new CommercialProposal(
       store,
       now,
@@ -69,6 +75,13 @@ export function createU3Owners(owners: ApiOwners, configuration: U3ApiConfigurat
     ),
     staff: new U3StaffAccess(store, now),
     customer: new U3CustomerAccess(owners.enterprise, now),
+    queries: new U3OwnerQuery(
+      store,
+      now,
+      configuration.staffIngress,
+      agreement,
+      configuration.diagnostics,
+    ),
   };
 }
 export function bindU3Operations(registry: OperationRegistry, owners: ApiOwners): void {
@@ -232,5 +245,21 @@ export function bindU3Operations(registry: OperationRegistry, owners: ApiOwners)
     (context, data: Parameters<ApiOwners['enterprise']['grantCustomerRole']>[2], target) =>
       owners.enterprise.grantCustomerRole(context, enterprise(target), data),
   );
-  // 나머지 보호 조회 구현은 후속 계층에서 바인딩한다. 미등록 호출은 registry가 명시 거절한다.
+  bind('CommercialAgreement', 'readAgreement', (context, data: U3AgreementPageQuery, target) =>
+    u3.queries.readAgreement(context, enterprise(target), data, ingress()),
+  );
+  bind('CommercialAgreement', 'effectiveAgreement', (context, data: U3OwnerRecordQuery) =>
+    u3.queries.effectiveAgreement(context, data, ingress()),
+  );
+  for (const owner of ['ProductCatalog', 'CommercialAgreement', 'OrderAcceptance'] as const) {
+    bind(owner, 'readOwnerHistory', (context, data: U3OwnerRecordQuery) =>
+      u3.queries.history(context, owner, data, ingress()),
+    );
+    bind(
+      owner,
+      'readOwnerDiagnostics',
+      (context, data: Parameters<U3OwnerQuery['diagnostic']>[2]) =>
+        u3.queries.diagnostic(context, owner, data, ingress()),
+    );
+  }
 }
