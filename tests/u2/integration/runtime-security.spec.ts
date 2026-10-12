@@ -50,17 +50,47 @@ describe('합성 실제 HTTP/BFF·공유 보호 admission 공격 경계', () => 
       ...(data !== undefined ? { body: JSON.stringify(data) } : {}),
     });
   }
-  it('이미 보호된 고정 revision1 fixture는 재seed로 덮어쓰지 않고 원래 fence를 보존한다', async () => {
+  it('보호된 fence에 고정 revision1 쓰기는 거절하고 원래 fence를 보존한다', async () => {
     await setup();
     const original = await store.currentProtected('StaffAuthorityFence', U2_STAFF_FENCE_ID);
-    // The seed writes revision1, then the normal role revision advances its fence to2.
+    const primary = await sources.primaryApp.getRepository('StaffAuthorityFence').findOne({
+      where: { fenceId: U2_STAFF_FENCE_ID },
+      select: { revision: true, authorityRevision: true },
+    });
+    // 공유 fixture는 현재 fence를 +1 개정한다. 고정 revision1 덮어쓰기는 별도로 검증한다.
     expect(original?.revision).toBe(2);
-    await expect(seedVerifiedRecoveryParty(store, sources.vault)).rejects.toMatchObject({
+    await expect(
+      store.execute(
+        {
+          principalId: 'synthetic-private-bootstrap',
+          audience: 'SYSTEM',
+          owner: 'EnterpriseAccess',
+          operation: 'fixture-staff-bootstrap',
+          target: null,
+          idempotencyKey: randomUUID(),
+          input: { revision: 1, authorityRevision: 1 },
+          correlationId: randomUUID(),
+          epoch: await store.currentEpoch(),
+        },
+        async (tx) =>
+          tx.put('StaffAuthorityFence', {
+            fenceId: U2_STAFF_FENCE_ID,
+            revision: 1,
+            authorityRevision: 1,
+          }),
+      ),
+    ).rejects.toMatchObject({
       code: 'REVISION_SEQUENCE',
     });
     expect(await store.currentProtected('StaffAuthorityFence', U2_STAFF_FENCE_ID)).toEqual(
       original,
     );
+    expect(
+      await sources.primaryApp.getRepository('StaffAuthorityFence').findOne({
+        where: { fenceId: U2_STAFF_FENCE_ID },
+        select: { revision: true, authorityRevision: true },
+      }),
+    ).toEqual(primary);
   });
   it('명시 private 합성 credential이 실제 HTTP password/MFA와 일치하고 다른 프로세스 credential은401이다', async () => {
     const f = await seedVerifiedRecoveryParty(store, sources.vault),
