@@ -4,6 +4,7 @@ import type { ModelData } from '@oms/persistence';
 import { randomUUID } from 'node:crypto';
 import { ref } from './references.js';
 import { CONSUMER, WorkerInternal, ReceiptResult } from './worker-state.js';
+import { assertU3NoticeSource } from './u3-notice-source.js';
 export async function relayBatch(host: WorkerInternal): Promise<number> {
   const pending = await host.store.list('OutboxDelivery', {
     equals: { state: 'PENDING', consumer: CONSUMER },
@@ -133,6 +134,7 @@ export async function holdExpired(
         (outbox.workRef as Ref).id,
         (outbox.workRef as Ref).revision,
       );
+      await assertU3NoticeSource(host.store, original, fact, transaction);
       requireCondition(
         published &&
           [

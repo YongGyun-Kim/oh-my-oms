@@ -3,6 +3,7 @@ import { canonicalJson, requireCondition } from '@oms/contracts';
 import type { ModelData, ProtectedTransaction } from '@oms/persistence';
 import { ref } from './references.js';
 import { CONSUMER, WorkerInternal } from './worker-state.js';
+import { assertU3NoticeSource } from './u3-notice-source.js';
 export function observed(
   host: WorkerInternal,
   operation: string,
@@ -112,5 +113,6 @@ export async function permit(
     'WORK_CAUSATION',
     '원래 사실/전체대상/소유자/접수/개정을 대조해야 합니다.',
   );
+  await assertU3NoticeSource(host.store, work, fact, transaction);
   return fact;
 }

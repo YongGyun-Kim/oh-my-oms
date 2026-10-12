@@ -59,3 +59,13 @@ ProtectedStore.list의 equals는 실제 JSONB containment로 동작하고 raw �
 duplicate에 실제 ModelData와 personLinkId 타입만 명시했다. 제품·실행 값·단언은 유지했고 최종 HTTP 통합 파일 SHA는 03904b59f90c9272b70d479e5e79f576982c8668b16142c4fcf0e907f36e87fc다. TypeScript·지정 ESLint 종료 코드0, http-host-person-graph-typed-integration-20261012.json은 6/6 PASS·실패/pending/todo0·success=true이며 미처리 오류0이다. root가 실제 count를 확인했다. 기존 unit264 PASS 보고서는 같은 제품/단위 시험 지문의 결과로 보존하고 반복하지 않았다. 검사 전후 HEAD는 3cecf81fc9842b7a973c02c786cea2fa9d17465b, source/runtime 지문은 05bbc6104880cd98c6337be8c58e3399b226bc97c09a128600a92d86ac864996이며 선택9개 SHA도 동일했다. 첫 두503 기대도 시험 그래프 정합화 후 정상202로 통과했다. 좁은 U1/U2 HTTP 영향 회귀는 이어서 실행 중이다.
 
 HTTP 영향 회귀도 통과했다. npm의 소유된 격리 검증 DB 준비를 거친 U1 http-boundaries/http-auth-intents는 25/25 PASS, U2 http-access/http-identity는 22/22 PASS이며 두 명령 종료 코드0이다. root가 http-host-u1-regression-20261012.json과 http-host-u2-regression-20261012.json의 실제 count를 확인했다. 실패/pending/todo0·success=true, 검사 전후 위 HEAD/source 지문과 선택9개 SHA는 동일했다. worker 소비 연결·파일럿 CI·공통 품질·최종 문서와 별도 리뷰는 계속 미완료다.
+
+## worker의 보호된 U3 출처 연결
+
+HTTP 계층은 34176d0로 커밋하고 같은 원격 브랜치에 push했다. 후속 4개 파일에서 u3-notice-source.ts와 기존 worker-authority/worker-traversal에 U3 통지의 보호 출처 대조를 연결했다. U3는 주문 통지만 Outbox/Work로 만들고 다른 사실은 원본으로 보존한다. 기존 NotificationDelivery.materialiseInApp:2 소비 wire를 유지하며 원래 registry3 작업·sourceContract·보호 Work/Fact/Receipt·정확 원자 후보·별도 journal byte/digest/이전 digest/sequence/key/result를 확인한다. 원래 Order 개정은 역사적 보호 원본으로 읽어 후속 개정 때문에 유효한 원래 통지를 거절하지 않는다. 현재 실행 permit·epoch·기한·Work/Fact 보호와 일회 소비 mark는 별도로 유지한다. 업무 승인이나 외부 소유자 작업을 새로 만들지 않는다.
+
+실제 100행 생산자→합성 queue→통지/중복 일회, 후속 판단 통지의 먼저 도착, 소비자·업무 작업·참조·버전 위조, 보호 Work source downgrade, candidate digest/primary Fact 오염, 실제 permit 회수의 6개 통합 사례를 작성했다. 기존 U3 검증 DB와 SyntheticQueue를 사용하며 실제 SQS/운영 U4–U7 생산자·AWS 배포를 검증했다고 주장하지 않는다. 원래 registry3/model2 혼합 payload와 소비 version2/model1 효과를 구분한다.
+
+TypeScript·지정 ESLint 종료 코드0, worker-handoff-unit-20261012.json은 264/264 PASS, worker-handoff-integration-20261012.json은 6/6 PASS다. root가 실제 JSON count를 확인했다. 실패/pending/todo0·success=true, 미처리 오류0이다. 검사 전후 HEAD는 34176d02a46c3e5a914efeecf6e1f9d052d1d45c, source/runtime 지문은 efa12d83c5f5fcf13009bd280c007d10247628a316d0852ad7ea04e68867d435이며 선택4개 SHA도 동일했다. 기존 U1/U2 worker 영향 회귀는 진행 중이다.
+
+worker 영향 회귀 4개 명령은 모두 종료 코드0이다. worker-handoff-u1-unit-regression-20261012.json은 16/16 PASS, u2-unit 회귀는 14/14 PASS, u2-integration 회귀는 21/21 PASS다. u1-integration 회귀는 business-flow의 outbox/Work/consumer/큐/worker 필터로 선택한 7 PASS·46 skip이며 전체53 PASS를 의미하지 않는다. root가 실제 JSON count·success=true를 확인했고 Luna가 시험 오류0을 보고했다. U1/U2 npm pretest는 소유된 격리 검증 DB를 준비했다. 검사 전후 HEAD/source 지문과 선택4개 SHA는 위 worker 검사와 동일했다. 파일럿 CI·전체 coverage·공통 품질·최종 문서/별도 리뷰는 미완료다.
