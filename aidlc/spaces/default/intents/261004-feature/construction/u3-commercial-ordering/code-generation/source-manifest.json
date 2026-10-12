@@ -1,0 +1,508 @@
+{
+  "stage": "code-generation",
+  "unit": "u3-commercial-ordering",
+  "version": 1,
+  "writes": [
+    {
+      "path": ".github/workflows/oms-full-proof.yml"
+    },
+    {
+      "path": ".github/workflows/u1-validation.yml"
+    },
+    {
+      "path": ".gitignore"
+    },
+    {
+      "path": "apps/api/src/application.ts"
+    },
+    {
+      "path": "apps/api/src/main.ts"
+    },
+    {
+      "path": "apps/api/src/operations.ts"
+    },
+    {
+      "path": "apps/api/src/u3-operations.ts"
+    },
+    {
+      "path": "apps/api/src/u3-person-context.ts"
+    },
+    {
+      "path": "apps/api/src/u3-routes.ts"
+    },
+    {
+      "path": "apps/api/src/u3-runtime.ts"
+    },
+    {
+      "path": "docs/u3/README.md"
+    },
+    {
+      "path": "package.json"
+    },
+    {
+      "path": "packages/contracts/schemas/u3-commercial-v2.json"
+    },
+    {
+      "path": "packages/contracts/schemas/u3-operations-v2.json"
+    },
+    {
+      "path": "packages/contracts/src/index.ts"
+    },
+    {
+      "path": "packages/contracts/src/registry.ts"
+    },
+    {
+      "path": "packages/contracts/src/schema.ts"
+    },
+    {
+      "path": "packages/contracts/src/u3-declarations.ts"
+    },
+    {
+      "path": "packages/contracts/src/u3-types.ts"
+    },
+    {
+      "path": "packages/contracts/src/u3-validation.ts"
+    },
+    {
+      "path": "packages/core/src/authorization.ts"
+    },
+    {
+      "path": "packages/core/src/catalog-conditions.ts"
+    },
+    {
+      "path": "packages/core/src/catalog-query.ts"
+    },
+    {
+      "path": "packages/core/src/catalog.ts"
+    },
+    {
+      "path": "packages/core/src/commands.ts"
+    },
+    {
+      "path": "packages/core/src/commercial-agreement.ts"
+    },
+    {
+      "path": "packages/core/src/commercial-proposal.ts"
+    },
+    {
+      "path": "packages/core/src/commercial-terms.ts"
+    },
+    {
+      "path": "packages/core/src/current-customer-scopes.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-memberships.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-query.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-role-revisions.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-roles.ts"
+    },
+    {
+      "path": "packages/core/src/identity-security-events.ts"
+    },
+    {
+      "path": "packages/core/src/index.ts"
+    },
+    {
+      "path": "packages/core/src/order-acceptance.ts"
+    },
+    {
+      "path": "packages/core/src/order-price.ts"
+    },
+    {
+      "path": "packages/core/src/order-terms.ts"
+    },
+    {
+      "path": "packages/core/src/pending-notification.ts"
+    },
+    {
+      "path": "packages/core/src/proposal-terms.ts"
+    },
+    {
+      "path": "packages/core/src/references.ts"
+    },
+    {
+      "path": "packages/core/src/scope-v2.ts"
+    },
+    {
+      "path": "packages/core/src/u3-after-sales-source.ts"
+    },
+    {
+      "path": "packages/core/src/u3-commands.ts"
+    },
+    {
+      "path": "packages/core/src/u3-consent-scope.ts"
+    },
+    {
+      "path": "packages/core/src/u3-current-basis.ts"
+    },
+    {
+      "path": "packages/core/src/u3-customer-access.ts"
+    },
+    {
+      "path": "packages/core/src/u3-notice-source.ts"
+    },
+    {
+      "path": "packages/core/src/u3-order-readiness.ts"
+    },
+    {
+      "path": "packages/core/src/u3-owner-query.ts"
+    },
+    {
+      "path": "packages/core/src/u3-recorded-operation.ts"
+    },
+    {
+      "path": "packages/core/src/u3-renewal-source.ts"
+    },
+    {
+      "path": "packages/core/src/u3-staff-access.ts"
+    },
+    {
+      "path": "packages/core/src/work-inquiry.ts"
+    },
+    {
+      "path": "packages/core/src/worker-authority.ts"
+    },
+    {
+      "path": "packages/core/src/worker-traversal.ts"
+    },
+    {
+      "path": "packages/persistence/models/u3-v1.json"
+    },
+    {
+      "path": "packages/persistence/src/index.ts"
+    },
+    {
+      "path": "packages/persistence/src/migration.ts"
+    },
+    {
+      "path": "packages/persistence/src/model-attribute.ts"
+    },
+    {
+      "path": "packages/persistence/src/model-catalog.ts"
+    },
+    {
+      "path": "packages/persistence/src/protected-store.ts"
+    },
+    {
+      "path": "packages/persistence/src/protected-transaction.ts"
+    },
+    {
+      "path": "packages/persistence/src/protected-write.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-migration.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-security-observation.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-security-write.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-security.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-types.ts"
+    },
+    {
+      "path": "packages/persistence/src/u2-model-decoder.ts"
+    },
+    {
+      "path": "packages/persistence/src/u3-migration.ts"
+    },
+    {
+      "path": "packages/persistence/src/u3-model-catalog.ts"
+    },
+    {
+      "path": "packages/persistence/src/u3-model-decoder.ts"
+    },
+    {
+      "path": "packages/persistence/src/u3-recovery-payload.ts"
+    },
+    {
+      "path": "packages/persistence/src/u3-repository.ts"
+    },
+    {
+      "path": "packages/persistence/src/u3-support-models.ts"
+    },
+    {
+      "path": "scripts/u2/coverage-evidence.ts"
+    },
+    {
+      "path": "scripts/u2/runtime-security-report.ts"
+    },
+    {
+      "path": "scripts/u2/security.ts"
+    },
+    {
+      "path": "scripts/u2/synth.ts"
+    },
+    {
+      "path": "scripts/u3/ci-pilot-proof.ts"
+    },
+    {
+      "path": "scripts/u3/coverage-aggregate.ts"
+    },
+    {
+      "path": "scripts/u3/coverage-evidence.ts"
+    },
+    {
+      "path": "scripts/u3/pilot-commands.ts"
+    },
+    {
+      "path": "scripts/u3/pilot-tools.ts"
+    },
+    {
+      "path": "scripts/u3/pilot-validation.ts"
+    },
+    {
+      "path": "scripts/u3/prepare-test-databases.ts"
+    },
+    {
+      "path": "scripts/u3/runtime-source.ts"
+    },
+    {
+      "path": "tests/project/vitest.pilot.coverage.config.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/recovery-security-oracle.ts"
+    },
+    {
+      "path": "tests/u2/fixtures/enterprise.ts"
+    },
+    {
+      "path": "tests/u2/integration/runtime-security.spec.ts"
+    },
+    {
+      "path": "tests/u2/integration/worker-boundaries.spec.ts"
+    },
+    {
+      "path": "tests/u2/unit/models.spec.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/agreement-input.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/agreement.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/applied-terms.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/catalog.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/clock.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/command-authority.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/commercial.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/consent-role.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/databases.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/diagnostics.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/http.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/identity.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/models.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/order-change.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/order-decision.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/order-input.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/profile.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/proposal-input.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/proposal.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/protected-candidate.ts"
+    },
+    {
+      "path": "tests/u3/fixtures/queue.ts"
+    },
+    {
+      "path": "tests/u3/integration/applied-terms-model.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/catalog.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/commercial-agreement.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/commercial-change-request.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/commercial-owner-port.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/commercial-proposal.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/customer-consent-authority.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/http-host.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/in-process-host.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/migration-compatibility.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/order-change.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/order-decision.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/order-submission.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/owner-query.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/recovery-role-source.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/repository-boundaries.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/staff-role-boundaries.spec.ts"
+    },
+    {
+      "path": "tests/u3/integration/worker-handoff.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/after-sales-source.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/agreement-input-preflight.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/applied-terms.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/catalog.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/commercial-change-input.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/commercial-terms.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/consent-authority.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/contracts.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/current-commercial-basis.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/current-image.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/fixture-boundaries.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/host-contracts.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/http-contracts.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/models.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/order-change-input.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/order-price.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/order-readiness.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/owner-query-contracts.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/pilot-ci.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/pilot-coverage.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/proposal-terms.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/receipt-profile.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/recovery-observation-profile.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/recovery-payload.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/recovery-role-source.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/references.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/renewal-source.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/repository.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/role-own-write.spec.ts"
+    },
+    {
+      "path": "tests/u3/unit/staff-role-versions.spec.ts"
+    },
+    {
+      "path": "tests/u3/vitest.coverage.config.ts"
+    },
+    {
+      "path": "tests/u3/vitest.integration.config.ts"
+    },
+    {
+      "path": "tests/u3/vitest.unit.config.ts"
+    },
+    {
+      "path": "tsconfig.json"
+    }
+  ]
+}

@@ -272,6 +272,21 @@ describe('pilot-current child·보고서·동일 image의 차단 경계', () => 
     );
     expect(pilotProductInventory(source)).toContain(product);
   });
+  it('실측 전체 실행 예산은 U3 통합·coverage에만 적용하고 다른 Unit 명령은 유지한다', () => {
+    const specs = pilotCommands(source);
+    expect(specs.find((spec) => spec.key === 'u3-integration')!.timeoutMilliseconds).toBe(1200000);
+    expect(specs.find((spec) => spec.key === 'u3-coverage')!.timeoutMilliseconds).toBe(1800000);
+    for (const key of [
+      'u1-unit',
+      'u1-integration',
+      'u1-coverage',
+      'u2-unit',
+      'u2-integration',
+      'u2-coverage',
+      'u3-unit',
+    ])
+      expect(specs.find((spec) => spec.key === key)!.timeoutMilliseconds).toBeUndefined();
+  });
   it('실제 관측 child 성공과 새 전체 보고서만 수집하고 기존 원문을 archive한다', async () => {
     const f = memoryPorts(),
       spec = pilotCommands(source)[0]!;

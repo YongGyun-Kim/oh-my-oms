@@ -1,0 +1,53 @@
+# U3 코드 생성 요약
+
+## 현재 판정
+
+승인된 test-after/Standard 순서로 계획1–18의 구현·계층별 시험을 수행했다. Step19 최종 동일 source 품질/보안/3기여80%·실제 CI와 Step20 별도 리뷰/공식 완료는 아직 미완료다. 이 문서는 리뷰 준비 산출물이며 체크박스19/20 또는 native 단계 상태를 변경하지 않는다. 제품 문서 추가/예산 수정으로 이전 HEAD의 성공을 최종 source 증거로 재사용하지 않는다.
+
+최종 기본 경로는 PR/main pilot-current CI의 독립 U1/U2/U3 matrix와 project gate다. 실제 결과는 root 소유 [품질 기록](quality-verification-20261012.md)에 source/HEAD·보고서 지문·종료 metadata와 함께 기록한다. main 머지/AWS 배포/실거래는 이 문서 생성으로 수행되지 않는다.
+
+## 파일과 구현
+
+[source-manifest.json](source-manifest.json)은 승인 기준 a2d694f 이후 실제 제품/시험/설정 변경 전체를 path-only version1로 주장한다. 신규 U3 파일뿐 아니라 shared core/persistence·U1/U2 fixture/회귀·보안/CI helper·package.json·tsconfig.json·.gitignore를 포함한다. package-lock/infra 자원 변경을 임의 주장하지 않고 실제 경로 목록에 따른다. 원래 사용자 aidlc_change.sh·tests/u1/.reports와 private runtime/report/credential은 manifest/커밋 대상이 아니다.
+
+| 계층      | 실제 구현/시험 연결                                                                                                             | 결과 의미                                                                                               |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| 계약/값   | packages/contracts의 u3-commercial-v2.json·u3-operations-v2.json·u3-types/u3-validation/u3-declarations                         | closed profile2·registry3·정수KRW/TargetScope/100행·producer 검증, common1/2 보존                       |
+| 모델/저장 | packages/persistence의 u3-v1.json·u3-model-catalog/decoder/migration/repository/recovery-payload·shared protected/recovery 수정 | 업무18+지원4·동명 중복 없는 current·비파괴 DDL·mixed payload/legacy bytes·primary와 별도 보호ACK        |
+| 상품      | catalog.ts·catalog-query.ts·catalog-conditions.ts                                                                               | 직원/내부망·draft와판매조건·기업허용·원래offer/구매조건 보존                                            |
+| 계약/제안 | commercial-agreement/proposal/terms·proposal-terms·u3-current-basis·u3-renewal-source                                           | 다른사람 승인·충돌차단/기업우선·변경요청/예외·정확현재 제안/동의·수동갱신 readonly 경계                 |
+| 동의 권한 | u3-customer-access/staff-access/consent-scope·shared authorization/current-role                                                 | 실제 C01 등록·grant/revoke·contract.consent·sameprofile/current 전후 대조. CONSENT_ROLES 전용 목록      |
+| 주문/적용 | order-acceptance/order-price/order-terms·u3-order-readiness/after-sales-source                                                  | 전체REVIEW/ACCEPT/REJECT/HOLD·확인금액·불변snapshot·두changeKind·실제application→다음제안               |
+| host/조회 | apps/api/u3-operations/routes/person-context/runtime·shared application/operations/main·u3-owner-query/work-inquiry             | 등록31+grant2/C18조회3·실제권한/CSRF·한parser1MiB/64KiB·readonly진단·legacymutation우회차단             |
+| 전달      | u3-notice-source·worker-authority/traversal                                                                                     | 보호된 원래 생산사실과 현재permit 구분·기존consumer2 유지·중복/역순/source오염차단                      |
+| CI        | scripts/u3의 `pilot-*`·`coverage-*`·runtime-source와 shared u2 helper, 두workflow                                               | default pilot-current/explicit full-proof·같은 전체분모/3기여80%·child/source/lock/image/필수보고서차단 |
+
+## 핵심 결정과 구현 정합화
+
+profile 개정2와 registry3은 별도 축이며 기존 URI/등록2를 재정의하지 않는다. U3Ref는 기존 닫힌 U2 Ref의 실제 필요한 종류를 U3 안에서만 연결한다. 새 Receipt/C18 output은 검증된 PROTECTED source descriptor로 선택하고 client marker로 선택하지 않는다. 순수 typed marker로 실제 신뢰를 대신하지 않는다.
+
+실제 현재 동의 권한을 생산하기 위해4개 권한 지원 정의를 별도로 연결했다. 논리 업무18개는 유지하며 새로운 인프라/물리 테이블 복제가 아니다. 구형 role/scope를 동의권한으로 자동 승격하지 않고 legacy 전체조회와 신규 CONSENT_ROLES 조회의 다른 의미를 명시한다.
+
+CommercialProposal의 원래 금액/fingerprint/proposer source와 OrderChangeApplication의 인라인 AppliedTerms는 additive nullable 저장 호환을 사용한다. 구형 누락 값은 신규 적용에 미확인으로 차단한다. 동의 후 row revision과 immutable content 개정을 구분하고 실제 protected ref·원래 접수/이력·현재권한을 대조한다. 원래 구매snapshot은 불변이며 다음 제안은 실제 application 체인을 원래 현재조건으로 사용한다.
+
+KRW는 선언된 정수 문자열 표현과 BigInt로 계산하고 임의 MAX_SAFE_INTEGER 금액 ceiling을 추가하지 않는다. KNOWN null 행/소계는 실제 스키마가 이미 거절하므로 이를 뒤늦게 발견한 기존 결함으로 주장하지 않는다. 미확인 비용/세금포함/적용 여부는0원으로 승격하지 않고 현재 직원/근거·전체 breakdown 확인을 요구한다.
+
+기존 shared fixture의 현재fence+1 개정 때문에 오래된 '재seed는 항상 revision1 overwrite' 시험 전제를 고쳤다. 실제 고정revision1 tx.put 거절·보호fence 전체 equality·primary개정 보존을 유지했고 제품 guard는 완화하지 않았다. worker의 역사 생산원본 개정과 현재permit을 분리하며 실제 외부 사업owner 기록을 만들지 않는다.
+
+U3 전체18파일의 기본600초 collector 종료는 완료11파일/104시험 표시시간587.215초와 남은7파일 과거63.618초로 조사했다. U3 integration 프로세스만20분, coverage만30분으로 명시하고 서비스10초·DB3초·stmt2초·lock최대500ms·개별test/hook30초·순차파일·전체분모는 유지했다. coverage30분은 아직 실제 V8 수행 여유 가정이다.
+
+## 시험 증거와 미완료
+
+계층별 원문과 실패/수정/재검증은 이 디렉터리의 contracts/models/repository/catalog/agreement/proposal/order/host/pilot-ci 검증 기록에 보존된다. 최근 별도 검증에서 주문 적용11개(기존9+경쟁2), HTTP6개 및 기존U1HTTP25/U2HTTP22, worker6개 및 영향U1/U2 회귀가 통과했다. 각각 당시 source의 경계 증거이며 최종 전체 CI 성공으로 확대하지 않는다.
+
+HEAD25d8583의 로컬 실제 U1기여는 unit571·integration168·동일739개 coverage 재실행, U2기여는 unit465·integration274·동일739개 coverage 재실행 및 PC5개가 통과했다. coverage 재실행을 새로운 고유시험 수에 더하지 않는다. U3unit280은 통과했지만 통합 child600초 기한 초과(exit143/expired=true)로 새 완료보고서가 없어 U3전체/coverage/project/80%·보안은 판정되지 않았다. 이전 e850ebc U2 실패와 진단/최소수정 결과도 삭제하지 않는다.
+
+새 예산 선택의 대상시험 pilot-ci10/10·TypeScript/지정ESLint는 통과했으며3개TS 파일 지문이 전후 같았다. 새 전체unit281개나 새로운 CI/coverage 성공은 아직 주장하지 않는다. docs/최종 source 고정 후 실제 CI가 같은 최종HEAD/source/lock/image의 전체 기여·품질/보안을 확인해야 한다. Luna의8파일 format/JSON/manifest/traceability 검사도 통과했고 전후 파일 지문이 같았다. root가 전체 Git 변경166경로와 신규 README를 manifest167경로에 대조해 누락/불필요 주장이 없는 것을 확인했다.
+
+## 추적과 운영 경계
+
+[traceability.json](traceability.json)은 할당42AC·29BR·33상세NFR를 모두 열거한다. OK는 실제 존재하는 구현/시험 경로 연결이지 그때의 운영목표 달성 인증이 아니다. 원래7개 AC Deferred와 NFR 설계의 후속 실증을 보존한다. 국내경로/실제보관정책 같은 원본 확인을 코드guard/문서로 달성했다고 표현하지 않는다.
+
+현재 운영 설정은 UNREGISTERED다. 실제 사람/증빙소유자·U4/U5/U6 공급/대금/라이선스준비·U6갱신회차·U7후처리 원본 미등록/미확인은 차단/HOLD다. 포트 구현과 운영 생산자등록, 합성 callback과실원본은 다르다. 기존 U2 Major1/2는 전역해소/위험수용이 아니다. U3 전면UI·provider/회사망/국내원본/보관/알림/장기운영·대량부하/전체DR/무중단 실증은 해당후속 소유자에 남긴다.
+
+최종 코드/명령/호환/후속 요약은 [docs/u3/README.md](../../../../../../../../docs/u3/README.md), 실제 Unit 실행은 [unit-test-instructions.md](unit-test-instructions.md)에 있다. 별도 리뷰·공식완료·실제CI·병합은 주 실행자가 실제 증거로 판정한다.

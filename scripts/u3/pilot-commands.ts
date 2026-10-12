@@ -41,6 +41,7 @@ export function pilotCommands(source: SourceIdentity): PilotCommand[] {
           '--outputFile=' + path,
         ],
         path,
+        ...(unit === 'u3' && layer === 'integration' ? { timeoutMilliseconds: 1200000 } : {}),
       });
     }
     commands.push({
@@ -57,6 +58,7 @@ export function pilotCommands(source: SourceIdentity): PilotCommand[] {
         '--coverage',
       ],
       path: pilotCoveragePath(unit) + '/evidence.json',
+      ...(unit === 'u3' ? { timeoutMilliseconds: 1800000 } : {}),
     });
   }
   commands.push({

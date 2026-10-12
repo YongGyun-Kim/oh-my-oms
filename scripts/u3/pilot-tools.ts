@@ -73,6 +73,7 @@ async function pilotCheck() {
           'tests/project',
           'docs/u1',
           'docs/u2',
+          'docs/u3',
           'package.json',
           'tsconfig.json',
           'eslint.config.mjs',
