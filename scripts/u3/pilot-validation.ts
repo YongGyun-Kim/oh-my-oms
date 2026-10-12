@@ -15,6 +15,17 @@ export type PilotReceipt = Awaited<ReturnType<typeof collectCommandProof>> & {
   mode: 'pilot-current';
   source: SourceIdentity;
   environment: Record<string, string>;
+  validationFailure?: 'PILOT_RECEIPT_VALIDATION_FAILED' | 'PILOT_COMMAND_REPORT_VALIDATION_FAILED';
+  validationErrorCode?:
+    | 'PILOT_COMMAND_PROOF'
+    | 'PILOT_REPORT_BYTES'
+    | 'PILOT_TEST_SCOPE'
+    | 'PILOT_UNIT_SCOPE'
+    | 'PILOT_E2E'
+    | 'PILOT_COVERAGE_COMMAND'
+    | 'PILOT_REQUIRED_FAILED'
+    | 'JSON_PARSE_FAILED'
+    | 'UNKNOWN_VALIDATION_ERROR';
 };
 export interface PilotProof {
   version: 2;

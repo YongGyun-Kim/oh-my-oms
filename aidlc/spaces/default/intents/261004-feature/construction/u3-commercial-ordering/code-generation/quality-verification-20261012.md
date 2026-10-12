@@ -71,3 +71,19 @@ Luna의8파일 Prettier 검사와 strict JSON/traceability/manifest assertion은
 최종 문서 검토에서 project 성공 보고서를 release-validation.json으로 정확히 표기하고 요약의 format/JSON 결과를 실제 완료로 갱신했다. 이 두 문서의 포맷을 다시 확인하며 타입/린트/단위 시험은 문서 변경 때문에 반복하지 않는다. 최초 승인 답변은 유지하고 PATH aidlc의 testing-posture brief가 현재 지침의 실행 허용을 종료 코드0으로 확인했다. Step19 전체 CI/80%/보안과 Step20 별도 리뷰·공식 완료는 미완료다.
 
 문서 정정 뒤 Luna의 두 문서 Prettier 검사도 종료 코드0이다. README SHA add64c3d5b8b8cdc2889c6fdadc2f07c0a47b47b53107eacd54cde33c9300d34, code-summary SHA16e2525e0574d36f8b1fac3cfeeaf9b0ea90c6302a61d9eac4e36b2493ed562c는 전후 동일했다. 이제 제품/시험/문서를 고정해 실제 CI에 제출한다.
+
+## 최초 실제 CI 실패와 관측 경계
+
+최종 준비는04b2859bd3719f14a7906931c25091f335452991로 커밋·push하고 draft PR1을 생성했다. 실제 GitHub CI run38197711760의 headSha는 해당 브랜치 HEAD이며 PR 체크아웃 mergeSHA5900a7385b8a73f2eff65c5198c32c4b5faa103e와 구분한다. U1/U2/U3를 격리해 병렬 실행했고 전체 run은 failure로 종료됐다. U1은 PILOT_CHILD_FAILED/u1-integration, U2/U3는 각각 u2-unit/u3-unit에서 실패했다. project는 선행 Unit 실패를 차단했고 실제 전체 품질 단계는 실행되지 않았다.
+
+완료 job 원문은 .reports/u3/github/38197711760의 private log에만 보존했다. 내려받은 U2/U3 공개 summary는 passed=false·completed=[]·realActivationAllowed=false이며 같은 sourceDigest8f2e2e027be9d7fa3c8c538b8f94fadeb040b778306fab378be664fa48e7ecee였다. 현재 공개 job log에는 개별 시험 이름/수/오류 코드나 상세 execution/artifact metadata가 없어 실제 테스트 실패와 child 시작/보고서 검증 실패를 구분할 수 없다. 통합 기한 초과를 이번 실패 원인으로 추정하지 않는다.
+
+실패 원인을 소거하지 않고 공개 요약에 고정된 안전 진단 코드·실제 종료/기한 정보·artifact 존재/신규 여부·strict numeric 시험 수만 추가한다. private 원문/payload/환경/자격은 업로드하지 않고 검증 기준·실패 차단·source/80%를 유지한다. 이 관측 공백 수정은 원인 해결/CI 성공을 의미하지 않는다. 다음 소스의 실제 CI가 상세 원인을 제공해야 하며 현재 Step19/20·main 머지는 미완료다.
+
+## 안전한 실패 관측 보완의 검사
+
+실패 요약에 allowlist 종료/검증 코드·scalar 실행/보고서 상태·엄격한 시험 수·등록 파일/실패 순번 최대10개·source inventory 프레임 최대3개를 추가했다. 제목/message/SQL/request/env/token/미등록 경로/임의 code는 투영하지 않고 프레임이 없으면 빈 배열이다. receipt와 command-report 검증 실패는 단계와 실제 허용 code를 구분하며 성공/실패 차단 규칙은 유지한다.
+
+Luna의 전체 TypeScript·지정 ESLint·선택 Prettier는 모두 종료 코드0이다. pilot-ci-safe-failure-diagnostic-unit-20261012.json은 단일 파일14/14 PASS·실패/pending/todo0·success=true이며 root도 실제 JSON count를 확인했다. mock4개를 추가해 단계/JSON/count·원문 제외·한도·UNKNOWN fallback을 확인했고 전체 Unit/CI 성공으로 확대하지 않는다.
+
+3파일 실행 전후 SHA는 ci-pilot-proof.ts 3894e05e7f4f24718a7138ffdefe73ffd0e59611edb29c24111de068be9c7cf6, pilot-validation.ts 1b1a7fd48f2f31934be544dde8875ae87890ebd6047ecf92dd1e13df306be3e9, pilot-ci.spec.ts 7eb0fffb94eb01c8d362e16ef2b6f6cbc16d9e7b5f37be0ff8946154d1462060로 동일했다. 실제 CI 원인은 아직 미확정이며 새 source의 CI에서 안전 metadata를 확인한다. 이미 주장한 source-manifest 경로3개 안의 변경이며 새 제품 파일/인프라/운영 원본은 만들지 않았다.

@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, statSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { dirname, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { canonicalJson, requireCondition } from '@oms/contracts';
 import {
@@ -10,7 +10,7 @@ import {
 } from '../u2/ci-full-proof.js';
 import type { ProofPorts, ProofRunner } from '../u2/ci-full-proof.js';
 import type { SourceIdentity } from '../u2/runtime-source.js';
-import { pilotSourceIdentity } from './runtime-source.js';
+import { pilotSourceIdentity, pilotTestInventory } from './runtime-source.js';
 import type { PilotUnit } from './runtime-source.js';
 import { pilotCommands, PILOT_DEFERRED } from './pilot-commands.js';
 import type { PilotCommand } from './pilot-commands.js';
@@ -39,6 +39,233 @@ const actualPorts: PilotPorts = {
   },
 };
 const jsonBytes = (value: unknown) => Buffer.from(JSON.stringify(value, null, 2));
+const safeErrorCodes = [
+  'ENOENT',
+  'EACCES',
+  'EINVAL',
+  'ENOEXEC',
+  'EMFILE',
+  'ENFILE',
+  'CHILD_ERROR',
+  'RUNNER_ERROR',
+] as const;
+const safeSignals = [
+  'SIGTERM',
+  'SIGKILL',
+  'SIGINT',
+  'SIGABRT',
+  'SIGSEGV',
+  'SIGHUP',
+  'SIGQUIT',
+  'SIGPIPE',
+  'SIGBUS',
+  'SIGTRAP',
+  'SIGFPE',
+  'SIGILL',
+  'SIGALRM',
+  'SIGXCPU',
+  'SIGXFSZ',
+] as const;
+const vitestCountFields = [
+  'numTotalTests',
+  'numPassedTests',
+  'numFailedTests',
+  'numPendingTests',
+  'numTodoTests',
+  'numFailedTestSuites',
+  'numPendingTestSuites',
+] as const;
+// 공개 요약은 닫힌 scalar 투영만 사용한다. 원문 report/message/title/env는 복사하지 않는다.
+const validationCodes = [
+  'PILOT_COMMAND_PROOF',
+  'PILOT_REPORT_BYTES',
+  'PILOT_TEST_SCOPE',
+  'PILOT_UNIT_SCOPE',
+  'PILOT_E2E',
+  'PILOT_COVERAGE_COMMAND',
+  'PILOT_REQUIRED_FAILED',
+] as const;
+function validationErrorCode(error: unknown): PilotReceipt['validationErrorCode'] {
+  if (error instanceof SyntaxError) return 'JSON_PARSE_FAILED';
+  if (error && typeof error === 'object' && 'code' in error) {
+    const code = validationCodes.find((allowed) => allowed === error.code);
+    if (code) return code;
+  }
+  return 'UNKNOWN_VALIDATION_ERROR';
+}
+function failedAssertions(
+  report: Record<string, unknown>,
+  spec: PilotCommand,
+  source: SourceIdentity,
+) {
+  const result: {
+    file: string;
+    ordinal: number;
+    status: 'failed';
+    frames: { path: string; line: number; column: number | null }[];
+  }[] = [];
+  if (spec.scope === 'project' || !Array.isArray(report.testResults)) return result;
+  const expected = new Set(pilotTestInventory(source, spec.scope));
+  for (const suite of report.testResults) {
+    if (
+      !suite ||
+      typeof suite !== 'object' ||
+      typeof suite.name !== 'string' ||
+      !Array.isArray(suite.assertionResults)
+    )
+      continue;
+    const file = relative(process.cwd(), resolve(suite.name)).replaceAll('\\', '/');
+    if (!expected.has(file)) continue;
+    for (
+      let ordinal = 0;
+      ordinal < suite.assertionResults.length && result.length < 10;
+      ordinal++
+    ) {
+      const assertion = suite.assertionResults[ordinal];
+      if (!assertion || typeof assertion !== 'object' || assertion.status !== 'failed') continue;
+      const frames: { path: string; line: number; column: number | null }[] = [];
+      if (Array.isArray(assertion.failureMessages)) {
+        for (const message of assertion.failureMessages.slice(0, 3)) {
+          if (typeof message !== 'string') continue;
+          for (const frame of message
+            .slice(0, 65536)
+            .matchAll(
+              /((?:apps|packages|infra|scripts|tests)\/[A-Za-z0-9_./-]+\.(?:ts|tsx|js|mjs)):(\d+)(?::(\d+))?/g,
+            )) {
+            const path = frame[1]!,
+              line = Number(frame[2]),
+              column = frame[3] === undefined ? null : Number(frame[3]);
+            if (
+              Object.hasOwn(source.files, path) &&
+              Number.isSafeInteger(line) &&
+              line > 0 &&
+              (column === null || (Number.isSafeInteger(column) && column > 0))
+            ) {
+              const entry = { path, line, column };
+              if (!frames.some((item) => canonicalJson(item) === canonicalJson(entry)))
+                frames.push(entry);
+            }
+            if (frames.length === 3) break;
+          }
+          if (frames.length === 3) break;
+        }
+      }
+      result.push({ file, ordinal: ordinal + 1, status: 'failed', frames });
+    }
+    if (result.length === 10) break;
+  }
+  return result;
+}
+function failedChildDiagnostics(proof: PilotProof, ports: PilotPorts) {
+  return pilotCommands(proof.source).flatMap((spec) => {
+    const receipt = proof.reports[spec.key];
+    if (!receipt || receipt.passed) return [];
+    const execution = receipt.execution;
+    const artifact = receipt.artifact;
+    let tests: Record<string, number | boolean> | null = null;
+    let assertions: ReturnType<typeof failedAssertions> = [];
+    let reportStatus: 'NOT_APPLICABLE' | 'MISSING' | 'INVALID' | 'VALID_COUNTS' =
+      /^u[123]-(unit|integration)$/.test(spec.key) ? 'MISSING' : 'NOT_APPLICABLE';
+    if (reportStatus === 'MISSING' && ports.exists(spec.path)) {
+      reportStatus = 'INVALID';
+      try {
+        const value: unknown = JSON.parse(ports.read(spec.path).toString());
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+          const report = value as Record<string, unknown>;
+          assertions = failedAssertions(report, spec, proof.source);
+          if (
+            typeof report.success === 'boolean' &&
+            vitestCountFields.every(
+              (field) => Number.isSafeInteger(report[field]) && Number(report[field]) >= 0,
+            ) &&
+            Number(report.numPassedTests) +
+              Number(report.numFailedTests) +
+              Number(report.numPendingTests) +
+              Number(report.numTodoTests) ===
+              report.numTotalTests &&
+            (report.success === false ||
+              (report.numFailedTests === 0 &&
+                report.numPendingTests === 0 &&
+                report.numTodoTests === 0 &&
+                report.numFailedTestSuites === 0 &&
+                report.numPendingTestSuites === 0)) &&
+            Array.isArray(report.testResults) &&
+            report.testResults.every(
+              (suite) =>
+                suite &&
+                typeof suite === 'object' &&
+                Array.isArray(suite.assertionResults) &&
+                suite.assertionResults.every(
+                  (assertion: unknown) =>
+                    assertion &&
+                    typeof assertion === 'object' &&
+                    'status' in assertion &&
+                    ['passed', 'failed', 'pending', 'todo', 'skipped'].includes(
+                      String(assertion.status),
+                    ),
+                ),
+            ) &&
+            report.testResults.reduce((sum, suite) => sum + suite.assertionResults.length, 0) ===
+              report.numTotalTests
+          ) {
+            tests = Object.fromEntries(
+              vitestCountFields.map((field) => [field, Number(report[field])]),
+            );
+            tests.success = report.success;
+            reportStatus = 'VALID_COUNTS';
+          }
+        }
+      } catch {
+        // 실패 진단의 JSON/IO 오류도 원문을 공개하지 않으며 성공 판정을 바꾸지 않는다.
+      }
+    }
+    return [
+      {
+        key: spec.key,
+        execution: {
+          observed: execution?.observed === true,
+          exitCode: Number.isSafeInteger(execution?.exitCode) ? execution.exitCode : null,
+          signal:
+            execution?.signal === null
+              ? null
+              : safeSignals.some((signal) => signal === execution?.signal)
+                ? execution.signal
+                : 'UNRECOGNIZED_SIGNAL',
+          expired: execution?.expired === true,
+          logFailed: execution?.logFailed === true,
+          errorCode:
+            execution?.errorCode === null
+              ? null
+              : safeErrorCodes.some((code) => code === execution?.errorCode)
+                ? execution.errorCode
+                : 'UNRECOGNIZED_ERROR_CODE',
+        },
+        artifact: {
+          exists: artifact?.exists === true,
+          fresh: artifact?.fresh === true,
+          bytes:
+            Number.isSafeInteger(artifact?.bytes) && Number(artifact.bytes) >= 0
+              ? artifact.bytes
+              : null,
+        },
+        validationFailure:
+          receipt.validationFailure === 'PILOT_RECEIPT_VALIDATION_FAILED' ||
+          receipt.validationFailure === 'PILOT_COMMAND_REPORT_VALIDATION_FAILED'
+            ? receipt.validationFailure
+            : null,
+        reportStatus,
+        tests,
+        validationErrorCode:
+          validationCodes.some((code) => code === receipt.validationErrorCode) ||
+          receipt.validationErrorCode === 'JSON_PARSE_FAILED' ||
+          receipt.validationErrorCode === 'UNKNOWN_VALIDATION_ERROR'
+            ? receipt.validationErrorCode
+            : null,
+        assertions,
+      },
+    ];
+  });
+}
 export async function collectPilotCommand(
   spec: PilotCommand,
   source: SourceIdentity,
@@ -83,14 +310,21 @@ export async function collectPilotCommand(
       environment: spec.environment,
     };
     if (receipt.passed) {
+      let report: Record<string, unknown> | null;
       try {
-        validatePilotCommandReport(
-          spec,
-          validatePilotReceipt(receipt, spec, source, ports.read),
-          source,
-        );
-      } catch {
+        report = validatePilotReceipt(receipt, spec, source, ports.read);
+      } catch (error) {
         receipt.passed = false;
+        receipt.validationFailure = 'PILOT_RECEIPT_VALIDATION_FAILED';
+        receipt.validationErrorCode = validationErrorCode(error);
+        return receipt;
+      }
+      try {
+        validatePilotCommandReport(spec, report, source);
+      } catch (error) {
+        receipt.passed = false;
+        receipt.validationFailure = 'PILOT_COMMAND_REPORT_VALIDATION_FAILED';
+        receipt.validationErrorCode = validationErrorCode(error);
       }
     }
     return receipt;
@@ -197,6 +431,7 @@ export async function collectPilotProof(
         completed: Object.entries(proof.reports)
           .filter(([, receipt]) => receipt.passed)
           .map(([key]) => key),
+        failures: failedChildDiagnostics(proof, ports),
         deferred: [...PILOT_DEFERRED],
         realActivationAllowed: false,
         observedAt: new Date().toISOString(),

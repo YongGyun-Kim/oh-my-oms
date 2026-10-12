@@ -304,6 +304,214 @@ describe('pilot-current child·보고서·동일 image의 차단 경계', () => 
     expect(f.archived).toContain(spec.path);
     expect(result.environment).toEqual(spec.environment);
   });
+  it('receipt와 보고서 검증 실패는 고정된 다른 코드로 요약하고 원문을 공개하지 않는다', async () => {
+    for (const mode of ['receipt', 'report'] as const) {
+      vi.stubEnv('OMS_U2_SYNTHETIC_PROFILE', 'approved-local-only');
+      const f = memoryPorts();
+      const spec = pilotCommands(source).find((item) => item.key === 'u3-unit')!;
+      const secret = 'synthetic-private-request-token-and-sql';
+      if (mode === 'receipt') f.ports.mtime = () => Date.now() + 10000;
+      await expect(
+        collectPilotProof(
+          'u3',
+          async () => {
+            const report = testReport([
+              'tests/u3/unit/fixture.spec.ts',
+              ...(mode === 'report' ? ['tests/u3/unit/unregistered.spec.ts'] : []),
+            ]);
+            f.ports.write(
+              spec.path,
+              bytes({ ...report, error: secret, env: secret, payload: secret }),
+            );
+            return execution;
+          },
+          f.ports,
+        ),
+      ).rejects.toMatchObject({ code: 'PILOT_CHILD_FAILED' });
+      const summaryBytes = f.ports.read('.reports/u3/pilot/u3-job-summary.json');
+      expect(summaryBytes.toString()).not.toContain(secret);
+      const summary = JSON.parse(summaryBytes.toString());
+      expect(summary).toMatchObject({ passed: false, completed: [], realActivationAllowed: false });
+      expect(summary.failures).toHaveLength(1);
+      expect(summary.failures[0]).toMatchObject({
+        key: 'u3-unit',
+        execution: {
+          observed: true,
+          exitCode: 0,
+          signal: null,
+          expired: false,
+          logFailed: false,
+          errorCode: null,
+        },
+        artifact: { exists: true, fresh: true },
+        validationFailure:
+          mode === 'receipt'
+            ? 'PILOT_RECEIPT_VALIDATION_FAILED'
+            : 'PILOT_COMMAND_REPORT_VALIDATION_FAILED',
+        validationErrorCode: mode === 'receipt' ? 'PILOT_COMMAND_PROOF' : 'PILOT_TEST_SCOPE',
+        reportStatus: 'VALID_COUNTS',
+        tests: { numTotalTests: mode === 'receipt' ? 1 : 2, success: true },
+      });
+      const privateProof = JSON.parse(
+        f.ports.read('.reports/u3/pilot/validation-u3.json').toString(),
+      );
+      expect(privateProof.reports['u3-unit'].passed).toBe(false);
+      expect(privateProof.reports['u3-unit'].validationFailure).toBe(
+        summary.failures[0].validationFailure,
+      );
+    }
+  });
+  it('실패 child의 엄격한 숫자 count만 요약하고 제목·SQL·임의 오류 code는 배제한다', async () => {
+    vi.stubEnv('OMS_U2_SYNTHETIC_PROFILE', 'approved-local-only');
+    const f = memoryPorts();
+    const spec = pilotCommands(source).find((item) => item.key === 'u3-unit')!;
+    const secret = 'synthetic-private-title-sql-token';
+    await expect(
+      collectPilotProof(
+        'u3',
+        async () => {
+          const report = testReport(['tests/u3/unit/fixture.spec.ts']);
+          report.success = false;
+          report.numPassedTests = 0;
+          report.numTotalTests = report.numFailedTests = 15;
+          report.numFailedTestSuites = 1;
+          report.testResults[0]!.status = 'failed';
+          report.testResults[0]!.assertionResults = Array.from({ length: 15 }, () => ({
+            status: 'failed',
+            title: secret,
+            failureMessages: [
+              secret +
+                ' unknown/private.ts:9:9 scripts/u3/fixture.ts:10:2 scripts/u3/fixture.ts:11:3 scripts/u3/fixture.ts:12:4 scripts/u3/fixture.ts:13:5',
+            ],
+          }));
+          report.testResults.push({
+            name: resolve('tests/u3/unit/unregistered-secret.spec.ts'),
+            status: 'failed',
+            assertionResults: [],
+          });
+          f.ports.write(spec.path, bytes(report));
+          return { ...execution, exitCode: 1, errorCode: secret };
+        },
+        f.ports,
+      ),
+    ).rejects.toMatchObject({ code: 'PILOT_CHILD_FAILED' });
+    const text = f.ports.read('.reports/u3/pilot/u3-job-summary.json').toString();
+    expect(text).not.toContain(secret);
+    const summary = JSON.parse(text);
+    expect(summary.failures[0]).toMatchObject({
+      execution: { observed: true, exitCode: 1, errorCode: 'UNRECOGNIZED_ERROR_CODE' },
+      validationFailure: null,
+      reportStatus: 'VALID_COUNTS',
+      tests: {
+        success: false,
+        numTotalTests: 15,
+        numPassedTests: 0,
+        numFailedTests: 15,
+        numFailedTestSuites: 1,
+      },
+    });
+    expect(summary.failures[0].assertions).toHaveLength(10);
+    for (let ordinal = 0; ordinal < 10; ordinal++) {
+      expect(summary.failures[0].assertions[ordinal]).toEqual({
+        file: 'tests/u3/unit/fixture.spec.ts',
+        ordinal: ordinal + 1,
+        status: 'failed',
+        frames: [
+          { path: 'scripts/u3/fixture.ts', line: 10, column: 2 },
+          { path: 'scripts/u3/fixture.ts', line: 11, column: 3 },
+          { path: 'scripts/u3/fixture.ts', line: 12, column: 4 },
+        ],
+      });
+    }
+    expect(text).not.toContain('unknown/private');
+    expect(text).not.toContain('unregistered-secret');
+    expect(Object.keys(summary.failures[0]).sort()).toEqual(
+      [
+        'artifact',
+        'assertions',
+        'execution',
+        'key',
+        'reportStatus',
+        'tests',
+        'validationFailure',
+        'validationErrorCode',
+      ].sort(),
+    );
+  });
+  it('누락·무효 JSON·문자열 count는 실패 요약에서도 실제 count로 승격하지 않는다', async () => {
+    for (const mode of ['missing', 'json', 'count'] as const) {
+      vi.stubEnv('OMS_U2_SYNTHETIC_PROFILE', 'approved-local-only');
+      const f = memoryPorts();
+      const spec = pilotCommands(source).find((item) => item.key === 'u3-unit')!;
+      await expect(
+        collectPilotProof(
+          'u3',
+          async () => {
+            if (mode === 'json')
+              f.ports.write(spec.path, Buffer.from('synthetic-private-invalid-json'));
+            if (mode === 'count')
+              f.ports.write(
+                spec.path,
+                bytes({
+                  ...testReport(['tests/u3/unit/fixture.spec.ts']),
+                  numTotalTests: 'synthetic-private-count',
+                }),
+              );
+            return execution;
+          },
+          f.ports,
+        ),
+      ).rejects.toMatchObject({ code: 'PILOT_CHILD_FAILED' });
+      const text = f.ports.read('.reports/u3/pilot/u3-job-summary.json').toString();
+      expect(text).not.toContain('synthetic-private');
+      const summary = JSON.parse(text);
+      expect(summary.failures[0]).toMatchObject({
+        key: 'u3-unit',
+        artifact: { exists: mode !== 'missing', fresh: mode !== 'missing' },
+        reportStatus: mode === 'missing' ? 'MISSING' : 'INVALID',
+        tests: null,
+        validationErrorCode:
+          mode === 'json'
+            ? 'JSON_PARSE_FAILED'
+            : mode === 'count'
+              ? 'UNKNOWN_VALIDATION_ERROR'
+              : null,
+      });
+    }
+  });
+  it('검증 예외의 임의 code는 고정 UNKNOWN으로만 공개하고 안정적인 frame이 없으면 빈 목록이다', async () => {
+    vi.stubEnv('OMS_U2_SYNTHETIC_PROFILE', 'approved-local-only');
+    const f = memoryPorts(),
+      spec = pilotCommands(source).find((item) => item.key === 'u3-unit')!;
+    const read = f.ports.read;
+    let reads = 0;
+    f.ports.read = (path) => {
+      if (path === spec.path && ++reads >= 3)
+        throw Object.assign(new Error('synthetic-private-validation-message'), {
+          code: 'synthetic-private-code',
+        });
+      return read(path);
+    };
+    await expect(
+      collectPilotProof(
+        'u3',
+        async () => {
+          f.ports.write(spec.path, bytes(testReport(['tests/u3/unit/fixture.spec.ts'])));
+          return execution;
+        },
+        f.ports,
+      ),
+    ).rejects.toMatchObject({ code: 'PILOT_CHILD_FAILED' });
+    const text = read('.reports/u3/pilot/u3-job-summary.json').toString();
+    expect(text).not.toContain('synthetic-private');
+    expect(JSON.parse(text).failures[0]).toMatchObject({
+      validationFailure: 'PILOT_RECEIPT_VALIDATION_FAILED',
+      validationErrorCode: 'UNKNOWN_VALIDATION_ERROR',
+      reportStatus: 'INVALID',
+      tests: null,
+      assertions: [],
+    });
+  });
   it('void·실패·signal·cancel·timeout·log 오류와 없거나 옛 report를 성공으로 바꾸지 않는다', async () => {
     for (const mode of [
       'void',
