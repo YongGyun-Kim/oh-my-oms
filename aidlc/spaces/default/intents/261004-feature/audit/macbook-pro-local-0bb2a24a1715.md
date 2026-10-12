@@ -51939,3 +51939,66 @@
 **Context**: construction > u3-commercial-ordering > code-generation > pilot-ci-verification-20261012.md
 
 ---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T01:17:38Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: CI 수집기·workflow·시험 10개 파일을 고정했습니다. 새 SHA와 Luna 검증 명령을 전달했습니다.\n\n기존 full-proof는 명시 실행으로 보존했습니다. 실제 CI·coverage·image 검사는 아직 실행하지 않았으며 Step17/18은 미완료입니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T01:19:25Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: default
+**Agent ID**: 01a12b06-bd2d-7a23-a9cc-4fcda54a8f92
+**Message**: tsc, U3 unit 280/280, U2 호환 회귀 117/117, ESLint, workflow Prettier 검사가 모두 통과했습니다. 실제 CI나 coverage 실행은 없었습니다. legacy/pilot identity와 지정 10개 파일 해시는 전후 동일하며 결과를 root에 전달했습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-12T01:20:39Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/code-generation-plan.md
+**Context**: construction > u3-commercial-ordering > code-generation > code-generation-plan.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-12T01:20:53Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/pilot-ci-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > pilot-ci-verification-20261012.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-12T01:23:23Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-developer-agent
+**Agent ID**: 01a12b35-4010-75d0-b3fa-1e958b40330b
+**Message**: Step17/18 체크박스만 완료로 표시했습니다.\n\n실제 검증은 최종 source 고정 후 `u1 → u2 → u3 → project` collector 순서로 권장하며, 정확 명령·profile·산출물 경로를 전달했습니다. 실제 coverage·CI·보안은 아직 미완료입니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-12T01:24:17Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/pilot-ci-verification-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > pilot-ci-verification-20261012.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-12T01:24:17Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u3-commercial-ordering/code-generation/delivery-checkpoint-20261012.md
+**Context**: construction > u3-commercial-ordering > code-generation > delivery-checkpoint-20261012.md
+
+---

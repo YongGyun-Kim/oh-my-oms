@@ -50,8 +50,8 @@ HTTP 라우트가 서버측으로 정확한 U3 등록 버전을 선택하며 클
 - [x] **Step 14 — 주문 시험 후 실행.** 5–8개 이상 핵심 정상/오류/경계와 세부 사례: 1/100/0/101행·타입/지급/FULL·미확인/0원/중복 비용·단가/합계 범위·부분 준비 HOLD·모든 계약 개정·수락/변경 경쟁·U7 없는 수락 후 변경 거절·원래 결과 조회.
 - [x] **Step 15 — HTTP·in-process/worker 호스트 연결.** U3 owner/operation/현재 action·대상/version/route·예산/보안/단일 parser 선택을 실제 등록한다. 주문/변경만 1MiB, 다른 64KiB·413/무효 JSON 응답을 연결한다. 공유 notice/fact 전달·worker 진입 및 복구 decoder에 U3 version을 등록한다.
 - [x] **Step 16 — HTTP/worker·소비자 계약 시험 후 실행.** 실제 왕복 input/response/producer·MFA/내부망·CSRF/타 기업·worker 우회·unknown operation/version·byte 이하/초과/압축·기존 상업 경로 우회 차단·큐 중복/역순/malformed 대조를 검사한다. U1/U2 영향 회귀는 별도 명령/결과로 기록한다.
-- [ ] **Step 17 — 파일럿 CI·전체 분모 집계 구현.** U1/U2/U3 job의 현재 같은 source/lock/image 결과와 전체 라인 실행 합집합·80%를 대조한다. pilot-current의 필수 검사/보안·minimal artifact와 별도 명시 full-proof를 연결한다. 원래 full-proof 기준/이력은 그대로 유지한다.
-- [ ] **Step 18 — CI/집계·보고서 시험 후 실행.** 실패/취소/skip·누락·source/SHA mismatch·좁은 분모·오래된 coverage/image·같은 key 다른 보고서·Deferred를 PASS로 바꾸는 경우를 거절한다. collector 시험은 제어된 fake child/report 자료로 수행하고 실제 장시간 부하/DR를 호출하지 않는다.
+- [x] **Step 17 — 파일럿 CI·전체 분모 집계 구현.** U1/U2/U3 job의 현재 같은 source/lock/image 결과와 전체 라인 실행 합집합·80%를 대조한다. pilot-current의 필수 검사/보안·minimal artifact와 별도 명시 full-proof를 연결한다. 원래 full-proof 기준/이력은 그대로 유지한다.
+- [x] **Step 18 — CI/집계·보고서 시험 후 실행.** 실패/취소/skip·누락·source/SHA mismatch·좁은 분모·오래된 coverage/image·같은 key 다른 보고서·Deferred를 PASS로 바꾸는 경우를 거절한다. collector 시험은 제어된 fake child/report 자료로 수행하고 실제 장시간 부하/DR를 호출하지 않는다.
 - [ ] **Step 19 — 변경에 맞는 공통 품질/보안 검증.** type/lint/format·비밀/SAST/의존성·필요 합성 CDK/해당 image/격리 runtime를 기존 차단선으로 수행한다. tool 설치/공간 부족·미실행·미지원은 성공으로 치환하지 않고 필요한 증거/실패를 보존한다.
 - [ ] **Step 20 — 문서·source manifest·추적/검토 준비.** 구현/시험/명령·파일/모드/버전·제외/후속/미해결을 정리한다. source-manifest.json에 실제 생성/수정/삭제한 모든 제품/시험/설정 경로를 주장하고 code-summary/traceability에 실제 파일/실행 근거만 연결한다. 42 AC·29 BR·33 NFR를 누락 없이 보존하고 별도 리뷰를 받는다.
 

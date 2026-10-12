@@ -16,4 +16,16 @@
 
 ## 남은 범위
 
-Step17–18은 미완료다. 기본 workflow/실제 child collector·같은 source/lock/image 검사 gate, 해당 반례 시험과 실제 전체 3기여 coverage/CI 실행이 남아 있다. Step19 품질/보안과 Step20 최종 산출물/별도 리뷰도 미완료이며 main 머지는 아직 수행하지 않았다.
+Step17–18의 구현·제어된 시험은 아래 후속 계층 검사로 완료했다. 실제 전체3기여 coverage80%·CI·품질/보안·같은 이미지 검사와 Step20 최종 산출물/별도 리뷰는 미완료이며 main 머지는 아직 수행하지 않았다.
+
+## collector·workflow 후속 구현
+
+첫 집계 계층은 7f2d551로 커밋하고 같은 원격 브랜치에 push했다. 후속 10개 파일은 pilot 명령·collector·최종 validation·도구 adapter와 기본/별도 전체 검증 workflow 및 fake-child 시험이다. 실제 유한 child runner의 void 결과는 성공으로 인정하지 않으며 실제 종료·신선한 report/hash·같은 source/lock/image를 대조한다. 보안/offline synth/same-image runtime helper는 명시 서버 identity를 선택적으로 전달받고 기본 동작을 보존한다. 기본 workflow는 U1/U2/U3와 project gate를 실행하며 기존 full-proof의 원래 명령/목표는 별도 manual-only oms-full-proof.yml로 보존한다. 50분 부하·전체 DR을 기본 pilot 명령에 넣지 않는다.
+
+새 단위9개는 제어된 작은 Node child의 exit7/timeout과 fake report/port로 종료·신선도·report 누락·같은 source/lock/image·충돌·coverage와 Deferred를 대조한다. 설치된 yaml parseDocument로 두 workflow syntax·기본 trigger/3Unit/project 성공 gate·manual-only 전체 검증·안전한 artifact 구조를 확인한다. actionlint는 PATH에 없어 실행/설치하지 않았고 통과로 표시하지 않는다.
+
+## 후속 계층 실제 검사
+
+TypeScript·지정 ESLint·두 workflow Prettier는 종료 코드0이다. pilot-ci-unit-20261012.json은 U3 280/280 PASS, pilot-ci-u2-compatibility-20261012.json은 기존 U2 gate/converter 영향117/117 PASS다. root가 실제 JSON count를 확인했으며 실패/pending/todo0·success=true다. 실행은 단위의 제어된 child/fake 보고서에 한정했고 실제 CI·coverage·보안 scan·image·부하·DR을 실행하지 않았다.
+
+검사 전후 HEAD는 7f2d551dbe0ddcd2c06965094b6df314fdf08d78이다. 구형 identity 지문428e9de263ec02d40bd6d77320942f4cc8d7cd6f77f2e5feacbcd7ea5f45e09c, 파일럿 identity 지문b424f18473777397f856c36c3a5ca2d4c18530c8d92c87ea970f5e655c24be4b가 각각 전후 동일하고 선택10개 SHA도 동일했다. 실제 전체 coverage80%·CI·공통 품질/보안·최종 문서/리뷰는 아직 미검증이다.

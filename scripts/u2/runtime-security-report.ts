@@ -30,6 +30,7 @@ import {
 } from '../../tests/u1/fixtures/identity.js';
 import { ContainerClient } from '../u1/container-client.js';
 import { runtimeSourceIdentity } from './runtime-source.js';
+import type { SourceIdentity } from './runtime-source.js';
 import { validateTestReport } from '../u1/report-validation.js';
 interface RuntimeProfile {
   verifier: string;
@@ -288,13 +289,15 @@ async function serveFixture() {
     JSON.stringify({ ready: true, role: worker ? 'WORKER' : 'API', realActivationAllowed: false }),
   );
 }
-export async function runtimeSecurityReport() {
+export async function runtimeSecurityReport(
+  identity: () => SourceIdentity = runtimeSourceIdentity,
+) {
   if (
     process.env.NODE_ENV === 'production' ||
     process.env.OMS_U2_SYNTHETIC_PROFILE !== 'approved-local-only'
   )
     throw Error('격리 synthetic same-image 검증만 허용합니다.');
-  const source = runtimeSourceIdentity(),
+  const source = identity(),
     folder = resolve('.runtime/u2/container-proof'),
     created: string[] = [],
     roles = new Map<string, string>(),
@@ -567,7 +570,7 @@ export async function runtimeSecurityReport() {
       )
         throw Error('4-role 현재 실행 image 대조 실패');
     }
-    if (runtimeSourceIdentity().digest !== source.digest) throw Error('실행 중 source 변경');
+    if (identity().digest !== source.digest) throw Error('실행 중 source 변경');
     passed = true;
   } finally {
     const startup: unknown[] = [];

@@ -8,6 +8,7 @@ import { classifyInfrastructureFinding } from '../u1/iac-findings.js';
 import type { Finding } from '../u1/iac-findings.js';
 import { evaluateSecurityExceptions, evaluateSecretExposures } from '../u1/security-policy.js';
 import { runtimeSourceIdentity, sha256 } from './runtime-source.js';
+import type { SourceIdentity } from './runtime-source.js';
 interface Report {
   Results?: {
     Secrets?: unknown[];
@@ -24,7 +25,10 @@ function scanned(path: string): Report {
 }
 const trivy = '.runtime/u1/tools/trivy';
 const semgrep = '.runtime/u1/semgrep-venv/bin/semgrep';
-export async function securityU2(): Promise<void> {
+export async function securityU2(
+  configuration: { identity?: () => SourceIdentity; extraSastRoots?: readonly string[] } = {},
+): Promise<void> {
+  const identity = configuration.identity ?? runtimeSourceIdentity;
   mkdirSync('.reports/u2', { recursive: true });
   verifyCdkBundle(process.cwd());
   const exceptions = evaluateSecurityExceptions(
@@ -83,6 +87,7 @@ export async function securityU2(): Promise<void> {
         'infra/cdk',
         'scripts/u1',
         'scripts/u2',
+        ...(configuration.extraSastRoots ?? []),
       ],
       '.reports/u2/sast.log',
     );
@@ -125,7 +130,7 @@ export async function securityU2(): Promise<void> {
     );
     if (
       !synth.passed ||
-      synth.sourceDigest !== runtimeSourceIdentity().digest ||
+      synth.sourceDigest !== identity().digest ||
       synth.templateSha256 !==
         sha256(readFileSync('.reports/u2/cdk.out/OmsU2Synthetic.template.json'))
     )
@@ -215,6 +220,7 @@ export async function securityU2(): Promise<void> {
           completed,
           passed,
           imageId: scannedImageId,
+          ...(configuration.identity ? { sourceDigest: identity().digest } : {}),
           realActivationAllowed: false,
           observedAt: new Date().toISOString(),
           limitations: [
