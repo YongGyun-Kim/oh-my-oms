@@ -4,7 +4,7 @@
 
 B2B 고객사10곳 이내·하루 주문1,000건을 계획 목표로 하는 제한 파일럿 서버 구현이다. 목표 주문량을 실제 처리 용량/동시 사용자 실측 결과로 표현하지 않는다. 한국어·KRW·PC1280 전제를 사용하며 전체 화면은 U8/U9의 책임이다.
 
-ProductCatalog·CommercialAgreement·OrderAcceptance와 필요한 EnterpriseAccess 권한 생산자/현재 검증을 구현했다. 계층별 합성 단위·격리 저장·HTTP·큐 검증 결과는 Unit 기록에 있다. 전체 동일 소스 품질·3기여 커버리지80%·보안·실제 CI·최종 리뷰는 아직 미완료다. AWS 배포/실거래 준비 완료가 아니다.
+ProductCatalog·CommercialAgreement·OrderAcceptance와 필요한 EnterpriseAccess 권한 생산자/현재 검증을 구현했다. 계층별 합성 단위·격리 저장·HTTP·큐 검증과 현재 소스의 전체 품질·3기여 커버리지80%·보안·CI 결과는 Unit의 code-summary와 품질 기록을 확인한다. 시험·CI 성공은 AWS 배포/실거래 준비 완료를 뜻하지 않는다.
 
 ## 계약·저장·소유 경계
 
@@ -21,6 +21,10 @@ ProductCatalog·CommercialAgreement·OrderAcceptance와 필요한 EnterpriseAcce
 ## 업무 흐름
 
 내부 직원만 상품·HW/영구SW/기간제SW·공통 조건을 등록/개정한다. draft와 판매 가능한 조건을 구분하고 현재 기업에 허용된 승인 조건만 제시한다. 기업 계약을 우선하며 같은 기업·상품·조건의 상충하는 유효 기간 중첩은 적용을 차단한다.
+
+공통 공개 기본값과 판매 상태는 별개다. 완성·유효한 비공개 상품도 승인된 기업 공개 예외가 있으면 해당 기업이 조회·주문할 수 있다. 기업의 비공개 조건은 공통 공개보다 우선한다. 고객 응답은 비공개 공통 가격과 조건 참조를 숨기고 자기 기업의 확정 가격만 제공한다. 직원 공통 조회는 해당 기업의 최종 가격 확인을 대신하지 않는다.
+
+saleState 입력은 선택적인 OFFERABLE/SUSPENDED이며 미완성·미래·만료 초안을 판매 가능으로 승격하지 않는다. 이미 중지된 상품은 상태를 생략한 설명 개정에서도 중지를 유지한다. 직원은 완전·유효한 현재 공통 원본과 정확한 근거를 확인해 명시적으로 재판매한다. 기업 공개 승인도 실제 판매 중지·미완성 상태를 우회하지 못한다. 기존 저장 상품 상태나 구매 스냅샷을 자동 변환하지 않는다.
 
 등록자/승인자의 다른 사람 판정은 서버에 등록한 소유자와 정확한 현재 link·근거·목적·출처/확인자 권위·개정·approval digest를 대조한다. 계정/person-link ID 차이를 다른 사람 증거로 쓰지 않는다. 미등록/UNKNOWN/만료/불일치는 승인하지 않는다. 고객 변경 요청은 자기 기업의 현재 조직·대상 범위/권한에 한정하고 예외 등록은 자기 승인/즉시 효력을 뜻하지 않는다.
 
@@ -52,7 +56,7 @@ OMS_U3_DATABASE_PROFILE=verification-isolated npx --no-install vitest run --conf
 NODE_ENV=test OMS_U2_SYNTHETIC_PROFILE=approved-local-only NEXT_TELEMETRY_DISABLED=1 node --import tsx scripts/u3/ci-pilot-proof.ts u3
 ```
 
-U3 저장/HTTP/worker 선택 시험의 실제 경로는 repository-boundaries.spec.ts·http-host.spec.ts·worker-handoff.spec.ts다. 선택 성공은 전체 성공을 대신하지 않는다. 계층 구현→시험 작성/실행의 test-after/Standard를 유지한다. 통합18파일 순차·개별 test/hook30초·passWithNoTests:false, 서비스10초/DBtransaction3초/stmt2초/lock최대500ms는 유지한다. U3 integration child만20분, U3 whole coverage child만30분이다. 600초 수집 실패 당시 완료11파일/104시험587.215초와 미완료7파일의 과거63.618초가 예산 수정 근거다. coverage30분은 V8 포함 여유 가정이며 실제 검증 전이다.
+U3 저장/HTTP/worker 선택 시험의 실제 경로는 repository-boundaries.spec.ts·http-host.spec.ts·worker-handoff.spec.ts다. 선택 성공은 전체 성공을 대신하지 않는다. 계층 구현→시험 작성/실행의 test-after/Standard를 유지한다. 통합18파일 순차·개별 test/hook30초·passWithNoTests:false, 서비스10초/DBtransaction3초/stmt2초/lock최대500ms는 유지한다. U3 integration child만20분, U3 whole coverage child만30분이다. 600초 수집 실패 당시 완료11파일/104시험587.215초와 미완료7파일의 과거63.618초가 예산 수정 근거다. coverage30분은 V8를 포함한 유한 수집 한도이며 서비스 요청 처리 시간이나 운영 용량 목표가 아니다. 실제 실행 시간과 성공 여부는 해당 소스의 보고서로 확인한다.
 
 PR/main 기본 `.github/workflows/u1-validation.yml`은 독립 U1/U2/U3 runner의 unit/integration/전체 제품 coverage 기여와 project gate를 실행한다. 로컬 collector는 u1→u2→u3→project 순차로 사용할 수 있다. project가 실제 실행 라인의3기여 합집합80%·같은 source/HEAD/lock/image·필수 type/lint/format·비밀/SAST/의존성·offline CDK/인프라·격리 runtime 보안을 판정한다. 평균/좁은 분모/오래된 보고서/실패·취소·skip/누락/같은 key 다른 증거는 차단한다. 작성 apps/packages/infra/scripts 전체를 포함하고 생성 .d.ts/.next/dist/cdk.out만 제외한다.
 
