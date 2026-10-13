@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { canonicalJson, OmsError, U3_PROFILE } from '@oms/contracts';
 import type { Money, Ref, U3OrderInput, U3OrderView, U3PriceConfirmation } from '@oms/contracts';
-import { U3OrderAcceptance } from '@oms/core';
+import { U3OrderAcceptance, U3ProductCatalog } from '@oms/core';
 import {
   ProtectedStore,
   ProtectedTransaction,
@@ -20,6 +20,7 @@ import { profileU3Budget } from '../fixtures/budget-profile.js';
 import { buildCommonOffer } from '../../../packages/core/src/catalog-conditions.js';
 import { catalogInput } from '../fixtures/catalog.js';
 import { QueryFailedError } from 'typeorm';
+import { agreementApprovalInput, agreementRegistrationInput } from '../fixtures/agreement-input.js';
 
 describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계', () => {
   const sources = u3Sources();
@@ -104,6 +105,136 @@ describe('실제 U3 주문 제출·불변 전체 조건·금액/재전송 경계
       }
     ).data;
   }
+  async function privateProduct(
+    saleState: 'OFFERABLE' | 'SUSPENDED' = 'OFFERABLE',
+    incomplete = false,
+  ) {
+    const draft = catalogInput(f.offerRef);
+    draft.meta = f.meta();
+    draft.saleState = saleState;
+    const visibility = draft.offerDraft!.conditions.find(
+      (value) => value.conditionKey === 'VISIBILITY',
+    )!;
+    if (visibility.conditionKey === 'VISIBILITY') visibility.value = false;
+    if (incomplete)
+      draft.offerDraft!.conditions = draft.offerDraft!.conditions.filter(
+        (value) => value.conditionKey !== 'COMPLETION',
+      );
+    const receipt = await new U3ProductCatalog(
+      store,
+      f.seller.now,
+      async (proof) => proof === f.ingress,
+    ).register(await f.requestContext(f.registrant), draft, null, f.ingress);
+    f.productRef = receipt.targetRef!;
+    f.offerRef = (await store.currentProtected('Product', f.productRef.id))!.currentOfferRef as Ref;
+  }
+  async function approvePrivate() {
+    const data = agreementRegistrationInput(
+      f.seller.enterpriseRef,
+      f.productRef,
+      f.offerRef,
+      (await f.input()).agreementEvidenceRefs,
+    );
+    data.conditions.push({
+      conditionKey: 'VISIBILITY',
+      value: true,
+      effectiveWindow: data.effectiveWindow,
+      evidenceRefs: data.agreementEvidenceRefs,
+    });
+    const receipt = await f.agreement.register(
+      await f.requestContext(f.registrant),
+      data,
+      f.ingress,
+    );
+    return f.agreement.approve(
+      await f.requestContext(f.approver),
+      agreementApprovalInput(receipt.targetRef!, data.agreementEvidenceRefs),
+      f.ingress,
+    );
+  }
+  it('현재 승인 공개된 비공개 상품은 기업A 조건으로 제출하며 기업B의 같은 payload는 기록하지 않는다', async () => {
+    await privateProduct();
+    const approved = await approvePrivate(),
+      value = await input(1, true),
+      receipt = await submit(value);
+    expect(await view(receipt)).toMatchObject({
+      agreementRevisionRefs: [approved.targetRef],
+      priceBreakdown: { total: { value: '900' } },
+    });
+    const foreign = {
+      ...value,
+      meta: f.meta(),
+      targetScope: {
+        ...f.targetScope,
+        enterpriseRef: f.reviewer.enterpriseRef,
+        contextPolicyRef: f.reviewer.enterpriseRef,
+        organisationRevision: f.reviewer.enterpriseRef.revision,
+      },
+    };
+    await expect(
+      orders.submit(await f.requestContext(f.reviewer.customer), foreign),
+    ).rejects.toMatchObject({ code: 'NOT_FOUND' });
+    expect(
+      await store.list('RequestReceipt', {
+        equals: { idempotencyKey: foreign.meta.clientRequestId },
+      }),
+    ).toHaveLength(0);
+  });
+  it('공개 예외 없는 비공개 상품의 허위 공개 binding은 주문 제출을 허용하지 않는다', async () => {
+    const value = await input();
+    await privateProduct();
+    value.meta = f.meta();
+    value.lines[0]!.productRef = f.productRef;
+    value.lines[0]!.commonOfferRevisionRef = f.offerRef;
+    value.lines[0]!.conditionBindings = (await store.currentProtected(
+      'CommonOfferRevision',
+      f.offerRef.id,
+    ))!.conditionBindings as U3OrderInput['lines'][number]['conditionBindings'];
+    const visibility = value.lines[0]!.conditionBindings.find(
+      (binding) => binding.conditionKey === 'VISIBILITY',
+    )!;
+    if (visibility.conditionKey === 'VISIBILITY') visibility.value = true;
+    await expect(submit(registeredOrderInput('submitOrder', value))).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+    });
+    expect(
+      await store.list('RequestReceipt', {
+        equals: { idempotencyKey: value.meta.clientRequestId },
+      }),
+    ).toHaveLength(0);
+  });
+  it.each(['SUSPENDED', 'INCOMPLETE'] as const)(
+    '실제 %s 상품은 승인 공개가 있어도 제출 전 차단한다',
+    async (state) => {
+      const value = await input();
+      await privateProduct(
+        state === 'SUSPENDED' ? 'SUSPENDED' : 'OFFERABLE',
+        state === 'INCOMPLETE',
+      );
+      const approved = await approvePrivate();
+      value.meta = f.meta();
+      value.lines[0]!.productRef = f.productRef;
+      value.lines[0]!.commonOfferRevisionRef = f.offerRef;
+      const common = (await store.currentProtected('CommonOfferRevision', f.offerRef.id))!
+        .conditionBindings as U3OrderInput['lines'][number]['conditionBindings'];
+      const enterprise = (await store.currentProtected(
+        'AgreementRevision',
+        approved.targetRef!.id,
+      ))!.conditionBindings as U3OrderInput['lines'][number]['conditionBindings'];
+      value.lines[0]!.conditionBindings = common.map(
+        (binding) =>
+          enterprise.find((condition) => condition.conditionKey === binding.conditionKey) ??
+          binding,
+      );
+      value.lines[0]!.agreementRevisionRefs = [approved.targetRef!];
+      await expect(submit(value)).rejects.toMatchObject({ code: 'STALE_CATALOG_OFFER' });
+      expect(
+        await store.list('RequestReceipt', {
+          equals: { idempotencyKey: value.meta.clientRequestId },
+        }),
+      ).toHaveLength(0);
+    },
+  );
   it('실제 모든 행·FULL·판단·스냅샷·요청/통지를 한 후보에 보호하고 비용 확인 없으면 REVIEW/UNKNOWN이다', async () => {
     const receipt = await submit(await input()),
       data = await view(receipt);

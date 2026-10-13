@@ -56,7 +56,7 @@ export function createU3Owners(owners: ApiOwners, configuration: U3ApiConfigurat
     );
   return {
     catalog,
-    products: new U3CatalogQuery(catalog),
+    products: new U3CatalogQuery(catalog, agreement),
     agreement,
     proposals: new CommercialProposal(
       store,

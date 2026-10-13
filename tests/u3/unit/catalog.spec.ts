@@ -107,22 +107,36 @@ describe('U3 상품 조건의 판매 정보·기간·정수·초안 경계', () 
       build({ ...catalogInput(basis), commonPrice: { currency: 'KRW', value: '2000' } }),
     ).toThrow();
   });
-  it('공개 중지 및 미래/만료 조건을 판매 가능으로 제시하지 않는다', () => {
-    const suspended = catalogInput(basis);
-    const visibility = suspended.offerDraft!.conditions.find(
+  it('공통 비공개 기본값은 완성된 판매 상태와 별도로 보존한다', () => {
+    const privateOffer = catalogInput(basis);
+    const visibility = privateOffer.offerDraft!.conditions.find(
       (value) => value.conditionKey === 'VISIBILITY',
     )!;
     if (visibility.conditionKey === 'VISIBILITY') visibility.value = false;
-    expect(build(suspended)).toMatchObject({
+    expect(build(privateOffer)).toMatchObject({
+      product: { saleState: 'OFFERABLE' },
+      offer: { visible: false },
+    });
+    expect(build({ ...privateOffer, saleState: 'SUSPENDED' })).toMatchObject({
       product: { saleState: 'SUSPENDED' },
       offer: { visible: false },
     });
+    expect(build({ ...catalogInput(basis), saleState: 'SUSPENDED' })).toMatchObject({
+      product: { saleState: 'SUSPENDED' },
+      offer: { visible: true },
+    });
+  });
+  it('미완성·미래·만료 조건은 명시 판매 가능 입력으로도 승격하지 않는다', () => {
+    expect(
+      build({ ...catalogInput(basis), offerDraft: null, saleState: 'OFFERABLE' }).product.saleState,
+    ).toBe('INCOMPLETE');
     for (const effectiveWindow of [
-      { ...suspended.offerDraft!.effectiveWindow, startAt: '2026-12-01T00:00:00.000Z' },
-      { ...suspended.offerDraft!.effectiveWindow, endAt: '2026-10-11T00:00:00.000Z' },
+      { ...catalogInput(basis).offerDraft!.effectiveWindow, startAt: '2026-12-01T00:00:00.000Z' },
+      { ...catalogInput(basis).offerDraft!.effectiveWindow, endAt: '2026-10-11T00:00:00.000Z' },
     ]) {
       const input = catalogInput(basis);
       input.offerDraft!.effectiveWindow = effectiveWindow;
+      input.saleState = 'OFFERABLE';
       expect(build(input).product.saleState).toBe('INCOMPLETE');
     }
   });
@@ -160,5 +174,67 @@ describe('U3 상품 조건의 판매 정보·기간·정수·초안 경계', () 
     expect(_draft).not.toBeNull();
     expect(schema.validate('ProductInput', legacy)).toEqual(legacy);
     expect(() => schema.validateUri(U3_PROFILE + '#/$defs/ProductInput', legacy)).toThrow();
+  });
+  it('U3 기업 상품 출력만 비공개 공통가격 null을 허용하며 기존 common 출력과 값/참조 경계는 유지한다', () => {
+    const view = {
+      productRef,
+      commonOfferRevisionRef: offerRef,
+      productType: 'HARDWARE',
+      softwareTermKind: null,
+      label: '합성 상품',
+      salesDescription: '승인된 기업 상품 정보',
+      visible: true,
+      commonPrice: null,
+      resolvedPrice: { currency: 'KRW', value: '900' },
+      salesConditionRefs: [],
+      priceKnowledge: 'KNOWN',
+    };
+    expect(schema.validateUri(U3_PROFILE + '#/$defs/ProductView', view)).toEqual(view);
+    const { commonPrice: _private, ...legacyV1 } = view;
+    expect(_private).toBeNull();
+    expect(schema.validate('ProductView', legacyV1, 1)).toEqual(legacyV1);
+    expect(() => schema.validate('ProductView', view, 1)).toThrow();
+    expect(() => schema.validate('ProductView', view, 2)).toThrow();
+    expect(
+      schema.validate(
+        'ProductView',
+        { ...view, commonPrice: { currency: 'KRW', value: '1000' } },
+        2,
+      ),
+    ).toBeTruthy();
+    expect(
+      schema.validateUri(U3_PROFILE + '#/$defs/ProductViewResult', {
+        knowledge: 'KNOWN',
+        data: view,
+        sourceRefs: [productRef, offerRef],
+        observedAt: now.toISOString(),
+      }),
+    ).toBeTruthy();
+    for (const change of [
+      { label: '' },
+      { label: 'x'.repeat(4097) },
+      { salesDescription: '' },
+      { productType: 'HW' },
+      { softwareTermKind: 'UNKNOWN' },
+      { visible: 'true' },
+      { priceKnowledge: 'YES' },
+      { resolvedPrice: { currency: 'KRW', value: '900.5' } },
+      { commonPrice: { currency: 'USD', value: '1000' } },
+      { productRef: { ...productRef, revision: 0 } },
+      { productRef: { ...productRef, owner: 'Unknown' } },
+      { salesConditionRefs: [{ ...basis, extra: true }] },
+      { privateNotes: '허용하지 않은 원본' },
+    ])
+      expect(() =>
+        schema.validateUri(U3_PROFILE + '#/$defs/ProductView', { ...view, ...change }),
+      ).toThrow();
+    expect(() => schema.validateUri(U3_PROFILE + '#/$defs/ProductView', legacyV1)).toThrow();
+    for (const saleState of ['INCOMPLETE', 'UNKNOWN', null])
+      expect(() =>
+        schema.validateUri(U3_PROFILE + '#/$defs/ProductInput', {
+          ...catalogInput(basis),
+          saleState,
+        }),
+      ).toThrow();
   });
 });

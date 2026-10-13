@@ -2,7 +2,14 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import { gzipSync } from 'node:zlib';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { canonicalJson } from '@oms/contracts';
-import type { Receipt, Ref, U3OrderInput, U3OrderView, U3ProposalView } from '@oms/contracts';
+import type {
+  Receipt,
+  Ref,
+  U3OrderInput,
+  U3OrderView,
+  U3ProposalView,
+  U3ResolvedCommercialTerms,
+} from '@oms/contracts';
 import {
   Assessments,
   NotificationDelivery,
@@ -24,6 +31,8 @@ import { syntheticCommercialEvidence } from '../fixtures/agreement.js';
 import { registeredOrderInput } from '../fixtures/order-input.js';
 import { consentRoleInput } from '../fixtures/consent-role.js';
 import { profileU3Budget, recordHttpObservation } from '../fixtures/budget-profile.js';
+import { catalogInput } from '../fixtures/catalog.js';
+import { agreementApprovalInput, agreementRegistrationInput } from '../fixtures/agreement-input.js';
 
 // password/MFA·권한·보호 저장은 실제 경로로 실행한다. 외부 소유자 원본은 로컬 합성이다.
 describe('명시 U3 HTTP host·실제 세션·유한 raw JSON 경계', () => {
@@ -237,6 +246,196 @@ describe('명시 U3 HTTP host·실제 세션·유한 raw JSON 경계', () => {
       },
     });
   }
+  it('실제 HTTP 등록·다른 사람 승인으로 비공개 상품의 기업 조회→주문→직원 수락을 연결하고 사적 공통가격을 숨긴다', async () => {
+    await customer.authenticate(f.seller.customer.principalId);
+    await staff.authenticate(f.registrant.principalId);
+    const draft = catalogInput(f.offerRef);
+    draft.meta = f.meta();
+    const visibility = draft.offerDraft!.conditions.find(
+      (value) => value.conditionKey === 'VISIBILITY',
+    )!;
+    if (visibility.conditionKey === 'VISIBILITY') visibility.value = false;
+    const saved = await staff.request<Receipt>('/products', draft, headers(draft));
+    expect(saved.response.status, safeStatus(saved.response.status, saved.body)).toBe(202);
+    const productRef = saved.body.targetRef!,
+      offerRef = (await store.currentProtected('Product', productRef.id))!.currentOfferRef as Ref;
+    const offerQuery = query('/products/' + productRef.id + '/offer', {
+      targetRef: productRef,
+      targetScope: f.targetScope,
+    });
+    const offerHeaders = { 'X-Target-Revision': String(productRef.revision) };
+    expect((await customer.request(offerQuery, undefined, offerHeaders)).response.status).toBe(404);
+    const data = agreementRegistrationInput(
+      f.seller.enterpriseRef,
+      productRef,
+      offerRef,
+      f.evidence,
+    );
+    data.conditions.push({
+      conditionKey: 'VISIBILITY',
+      value: true,
+      effectiveWindow: data.effectiveWindow,
+      evidenceRefs: f.evidence,
+    });
+    const registered = await staff.request<Receipt>('/commercial-agreements', data, headers(data));
+    expect(
+      registered.response.status,
+      safeStatus(registered.response.status, registered.body),
+    ).toBe(202);
+    expect((await customer.request(offerQuery, undefined, offerHeaders)).response.status).toBe(404);
+    const approver = new SyntheticHttpClient(staffOrigin);
+    await approver.authenticate(f.approver.principalId);
+    const approval = agreementApprovalInput(registered.body.targetRef!, f.evidence);
+    const approved = await approver.request<Receipt>(
+      '/commercial-agreements/' + approval.targetRef.id + '/approvals',
+      approval,
+      headers(approval, approval.targetRef.revision),
+    );
+    expect(approved.response.status, safeStatus(approved.response.status, approved.body)).toBe(202);
+    const display = await customer.request(offerQuery, undefined, offerHeaders);
+    expect(display.response.status, safeStatus(display.response.status, display.body)).toBe(200);
+    expect(display.body).toMatchObject({
+      data: {
+        label: draft.label,
+        visible: true,
+        commonPrice: null,
+        resolvedPrice: { currency: 'KRW', value: '900' },
+        priceKnowledge: 'KNOWN',
+        salesConditionRefs: [],
+      },
+    });
+    store.schema.validateUri(
+      customerHost!.registry.lookup('ProductCatalog', 'readCommonOffer', 3).output,
+      display.body,
+    );
+    const terms = await customer.request<U3ResolvedCommercialTerms>(
+      query('/commercial-terms', {
+        targetScope: f.targetScope,
+        productRef,
+        commonOfferRevisionRef: offerRef,
+      }),
+    );
+    expect(terms.response.status).toBe(200);
+    const input = registeredOrderInput<U3OrderInput>('submitOrder', {
+      ...structuredClone(f.input),
+      meta: f.meta(),
+      lines: [
+        {
+          ...structuredClone(f.input.lines[0]!),
+          productRef,
+          commonOfferRevisionRef: offerRef,
+          agreementRevisionRefs: terms.body.agreementRevisionRefs,
+          conditionBindings: terms.body.conditionBindings,
+        },
+      ],
+      priceConfirmation: {
+        ...structuredClone(f.input.priceConfirmation!),
+        priceBreakdown: {
+          lineAmounts: [{ currency: 'KRW', value: '900' }],
+          productAmount: { currency: 'KRW', value: '900' },
+          adjustments: [],
+          total: { currency: 'KRW', value: '900' },
+          knowledge: 'KNOWN',
+        },
+      },
+    });
+    const submitted = await customer.request<Receipt>('/orders', input, headers(input));
+    expect(submitted.response.status, safeStatus(submitted.response.status, submitted.body)).toBe(
+      202,
+    );
+    const original = (await store.currentProtected('Order', submitted.body.targetRef!.id))!,
+      snapshotRef = original.purchaseTermsRef as Ref;
+    const bytes = canonicalJson(
+      await store.currentProtected('PurchaseTermsSnapshot', snapshotRef.id),
+    );
+    const decision = f.decision('ACCEPT', submitted.body.targetRef!);
+    const accepted = await staff.request<Receipt>(
+      '/orders/' + decision.targetRef.id + '/decisions',
+      decision,
+      headers(decision, decision.targetRef.revision),
+    );
+    expect(accepted.response.status, safeStatus(accepted.response.status, accepted.body)).toBe(202);
+    expect(await store.currentProtected('Order', submitted.body.targetRef!.id)).toMatchObject({
+      state: 'ACCEPTED',
+    });
+    expect(
+      canonicalJson(await store.currentProtected('PurchaseTermsSnapshot', snapshotRef.id)),
+    ).toBe(bytes);
+    const other = new SyntheticHttpClient(customerOrigin);
+    await other.authenticate(f.reviewer.customer.principalId);
+    const otherScope = {
+      ...f.targetScope,
+      enterpriseRef: f.reviewer.enterpriseRef,
+      contextPolicyRef: f.reviewer.enterpriseRef,
+      organisationRevision: f.reviewer.enterpriseRef.revision,
+    };
+    expect(
+      (
+        await other.request(
+          query('/products/' + productRef.id + '/offer', {
+            targetRef: productRef,
+            targetScope: otherScope,
+          }),
+          undefined,
+          offerHeaders,
+        )
+      ).response.status,
+    ).toBe(404);
+    const foreign = { ...input, meta: f.meta(), targetScope: otherScope };
+    expect((await other.request('/orders', foreign, headers(foreign))).response.status).toBe(404);
+    staffAllowed = false;
+    expect(
+      (
+        await staff.request(
+          query('/products/' + productRef.id + '/offer', {
+            targetRef: productRef,
+            targetScope: null,
+          }),
+          undefined,
+          offerHeaders,
+        )
+      ).response.status,
+    ).toBe(403);
+  });
+  it('공통 공개 상품도 기업의 승인 비공개가 있으면 HTTP 상품 메타데이터와 가격을 반환하지 않는다', async () => {
+    await customer.authenticate(f.seller.customer.principalId);
+    await staff.authenticate(f.registrant.principalId);
+    const data = agreementRegistrationInput(
+      f.seller.enterpriseRef,
+      f.productRef,
+      f.offerRef,
+      f.evidence,
+    );
+    data.conditions = [
+      {
+        conditionKey: 'VISIBILITY',
+        value: false,
+        effectiveWindow: data.effectiveWindow,
+        evidenceRefs: f.evidence,
+      },
+    ];
+    const registered = await staff.request<Receipt>('/commercial-agreements', data, headers(data));
+    expect(registered.response.status).toBe(202);
+    const approver = new SyntheticHttpClient(staffOrigin);
+    await approver.authenticate(f.approver.principalId);
+    const approval = agreementApprovalInput(registered.body.targetRef!, f.evidence);
+    const approved = await approver.request<Receipt>(
+      '/commercial-agreements/' + approval.targetRef.id + '/approvals',
+      approval,
+      headers(approval, approval.targetRef.revision),
+    );
+    expect(approved.response.status).toBe(202);
+    const denied = await customer.request(
+      query('/products/' + f.productRef.id + '/offer', {
+        targetRef: f.productRef,
+        targetScope: f.targetScope,
+      }),
+      undefined,
+      { 'X-Target-Revision': String(f.productRef.revision) },
+    );
+    expect(denied.response.status).toBe(404);
+    expect(denied.body).not.toHaveProperty('data');
+  });
   it('정확1MiB 주문·조건 적용은 보호202/원래 결과 재시도·현재 조회와 스냅샷 불변을 연결한다', async (test) => {
     await customer.authenticate(f.seller.customer.principalId);
     await staff.authenticate(f.registrant.principalId);

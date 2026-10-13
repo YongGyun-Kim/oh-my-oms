@@ -1,7 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import { requireCondition } from '@oms/contracts';
+import { canonicalJson, requireCondition } from '@oms/contracts';
 import type {
   CommandMeta,
+  ConditionBinding,
   Money,
   Receipt,
   Ref,
@@ -87,15 +88,31 @@ export class U3ProductCatalog {
         );
         for (const source of commonOfferSources(input)) {
           const value = await scope.current(source);
-          if (source.entity === 'CommonOfferRevision')
+          if (source.entity === 'CommonOfferRevision') {
+            const product = await scope.current(value.productRef as Ref);
+            const conditions = value.conditionBindings as ConditionBinding[];
             requireCondition(
               value.modelVersion === 2 &&
-                value.visible &&
-                withinEffectiveWindow(value.effectiveWindow as EffectiveWindow, this.now()),
+                product.modelVersion === 2 &&
+                ['OFFERABLE', 'SUSPENDED'].includes(String(product.saleState)) &&
+                canonicalJson(product.currentOfferRef) === canonicalJson(source) &&
+                withinEffectiveWindow(value.effectiveWindow as EffectiveWindow, this.now()) &&
+                ['PRICE', 'VISIBILITY', 'PAYMENT', 'PROVISION', 'COMPLETION'].every((key) =>
+                  conditions.some((condition) => condition.conditionKey === key),
+                ) &&
+                (product.softwareTermKind !== 'TERM' ||
+                  conditions.some((condition) => condition.conditionKey === 'PERIOD')) &&
+                (value.revisionEvidenceRefs as Ref[]).length > 0 &&
+                conditions.every(
+                  (condition) =>
+                    condition.evidenceRefs.length > 0 &&
+                    withinEffectiveWindow(condition.effectiveWindow, this.now()),
+                ),
               503,
               'CATALOG_BASIS_UNCONFIRMED',
               '유효한 공통 조건 원본이 필요합니다.',
             );
+          }
         }
         const productRef: Ref = {
             owner: 'ProductCatalog',
@@ -111,7 +128,11 @@ export class U3ProductCatalog {
           };
         const { product, offer } = buildCommonOffer(
           this.store,
-          input,
+          {
+            ...input,
+            saleState:
+              input.saleState ?? (previous?.saleState === 'SUSPENDED' ? 'SUSPENDED' : 'OFFERABLE'),
+          },
           productRef,
           offerRef,
           this.now(),

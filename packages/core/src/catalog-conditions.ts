@@ -70,8 +70,8 @@ export function buildCommonOffer(
     withinEffectiveWindow(draft.effectiveWindow, at) &&
     conditions.every((value) => withinEffectiveWindow(value.effectiveWindow, at));
   // 미완성/미래/만료 초안을 유효 공통 조건으로 추정하지 않는다.
-  product.saleState =
-    complete && active ? (visibility?.value === true ? 'OFFERABLE' : 'SUSPENDED') : 'INCOMPLETE';
+  // 기업 공개 예외는 비공개 기본값을 대체할 수 있지만 실제 판매 중지를 해제하지 않는다.
+  product.saleState = complete && active ? (input.saleState ?? 'OFFERABLE') : 'INCOMPLETE';
   return {
     product,
     offer: {
@@ -79,7 +79,7 @@ export function buildCommonOffer(
       offerRevisionId: offerRef.id,
       revision: 1,
       productRef,
-      visible: product.saleState === 'OFFERABLE',
+      visible: complete && active && visibility?.value === true,
       commonPrice: input.commonPrice,
       salesConditionRefs: input.salesConditionRefs,
       publishedAt: at.toISOString(),

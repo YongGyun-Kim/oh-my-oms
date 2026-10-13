@@ -808,11 +808,21 @@ export class U3OrderAcceptance {
       const key = canonicalJson([line.commonOfferRevisionRef, line.agreementRevisionRefs]);
       if (seen.has(key)) continue;
       seen.add(key);
-      const common = await scope.current(line.commonOfferRevisionRef),
+      const visibleProduct = await this.store.currentProtected('Product', line.productRef.id);
+      requireCondition(
+        visibleProduct,
+        503,
+        'ORDER_TERMS_CHANGED',
+        '상품의 현재 판매 상태를 확인해야 합니다.',
+      );
+      // 현재 판매 중지는 재검증하되 새 공통 가격으로 구매 당시 조건을 바꾸지 않는다.
+      const product = await scope.current(ref('Product', visibleProduct!)),
+        common = await scope.current(line.commonOfferRevisionRef),
         agreements: ModelData[] = [];
       requireCondition(
-        common.modelVersion === 2 &&
-          common.visible === true &&
+        product.modelVersion === 2 &&
+          product.saleState === 'OFFERABLE' &&
+          common.modelVersion === 2 &&
           canonicalJson(common.productRef) === canonicalJson(line.productRef) &&
           withinEffectiveWindow(
             common.effectiveWindow as Parameters<typeof withinEffectiveWindow>[0],
@@ -835,7 +845,8 @@ export class U3OrderAcceptance {
         this.now(),
       );
       requireCondition(
-        canonicalJson(resolved) === canonicalJson(line.conditionBindings),
+        resolved.find((value) => value.conditionKey === 'VISIBILITY')?.value === true &&
+          canonicalJson(resolved) === canonicalJson(line.conditionBindings),
         503,
         'ORDER_TERMS_CHANGED',
         '원래 조건의 효력/필수 근거가 달라지면 새 합의를 확인해야 합니다.',

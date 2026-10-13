@@ -2,7 +2,7 @@
 
 ## 상태와 실행 전제
 
-현재 tests/u3 runner·fixture·계층별 시험·host/worker·pilot-current가 구현되어 있다. Step20에서 아래 명령/대상을 실제 경로로 정합화했다. 원래 승인 계획/지침과 Testing Contract는 .aidlc-engine/u3-approved-developer-brief.md에 보존하며 인간의 최초 답변/fingerprint를 재발행하거나 현재 지침 bytes까지 승인받았다고 표현하지 않는다. 계층별 성공은 원문 기록에 있지만 최종 동일 source의 전체 품질/보안·3기여80%·실제CI·최종 리뷰는 미완료다. Step19/20은 아직 체크하지 않는다.
+현재 tests/u3 runner·fixture·계층별 시험·host/worker·pilot-current가 구현되어 있다. 원래 20단계의 구현·검사 이력과 이번 공개 예외 보완의 Step21–24를 구분한다. 현재 실행에 전달한 실제 계획/지침과 Testing Contract는 .aidlc-engine/u3-current-execution-brief-20261013.md에 보존한다. 인간의 답변/fingerprint를 재발행하거나 허용된 후속 문구 정리까지 새로 승인받았다고 표현하지 않는다. 수정 전 전체 CI 성공은 품질 기록에 보존하며 이번 수정 후 source의 전체 품질/보안·3기여80%·실제 CI 결과와 별도 완료 검증을 새로 확인한다.
 
 원본 Testing Contract는 계획에 있으며 test-after / Standard를 따른다. Node 22.23.3·npm 10.9.9와 repository의 exact lockfile/기존 Vitest·Ajv·TypeORM을 사용한다. PATH의 원래 aidlc만 프레임워크 명령에 사용한다. 새 패키지/제공자를 임의 설치하거나 테스트 하한을 변경하지 않는다.
 
@@ -68,6 +68,19 @@ U3 coverage config의 테스트 include는 U3만이지만 coverage inventory는 
 100행 byte/DB 경계·제어된 crash/queue 중복·동시 변경 시험은 제품 정확성 검증이며 대량 부하·전체 재해 복구 실증이 아니다. 본 명령들은 100k 준비/50분 부하·기존 시간 하한 FAIL 재실행·전체 DR·무중단·30일 가용성/장기 운영 실증을 호출하지 않는다. 기존 full-proof 결과/미실증/보류는 그대로 유지한다.
 
 동시 사용자·짧은 파일럿 부하의 정확 조건/기간은 해당 시험 설계에서 확인한다. 하루1,000건을 임의 초당 요청/동시 사용자 수로 환산해 달성했다고 표시하지 않는다. U3 전면 PC UI는 U8/U9, 실제 provider/회사망/국내 원본·로그/백업·알림/배포 준비는 해당 소유자의 실증 책임이다. 문서·합성/CI 시험 성공은 그 선행조건을 면제하지 않는다.
+
+## 공개 예외의 추가 회귀 검증
+
+현재 보완은 FR4.2·BR1.3의 기존 기업별 공개 예외를 충족하는 작업이다. 새 입력 한도·시간 예산·커버리지 하한·기능 범위는 추가하거나 완화하지 않는다.
+
+| 기존 시험 파일                                                       | 추가로 확인할 관찰                                                                                                                  |
+| -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| tests/u3/unit/catalog.spec.ts                                        | 완성·유효·공통 비공개 조건은 판매 가능한 상품과 비공개 기본값을 별도로 보존. 실제 중지·미완성·미래·만료는 공개 예외로 우회되지 않음 |
+| tests/u3/integration/catalog.spec.ts·commercial-agreement.spec.ts    | 실제 현재 등록/승인 원본의 기업A 공개 예외 조회, 공통 공개+기업 비공개, 기업B·미승인·미래/만료·조회 실패의 비노출/차단              |
+| tests/u3/integration/order-submission.spec.ts·order-decision.spec.ts | 승인된 기업A의 공통 비공개 상품 제출→전체 직원 수락, 타 기업/중지/미완성 차단, 조건 개정과 최초 스냅샷 보존                         |
+| tests/u3/integration/http-host.spec.ts                               | 실제 호스트에서 기업 최종 조건 조회와 주문 경로의 동일 판단, 권한/직원망/현재 승인 근거 우회·타 기업 정보 노출 없음                 |
+
+선택 단위 명령은 `npx --no-install vitest run --config tests/u3/vitest.unit.config.ts tests/u3/unit/catalog.spec.ts`이다. 선택 통합 명령은 `OMS_U3_DATABASE_PROFILE=verification-isolated npx --no-install vitest run --config tests/u3/vitest.integration.config.ts tests/u3/integration/catalog.spec.ts tests/u3/integration/commercial-agreement.spec.ts tests/u3/integration/order-submission.spec.ts tests/u3/integration/order-decision.spec.ts tests/u3/integration/http-host.spec.ts`이다. pinned Node22.23.3을 PATH에 적용하며 문서의 전체 U3 및 같은 source CI 검증도 별도로 수행한다. 선택 통과를 전체 source/운영 성공으로 승격하지 않는다.
 
 ## Sources
 

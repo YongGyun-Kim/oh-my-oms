@@ -43,6 +43,7 @@ export interface U3ProductInput {
   commonPrice: Money;
   salesConditionRefs: Ref[];
   offerDraft: CommonOfferDraft | null;
+  saleState?: 'OFFERABLE' | 'SUSPENDED';
 }
 export interface U3CommonOfferQuery {
   targetRef: Ref;

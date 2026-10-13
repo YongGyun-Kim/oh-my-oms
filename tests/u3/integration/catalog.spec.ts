@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { canonicalJson } from '@oms/contracts';
 import type { Ref, U3ProductInput } from '@oms/contracts';
-import { U3CatalogQuery, U3ProductCatalog } from '@oms/core';
+import { CommercialAgreement, U3CatalogQuery, U3ProductCatalog } from '@oms/core';
 import { ProtectedStore, U3_SOURCE_CONTRACT } from '@oms/persistence';
 import { buildCommonOffer } from '../../../packages/core/src/catalog-conditions.js';
 import { initializeU3Databases, resetU3Databases, u3Sources } from '../fixtures/databases.js';
@@ -10,6 +10,7 @@ import { seedU3CommandAuthority } from '../fixtures/command-authority.js';
 import { assertProtectedCandidate } from '../fixtures/protected-candidate.js';
 import { catalogInput } from '../fixtures/catalog.js';
 import { fixtureScope } from '../fixtures/identity.js';
+import { syntheticCommercialEvidence } from '../fixtures/agreement.js';
 
 // 기존 공통 판매 정보 원본을 합성 등록한다. 실제 고객 계약/외부 이행의 근거가 아니다.
 describe('U3 상품 실제 저장·현재 조건·권한 경계', () => {
@@ -29,7 +30,15 @@ describe('U3 상품 실제 저장·현재 조건·권한 경계', () => {
     store = new ProtectedStore(sources.primaryApp, sources.journalAppend);
     authority = await seedU3CommandAuthority(store);
     catalog = new U3ProductCatalog(store, authority.now, async (proof) => proof === ingress);
-    query = new U3CatalogQuery(catalog);
+    query = new U3CatalogQuery(
+      catalog,
+      new CommercialAgreement(
+        store,
+        authority.now,
+        async (proof) => proof === ingress,
+        syntheticCommercialEvidence,
+      ),
+    );
     basis = {
       owner: 'ProductCatalog',
       entity: 'CommonOfferRevision',
@@ -153,7 +162,7 @@ describe('U3 상품 실제 저장·현재 조건·권한 경계', () => {
     await expect(register(invalid)).rejects.toMatchObject({ code: 'INVALID_INPUT' });
     expect(await store.list('CatalogHistory')).toHaveLength(historyBefore);
   });
-  it('현재 기업/상품 읽기 권한으로 공통 정보만 읽고 기업 최종 가격은 미확인이다', async () => {
+  it('현재 기업/상품 읽기 권한으로 공개 상품의 최종 가격을 확인하고 직원 공통 조회는 구분한다', async () => {
     const receipt = await register();
     const view = await query.readCommonOffer(authority.customer, {
       targetRef: receipt.targetRef!,
@@ -163,11 +172,147 @@ describe('U3 상품 실제 저장·현재 조건·권한 경계', () => {
       knowledge: 'KNOWN',
       data: {
         commonPrice: { currency: 'KRW', value: '1000' },
+        resolvedPrice: { currency: 'KRW', value: '1000' },
+        priceKnowledge: 'KNOWN',
+      },
+    });
+    expect(view.sourceRefs.every((value) => value.owner === 'ProductCatalog')).toBe(true);
+    expect(
+      await query.readCommonOffer(
+        authority.staff,
+        { targetRef: receipt.targetRef!, targetScope: null },
+        ingress,
+      ),
+    ).toMatchObject({ data: { resolvedPrice: null, priceKnowledge: 'UNKNOWN' } });
+  });
+  it('직원은 완성된 비공개 공통 원본을 조회·재개정하지만 공개 예외 없는 고객에게 메타데이터를 반환하지 않는다', async () => {
+    const draft = input();
+    const visibility = draft.offerDraft!.conditions.find(
+      (value) => value.conditionKey === 'VISIBILITY',
+    )!;
+    if (visibility.conditionKey === 'VISIBILITY') visibility.value = false;
+    const receipt = await register(draft);
+    const view = await query.readCommonOffer(
+      authority.staff,
+      { targetRef: receipt.targetRef!, targetScope: null },
+      ingress,
+    );
+    expect(view).toMatchObject({
+      data: {
+        visible: false,
+        commonPrice: draft.commonPrice,
         resolvedPrice: null,
         priceKnowledge: 'UNKNOWN',
       },
     });
-    expect(view.sourceRefs.every((value) => value.owner === 'ProductCatalog')).toBe(true);
+    await expect(
+      query.readCommonOffer(authority.customer, {
+        targetRef: receipt.targetRef!,
+        targetScope: customerScope(),
+      }),
+    ).rejects.toMatchObject({ code: 'NOT_FOUND' });
+    const revised = catalogInput(view.data.commonOfferRevisionRef as Ref);
+    revised.meta = {
+      ...revised.meta,
+      clientRequestId: randomUUID(),
+      expectedRevision: receipt.targetRef!.revision,
+    };
+    const saved = await catalog.register(authority.staff, revised, receipt.targetRef!, ingress);
+    expect(saved.targetRef!.revision).toBe(2);
+    expect(
+      await store.readRevision(
+        'CommonOfferRevision',
+        (view.data.commonOfferRevisionRef as Ref).id,
+        1,
+      ),
+    ).toMatchObject({ visible: false });
+  });
+  it('중지 상품의 현재 공통 원본은 직원 관리에 사용하고 생략 개정은 중지를 보존하며 명시 재판매만 허용한다', async () => {
+    const stopped = input();
+    stopped.saleState = 'SUSPENDED';
+    const first = await register(stopped);
+    const firstProduct = (await store.currentProtected('Product', first.targetRef!.id))!;
+    const firstOffer = firstProduct.currentOfferRef as Ref;
+    const bytes = canonicalJson(await store.readRevision('CommonOfferRevision', firstOffer.id, 1));
+    const staffView = await query.readCommonOffer(
+      authority.staff,
+      { targetRef: first.targetRef!, targetScope: null },
+      ingress,
+    );
+    expect(staffView.data.commonOfferRevisionRef).toEqual(firstOffer);
+    await expect(
+      query.readCommonOffer(authority.customer, {
+        targetRef: first.targetRef!,
+        targetScope: customerScope(),
+      }),
+    ).rejects.toMatchObject({ code: 'NOT_FOUND' });
+    const description = catalogInput(firstOffer);
+    description.meta = {
+      ...description.meta,
+      clientRequestId: randomUUID(),
+      expectedRevision: first.targetRef!.revision,
+    };
+    description.salesDescription = '합성 중지 상품 설명 개정';
+    const revised = await catalog.register(authority.staff, description, first.targetRef!, ingress);
+    const current = (await store.currentProtected('Product', revised.targetRef!.id))!;
+    expect(current).toMatchObject({
+      saleState: 'SUSPENDED',
+      revision: 2,
+      salesDescription: description.salesDescription,
+    });
+    const explicit = catalogInput(current.currentOfferRef as Ref);
+    explicit.meta = {
+      ...explicit.meta,
+      clientRequestId: randomUUID(),
+      expectedRevision: revised.targetRef!.revision,
+    };
+    explicit.saleState = 'OFFERABLE';
+    const resale = await catalog.register(authority.staff, explicit, revised.targetRef!, ingress);
+    const active = (await store.currentProtected('Product', resale.targetRef!.id))!;
+    expect(active.saleState).toBe('OFFERABLE');
+    const invalid = catalogInput(active.currentOfferRef as Ref);
+    invalid.meta = {
+      ...invalid.meta,
+      clientRequestId: randomUUID(),
+      expectedRevision: resale.targetRef!.revision,
+    };
+    invalid.saleState = 'OFFERABLE';
+    invalid.offerDraft!.effectiveWindow.startAt = '2099-01-01T00:00:00.000Z';
+    const incomplete = await catalog.register(authority.staff, invalid, resale.targetRef!, ingress);
+    expect(await store.currentProtected('Product', incomplete.targetRef!.id)).toMatchObject({
+      saleState: 'INCOMPLETE',
+    });
+    const resume = catalogInput(
+      (await store.currentProtected('Product', incomplete.targetRef!.id))!.currentOfferRef as Ref,
+    );
+    resume.meta = {
+      ...resume.meta,
+      clientRequestId: randomUUID(),
+      expectedRevision: incomplete.targetRef!.revision,
+    };
+    resume.saleState = 'OFFERABLE';
+    await expect(
+      catalog.register(authority.staff, resume, incomplete.targetRef!, ingress),
+    ).rejects.toMatchObject({ code: 'CATALOG_BASIS_UNCONFIRMED' });
+    const validResume = catalogInput(basis);
+    validResume.meta = {
+      ...validResume.meta,
+      clientRequestId: randomUUID(),
+      expectedRevision: incomplete.targetRef!.revision,
+    };
+    validResume.saleState = 'OFFERABLE';
+    const resumed = await catalog.register(
+      authority.staff,
+      validResume,
+      incomplete.targetRef!,
+      ingress,
+    );
+    expect(await store.currentProtected('Product', resumed.targetRef!.id)).toMatchObject({
+      saleState: 'OFFERABLE',
+    });
+    expect(canonicalJson(await store.readRevision('CommonOfferRevision', firstOffer.id, 1))).toBe(
+      bytes,
+    );
   });
   it('타 기업 범위·기업 미지정·고객 상품 등록은 정보를 반환/변경하지 않는다', async () => {
     const receipt = await register();

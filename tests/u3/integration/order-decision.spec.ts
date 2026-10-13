@@ -1,14 +1,15 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { canonicalJson, OmsError, U3_PROFILE } from '@oms/contracts';
-import type { Receipt, Ref, U3OrderView } from '@oms/contracts';
-import { StaffAccess, U3ProductCatalog } from '@oms/core';
+import type { Receipt, Ref, U3OrderInput, U3OrderView } from '@oms/contracts';
+import { StaffAccess, U3CatalogQuery, U3ProductCatalog } from '@oms/core';
 import type { U3ReadinessRegistration } from '@oms/core';
 import { ProtectedStore, ProtectedTransaction, modelDefinition } from '@oms/persistence';
 import { initializeU3Databases, resetU3Databases, u3Sources } from '../fixtures/databases.js';
 import { seedDecisionOrder } from '../fixtures/order-decision.js';
 import { assertProtectedCandidate } from '../fixtures/protected-candidate.js';
 import { profileU3Budget } from '../fixtures/budget-profile.js';
-import { orderQuery } from '../fixtures/order-input.js';
+import { orderQuery, registeredOrderInput } from '../fixtures/order-input.js';
+import { agreementApprovalInput, agreementRegistrationInput } from '../fixtures/agreement-input.js';
 import { catalogInput } from '../fixtures/catalog.js';
 import { randomUUID } from 'node:crypto';
 import { QueryFailedError } from 'typeorm';
@@ -50,6 +51,161 @@ describe('실제 전체 직원 판단·소유 원본·원자 접수 경계', () 
       ),
     });
   }
+  async function privateOrder() {
+    const f = await seedDecisionOrder(store),
+      catalog = new U3ProductCatalog(store, f.seller.now, async (proof) => proof === f.ingress);
+    const draft = catalogInput(f.offerRef);
+    draft.meta = f.meta();
+    const visibility = draft.offerDraft!.conditions.find(
+      (value) => value.conditionKey === 'VISIBILITY',
+    )!;
+    if (visibility.conditionKey === 'VISIBILITY') visibility.value = false;
+    const saved = await catalog.register(
+      await f.requestContext(f.registrant),
+      draft,
+      null,
+      f.ingress,
+    );
+    const productRef = saved.targetRef!,
+      product = (await store.currentProtected('Product', productRef.id))!,
+      offerRef = product.currentOfferRef as Ref;
+    const data = agreementRegistrationInput(
+      f.seller.enterpriseRef,
+      productRef,
+      offerRef,
+      f.evidence,
+    );
+    data.conditions.push({
+      conditionKey: 'VISIBILITY',
+      value: true,
+      effectiveWindow: data.effectiveWindow,
+      evidenceRefs: f.evidence,
+    });
+    const registration = await f.agreement.register(
+      await f.requestContext(f.registrant),
+      data,
+      f.ingress,
+    );
+    const approval = await f.agreement.approve(
+      await f.requestContext(f.approver),
+      agreementApprovalInput(registration.targetRef!, f.evidence),
+      f.ingress,
+    );
+    const query = new U3CatalogQuery(catalog, f.agreement);
+    const view = await query.readCommonOffer(await f.requestContext(f.seller.customer), {
+      targetRef: productRef,
+      targetScope: f.targetScope,
+    });
+    expect(view).toMatchObject({
+      data: {
+        label: draft.label,
+        visible: true,
+        commonPrice: null,
+        resolvedPrice: { currency: 'KRW', value: '900' },
+        priceKnowledge: 'KNOWN',
+        salesConditionRefs: [],
+      },
+    });
+    expect(view.sourceRefs).toContainEqual(approval.targetRef);
+    const resolved = await f.agreement.resolve(await f.requestContext(f.seller.customer), {
+      targetScope: f.targetScope,
+      productRef,
+      commonOfferRevisionRef: offerRef,
+    });
+    const input = registeredOrderInput<U3OrderInput>('submitOrder', {
+      ...structuredClone(f.input),
+      meta: f.meta(),
+      lines: [
+        {
+          ...structuredClone(f.input.lines[0]!),
+          productRef,
+          commonOfferRevisionRef: offerRef,
+          agreementRevisionRefs: resolved.agreementRevisionRefs,
+          conditionBindings: resolved.conditionBindings,
+        },
+      ],
+      priceConfirmation: {
+        ...structuredClone(f.input.priceConfirmation!),
+        priceBreakdown: {
+          lineAmounts: [{ currency: 'KRW', value: '900' }],
+          productAmount: { currency: 'KRW', value: '900' },
+          adjustments: [],
+          total: { currency: 'KRW', value: '900' },
+          knowledge: 'KNOWN',
+        },
+      },
+    });
+    const orders = f.service(),
+      receipt = await orders.submit(await f.requestContext(f.seller.customer), input);
+    return { f, catalog, query, productRef, offerRef, orders, receipt, draft };
+  }
+  it('실제 공통 비공개→다른 사람 승인→기업 상품 조회→제출→전체 직원 수락은 최초 스냅샷을 보존한다', async () => {
+    const p = await privateOrder(),
+      order = (await store.currentProtected('Order', p.receipt.targetRef!.id))!,
+      snapshotRef = order.purchaseTermsRef as Ref;
+    const bytes = canonicalJson(
+      await store.currentProtected('PurchaseTermsSnapshot', snapshotRef.id),
+    );
+    const accepted = await p.orders.decide(
+      await p.f.requestContext(p.f.registrant),
+      p.f.decision('ACCEPT', p.receipt.targetRef!),
+      p.f.ingress,
+    );
+    expect(await result(accepted)).toMatchObject({
+      order: { state: 'ACCEPTED' },
+      decision: { decision: 'ACCEPT' },
+    });
+    expect(
+      canonicalJson(await store.currentProtected('PurchaseTermsSnapshot', snapshotRef.id)),
+    ).toBe(bytes);
+    expect(
+      (await store.currentProtected('PurchaseTermsSnapshot', snapshotRef.id))!.priceBreakdown,
+    ).toMatchObject({ total: { value: '900' } });
+    await expect(
+      p.query.readCommonOffer(await p.f.requestContext(p.f.reviewer.customer), {
+        targetRef: p.productRef,
+        targetScope: {
+          ...p.f.targetScope,
+          enterpriseRef: p.f.reviewer.enterpriseRef,
+          contextPolicyRef: p.f.reviewer.enterpriseRef,
+          organisationRevision: p.f.reviewer.enterpriseRef.revision,
+        },
+      }),
+    ).rejects.toMatchObject({ code: 'NOT_FOUND' });
+  });
+  it.each(['SUSPENDED', 'INCOMPLETE'] as const)(
+    '제출 뒤 현재 상품의 실제 %s 개정은 승인 공개가 있어도 전체 수락을 HOLD한다',
+    async (state) => {
+      const p = await privateOrder(),
+        order = (await store.currentProtected('Order', p.receipt.targetRef!.id))!,
+        snapshotRef = order.purchaseTermsRef as Ref;
+      const bytes = canonicalJson(
+        await store.currentProtected('PurchaseTermsSnapshot', snapshotRef.id),
+      );
+      const draft = structuredClone(p.draft);
+      draft.meta = p.f.meta(p.productRef.revision);
+      draft.saleState = state === 'SUSPENDED' ? 'SUSPENDED' : 'OFFERABLE';
+      if (state === 'INCOMPLETE') draft.offerDraft = null;
+      await p.catalog.register(
+        await p.f.requestContext(p.f.registrant),
+        draft,
+        p.productRef,
+        p.f.ingress,
+      );
+      const held = await p.orders.decide(
+        await p.f.requestContext(p.f.registrant),
+        p.f.decision('ACCEPT', p.receipt.targetRef!),
+        p.f.ingress,
+      );
+      expect(await result(held)).toMatchObject({
+        order: { state: 'REVIEW' },
+        decision: { decision: 'HOLD' },
+      });
+      expect(
+        canonicalJson(await store.currentProtected('PurchaseTermsSnapshot', snapshotRef.id)),
+      ).toBe(bytes);
+    },
+  );
   it('모든 현재 근거가 확인된 전체만 수락하고 같은 보호 접수의 재시도는 소유자를 다시 호출하지 않는다', async () => {
     const f = await seedDecisionOrder(store),
       bytes = await originalBytes(f);

@@ -2,27 +2,11 @@
 
 ## 현재 판정
 
-승인된 test-after/Standard 순서로 계획1–18의 구현·계층별 시험을 수행했다. Step19 최종 동일 source 품질/보안/3기여80%·실제 CI와 Step20 별도 리뷰/공식 완료는 아직 미완료다. 이 문서는 리뷰 준비 산출물이며 체크박스19/20 또는 native 단계 상태를 변경하지 않는다. 제품 문서 추가/예산 수정으로 이전 HEAD의 성공을 최종 source 증거로 재사용하지 않는다.
+첫 제한 파일럿의 상품·기업 계약·전체 주문·조건 변경 경로를 기존 API/worker/DB/보호 저장에 구현했다. 현재 Testing Contract의 test-after/Standard 순서와 80% 라인 커버리지 기준을 유지했다. 기능과 보호 검증을 연결한 실제 변경은 [source-manifest.json](source-manifest.json)의176개 경로에 기록한다.
 
-최종 기본 경로는 PR/main pilot-current CI의 독립 U1/U2/U3 matrix와 project gate다. 실제 결과는 root 소유 [품질 기록](quality-verification-20261012.md)에 source/HEAD·보고서 지문·종료 metadata와 함께 기록한다. main 머지/AWS 배포/실거래는 이 문서 생성으로 수행되지 않는다.
+수정 전 제품 d7d77d8의 [실제 CI run38353783066](https://github.com/YongGyun-Kim/oh-my-oms/actions/runs/38353783066)은 U1/U2/U3와 project 모두 성공했다. 동일 PR checkout source의 합산 라인 커버리지는11932/14377=82.9937%이며 type/lint/format·보안·image/runtime 검증도 통과했다. 아래 기업별 공개 예외 수정 이후의 전체 CI 증거로 재사용하지 않는다. 실제 운영 활성화는 허용하지 않으며 이 결과를 배포·운영 용량·전체 재해 복구의 증명으로 해석하지 않는다.
 
-스트림 복구 시 마지막 수정의 소스 지문과 저장된 결과를 대조했다. U3 전체 단위303개·관련 통합65개(7파일), U1 영향 단위8개, U2 영향 단위18개·권한 경쟁 통합17개가 성공으로 기록되어 있다. U1 직원 흐름은 선택3개 성공·나머지50개 미실행이다. 복구된 통합 JSON은 success=true지만 이전 프로세스의 최종 종료 코드는 다시 관측하지 못했다. 새 같은 소스의 실제 CI·전체80%·품질/보안·별도 리뷰는 아직 필요하다.
-
-마지막 ef17200 CI는 U1/U2 성공·U3 통합8건 실패였다. 안전한 received 정보에서 두 구간의25P04(transaction_timeout)와 다른 구간의 약3초 QUERY_RUNNER_RELEASED를 확인했으며 모든 사례가 같은 DB 코드를 받았다고 확대하지 않는다. 이후 조회의 같은 구간 snapshot/choice/lines, 적용의 검증된 Product, 직원 권위 검사의 검증된 StaffRole 연속 재조회를 줄였다. 최종 원상/권한·applicationSource 전후·grant 전체 순회와 공개 currentRoleState의3인수 독립 조회를 보존한다. 서비스10초·DB3초·statement2초·lock500ms·100행·80%는 유지했다.
-
-그 수정의 bb89b1f 실제 CI run38337443760은 U1/U2 성공·U3 통합162개 중158 PASS/4 FAIL로 종료됐다. 실패는100행 조회와 판단 및 후단 변조 거절 경로다. READ_100의 최종 원본 대조에서 직접25P04를 받았으며 다른 실패의 약3초 QUERY_RUNNER_RELEASED와 구분한다. 같은 source의 project 전체80%·품질·보안은 실행되지 않았다. 실패를 보존하고 스키마 검증 내부의 모든 오류 목록 수집 비용을 줄이는 좁은 수정과 계약 판정/변조 거절 회귀를 검증 중이다.
-
-Ajv의 내부 allErrors 목록 수집만 중단하고 closed schema의 boolean 판정·공개 INVALID_INPUT·U3 의미 검증을 유지했다. 기존 검증기와 모든 등록 Ref 분기 판정 비교, 입력 무변경·후속 변조·기간 의미 거절을 추가했다. 타입/린트/형식과 U3/U1/U2 선택 단위77/23/20개, 두100행 통합21개가 통과했다. DB 준비 실패는 Docker 시작과 등록된 두 합성 컨테이너 재시작 후 해소했고 테스트/제품 예산은 바꾸지 않았다. 이 결과는 새 전체 CI·80%·보안·별도 리뷰의 통과로 확대하지 않는다.
-
-10349e2의 새 실제 CI run38339978025는 U1·U2 전체 성공과 U3 단위·통합 완료를 기록했으나 커버리지 child가exit1로 끝나 전체 failure다. 미생성으로 관측된 대상은u3-coverage/evidence.json이며 coverage-tests.json·coverage-final.json 존재 여부는 미확인이다. 실제 공용 pilot coverage 설정의 V8 수집·exporter·원본 변환·전체 범위 확인 경로를 조사 중이다. 구체 원인을 추측하거나 선택 진단의 예상 범위 차단을 전체 성공으로 바꾸지 않는다.
-
-임시 런타임 부재를 확인해 공식checksum으로Node22.23.3/npm10.9.9를 복구했다. 실제 버전 확인 없이 실행한 앞선 로컬 결과는 최종 runtime 증거로 재사용하지 않는다. 고정 runtime의 선택120개와 계약·100행의 V8 선택70개가 통과했으나 후자는completeScope:false로 전체 기여 승격이 차단됐다. 커버리지 증명 파일이 없더라도 새로 생성된 고정 시험 JSON의 허용 정보만diagnosticOnly로 관측하도록 보완했다. 타입/린트/형식·진단 회귀37개가 통과했고 원래source/receipt/실패/전체80% 판정은 유지한다. 다음 전체 커버리지·CI에서 실제 실패 원인을 확인한다.
-
-고정 Node22.23.3의 파일 필터 없는 로컬 U3 커버리지는484/484 PASS·completeScope:true로 끝났다. 같은 브랜치의 실제 CI run38346792092는 U1/U2와 U3 단위·일반 통합을 완료했지만 V8 커버리지484개 중482 PASS/2 FAIL로 실패했다. 실패한 HTTP_APPLY와 APPLY_REVIEW는 약3초의 보호 실행 예산에서 QUERY_RUNNER_RELEASED를 받았고 currentProtected 조회는 각각933회·944회였다. 이 run에서 직접25P04는 관측되지 않았다. 로컬 통과를 Linux CI 성공으로 확대하지 않으며 project 전체80%·품질/보안은 아직 실행되지 않았다.
-
-적용 경로의 실제 조회 분포를 확인하기 위해 기존 order-change 시험에 명시적 OMS_U3_LOOKUP_PROFILE=1일 때만 동작하는 APPLY_REVIEW 계측을 추가했다. 고정 모델20종의 정수 횟수만 private 로컬 로그에 남기며 ID·참조·payload·오류 원문은 수집하지 않는다. 원래 계측 메서드에 그대로 위임하고 finally에서 복원한다. 제품 코드·시간 예산·현재성 검증·공개 reporter 형식은 바꾸지 않았으며 선택 진단을 전체 범위나 운영 증거로 승격하지 않는다.
-
-직원 권위 검사의 순차 조회 비용을 줄이기 위해 requireStaff/requireStaffSource의 grant 검사를 독립 호출마다 최대4개씩 실행한다. grant→현재 역할→현재 상태의 원래 검사를 그대로 호출하며 캐시·새 저장 API·시간 제한 변경은 없다. 허용 권한을 찾은 뒤에도 scan 끝까지 검사하고, 시작한 조회를 모두 기다린 뒤 원래 scan 순서의 첫 오류를 반환한다. 별도 pre/post 권위 검사와 최종 원상/전제 대조는 유지한다. 새 타입/린트/형식·U3 권한28개·공유U2 권한26개·U1 복구보안8개·주문 적용/HTTP 통합18개가 통과했다. 로컬 V8 선택 한 건의 보호 실행은1748.6→1295.9ms이고 조회991회는 동일했다. 부분 범위의 coverage 명령은exit1·completeScope:false를 유지한다. 실제 Linux 전체 CI·80%·품질/보안·별도 리뷰는 아직 미완료다.
+이전 실패·수정·재검증, 선택 진단의 부분 범위 차단, 런타임 증거 정정과 보고서 지문은 [품질 기록](quality-verification-20261012.md)에 보존한다. 최종 기본 검증은 PR/main pilot-current CI이며 대량 부하·전체DR·무중단 실증은 별도 실행이다.
 
 ## 파일과 구현
 
@@ -42,6 +26,10 @@ Ajv의 내부 allErrors 목록 수집만 중단하고 closed schema의 boolean �
 
 ## 핵심 결정과 구현 정합화
 
+공통 공개 기본값과 판매 상태를 분리했다. 완성·유효한 비공개 상품도 승인된 기업 조건을 합성한 뒤 최종 공개 여부를 판단한다. 고객 조회·주문 제출·직원 전체 수락은 실제 OFFERABLE 상태와 현재 권한·원본·유효 기간을 확인한다. 비공개 공통 가격/조건은 고객 응답에서 null/빈 목록으로 숨기고 해당 기업의 확정 가격만 반환한다. 직원 조회는 공통 원본과 최종 기업 조건의 의미를 구분한다. API는 실제 CommercialAgreement 소유자를 조회 서비스에 연결한다.
+
+기존 중지 상품은 saleState를 생략한 설명 개정에서도 SUSPENDED를 유지한다. 직원은 완전·유효한 중지 상품의 현재 공통 원본을 조회하고 명시적으로 재판매할 수 있다. 미완성·미래·만료 조건은 재판매 근거로 인정하지 않는다. 기존 저장 상태를 자동 변환하지 않으며 원래 구매 가격·조건·offer bytes를 보존한다. 입력의 선택적 saleState와 nullable 공통 가격은 U3 계약에만 반영하고 common:1/common:2를 유지한다.
+
 profile 개정2와 registry3은 별도 축이며 기존 URI/등록2를 재정의하지 않는다. U3Ref는 기존 닫힌 U2 Ref의 실제 필요한 종류를 U3 안에서만 연결한다. 새 Receipt/C18 output은 검증된 PROTECTED source descriptor로 선택하고 client marker로 선택하지 않는다. 순수 typed marker로 실제 신뢰를 대신하지 않는다.
 
 실제 현재 동의 권한을 생산하기 위해4개 권한 지원 정의를 별도로 연결했다. 논리 업무18개는 유지하며 새로운 인프라/물리 테이블 복제가 아니다. 구형 role/scope를 동의권한으로 자동 승격하지 않고 legacy 전체조회와 신규 CONSENT_ROLES 조회의 다른 의미를 명시한다.
@@ -60,34 +48,32 @@ U3 전체18파일의 기본600초 collector 종료는 완료11파일/104시험 �
 
 깨끗한 CI에서 필요한 증거 폴더는 각 U1/U2 시험이 소유 경로만0700으로 준비하고 실제0600 쓰기를 유지한다. U1 보고서 쓰기 오류도 전파하며 연결 정리는 finally로 보장한다. 100행 주문의 새 OrderLine은 기존 revision1/정확 버전/고유ID/INSERT/FK·commit 검증을 가진 putNewBatch로 저장한다. 판단은 같은 phase에서 currentOrderTerms가 검증한 snapshot/choice/lines를 재사용하고 독립적인 최종 assertPremises·현재 권한/보호 대조를 유지한다. 실제 CI 받은 DB 오류 코드는 미확정이며 검증된 중복 작업을 줄인 개선으로 기록한다.
 
-## 시험 증거와 미완료
+## 시험 증거와 제한
 
-계층별 원문과 실패/수정/재검증은 이 디렉터리의 contracts/models/repository/catalog/agreement/proposal/order/host/pilot-ci 검증 기록에 보존된다. 최근 별도 검증에서 주문 적용11개(기존9+경쟁2), HTTP6개 및 기존U1HTTP25/U2HTTP22, worker6개 및 영향U1/U2 회귀가 통과했다. 각각 당시 source의 경계 증거이며 최종 전체 CI 성공으로 확대하지 않는다.
+기업별 공개 예외 수정 후 고정 Node22.23.3의 선택 단위12/12와 실제 primary/보호 DB·HTTP 통합5파일66/66이 통과했다. 실패/pending/todo0·success=true·두 명령 실제exit0이며 관련14파일 SHA가 실행 전후 동일하다. 새 tsc --noEmit·변경 TS lint·format도 exit0이다. 전체 U3 및 영향 U1/U2 CI·같은 전체 분모80%·보안/image의 이번 source 결과는 별도로 확인한다.
 
-HEAD25d8583의 로컬 실제 U1기여는 unit571·integration168·동일739개 coverage 재실행, U2기여는 unit465·integration274·동일739개 coverage 재실행 및 PC5개가 통과했다. coverage 재실행을 새로운 고유시험 수에 더하지 않는다. U3unit280은 통과했지만 통합 child600초 기한 초과(exit143/expired=true)로 새 완료보고서가 없어 U3전체/coverage/project/80%·보안은 판정되지 않았다. 이전 e850ebc U2 실패와 진단/최소수정 결과도 삭제하지 않는다.
+수정 전 d7d77d8 CI의 실제 결과는 다음과 같다. coverage 열은 단위·통합의 같은 시험을 V8로 재실행한 수이며 새로운 고유 시험으로 합산하지 않는다.
 
-새 예산 선택의 대상시험 pilot-ci10/10·TypeScript/지정ESLint는 통과했으며3개TS 파일 지문이 전후 같았다. 새 전체unit281개나 새로운 CI/coverage 성공은 아직 주장하지 않는다. docs/최종 source 고정 후 실제 CI가 같은 최종HEAD/source/lock/image의 전체 기여·품질/보안을 확인해야 한다. Luna의8파일 format/JSON/manifest/traceability 검사도 통과했고 전후 파일 지문이 같았다. root가 전체 Git 변경166경로와 신규 README를 manifest167경로에 대조해 누락/불필요 주장이 없는 것을 확인했다.
+| Unit |    단위 |    통합 | 전체 coverage 재실행 |        PC |
+| ---- | ------: | ------: | -------------------: | --------: |
+| U1   | 571/571 | 168/168 |              739/739 | 해당 없음 |
+| U2   | 465/465 | 274/274 |              739/739 |       5/5 |
+| U3   | 330/330 | 162/162 |              492/492 | 해당 없음 |
 
-이후 안전 진단 선택14개, U2 보고서 보존 선택9개, U3 취소/진단 선택19개도 각각 당시 source에서 통과했다. 타입/린트/선택 포맷과168경로 manifest·104ID·AC Deferred7의 strict 검사를 확인했다. 06a5b35의 실제 CI에서는 U2 unit464/465·U3 unit284/285와 U1 integration assertion168/168이었지만 U1 failedSuite1로 전체 세 작업이 실패했고 project는 차단됐다. 이 실패는 품질 기록에 보존하고 다음 source의 CI를 별도로 확인한다.
+각 시험은 fail/pending/todo0·success=true이며 coverage evidence는passed=true·completeScope=true다. source HEAD는f7f2bb036cd83e2e26c3f0ac8a65f38b5b342c2e·digest c2efe642c9163706184db0554f7231cc726dddbda9d5b2857738b5a42142da0f로 세 기여와 project가 일치한다. Node22.23.3/Vitest·V85.0.3/TypeScript6.0.3 및 원래 lock을 보존한다.
 
-759e578에서는 세 Unit의 단위가 통과했고 U1의 실제 보고서 쓰기 suite 오류와 U2의 보고서 파일 쓰기2건, U3의100행 통합2건으로 전체 CI는 실패했다. 이후 보고서 폴더 수정의 U1 선택8개·U2 선택7개, 주문 접수/판단·일괄 저장 duplicate/FK rollback·후단 마지막 행 변조 거절20개, 주문 변경 회귀11개가 로컬에서 각각 통과했다. 해당 타입·린트·포맷과 당시170경로 manifest 대조도 통과했지만 전체 CI·coverage80%·보안 성공으로 확대하지 않는다.
+project는18개 완료·실패0·Deferred4를 기록했다. 보안은 의존성·SAST·비밀·IaC 문맥·컨테이너 OS/라이브러리 검사를 완료했다. 동일 image ID sha256:3dc91dca275bc5dff8b0d21ea9e57b58ba7288081127c4167744d7b09224b794를 release/security/runtime 보고서가 대조한다. runtime의 동일 image/TLS 검증은true·cleanupFailed=false지만 Cognito/회사망 검증은false·realActivationAllowed=false다. 개별 exit/fresh 필드가 없는 project 검사의 값을 임의로 채우지 않는다.
 
-9ca3cfc의 실제 CI run38202950687에서 U1·U2 작업은 통과했다. 같은 checkout/source의 U1 단위571·통합168, U2 단위465·통합274·PC5개 및 각 기여의 동일739개 coverage 재실행을 확인했다. U3 통합은159개 중155 PASS/4 FAIL로 전체 CI와 project 품질 검증은 차단됐으며 이 실패도 보존한다.
+직원 grant별 기존 검증은 독립 권위 호출마다 최대4개씩 읽기를 겹친다. 보호 원상·개정/profile·전체 grant scan·독립 pre/post·최종 전제 대조를 유지하며 캐시·새 저장 API·시간 제한 완화는 없다. 시작한 조회를 모두 기다리고 원래 scan 순서의 첫 오류를 반환한다. 후행 변조·다음 독립 회수·상한·취소·형제 조회 종료 대기를 회귀로 검증했다. 동일 로컬 V8 선택의 보호 실행1748.6→1295.9ms 감소와 조회991회 동일성을 관측했으나 한 건의 지연을 운영 용량으로 일반화하지 않는다.
 
-추가 조사에서 정상 proposal·주문 입력 준비/접수/조회·seed 후 판단이 최초 요청의 시간 예산을 여러 요청에 재사용한 시험 전제를 확인했다. 각 요청은 기존 실제 재인증 closure로 새 context를 사용하며 부정 actor·기업·외부망·권한회수·변조 입력·경쟁 단언을 유지한다. 제품 변경은 한 assertPremises 호출에서 write Map을 한 번 만드는 것으로 제한했고 독립 최종 현재성/보호 대조를 유지했다. 서비스10초·DB3초·statement2초·lock500ms·100행·80% 기준은 바꾸지 않았다.
+Ajv는 사용하지 않는 allErrors 목록 수집만 중단했다. closed schema 판정·공개 INVALID_INPUT·입력 보존·기간 의미 검증을 원래 검증기와 비교했다. 안전 진단은 허용 코드/수치/등록 위치만 담고 원문·SQL·민감 입력을 공개하지 않는다. 커버리지 증명과 별도 시험 관측을 구분하고 부분 범위를 성공 증거로 승격하지 않는다.
 
-Luna의 해당 타입/린트/포맷·선택 단위22개·관련 통합3파일32개는 통과했다. opt-in 테스트 helper는 고정 phase/메서드의 숫자 집계만 제공하며 계측 overhead를 포함하고 중첩 누적 시간을 합산하지 않는다. 당시 manifest는 이 테스트 helper를 포함한 실제171개 경로였고 root의 전체 Git 대조에 누락/추가가 없었다. 새 소스의 전체 CI·coverage80%·보안·별도 리뷰·공식 완료는 아직 미완료다.
+상품/계약/제안/주문/host/worker의 계층별 시험과 영향 U1/U2 회귀를 유지했다. 원래 서비스10초·DB3초·statement2초·lock최대500ms·개별시험30초·최대100행·전체80% 기준은 유지한다. U3 통합 수집20분·coverage 수집30분은 전체 순차 시험의 유한 수집 예산이다.
 
 ## 추적과 운영 경계
-
-7d4df314의 실제 CI run38206085977에서 U3 제안 시험은 통과했지만 통합159개 중152 PASS/7 FAIL로 현재 전체 검증은 계속 차단됐다. 이전 로컬32개와 제출/판단의 숫자 집계 성공을 CI 성공으로 확대하지 않는다. 실제 최종 오류 코드는 기존 문자열 JSON 요약에서 확인할 수 없으므로 제품·DB 예산/현재성 검사를 추측으로 변경하지 않았다.
-
-시험 전용 JsonReporter subclass는 부모의 JSON counts/output을 유지하며 최종 failed 사례에서만 실제 오류의 허용 code/SQLSTATE와 닫힌 phase 숫자를 meta로 기록한다. 메서드의 관측 rejection과 최종 시험 오류는 구분하며 passed 예상 rejection은 실패 집계에서 제외한다. HTTP는 실제 받은 status/problem type의 정확 enum만 사용한다. 미확인 값은 UNKNOWN이고 message/title/actual/expected/SQL/token을 추측·공개하지 않는다. 계측 overhead를 포함하고 중첩 시간을 합산하지 않는다. 기본 include 밖의 DB 없는3 FAIL/1 PASS reporter probe는 exit1이 의도된 진단 연결 검사다. 실제 BASELINE/SAFE의 counts/status 보존·받은 오류/SQLSTATE·matcher UNKNOWN·정상 예상 rejection 제외·민감 sentinel 제외를 확인했다. 제어된3 FAIL은 실제 업무 회귀 판정에 합산하지 않는다.
-
-타입 metadata 오류를 수정한 뒤 Luna의 TypeScript·지정 ESLint·Prettier·진단 단위21개·관련 통합4파일37개는 모두 통과했다. root가 실제 report count/bool과 probe를 대조했고 source176경로의 실제 전체 Git 대조에 누락/추가가 없다. 같은19경로 SHA는 검사 전후 동일했다. 로컬 HTTP_APPLY의 보호 실행2630.977ms와 READ_100 전체1920.292ms는 계측 overhead를 포함한 관측이며 CI 실패 원인/운영 용량의 확정 증거가 아니다. 새 관측 source의 전체 CI·전체80%·보안·별도 리뷰·main 머지는 미완료다.
 
 [traceability.json](traceability.json)은 할당42AC·29BR·33상세NFR를 모두 열거한다. OK는 실제 존재하는 구현/시험 경로 연결이지 그때의 운영목표 달성 인증이 아니다. 원래7개 AC Deferred와 NFR 설계의 후속 실증을 보존한다. 국내경로/실제보관정책 같은 원본 확인을 코드guard/문서로 달성했다고 표현하지 않는다.
 
 현재 운영 설정은 UNREGISTERED다. 실제 사람/증빙소유자·U4/U5/U6 공급/대금/라이선스준비·U6갱신회차·U7후처리 원본 미등록/미확인은 차단/HOLD다. 포트 구현과 운영 생산자등록, 합성 callback과실원본은 다르다. 기존 U2 Major1/2는 전역해소/위험수용이 아니다. U3 전면UI·provider/회사망/국내원본/보관/알림/장기운영·대량부하/전체DR/무중단 실증은 해당후속 소유자에 남긴다.
 
-최종 코드/명령/호환/후속 요약은 [docs/u3/README.md](../../../../../../../../docs/u3/README.md), 실제 Unit 실행은 [unit-test-instructions.md](unit-test-instructions.md)에 있다. 별도 리뷰·공식완료·실제CI·병합은 주 실행자가 실제 증거로 판정한다.
+최종 코드/명령/호환/후속 요약은 [docs/u3/README.md](../../../../../../../../docs/u3/README.md), 실제 Unit 실행은 [unit-test-instructions.md](unit-test-instructions.md)에 있다. 실제 운영 원본 등록과 배포는 별도 책임과 증거가 필요한 후속 작업이다.

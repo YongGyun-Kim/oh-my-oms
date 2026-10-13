@@ -1908,6 +1908,7 @@
     "ProductInput": {
       "type": "object",
       "properties": {
+        "saleState": { "enum": ["OFFERABLE", "SUSPENDED"] },
         "meta": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CommandMeta" },
         "productType": { "enum": ["HARDWARE", "SOFTWARE"] },
         "softwareTermKind": { "enum": ["PERPETUAL", "TERM", null] },
@@ -2056,29 +2057,38 @@
       "additionalProperties": false
     },
     "ProductView": {
-      "allOf": [
-        {
-          "$ref": "urn:oms:contract:common:2#/$defs/ProductView"
+      "type": "object",
+      "properties": {
+        "productRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+        "commonOfferRevisionRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+        "productType": { "enum": ["HARDWARE", "SOFTWARE"] },
+        "softwareTermKind": { "enum": ["PERPETUAL", "TERM", null] },
+        "label": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "salesDescription": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "visible": { "type": "boolean" },
+        "commonPrice": {
+          "anyOf": [{ "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money" }, { "type": "null" }]
         },
-        {
-          "type": "object",
-          "properties": {
-            "commonPrice": {
-              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
-            },
-            "resolvedPrice": {
-              "anyOf": [
-                {
-                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            }
-          }
-        }
-      ]
+        "resolvedPrice": {
+          "anyOf": [{ "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Money" }, { "type": "null" }]
+        },
+        "salesConditionRefs": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Refs" },
+        "priceKnowledge": { "enum": ["KNOWN", "UNKNOWN", "CONFLICT"] }
+      },
+      "required": [
+        "productRef",
+        "commonOfferRevisionRef",
+        "productType",
+        "softwareTermKind",
+        "label",
+        "salesDescription",
+        "visible",
+        "commonPrice",
+        "resolvedPrice",
+        "salesConditionRefs",
+        "priceKnowledge"
+      ],
+      "additionalProperties": false
     },
     "AgreementInput": {
       "allOf": [

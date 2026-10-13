@@ -638,10 +638,13 @@ export class CommercialAgreement {
     requireCondition(
       product.modelVersion === 2 &&
         product.saleState === 'OFFERABLE' &&
-        offer.visible &&
+        offer.modelVersion === 2 &&
         canonicalJson(product.currentOfferRef) === canonicalJson(input.commonOfferRevisionRef) &&
         canonicalJson(offer.productRef) === canonicalJson(input.productRef) &&
-        withinEffectiveWindow(offer.effectiveWindow as EffectiveWindow, this.now()),
+        withinEffectiveWindow(offer.effectiveWindow as EffectiveWindow, this.now()) &&
+        (offer.conditionBindings as ConditionBinding[]).every((value) =>
+          withinEffectiveWindow(value.effectiveWindow, this.now()),
+        ),
       409,
       'STALE_CATALOG_OFFER',
       '현재 공통 조건의 정확한 개정이 필요합니다.',
@@ -797,6 +800,11 @@ export class CommercialAgreement {
             new ProtectedTransaction(manager, this.store.schema),
           );
           const result = await this.currentTerms(scope, input);
+          await this.approvedSources(scope, result.agreementRevisionRefs, {
+            epoch,
+            approvalDigest: fingerprint({ operation: 'readApprovedTerms', input, result }),
+            targetEnterpriseRef: input.targetScope.enterpriseRef,
+          });
           await scope.assertPremises();
           await this.ingress(context, ingressProof);
           return result;

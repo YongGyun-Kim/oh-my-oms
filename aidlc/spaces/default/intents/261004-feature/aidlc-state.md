@@ -288,6 +288,21 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 - **Active Unit**: u3-commercial-ordering
 
 - **Unit Stage**: code-generation
@@ -355,7 +370,7 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-11T13:21:40Z
+- **Last Updated**: 2026-10-13T09:06:25Z
 
 - **Construction Autonomy Mode**: autonomous
 

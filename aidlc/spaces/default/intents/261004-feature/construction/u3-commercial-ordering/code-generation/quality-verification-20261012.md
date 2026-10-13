@@ -325,3 +325,48 @@ APPLY_REVIEW1854.2ms·protectedExecute1748.6ms·currentProtected1175.7ms·transa
 같은 실제pilot config의 r3 선택 V8 assertion은1 PASS/0 FAIL·11 pending이고 evidence passed=false·completeScope=false·tests12/1/11/0·실제exit1이다. root가 rawHash87986a77a442d6103906ab9309a5e566beea67ca732c2a468b34037623466363 일치를 확인했다. source HEAD7fed1c1f21ff9ba73edc2acbd932f64832348dc6·digest ea5913e62a7c436b4af5a0de42feb266a2236065db77caf13a4ddd8dc929529e·inventory628경로를 보존하며 최종 변경은 실제source bytes에 포함된다. 전체 분모나 전체 기여 성공으로 승격하지 않는다.
 
 r3 닫힌 모델별 조회는 r2와 같고 합계991회다. APPLY_REVIEW1376.8ms·protectedExecute1295.9ms·currentProtected991회/1281.4ms·transactionGet925회/357.3ms·validateUri14241회/46.0ms·validateSchema1905회/11.7ms·assertPremises1회/98.6ms이며 모든 관측 rejection은0이다. 중첩 시간을 합산하지 않는다. 같은 로컬 선택의 보호 실행1748.6→1295.9ms 감소를 관측했지만 Linux CI 예산 통과나 운영 용량을 확정하지 않는다. 네 source 지문은 전후 동일했고 workflow SHA는34ec762ce0915a55ccd5bd3620dbbcf28ed1cdd70050cb460b8247261ee5d58c다. 새 최종 CI·전체80%·품질/보안·별도 리뷰·공식완료·main 병합은 아직 남아 있다.
+
+## 이전 체크포인트 7fed1c1의 실제 CI 성공
+
+run38351299356은 success로 종료됐으며 root가 실제 U1/U2/U3/project job success를 확인했다. 다운받은 U3 source HEAD는9a3de4c491f27bdb6fe0fec8e761b3c252b6188e·digest e70d0c0e315994ae3bc357ca6be0d05dac2828facd4bca21ecadb5332135699b다. 요구 Node22.23.3/Vitest·V85.0.3/TypeScript6.0.3을 보존한다. U3 단위322/322·통합162/162·같은484개 coverage 재실행이 통과했고 fail/pending/skips0·source receipt의각검사passed/exit0/artifact fresh=true다. evidence passed=true·completeScope=true·49파일이며 V8 실행은2026-10-13T05:35:09Z~05:45:05Z다.
+
+같은 source의 project 합산 라인 커버리지는11910/14356=82.9618278%로80% 기준을 통과했다. project summary는passed=true·completed18·failures0·deferred4이며 type/lint/format·image·security/runtime-security receipt가 통과했다. image ID는sha256:beae0eacdfe657dcbfe644a9c327029ebd1140ee55d939ffe86858e9751e6f8b다. runtime 원본은TLS 확인·Cognito/회사망 미확인·realActivationAllowed=false를 보존한다. 실제 운영 원본 등록/활성화의 완료가 아니다.
+
+이 성공은 신규 병렬 권위 조회 전의 체크포인트다. 최신 수정은d7d77d85b83f05762e1dfff8c5c3940774a9b534로 커밋·push했고 새 실제 CI run38353783066을 실행 중이다. 이전 성공을 최신 source의 품질·80%·리뷰 증거로 재사용하거나 다른head/digest의 기여를 합치지 않는다. 최종 최신 결과와 별도 리뷰가 통과하기 전에는 Step19/20·공식완료·main 병합을 완료로 표시하지 않는다.
+
+Step20의 제목에 맞게 작성자 산출물 준비와 이후 별도 리뷰를 구분했다. 준비 체크박스는 문서/manifest/추적 작성의 완료만 의미하고 실제 별도 리뷰·결과 기록·통과는 완료 승인 전의 별도 필수 단계다. 리뷰나 측정 하한을 제거하지 않는다. 기존 승인 답변/지문은 변경하지 않았으며 원래 PATH aidlc의 testing-posture verify는 현재 계획/지침 존재·contractValid=true·execution_allowed=true를 반환했다. 초기 승인이 변경된 문구까지 승인한 것으로 재표현하지 않는다.
+
+## d7d77d8의 최신 실제 CI
+
+run38353783066의 실제 U1/U2/U3 job은 모두 success로 종료됐다. 다운받은 세 Unit 원문과 U2 PC 영수증의 PR checkout HEAD는f7f2bb036cd83e2e26c3f0ac8a65f38b5b342c2e·digest c2efe642c9163706184db0554f7231cc726dddbda9d5b2857738b5a42142da0f로 일치한다. Node22.23.3/Vitest·V85.0.3/TypeScript6.0.3과 원래lock을 보존한다.
+
+U1 단위571/571·통합168/168·같은739개 coverage 재실행, U2 단위465/465·통합274/274·같은739개 coverage 재실행, U3 단위330/330·통합162/162·같은492개 coverage 재실행이 통과했다. 모든 시험 fail/pending/todo0·success=true다. 각 coverage evidence는passed=true·completeScope=true·skipped/failed0이고 실제 raw hash 일치를 확인했다. 각 검사 및 U2 e2e receipt는observed=true·artifact exists/fresh=true·passed=true·exit0·error/signal null·expired/logFailed=false다. PC 원문은expected5·skipped/unexpected/flaky/errors0이며 실제5개 결과가pass다. 같은 시험의 coverage 재실행을 추가 고유 시험으로 합산하지 않는다.
+
+이번 source의 전체 U3 V8에서 이전 적용 실패 두 건이 통과한 것을 확인했다. 아직 project 합산80%·품질/보안·image 검사는 진행 중이며 해당 산출물을 받기 전에는 전체 CI/Step19 완료를 선언하지 않는다. 별도 리뷰·공식완료·main 병합도 아직 미완료다.
+
+최종 run38353783066은 전체 success로 종료됐다. 실제 project aggregate는같은HEAD/digest·pilot-current·11932/14377라인=82.99367044585101%·기준80·passed=true다. project summary와release-validation은passed=true·completed/validated18·failures0·Deferred4(bulk-100k-50min/full-dr-proof/uninterrupted-rollout/operating-owner-registration)를 보존한다. type/lint/format check는passed=true이며 개별 exit/fresh 필드가 없는 값을 추정하지 않는다. synth/image-build는완료목록에 있으나 별도 실행 영수증은 내려받은 artifact에 없다.
+
+image ID는sha256:3dc91dca275bc5dff8b0d21ea9e57b58ba7288081127c4167744d7b09224b794이며 release/security/runtime에 일치한다. security passed=true·의존성 physical bundle/audit·SAST·secrets·실활성화 없는IaC 문맥·container OS/library의5개 검사를 완료했다. runtime passed=true·sameProductImageVerified=true·cleanupFailed=false·TLS=true·Cognito=false·companyNetwork=false·realActivationAllowed=false다. 운영 소유자/원본 미등록과 실제 활성화 차단을 유지한다.
+
+Step19의 최신 같은 제품 source 품질/보안/80%·CI 확인을 마쳤다. Step20 산출물은 최신 결과·파일/명령/버전/제외·원래 미해결을 최종 요약으로 정리하며 과거 실패/진단은 이 품질 기록에 보존한다. 이후 별도 리뷰와 공식 완료는 실제 결과 기록 전까지 완료로 표현하지 않는다.
+
+
+## 기업별 공개 예외의 미충족과 수정 재개
+
+재동결 후 선택 검증은 단위12/12와 통합5파일66/66 PASS·실제exit0이다. 통합은 catalog12·commercial-agreement18·http-host8·order-decision15·order-submission13이며 fail/pending/todo0·success=true다. root는 실제 두 JSON의 count와 SHA를 직접 확인했다. unit SHA는1d308efca11ac0c8c9f53c834c5779eefef030fbf2c3bb406762d4a5806e623c, integration SHA는c76292e6525f6830391c09c3133fb3f94fd953077e0e4391062f09798c2355dd다. Luna가14개 source/test SHA의 실행 전후 일치를 확인했다. 이 선택 통과는 현재 전체 suite/커버리지/보안/CI의 대체 증거가 아니다. 다음 커밋을 push해 같은 source의 전체 pilot-current를 확인한다.
+
+수정 시도의 기능 설계·NFR 요구·NFR 설계·인프라 설계는 기존 업무 기준 그대로 유지하고 각각 별도 검토를 완료했다. 기존 구현 이력과 추가4단계를 구분한 계획에 사용자 원문 Approve Plan을 기록했고 실제 testing-posture verify의 approved/receiptValid/contractValid/fingerprintValid/execution_allowed는 true였다.
+
+첫 최종 단위 실행은12개 중11 PASS/1 FAIL·exit1이었다. 새 legacy v1 회귀에 해당 계약에 없는 commonPrice 필드를 넣은 오류를 확인해 테스트만 수정했다. 다음 단일 실행은12/12 PASS·exit0였고 제품/legacy schema와 하한은 유지했다. 앞선 중간11/11 성공은 이후 source가 바뀌었으므로 재사용하지 않았다.
+
+고정 Node22.23.3의 tsc --noEmit·13개 변경 TS 파일 ESLint·14개 변경 파일 Prettier가 통과했다. root의 잘못된 tsc --noEmit . 명령은 TS5112·exit1로 제품 검사를 하지 못했으며 정확한 명령의 exit0·진단0과 구분한다. 단위 fixture 수정 뒤 TypeScript와 해당 파일 lint/format도 exit0였고 검사 중14파일 SHA가 동일했다.
+
+첫 지정 통합은5파일65개 중60 PASS/5 FAIL·pending0·실제exit1이었다. catalog 11/11, commercial-agreement 17/18, http-host 6/8, order-decision 15/15, order-submission 11/13이다. JSON에 실제 구조화된 오류 코드가 없어 당시5건 모두 UNKNOWN으로 기록했다. 이후 읽기 진단에서 신규 회귀의 현재 RoleRevisionState 참조·필수 X-Target-Revision 헤더·새 상품과 일치하는 조건 sourceRef 구성 오류를 확인했다. 수정 후 검증 전 통합 성공으로 표시하지 않는다.
+
+중지 상품의 saleState 생략 개정이 자동 재판매될 수 있고 자기의 유효 공통 조건을 근거로 한 명시 재판매/직원 조회가 막힐 수 있는 경계도 확인했다. 기존 판매 상태 보존과 직원 관리·고객 구매 판단의 분리를 보완했다. 추가 catalog 통합 사례와 신규 fixture5건을 수정한 source를 재동결했다. Luna의 새 단위 실행은12/12 PASS·실제exit0이다. 변경6파일 lint/format과 정확한 tsc --noEmit도 각각exit0·진단/경고0이고14개 source SHA는 각 실행 전후 동일했다. root는 단위 JSON의 total12/pass12/fail0/pending0/success=true를 직접 확인했다. 지정 통합5파일과 전체 CI·별도 구현 검토·공식 완료 검증 및 병합은 아직 남아 있다. 원문 로그는 private-run 디렉터리0700/파일0600에 보존하며 일반 산출물로 업로드하지 않는다.
+
+별도 구현 검토에서 R-01(Major)을 확인했다. 완성된 공통 VISIBILITY=false 입력을 Product.SUSPENDED로 바꾸고 기업 승인 예외 합성 전에 offer.visible로 차단하여, FR4.2의 특정 기업 공개 승인이 조회·주문에 적용되지 않는다. READY 판정은 이 결함의 면제나 수정 완료를 뜻하지 않는다.
+
+Luna의 실제 buildCommonOffer/currentTerms 알고리즘 재현은 공통 비공개·기업 공개 승인에서 saleState=SUSPENDED·offerVisible=false·agreementsCalled=false·STALE_CATALOG_OFFER를 반환했다. 공통 공개·기업 비공개는 NOT_FOUND, 둘 다 공개는 오류 없음이었다. 이 시험은 모의 scope/agreement를 사용했으며 실제 호스트·권한·보호 저장 통합의 증거가 아니다.
+
+사용자는 Request Changes를 선택했고 추가 의견은 원문 “변경 없음”이다. 제안한 R-01 수정 외 추가 변경 없음으로 해석하고 해당 범위만 수정한다. 원래 PATH aidlc가 2026-10-13T07:14:24Z#1의 GATE_REJECTED를 기록했다. 기존 CI/PC 검증 성공은 이전 source의 역사이며 수정 후 source의 성공으로 재사용하지 않는다. 새 기능 설계 검토와 이후 실제 구현·조회/주문 회귀·현재 source 전체 CI·별도 구현 검토·완료 검증이 남아 있다. main 병합은 하지 않았다.

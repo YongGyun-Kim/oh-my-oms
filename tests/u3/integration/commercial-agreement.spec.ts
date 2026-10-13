@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { canonicalJson } from '@oms/contracts';
 import type { Ref, U3AgreementRegistrationInput } from '@oms/contracts';
-import { CommercialAgreement } from '@oms/core';
+import { CommercialAgreement, U3ProductCatalog } from '@oms/core';
 import { ProtectedStore } from '@oms/persistence';
 import { initializeU3Databases, resetU3Databases, u3Sources } from '../fixtures/databases.js';
 import { seedAgreementAuthority, syntheticCommercialEvidence } from '../fixtures/agreement.js';
@@ -10,6 +10,7 @@ import { fixtureMeta } from '../fixtures/commercial.js';
 import { fixtureScope } from '../fixtures/identity.js';
 import { assertProtectedCandidate } from '../fixtures/protected-candidate.js';
 import { agreementApprovalInput, commercialTermsInput } from '../fixtures/agreement-input.js';
+import { catalogInput } from '../fixtures/catalog.js';
 
 describe('계약 등록·현재 다른 사람 승인·기업 조건의 실제 보호 경계', () => {
   const sources = u3Sources(),
@@ -64,6 +65,139 @@ describe('계약 등록·현재 다른 사람 승인·기업 조건의 실제 �
         Number(value.revision),
       ),
     );
+  async function registeredProduct(
+    visible = false,
+    saleState: 'OFFERABLE' | 'SUSPENDED' = 'OFFERABLE',
+    incomplete = false,
+  ) {
+    const draft = catalogInput(f.offerRef);
+    draft.meta = { ...draft.meta, clientRequestId: randomUUID() };
+    draft.saleState = saleState;
+    const visibility = draft.offerDraft!.conditions.find(
+      (value) => value.conditionKey === 'VISIBILITY',
+    )!;
+    if (visibility.conditionKey === 'VISIBILITY') visibility.value = visible;
+    if (incomplete)
+      draft.offerDraft!.conditions = draft.offerDraft!.conditions.filter(
+        (value) => value.conditionKey !== 'COMPLETION',
+      );
+    const receipt = await new U3ProductCatalog(
+      store,
+      f.seller.now,
+      async (proof) => proof === ingress,
+    ).register(await f.requestContext(f.registrant), draft, null, ingress);
+    const product = (await store.currentProtected('Product', receipt.targetRef!.id))!;
+    return {
+      ...query(),
+      productRef: receipt.targetRef!,
+      commonOfferRevisionRef: product.currentOfferRef as Ref,
+    };
+  }
+  async function visibilityAgreement(
+    target: ReturnType<typeof query>,
+    visible: boolean,
+    window = f.input().effectiveWindow,
+    approved = true,
+  ) {
+    const data = f.input();
+    data.productRefs = [target.productRef];
+    data.effectiveWindow = window;
+    data.conditions = [
+      {
+        conditionKey: 'VISIBILITY',
+        value: visible,
+        effectiveWindow: window,
+        evidenceRefs: data.agreementEvidenceRefs,
+      },
+    ];
+    const registered = await agreement.register(
+      await f.requestContext(f.registrant),
+      data,
+      ingress,
+    );
+    return approved
+      ? approve(
+          registered.targetRef!,
+          await f.requestContext(f.approver),
+          data.agreementEvidenceRefs,
+        )
+      : registered;
+  }
+  it('실제 비공개 상품의 다른 사람 승인 공개는 자기 기업만 최종 조회할 수 있다', async () => {
+    const target = await registeredProduct(),
+      approved = await visibilityAgreement(target, true);
+    const own = await agreement.resolve(await f.requestContext(f.seller.customer), target);
+    expect(own.agreementRevisionRefs).toEqual([approved.targetRef]);
+    expect(
+      own.conditionBindings.find((value) => value.conditionKey === 'VISIBILITY'),
+    ).toMatchObject({ value: true, sourceRef: approved.targetRef });
+    await expect(
+      agreement.resolve(await f.requestContext(f.reviewer.customer), {
+        ...target,
+        targetScope: {
+          ...target.targetScope,
+          enterpriseRef: f.reviewer.enterpriseRef,
+          contextPolicyRef: f.reviewer.enterpriseRef,
+          organisationRevision: f.reviewer.enterpriseRef.revision,
+        },
+      }),
+    ).rejects.toMatchObject({ code: 'NOT_FOUND' });
+    const roleState = (await store.list('RoleRevisionState')).find((value) =>
+      (value.actions as string[]).includes('contract.approve'),
+    )!;
+    const grant = (
+      await store.list('StaffRoleGrant', {
+        equals: {
+          accountRef: { id: f.approver.actorAccountRef!.id },
+          roleRef: { id: (roleState.staffRoleRef as Ref).id },
+          revokedAt: null,
+        },
+      })
+    )[0]!;
+    await mutate('StaffRoleGrant', grant, { revokedAt: f.seller.now().toISOString() });
+    await expect(
+      agreement.resolve(await f.requestContext(f.seller.customer), target),
+    ).rejects.toThrow();
+  });
+  it('공통 공개도 해당 기업의 승인 비공개가 우선하며 타 기업 가격/조건은 반환하지 않는다', async () => {
+    const target = await registeredProduct(true);
+    await visibilityAgreement(target, false);
+    await expect(
+      agreement.resolve(await f.requestContext(f.seller.customer), target),
+    ).rejects.toMatchObject({ code: 'NOT_FOUND' });
+  });
+  it.each(['none', 'unapproved', 'future', 'expired'] as const)(
+    '비공개 상품의 %s 기업 조건은 공개 예외로 적용하지 않는다',
+    async (state) => {
+      const target = await registeredProduct();
+      if (state !== 'none') {
+        const window = { ...f.input().effectiveWindow };
+        if (state === 'future') window.startAt = '2099-01-01T00:00:00.000Z';
+        if (state === 'expired') {
+          window.startAt = '2000-01-01T00:00:00.000Z';
+          window.endAt = '2001-01-01T00:00:00.000Z';
+        }
+        await visibilityAgreement(target, true, window, state !== 'unapproved');
+      }
+      await expect(
+        agreement.resolve(await f.requestContext(f.seller.customer), target),
+      ).rejects.toMatchObject({ code: 'NOT_FOUND' });
+    },
+  );
+  it.each(['SUSPENDED', 'INCOMPLETE'] as const)(
+    '기업 승인 공개도 실제 %s 상품의 판매 상태를 우회하지 않는다',
+    async (state) => {
+      const target = await registeredProduct(
+        false,
+        state === 'SUSPENDED' ? 'SUSPENDED' : 'OFFERABLE',
+        state === 'INCOMPLETE',
+      );
+      await visibilityAgreement(target, true);
+      await expect(
+        agreement.resolve(await f.requestContext(f.seller.customer), target),
+      ).rejects.toMatchObject({ code: 'STALE_CATALOG_OFFER' });
+    },
+  );
   it('등록은 승인 포인터 없이 저장하고 다른 사람의 정확 승인/이력/계약/근거를 원자 보호한다', async () => {
     const receipt = await register(),
       before = (await store.read('AgreementRevision', receipt.targetRef!.id))!,
