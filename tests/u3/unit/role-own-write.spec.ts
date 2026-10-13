@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
-import { SchemaValidator } from '@oms/contracts';
+import { OmsError, SchemaValidator } from '@oms/contracts';
 import { Authorization } from '@oms/core';
 import type { ModelData, ProtectedStore, ProtectedTransaction } from '@oms/persistence';
 import { U3_SOURCE_CONTRACT } from '@oms/persistence';
-import { fixtureRef } from '../fixtures/identity.js';
+import { fixtureContext, fixtureRef } from '../fixtures/identity.js';
 import { SyntheticModelStore } from '../../u2/fixtures/identity.js';
 
 const original: ModelData = {
@@ -220,6 +220,245 @@ describe('직원 확인 원본의 같은 검사 내 역할 대조', () => {
     f.source.fixture('StaffRole', { ...f.role, label: '후단 원상 변조' }, false);
     await expect(
       f.authorization.currentRoleState('StaffRole', String(f.role.staffRoleId), f.transaction),
+    ).rejects.toMatchObject({ code: 'CURRENT_AUTH_NOT_PROTECTED' });
+  });
+});
+
+function staffWindowFixture() {
+  const f = staffFixture();
+  f.source.protectedRows.get('StaffRoleGrant')!.clear();
+  f.source.rawRows.get('StaffRoleGrant')!.clear();
+  const grants = Array.from({ length: 9 }, (_, index) => {
+    const role = { ...f.role, staffRoleId: 'window-role-' + index },
+      roleRef = fixtureRef('EnterpriseAccess', 'StaffRole', String(role.staffRoleId)),
+      state = { ...f.state, roleStateId: 'window-state-' + index, staffRoleRef: roleRef },
+      grant = { ...f.grant, staffGrantId: 'window-grant-' + index, roleRef };
+    f.source.fixture('StaffRole', role);
+    f.source.fixture('RoleRevisionState', state);
+    f.source.fixture('StaffRoleGrant', grant);
+    return { grant, role, state };
+  });
+  return { ...f, grants };
+}
+function commandCheck(f: ReturnType<typeof staffWindowFixture>) {
+  // Identity is covered at the host boundary; this unit isolates the unchanged
+  // grant/current-image checks shared by caller and recorded-source authority.
+  vi.spyOn(f.authorization, 'identity').mockResolvedValue({ active: true });
+  return f.authorization.requireStaff(
+    {
+      ...fixtureContext('STAFF'),
+      principalId: f.accountRef.id,
+      actorAccountRef: f.accountRef,
+      deadlineAt: '2026-10-12T00:01:00.000Z',
+    },
+    'contract.approve',
+    f.transaction,
+  );
+}
+
+describe('동일 직원 권위 검사 안의 유한 병렬 읽기', () => {
+  it('동시에 최대4개만 시작하고 다음 window 및 마지막1개를 모두 대조한다', async () => {
+    const f = staffWindowFixture(),
+      originalLookup = f.authorization.lookup.bind(f.authorization),
+      waiting = new Map<string, () => void>(),
+      started: string[] = [],
+      checkedRoles: string[] = [];
+    let active = 0,
+      maximum = 0;
+    vi.spyOn(f.authorization, 'lookup').mockImplementation(async (model, id, transaction) => {
+      if (model === 'StaffRole') checkedRoles.push(id);
+      if (model !== 'StaffRoleGrant') return originalLookup(model, id, transaction);
+      started.push(id);
+      maximum = Math.max(maximum, ++active);
+      await new Promise<void>((resolve) => waiting.set(id, resolve));
+      try {
+        return await originalLookup(model, id, transaction);
+      } finally {
+        active--;
+      }
+    });
+    const result = f.authorization.requireStaffSource(
+      f.accountRef,
+      'contract.approve',
+      f.transaction,
+    );
+    for (const size of [4, 8, 9]) {
+      await vi.waitFor(() => expect(started).toHaveLength(size));
+      expect(active).toBe(size === 9 ? 1 : 4);
+      for (const id of started.slice(size === 9 ? 8 : size - 4, size)) waiting.get(id)!();
+    }
+    await expect(result).resolves.toBeUndefined();
+    expect(maximum).toBe(4);
+    expect(active).toBe(0);
+    expect(checkedRoles.sort()).toEqual(
+      f.grants.map((value) => String(value.role.staffRoleId)).sort(),
+    );
+  });
+
+  it.each(['source', 'command'] as const)(
+    '%s도 허용 grant 뒤의 다음/마지막 window에서 미보호 원상을 거절한다',
+    async (kind) => {
+      for (const index of [4, 8]) {
+        const f = staffWindowFixture(),
+          tail = f.grants[index]!;
+        f.source.fixture('StaffRole', { ...tail.role, label: 'primary-only-change' }, false);
+        await expect(
+          kind === 'source'
+            ? f.authorization.requireStaffSource(f.accountRef, 'contract.approve', f.transaction)
+            : commandCheck(f),
+        ).rejects.toMatchObject({ code: 'CURRENT_AUTH_NOT_PROTECTED' });
+      }
+    },
+  );
+
+  it('먼저 완료한 오류 대신 scan 순서의 첫 오류를 선택하고 지연된 형제도 기다린다', async () => {
+    const f = staffWindowFixture(),
+      originalLookup = f.authorization.lookup.bind(f.authorization);
+    f.source.fixture('StaffRoleGrant', { ...f.grants[0]!.grant, revision: 2 }, false);
+    let releaseFirst!: () => void,
+      releaseSibling!: () => void,
+      firstFinished = false,
+      settled = false,
+      active = 0;
+    const firstGate = new Promise<void>((resolve) => {
+        releaseFirst = resolve;
+      }),
+      siblingGate = new Promise<void>((resolve) => {
+        releaseSibling = resolve;
+      });
+    vi.spyOn(f.authorization, 'lookup').mockImplementation(async (model, id, transaction) => {
+      if (model !== 'StaffRoleGrant') return originalLookup(model, id, transaction);
+      active++;
+      try {
+        if (id === f.grants[0]!.grant.staffGrantId) await firstGate;
+        if (id === f.grants[1]!.grant.staffGrantId)
+          throw new OmsError(503, 'ROLE_STATE_REVISION', 'synthetic-second-rejection');
+        if (id === f.grants[2]!.grant.staffGrantId) await siblingGate;
+        return await originalLookup(model, id, transaction);
+      } finally {
+        if (id === f.grants[0]!.grant.staffGrantId) firstFinished = true;
+        active--;
+      }
+    });
+    const result = f.authorization
+      .requireStaffSource(f.accountRef, 'contract.approve', f.transaction)
+      .then(
+        () => {
+          settled = true;
+          return null;
+        },
+        (error: unknown) => {
+          settled = true;
+          return error;
+        },
+      );
+    await vi.waitFor(() => expect(active).toBe(2));
+    releaseFirst();
+    await vi.waitFor(() => expect(firstFinished).toBe(true));
+    expect(settled).toBe(false);
+    releaseSibling();
+    expect(await result).toMatchObject({ code: 'CURRENT_AUTH_NOT_PROTECTED' });
+    expect(active).toBe(0);
+  });
+
+  it('진행 중 취소도 시작한 읽기를 모두 settle하고 다음 window를 시작하지 않는다', async () => {
+    const f = staffWindowFixture(),
+      originalLookup = f.authorization.lookup.bind(f.authorization),
+      controller = new AbortController(),
+      started: string[] = [];
+    let releaseSibling!: () => void,
+      settled = false,
+      active = 0;
+    const siblingGate = new Promise<void>((resolve) => {
+      releaseSibling = resolve;
+    });
+    vi.spyOn(f.authorization, 'lookup').mockImplementation(async (model, id, transaction) => {
+      if (model !== 'StaffRoleGrant') return originalLookup(model, id, transaction);
+      started.push(id);
+      active++;
+      try {
+        if (id === f.grants[2]!.grant.staffGrantId) await siblingGate;
+        else
+          await new Promise<void>((resolve) =>
+            controller.signal.addEventListener('abort', () => resolve(), { once: true }),
+          );
+        controller.signal.throwIfAborted();
+        return await originalLookup(model, id, transaction);
+      } finally {
+        active--;
+      }
+    });
+    const result = f.authorization
+      .requireStaffSource(f.accountRef, 'contract.approve', f.transaction)
+      .then(
+        () => {
+          settled = true;
+          return null;
+        },
+        (error: unknown) => {
+          settled = true;
+          return error;
+        },
+      );
+    await vi.waitFor(() => expect(started).toHaveLength(4));
+    controller.abort(new OmsError(503, 'EXECUTION_DEADLINE', 'synthetic-cancelled-read'));
+    await vi.waitFor(() => expect(active).toBe(1));
+    expect(settled).toBe(false);
+    releaseSibling();
+    expect(await result).toMatchObject({ code: 'EXECUTION_DEADLINE' });
+    expect(active).toBe(0);
+    expect(started).toHaveLength(4);
+  });
+
+  it('중간 scan 오류 전에 수집한 읽기도 settle하며 앞쪽 원상 오류가 우선한다', async () => {
+    const f = staffWindowFixture();
+    f.source.fixture('StaffRole', { ...f.grants[0]!.role, revision: 2 }, false);
+    vi.spyOn(f.authorization.store, 'scan').mockImplementation(async function* () {
+      yield f.grants[0]!.grant;
+      yield f.grants[1]!.grant;
+      throw new OmsError(503, 'QUERY_DEADLINE', 'synthetic-scan-deadline');
+    });
+    await expect(
+      f.authorization.requireStaffSource(f.accountRef, 'contract.approve', f.transaction),
+    ).rejects.toMatchObject({ code: 'CURRENT_AUTH_NOT_PROTECTED' });
+  });
+
+  it('허용 grant가 있어도 확인 직원 source scan의2000 상한을 넘기지 않는다', async () => {
+    const f = staffWindowFixture();
+    vi.spyOn(f.authorization.store, 'scan').mockImplementation(async function* () {
+      yield f.grants[0]!.grant;
+      for (let index = 1; index <= 2000; index++)
+        yield { ...f.grant, staffGrantId: 'unavailable-grant-' + index };
+    });
+    await expect(
+      f.authorization.requireStaffSource(f.accountRef, 'contract.approve', f.transaction),
+    ).rejects.toMatchObject({ code: 'AUTHORITY_SCAN_LIMIT' });
+  });
+
+  it('다음 독립 검사는 보호된 전체 역할/부여 회수와 후단 transaction 변조를 다시 대조한다', async () => {
+    const f = staffWindowFixture();
+    await f.authorization.requireStaffSource(f.accountRef, 'contract.approve', f.transaction);
+    for (const { grant } of f.grants)
+      f.source.fixture('StaffRoleGrant', {
+        ...grant,
+        revision: 2,
+        revokedAt: '2026-10-12T00:00:00Z',
+      });
+    await expect(
+      f.authorization.requireStaffSource(f.accountRef, 'contract.approve', f.transaction),
+    ).rejects.toMatchObject({ code: 'ISSUER_AUTHORITY' });
+    for (const { grant } of f.grants) f.source.fixture('StaffRoleGrant', { ...grant, revision: 3 });
+    // The fixture getter is already vi.fn; binding that mutable mock would
+    // call this replacement recursively. Capture its underlying read instead.
+    const originalGet = vi.mocked(f.transaction.get).getMockImplementation()!;
+    vi.spyOn(f.transaction, 'get').mockImplementation(async (model, id) => {
+      const row = await originalGet.call(f.transaction, model, id);
+      return model === 'RoleRevisionState' && id === f.grants[8]!.state.roleStateId
+        ? { ...row, active: false }
+        : row;
+    });
+    await expect(
+      f.authorization.requireStaffSource(f.accountRef, 'contract.approve', f.transaction),
     ).rejects.toMatchObject({ code: 'CURRENT_AUTH_NOT_PROTECTED' });
   });
 });

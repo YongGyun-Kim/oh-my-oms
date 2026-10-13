@@ -22,6 +22,8 @@ Ajv의 내부 allErrors 목록 수집만 중단하고 closed schema의 boolean �
 
 적용 경로의 실제 조회 분포를 확인하기 위해 기존 order-change 시험에 명시적 OMS_U3_LOOKUP_PROFILE=1일 때만 동작하는 APPLY_REVIEW 계측을 추가했다. 고정 모델20종의 정수 횟수만 private 로컬 로그에 남기며 ID·참조·payload·오류 원문은 수집하지 않는다. 원래 계측 메서드에 그대로 위임하고 finally에서 복원한다. 제품 코드·시간 예산·현재성 검증·공개 reporter 형식은 바꾸지 않았으며 선택 진단을 전체 범위나 운영 증거로 승격하지 않는다.
 
+직원 권위 검사의 순차 조회 비용을 줄이기 위해 requireStaff/requireStaffSource의 grant 검사를 독립 호출마다 최대4개씩 실행한다. grant→현재 역할→현재 상태의 원래 검사를 그대로 호출하며 캐시·새 저장 API·시간 제한 변경은 없다. 허용 권한을 찾은 뒤에도 scan 끝까지 검사하고, 시작한 조회를 모두 기다린 뒤 원래 scan 순서의 첫 오류를 반환한다. 별도 pre/post 권위 검사와 최종 원상/전제 대조는 유지한다. 새 타입/린트/형식·U3 권한28개·공유U2 권한26개·U1 복구보안8개·주문 적용/HTTP 통합18개가 통과했다. 로컬 V8 선택 한 건의 보호 실행은1748.6→1295.9ms이고 조회991회는 동일했다. 부분 범위의 coverage 명령은exit1·completeScope:false를 유지한다. 실제 Linux 전체 CI·80%·품질/보안·별도 리뷰는 아직 미완료다.
+
 ## 파일과 구현
 
 [source-manifest.json](source-manifest.json)은 승인 기준 a2d694f 이후 실제 제품/시험/설정 변경 전체를 path-only version1로 주장한다. 신규 U3 파일뿐 아니라 shared core/persistence·U1/U2 fixture/회귀·보안/CI helper·package.json·tsconfig.json·.gitignore를 포함한다. package-lock/infra 자원 변경을 임의 주장하지 않고 실제 경로 목록에 따른다. 원래 사용자 aidlc_change.sh·tests/u1/.reports와 private runtime/report/credential은 manifest/커밋 대상이 아니다.

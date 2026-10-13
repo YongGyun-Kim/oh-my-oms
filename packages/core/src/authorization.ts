@@ -232,6 +232,88 @@ export class Authorization {
     }
     return state;
   }
+  private async staffGrantsAllowed(
+    input: { accountId: string; action: string; deadline: string; source: boolean },
+    transaction?: ProtectedTransaction,
+  ): Promise<boolean> {
+    const grants = this.store.scan(
+      'StaffRoleGrant',
+      { accountRef: { id: input.accountId }, revokedAt: null },
+      input.deadline,
+    );
+    let allowed = false;
+    let count = 0,
+      failed = false;
+    const check = async (item: ModelData): Promise<boolean> => {
+      const grant = await this.lookup('StaffRoleGrant', String(item.staffGrantId), transaction);
+      if (
+        !grant ||
+        grant.revokedAt !== null ||
+        Date.parse(String(grant.effectiveFrom)) > this.now().getTime()
+      )
+        return false;
+      const { role, state } = await this.staffRoleAuthority((grant.roleRef as Ref).id, transaction);
+      if (!role) return false;
+      if (state) {
+        requireCondition(
+          (state.staffRoleRef as Ref).revision === role.revision,
+          503,
+          'ROLE_STATE_REVISION',
+          input.source ? '현재 확인 직원 역할 개정이 필요합니다.' : '현재 역할 개정이 다릅니다.',
+        );
+        if (!state.active) return false;
+      }
+      return ((state?.actions ?? role.actions) as string[]).includes(input.action);
+    };
+    try {
+      while (true) {
+        const window: ModelData[] = [];
+        let ended = false,
+          scanFailed = false,
+          scanError: unknown;
+        while (window.length < 4) {
+          try {
+            const next = await grants.next();
+            if (next.done) {
+              ended = true;
+              break;
+            }
+            if (input.source)
+              requireCondition(
+                ++count <= 2000,
+                503,
+                'AUTHORITY_SCAN_LIMIT',
+                '유한 확인 직원 권위 대조가 필요합니다.',
+              );
+            window.push(next.value);
+          } catch (error) {
+            scanFailed = true;
+            scanError = error;
+            break;
+          }
+        }
+        // Only the independent reads within this window overlap. Every started
+        // lookup settles before failure; the scan order selects the first error.
+        const results = await Promise.allSettled(window.map(check));
+        const rejection = results.find((result) => result.status === 'rejected');
+        if (rejection?.status === 'rejected') throw rejection.reason;
+        if (scanFailed) throw scanError;
+        for (const result of results)
+          if (result.status === 'fulfilled' && result.value) allowed = true;
+        if (ended) return allowed;
+      }
+    } catch (error) {
+      failed = true;
+      throw error;
+    } finally {
+      try {
+        await grants.return(undefined);
+      } catch (error) {
+        // Preserve the original scan/lookup rejection if closing also fails.
+        if (!failed) throw error;
+      }
+    }
+  }
   async requireStaff(
     context: ServiceContext,
     action: string,
@@ -239,32 +321,15 @@ export class Authorization {
   ): Promise<void> {
     await this.identity(context, transaction);
     requireCondition(context.audience === 'STAFF', 403, 'STAFF_REQUIRED', '직원 행위입니다.');
-    let allowed = false;
-    for await (const item of this.store.scan(
-      'StaffRoleGrant',
-      { accountRef: { id: context.principalId }, revokedAt: null },
-      this.queryDeadline(context),
-    )) {
-      const grant = await this.lookup('StaffRoleGrant', String(item.staffGrantId), transaction);
-      if (
-        !grant ||
-        grant.revokedAt !== null ||
-        Date.parse(String(grant.effectiveFrom)) > this.now().getTime()
-      )
-        continue;
-      const { role, state } = await this.staffRoleAuthority((grant.roleRef as Ref).id, transaction);
-      if (!role) continue;
-      if (state) {
-        requireCondition(
-          (state.staffRoleRef as Ref).revision === role.revision,
-          503,
-          'ROLE_STATE_REVISION',
-          '현재 역할 개정이 다릅니다.',
-        );
-        if (!state.active) continue;
-      }
-      if (((state?.actions ?? role.actions) as string[]).includes(action)) allowed = true;
-    }
+    const allowed = await this.staffGrantsAllowed(
+      {
+        accountId: context.principalId,
+        action,
+        deadline: this.queryDeadline(context),
+        source: false,
+      },
+      transaction,
+    );
     requireCondition(allowed, 403, 'ACTION_DENIED', '현재 행위 권한이 없습니다.');
   }
   // Revalidate an already protected decision issuer; this never creates a
@@ -297,39 +362,10 @@ export class Authorization {
       transaction,
     );
     requireCondition(binding?.active, 403, 'ISSUER_AUTHORITY', '현재 확인 직원 연결이 필요합니다.');
-    let allowed = false,
-      count = 0;
-    for await (const item of this.store.scan(
-      'StaffRoleGrant',
-      { accountRef: { id: accountRef.id }, revokedAt: null },
-      this.queryDeadline(),
-    )) {
-      requireCondition(
-        ++count <= 2000,
-        503,
-        'AUTHORITY_SCAN_LIMIT',
-        '유한 확인 직원 권위 대조가 필요합니다.',
-      );
-      const grant = await this.lookup('StaffRoleGrant', String(item.staffGrantId), transaction);
-      if (
-        !grant ||
-        grant.revokedAt !== null ||
-        Date.parse(String(grant.effectiveFrom)) > this.now().getTime()
-      )
-        continue;
-      const { role, state } = await this.staffRoleAuthority((grant.roleRef as Ref).id, transaction);
-      if (!role) continue;
-      if (state) {
-        requireCondition(
-          (state.staffRoleRef as Ref).revision === role.revision,
-          503,
-          'ROLE_STATE_REVISION',
-          '현재 확인 직원 역할 개정이 필요합니다.',
-        );
-        if (!state.active) continue;
-      }
-      if (((state?.actions ?? role.actions) as string[]).includes(action)) allowed = true;
-    }
+    const allowed = await this.staffGrantsAllowed(
+      { accountId: accountRef.id, action, deadline: this.queryDeadline(), source: true },
+      transaction,
+    );
     requireCondition(
       allowed,
       403,

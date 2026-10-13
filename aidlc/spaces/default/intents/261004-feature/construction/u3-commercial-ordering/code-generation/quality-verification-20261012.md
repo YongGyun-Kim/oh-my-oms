@@ -309,3 +309,19 @@ Ajv 내부 오류 수집 비용은 줄었지만 같은 Linux V8 실행의 적용
 private 닫힌 집계는 Account98·ProviderBinding69·StaffRoleGrant201·StaffRole216·RoleRevisionState163·VerificationEvidence30·VerificationPolicy28·PersonVerification8·VerifiedPersonLink8·IdentityHistory8·RequestReceipt18·AgreementHistory14·AgreementRevision5·EnterpriseContract7·Product5·CommonOfferRevision11·CustomerRole9·CustomerRoleGrant9·ScopeV2 3·OTHER81이었다. root가 합계991을 확인해 기존profiler currentProtected991과 일치했다. 앞의 계정/Binding/직원 grant/role/state 5종이747회로 약75.4%를 차지했다.
 
 APPLY_REVIEW1854.2ms·protectedExecute1748.6ms·currentProtected1175.7ms·transactionGet925회/287.5ms·validateUri14241회/47.4ms·validateSchema1905회/11.9ms·assertPremises1회/96.8ms이며 관측 rejection은0이다. 중첩 시간을 합산하지 않는다. source SHA는 전후 동일했다. Linux CI의944회/약3초와 같다고 주장하지 않고, 같은 권위 검사 내부에서 검증 완료된 원본을 재사용할 수 있는 좁은 경계만 조사한다.
+
+계측과 이 기록은7fed1c1f21ff9ba73edc2acbd932f64832348dc6으로 커밋·push했다. 새 실제 CI run38351299356이 시작됐으며 아직 완료 판정은 없다. 다음 production 수정의 성공 증거로 이 이전 source의 결과를 재사용하지 않는다.
+
+조사에서 authorization-fence의 역할/상태 중복 조회 약15회를 확인했으나 관측991회의 작은 일부라 시간 초과 해결을 확약할 수 없었다. 현 저장 API는 보호 list(ids)만 지원하고 physical/transaction 원상의 안전한 배치는 새 저장 API와 추가 검증 경계가 필요해 이번 수정에는 도입하지 않는다. 대신 기존 requireStaff/requireStaffSource의 grant별 lookup→역할→상태 검사를 한 독립 권위 검사 안에서 최대4개씩 실행하는 좁은 수정에 착수했다. 캐시 없이 기존 검사를 모두 실행하고 pre/post 권위 조회·완전한 grant scan·Source2000 상한·현재 원상/profile/개정 검증을 유지한다. 모든 시작 조회의 종료를 기다리고 원래 scan 순서의 첫 오류를 반환한다. 실제 성능 개선·현재 CI 통과는 아직 미확정이다.
+
+새 authorization.ts SHA df9b849c72838294de05ada9ab6453f207b04d2be492fab018fbb03701384f10과 role-own-write 시험 SHA c98d4ad67429e9fff4affad5fc9d48dac1e7e96d860e1b61b5e0bf672ea1ed81을 고정했다. Node22.23.3 타입/해당 lint/format은exit0이고 첫 단위 회귀는28개 중27 PASS/1 FAIL·pending/todo0·exit1이었다. 실패 순번28의 matcher 위치는role-own-write.spec.ts:460:6이며 추가 U2 회귀는 실행하지 않았다.
+
+처음 보고된 CURRENT_AUTH_NOT_PROTECTED는 최종 matcher의 기대 코드였으며 직접 받은 오류로 확정할 수 없어 정정한다. 이 fixture의 transaction.get은 기존 vi.fn이고 bind한 mock에 다시 spyOn 구현을 설치해 자기 자신으로 위임하는 재귀가 발생했다. private JSON의 고정 분류 RangeError=true·callStackMention=true와 실제 mock 구성을 대조했다. 원래 getMockImplementation 함수 자체를 캡처해 위임하도록 시험만 수정하며 최종 guard 거절 기대와 production 검증을 유지한다.
+
+시험의 원래 구현 캡처만 수리한 새 SHA는3df51435ffaf16d759ac8c5ef0b13999cdaa4bd6d262784d3e4e86cccb19b962이고 production SHA는df9b849c 그대로다. r2의Node22.23.3 타입/해당 lint/format은exit0이며 U3 역할 회귀28/28·공유 U2 authorization10/emergency-recovery8/role-revisions8 합계26/26 PASS·fail/pending/todo0·success=true·실제exit0이다. root가 두 private JSON의 개수/상태를 확인했고 두 source 지문은 전후 동일했다. 영향 통합·V8 계측·새 전체 CI는 다음 확인 대상이며 이 선택 단위 통과를 전체 품질 판정으로 확대하지 않는다.
+
+이후 U1 recovery-security-policy8/8·U3 order-change12/http-host6 합계18/18 PASS·fail/pending/todo0·success=true·실제exit0을 root가 새 JSON에서 확인했다. 합성 U3 DB 준비exit0이며 원래 보고서/로그는 private0600으로 별도 보존한다. 별도 산출물 검사는 manifest176개와 실제 기준 이후 경로의 누락/추가/중복0·4개 produces 존재/비어 있지 않음을 확인했다. traceability104개는 upstream과 고유하게 일치하며 OK87/Deferred17이고 이 중 AC Deferred7을 유지한다. OK는 파일 연결이지 운영 목표 달성 판정이 아니다. 전체 source diff 검사에서 기존 oms-full-proof.yml의 EOF 빈 줄 한 개만 발견해 제거했으며 workflow 실행 의미는 동일하다.
+
+같은 실제pilot config의 r3 선택 V8 assertion은1 PASS/0 FAIL·11 pending이고 evidence passed=false·completeScope=false·tests12/1/11/0·실제exit1이다. root가 rawHash87986a77a442d6103906ab9309a5e566beea67ca732c2a468b34037623466363 일치를 확인했다. source HEAD7fed1c1f21ff9ba73edc2acbd932f64832348dc6·digest ea5913e62a7c436b4af5a0de42feb266a2236065db77caf13a4ddd8dc929529e·inventory628경로를 보존하며 최종 변경은 실제source bytes에 포함된다. 전체 분모나 전체 기여 성공으로 승격하지 않는다.
+
+r3 닫힌 모델별 조회는 r2와 같고 합계991회다. APPLY_REVIEW1376.8ms·protectedExecute1295.9ms·currentProtected991회/1281.4ms·transactionGet925회/357.3ms·validateUri14241회/46.0ms·validateSchema1905회/11.7ms·assertPremises1회/98.6ms이며 모든 관측 rejection은0이다. 중첩 시간을 합산하지 않는다. 같은 로컬 선택의 보호 실행1748.6→1295.9ms 감소를 관측했지만 Linux CI 예산 통과나 운영 용량을 확정하지 않는다. 네 source 지문은 전후 동일했고 workflow SHA는34ec762ce0915a55ccd5bd3620dbbcf28ed1cdd70050cb460b8247261ee5d58c다. 새 최종 CI·전체80%·품질/보안·별도 리뷰·공식완료·main 병합은 아직 남아 있다.
