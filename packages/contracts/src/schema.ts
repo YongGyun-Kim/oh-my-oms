@@ -12,7 +12,10 @@ const BASE = 'urn:oms:contract:common:2';
 const addFormats = createRequire(import.meta.url)('ajv-formats') as FormatsPlugin;
 export class SchemaValidator {
   private readonly ajv = new Ajv2020({
-    allErrors: true,
+    // Only the boolean result crosses this boundary; callers receive the same
+    // INVALID_INPUT error. Stop a failing branch early instead of collecting
+    // every owner/field error for each Ref in a 100-line protected image.
+    allErrors: false,
     strictSchema: true,
     strictTypes: false,
     coerceTypes: false,

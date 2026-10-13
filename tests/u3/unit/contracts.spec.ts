@@ -1,4 +1,8 @@
 import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import { Ajv2020 } from 'ajv/dist/2020.js';
+import type { AnySchema } from 'ajv';
+import type { FormatsPlugin } from 'ajv-formats';
 import { describe, expect, it } from 'vitest';
 import {
   OperationRegistry,
@@ -33,6 +37,97 @@ const receipt: Receipt = {
   statusRevision: 1,
   retryAfterMilliseconds: null,
 };
+
+describe('첫 오류 중단의 계약 경계 보존', () => {
+  it('모든 등록 Ref 분기의 정상/다중 오류 입력을 기존 allErrors 판정과 동일하게 검증한다', () => {
+    const reference = new Ajv2020({
+      allErrors: true,
+      strictSchema: true,
+      strictTypes: false,
+      coerceTypes: false,
+      removeAdditional: false,
+    });
+    const addFormats = createRequire(import.meta.url)('ajv-formats') as FormatsPlugin;
+    addFormats(reference);
+    for (const filename of ['c00-v1', 'c00-v2', 'u2-access-additions-v1', 'u3-commercial-v2'])
+      reference.addSchema(
+        JSON.parse(
+          readFileSync(`packages/contracts/schemas/${filename}.json`, 'utf8'),
+        ) as AnySchema,
+      );
+    const original = reference.compile({ $ref: U3_PROFILE + '#/$defs/Ref' });
+    type Branch = {
+      properties?: { owner: { const: string }; entity: { enum: string[] } };
+    };
+    const common = JSON.parse(readFileSync('packages/contracts/schemas/c00-v2.json', 'utf8')) as {
+        $defs: { Ref: { oneOf: Branch[] } };
+      },
+      additions = JSON.parse(
+        readFileSync('packages/contracts/schemas/u2-access-additions-v1.json', 'utf8'),
+      ) as { $defs: { Ref: { anyOf: Branch[] } } };
+    const branches = [...common.$defs.Ref.oneOf, ...additions.$defs.Ref.anyOf];
+    for (const branch of branches) {
+      if (!branch.properties) continue;
+      for (const entity of branch.properties.entity.enum) {
+        const valid = fixtureRef(branch.properties.owner.const, entity);
+        const missing = { ...valid } as Partial<typeof valid>;
+        delete missing.id;
+        for (const input of [
+          valid,
+          { ...valid, revision: Number.MAX_SAFE_INTEGER },
+          null,
+          missing,
+          { ...valid, owner: 'Unknown', entity: 'Unknown', revision: 0 },
+          { ...valid, owner: 'Unknown', id: '', extra: null },
+          { ...valid, entity: 'Unknown', revision: 1.5 },
+          { ...valid, id: '', revision: Number.MAX_SAFE_INTEGER + 1 },
+          { ...valid, extra: null },
+        ]) {
+          const before = JSON.stringify(input);
+          if (original(input)) expect(validate('Ref', input)).toBe(input);
+          else
+            expect(() => validate('Ref', input)).toThrowError(
+              expect.objectContaining({
+                status: 400,
+                code: 'INVALID_INPUT',
+                message: '등록된 계약과 다른 입력입니다.',
+              }),
+            );
+          expect(JSON.stringify(input)).toBe(before);
+        }
+      }
+    }
+  });
+
+  it('같은 객체의 후속 변조도 매번 검증하고 성공 결과를 캐시하지 않는다', () => {
+    const input = fixtureRef('OrderAcceptance', 'Order');
+    expect(validate('Ref', input)).toBe(input);
+    input.entity = 'PriceTerms';
+    expect(() => validate('Ref', input)).toThrowError(
+      expect.objectContaining({ status: 400, code: 'INVALID_INPUT' }),
+    );
+    input.entity = 'Order';
+    expect(validate('Ref', input)).toBe(input);
+    input.revision = 0;
+    expect(() => validate('Ref', input)).toThrowError(
+      expect.objectContaining({ status: 400, code: 'INVALID_INPUT' }),
+    );
+    expect(input.revision).toBe(0);
+  });
+
+  it('AJV를 통과한 기간의 교차 필드 의미도 계속 거절하고 입력을 변경하지 않는다', () => {
+    const window = {
+      ...orderFixture().lines[0]!.conditionBindings[0]!.effectiveWindow,
+      startAt: '2026-10-12T00:00:00.000Z',
+      endAt: '2026-10-11T00:00:00.000Z',
+    };
+    const before = JSON.stringify(window);
+    expect(() => validate('EffectiveWindow', window)).toThrowError(
+      expect.objectContaining({ status: 400, code: 'INVALID_INPUT' }),
+    );
+    expect(JSON.stringify(window)).toBe(before);
+  });
+});
 
 describe('U3 profile 개정2와 registry3의 구형 원본 보존', () => {
   it('기존 두 common profile의 소수 Money 의미를 같은 ID에서 바꾸지 않는다', () => {

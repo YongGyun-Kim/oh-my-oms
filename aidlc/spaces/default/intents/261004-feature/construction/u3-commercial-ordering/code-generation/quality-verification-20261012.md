@@ -211,3 +211,33 @@ Luna의4파일 TypeScript·ESLint·Prettier는 종료 코드0이고 same-phase-r
 Luna와 root가 기존 JSON을 읽기 전용으로 대조했다. staff-authority-private-integration-20261012.json은7파일65/65 PASS, staff-authority-u2-integration-20261012.json은2파일17/17 PASS다. 모두 fail/pending/todo/failedSuite0·success=true다. staff-authority-u1-selected-integration-20261012.json은1파일의 총53개 중선택3 PASS·50 pending/미실행·fail/todo/failedSuite0·success=true다. 선택 밖50개를 통과로 표시하지 않는다. 앞선 U3 단위303·U1 단위8·U2 단위18의 성공도 같은 source 지문에서 확인했다.
 
 진행 중인 Vitest 프로세스는 없었고 이전 프로세스의 최종 exit scalar는 복구 시 확인하지 못했다. JSON success를 새 observed exit0 receipt로 만들지 않으며, 소스 변경이나 새 실패가 없는 선택 검사를 반복하지 않는다. 저장된 로컬 결과와 새 커밋의 실제 CI·전체80%/품질·보안·별도 리뷰·main 머지는 별도 판정한다. Step19/20 미완료는 유지한다.
+
+## bb89b1f의 실제 CI 검증
+
+조회·상품 원본 재사용960d2dd와 직원 권위 검사 내부 재조회 제거bb89b1f2679892bd880c7ecda4be73485e52c83a를 push했다. 실제 CI run38337443760의 PR checkout HEAD는f1917fb62be3b5a1d658012cd428c3c2397d24c3이며 branch HEAD와 구분한다. U1·U2 성공 artifact의 sourceDigest는b8a58550e03fdd492e041ce7419c8fb2f94948f3755140f2d1a0a75b161322d1이다.
+
+root가 U1 단위571/571·통합168/168과 U2 단위465/465·통합274/274를 실제 JSON에서 확인했다. 각 기여의 같은739개 coverage 재실행도 통과했으며 고유시험 수에 중복 합산하지 않는다. 모두 fail/pending/todo/failedSuite0·success=true다. 같은 checkout/digest의 validation-u1·validation-u2는 pilot-current이고 해당 검사마다 passed/observed/exists/fresh=true·exit0·signal/errorCode=null·expired/logFailed=false다.
+
+U2 PC 보고서는 expected5·skipped/unexpected/flaky0·errors0이며 validation-u2의 u2-e2e도 같은 source에서 observed=true·exit0·fresh=true다. U1·U2 job은 success로 끝났지만 U3와 project 전체80%·품질·보안은 아직 진행 중이다. Step19/20·공식 리뷰·main 머지는 완료로 처리하지 않는다.
+
+run38337443760은 failure로 종료됐다. U3 통합162개 중158 PASS·4 FAIL, pending/todo0·failedSuites4·success=false다. 실제 child는 observed=true·exit1·signal/errorCode=null·expired/logFailed=false이고 새 artifact/VALID_COUNTS이며 validationFailure/validationErrorCode=null이다. 선행 실패로 project의 전체80%·품질·보안 검증은 실행되지 않았고, 성공 결과가 없어 최종 결과 artifact 보존 단계도 실패했다.
+
+실패는 order-decision 순번3/4와 order-submission 순번3/4다. READ_100의 최종 assertPremises에서 실제SQLSTATE25P04를 받았고 protected 원본 대조는1608.206ms, validateUri는9082회/2109.323ms였다. DECISION_100은protectedExecute3008.141ms·assertPremises1059.827ms에서QUERY_RUNNER_RELEASED를 받았다. 변조 거절 시험의 최종 assertion은UNKNOWN이고 내부 메서드에서는 같은 약3초 QUERY_RUNNER_RELEASED를 관측했다. 이 실패들이 모두 직접25P04를 받았다고 확대하지 않고 중첩 시간을 합산하지 않는다.
+
+최종 현재성·권한·보호 원상 검사를 유지하면서 실제 검증/조회 호출 경로의 남은 비용을 조사한다. HTTP·변경 적용이 실패목록에서 빠졌다는 사실을 최종 전체통과나 운영용량 실증으로 바꾸지 않는다. 시간/100행/80% 기준과 Step19/20 미완료를 보존한다.
+
+## 스키마 검증의 오류 목록 수집 비용 축소
+
+SchemaValidator의 Ajv allErrors 설정만 false로 변경했다. private validator 오류 목록을 소비하는 제품 경로는 없으며 공개 결과는 기존 boolean 판정과400 INVALID_INPUT으로 유지한다. coerceTypes/removeAdditional·closed schema·oneOf/anyOf 및 U3 교차 필드 의미 검증을 보존한다. 데이터 또는 현재성 증명 캐시를 추가하지 않고 최종 assertPremises·보호/primary 전체 이미지·현재 권한/개정 대조는 그대로 수행한다.
+
+기존 allErrors:true Ajv를 독립 판정 기준으로 모든 등록 Ref owner/entity의 정상·다중 오류·누락·추가 필드·개정 경계를 비교하고 입력 무변경을 확인했다. 같은 객체의 후속 변조 재검증과 AJV 이후 역순 기간 의미 검증도 추가했다. source schema.ts의 SHA는794d3eef6c98f9cb3d6032c8868e95ba69ac9d24d198cc3f45b271c080e8d81e이고 contracts.spec.ts의 최종 SHA는45bf20fec26472118d9c105e6fd178a067837e6434e9c045e941b6fe05587a63이다.
+
+Luna의 TypeScript·지정 ESLint는 exit0이다. 첫 Prettier 검사는 contracts.spec.ts 형식으로 exit1이라 의미 테스트를 중단했고 개발자가 해당 파일 형식만 정리한 후 check exit0을 확인했다. U3 선택5파일77/77·U1 선택2파일23/23·U2 선택2파일20/20이 exit0으로 통과했다. root도 각 실제 JSON의 fail/pending/todo/failedSuite0·success=true를 확인했다.
+
+첫 격리 DB 준비는 Docker daemon unavailable로 exit1이었다. root가 Docker를 시작하고 등록된 synthetic/oms-u1 primary·journal 두 기존 컨테이너만 재시작했다. 다음 소유 DB 준비는 exit0이며 이름/격리 admission을 바꾸지 않았다. 두100행 통합 시험은 exit0, order-decision12개·order-submission9개 총21/21 PASS·fail/pending/todo/failedSuite0·success=true다. root도 실제2파일 JSON을 대조했다. 후단 변조 거절과 실제 최종 원본 대조를 포함하며 아직 새 전체 CI·전체80%·품질/보안·공식 리뷰를 대체하지 않는다.
+
+소유 private 로그의 고정 U3_BUDGET_AGGREGATE JSON만 허용 수치로 투영했다. READ_100 두 관측은554.3~655.4ms, DECISION_100 두 관측은888.0~1001.8ms다. 정상·변조 거절 관측을 포함하므로 운영 평균이나 용량으로 해석하지 않는다. 의도된 후단 변조는CURRENT_AUTH_NOT_PROTECTED로 거절됐다. 중첩 시간을 합산하지 않고 계측 overhead가 포함된 로컬 관측으로 제한한다.
+
+독립 Ajv 비교는 같은5개 서버 schema를 warm compile한 뒤 순서를 교차해 설정별5회씩 총10개 관측을 만들었다. 관측마다 Ref9000회와100행 OrderInput30회를 따로 측정했다. Ref9000회는 allErrors:true5.636~6.391ms·false1.637~2.358ms, OrderInput30회는true134.858~158.824ms·false8.606~18.754ms다. 입력 JSON 불변·exit0과 실제 숫자 JSON을 root가 확인했다. 앞선5개 혼합 duration은 Ref/Order를 함께 측정해 이 분리 비교의 증거로 사용하지 않는다. 이 비교는 boolean schema 검증 비용만이며 DB·의미 검증·보호 저장·최종 전제 검증·실제CI 시간은 포함하지 않는다.
+
+검사 전후 두 source SHA가 같았고 root가 baseline a2d694f 이후 실제176개 source 경로와 manifest176개를 대조해 누락/추가0을 확인했다. 같은 수정의 새 실제 CI를 실행한 뒤 전체 품질·보안·80%와 별도 리뷰를 판정한다.

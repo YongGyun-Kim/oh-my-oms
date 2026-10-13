@@ -10,6 +10,10 @@
 
 마지막 ef17200 CI는 U1/U2 성공·U3 통합8건 실패였다. 안전한 received 정보에서 두 구간의25P04(transaction_timeout)와 다른 구간의 약3초 QUERY_RUNNER_RELEASED를 확인했으며 모든 사례가 같은 DB 코드를 받았다고 확대하지 않는다. 이후 조회의 같은 구간 snapshot/choice/lines, 적용의 검증된 Product, 직원 권위 검사의 검증된 StaffRole 연속 재조회를 줄였다. 최종 원상/권한·applicationSource 전후·grant 전체 순회와 공개 currentRoleState의3인수 독립 조회를 보존한다. 서비스10초·DB3초·statement2초·lock500ms·100행·80%는 유지했다.
 
+그 수정의 bb89b1f 실제 CI run38337443760은 U1/U2 성공·U3 통합162개 중158 PASS/4 FAIL로 종료됐다. 실패는100행 조회와 판단 및 후단 변조 거절 경로다. READ_100의 최종 원본 대조에서 직접25P04를 받았으며 다른 실패의 약3초 QUERY_RUNNER_RELEASED와 구분한다. 같은 source의 project 전체80%·품질·보안은 실행되지 않았다. 실패를 보존하고 스키마 검증 내부의 모든 오류 목록 수집 비용을 줄이는 좁은 수정과 계약 판정/변조 거절 회귀를 검증 중이다.
+
+Ajv의 내부 allErrors 목록 수집만 중단하고 closed schema의 boolean 판정·공개 INVALID_INPUT·U3 의미 검증을 유지했다. 기존 검증기와 모든 등록 Ref 분기 판정 비교, 입력 무변경·후속 변조·기간 의미 거절을 추가했다. 타입/린트/형식과 U3/U1/U2 선택 단위77/23/20개, 두100행 통합21개가 통과했다. DB 준비 실패는 Docker 시작과 등록된 두 합성 컨테이너 재시작 후 해소했고 테스트/제품 예산은 바꾸지 않았다. 이 결과는 새 전체 CI·80%·보안·별도 리뷰의 통과로 확대하지 않는다.
+
 ## 파일과 구현
 
 [source-manifest.json](source-manifest.json)은 승인 기준 a2d694f 이후 실제 제품/시험/설정 변경 전체를 path-only version1로 주장한다. 신규 U3 파일뿐 아니라 shared core/persistence·U1/U2 fixture/회귀·보안/CI helper·package.json·tsconfig.json·.gitignore를 포함한다. package-lock/infra 자원 변경을 임의 주장하지 않고 실제 경로 목록에 따른다. 원래 사용자 aidlc_change.sh·tests/u1/.reports와 private runtime/report/credential은 manifest/커밋 대상이 아니다.
