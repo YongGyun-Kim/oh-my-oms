@@ -18,6 +18,10 @@ Ajv의 내부 allErrors 목록 수집만 중단하고 closed schema의 boolean �
 
 임시 런타임 부재를 확인해 공식checksum으로Node22.23.3/npm10.9.9를 복구했다. 실제 버전 확인 없이 실행한 앞선 로컬 결과는 최종 runtime 증거로 재사용하지 않는다. 고정 runtime의 선택120개와 계약·100행의 V8 선택70개가 통과했으나 후자는completeScope:false로 전체 기여 승격이 차단됐다. 커버리지 증명 파일이 없더라도 새로 생성된 고정 시험 JSON의 허용 정보만diagnosticOnly로 관측하도록 보완했다. 타입/린트/형식·진단 회귀37개가 통과했고 원래source/receipt/실패/전체80% 판정은 유지한다. 다음 전체 커버리지·CI에서 실제 실패 원인을 확인한다.
 
+고정 Node22.23.3의 파일 필터 없는 로컬 U3 커버리지는484/484 PASS·completeScope:true로 끝났다. 같은 브랜치의 실제 CI run38346792092는 U1/U2와 U3 단위·일반 통합을 완료했지만 V8 커버리지484개 중482 PASS/2 FAIL로 실패했다. 실패한 HTTP_APPLY와 APPLY_REVIEW는 약3초의 보호 실행 예산에서 QUERY_RUNNER_RELEASED를 받았고 currentProtected 조회는 각각933회·944회였다. 이 run에서 직접25P04는 관측되지 않았다. 로컬 통과를 Linux CI 성공으로 확대하지 않으며 project 전체80%·품질/보안은 아직 실행되지 않았다.
+
+적용 경로의 실제 조회 분포를 확인하기 위해 기존 order-change 시험에 명시적 OMS_U3_LOOKUP_PROFILE=1일 때만 동작하는 APPLY_REVIEW 계측을 추가했다. 고정 모델20종의 정수 횟수만 private 로컬 로그에 남기며 ID·참조·payload·오류 원문은 수집하지 않는다. 원래 계측 메서드에 그대로 위임하고 finally에서 복원한다. 제품 코드·시간 예산·현재성 검증·공개 reporter 형식은 바꾸지 않았으며 선택 진단을 전체 범위나 운영 증거로 승격하지 않는다.
+
 ## 파일과 구현
 
 [source-manifest.json](source-manifest.json)은 승인 기준 a2d694f 이후 실제 제품/시험/설정 변경 전체를 path-only version1로 주장한다. 신규 U3 파일뿐 아니라 shared core/persistence·U1/U2 fixture/회귀·보안/CI helper·package.json·tsconfig.json·.gitignore를 포함한다. package-lock/infra 자원 변경을 임의 주장하지 않고 실제 경로 목록에 따른다. 원래 사용자 aidlc_change.sh·tests/u1/.reports와 private runtime/report/credential은 manifest/커밋 대상이 아니다.

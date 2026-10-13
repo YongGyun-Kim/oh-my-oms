@@ -277,3 +277,35 @@ root가 공식nodejs.org의v22.23.3 darwin-arm64 archive를 내려받고 같은 
 첫 진단 회귀는36개 중34 PASS/2 FAIL, 다음은37개 중34 PASS/3 FAIL이었다. 당시 타입·린트·형식은exit0이었다. Vitest는파일과 중첩describe를 모두suite로 세므로 실패 파일 수와numFailedTestSuites의 동일성 강제가 잘못된 것을 확인해 제거했고 실제JsonReporter hierarchy 회귀를 추가했다. 별도의 테스트 fixture가 동일 argv를 가진U1/U2/U3 coverage 명령을argv만으로 선택해U1을 골라U3 JSON을 쓰지 않는 원인을 확인했다. 단일 선택 진단은총21개 중1 FAIL·20 미실행이며 bufferPresent:false·bytes0·modified0을 관측했다. 새U3 fake runner3곳의scope 선택만 정정하고 중간 계측을 제거했다. 원래reader/source/receipt guard는 완화하지 않았다.
 
 최종r4는Node22.23.3에서 타입·해당 lint/format exit0이고 두 실제 파일37/37 PASS·fail/pending/todo/failedSuite0·success=true·exit0이다. root도r4 JSON을 확인했다. 안정된4파일 SHA는ci-pilot-proof.ts a2b1e15e1f08fa5c9253816daaff0e91f99fc2b3eb7e2589fb6396e92fd52e1b, pilot-safe-diagnostics.ts caa3f3b6385a7e5ff12f8ae5ba12fa8a93eb5255da594dd9e5ca7bfbee7519f8, pilot-ci.spec.ts8058d42107a97439efc93078556fb433c0676f7d20ea04e179b4cc86827b4f37, safe-diagnostics.spec.ts811be878ed2f811075c1a3ef92b244994635d19aa49ad2b6c0d04593ba364246이다. 검사 전후 지문이 같았고 root가 실제176개 경로와manifest176개를 대조해 누락/추가0을 확인했다. 실제 CI 실패 원인의 해소나 전체80%·품질/보안·별도 리뷰 완료는 아직 주장하지 않는다.
+
+## eec8998의 전체 로컬 커버리지와 실제 CI
+
+진단 보완·회귀·당시 품질 기록은eec89980ba7f689246734a6cc68d99bf0d125546으로 커밋·push했다. 소스를 고정한 뒤 Node22.23.3의 실제pilot coverage config를 파일 필터 없이 직접 실행했다. 소유 U3 DB 준비exit0, 전체 coverage 실제exit0·484/484 PASS·fail/pending/todo/failedSuite0·success=true·49파일을 root도 JSON에서 확인했다.
+
+새 evidence는passed=true·completeScope=true·tests484/484/0/0·시험49파일·source inventory628경로다. local source HEAD는위eec8998, sourceDigest203b272f2467f428379f7de7acaa6133918ae8f594c4740a9d64f6221bcd310d이며 실제Node22.23.3/Vitest·V85.0.3/TypeScript6.0.3을 보존한다. 실행구간은2026-10-13T04:31:55.906Z~04:41:35.065Z다. rawHashb97246c00bd911f73a68e209d349bf6e441d0a58c818da01f5c1b60a8fd6767c를 root가 실제coverage-final.json과 대조했다. 기존 U3 출력만 타임스탬프를 보존해 별도archive했고 다른 Unit/사용자 보고서는 보존했다.
+
+로컬 전체 제품 분모의U3 기여 line36.71%는 U3 시험의 기여율이지3개 Unit 합집합80%의 판정이 아니다. 이 로컬 성공으로 이전 실제CI의 coverage 실패 원인이 해결됐다고 확정하지 않고, 로컬과 PR checkout의 서로 다른head/digest 보고서를 합치지 않는다.
+
+새 실제 CI run38346792092의 PR checkout HEAD는f8779d82035c2ab5fc7e471d0be96e3d175d718b이고 sourceDigest68a5b59e6d14b172396bd894ecb4fa03f195185a6fa183daf6cad733bac7a7d0다. root가 U1의 실제 단위571/571·통합168/168·같은739개 coverage 재실행을 확인했으며 fail/pending/todo/failedSuite0·success=true다. 각 검사는위checkout/digest·passed/observed/exists/fresh=true·exit0·signal/errorCode=null·expired/logFailed=false를 보존한다. U2/U3와 project 전체80%·품질·보안은 아직 진행 중이며 Step19/20·별도 리뷰·main 머지는 미완료다.
+
+같은 run의 U2도success로 종료됐다. root가 단위465/465·통합274/274·같은739개 coverage 재실행을 확인했고 fail/pending/todo/failedSuite0·success=true다. 각 검사와u2-e2e는위 같은checkout/digest·Node22.23.3·passed/observed/exists/fresh=true·exit0·signal/errorCode=null·expired/logFailed=false다. 실제 PC 보고서는expected5·skipped/unexpected/flaky0·errors0이다. U3와 project 결과는 아직 기다리고 있다.
+
+run38346792092은failure로 종료됐다. U3 단위·일반 통합은completed에 기록됐고 coverage child는observed=true·exit1·signal/errorCode=null·expired/logFailed=false다. evidence.json은미생성이다. 새 별도시험관측은diagnosticOnly=true·VALID_COUNTS·completeScope=true이며484개 중482 PASS/2 FAIL·pending/todo0·failedSuites4·success=false다. 이 관측으로 원래receipt의 실패나 미생성 증명을 성공으로 바꾸지 않는다. project 전체80%·품질/보안은 선행 실패로 실행되지 않았다.
+
+실패는http-host 순번1과order-change 순번1이다. HTTP_APPLY는실제503/REQUEST_UNAVAILABLE·protectedExecute3003.048ms·currentProtected933회/1875.064ms·transactionGet880회/480.531ms·validateUri13605회/163.249ms다. APPLY_REVIEW는protectedExecute3003.960ms·currentProtected944회/1855.655ms·transactionGet898회/468.480ms·validateUri13719회/164.116ms다. 직접 받은 오류는QUERY_RUNNER_RELEASED이며 이 run에서25P04는 관측되지 않았다. 중첩 시간은 합산하지 않는다.
+
+Ajv 내부 오류 수집 비용은 줄었지만 같은 Linux V8 실행의 적용 경로가 여전히 약3초에 실패한다. 로컬484개 성공을 이 실패의 해소로 일반화하지 않는다. 보호 원본 조회 경로의 실제 중복을 조사하고 독립적인 전후 현재 권한/원상·최종 전제 검증을 유지하는 좁은 개선을 진행한다. 기한/100행/80%·source 신뢰를 완화하지 않으며 Step19/20·별도 리뷰·main 머지는 미완료다.
+
+## 적용 조회 분포의 로컬 선택 진단
+
+기존 order-change 시험의 APPLY_REVIEW에 opt-in 로컬 계측을 추가했다. 첫 계측 source SHA는5c7d9832b3136cdbf8d7d62e6edfce86b4c98b002fd20cc84ec962c96560b08d이며 Node22.23.3의 타입·해당 lint/format은exit0이었다. 기존 U3 출력의 타임스탬프를 보존해 archive하고 합성 U3 DB 준비exit0 후 실제pilot coverage config로 대상 한 건을 선택했다.
+
+첫 선택 실행은exit1·총12개 중0 PASS/1 FAIL/11 pending·1파일이었다. 고정 모델 집계는OTHER1553회·등록19종 모두0회였으며 APPLY_REVIEW5.772ms·validateUri3회/2.5234ms였다. 안전 실패 코드는UNKNOWN이며 등록 프레임이 없고 raw coverage/evidence는 생성되지 않았다. source SHA는 전후 동일했다. 이 관측은 기존 Linux CI의 약3초 실패를 재현하거나 제품 결함을 입증하지 않는다. 계측의 인수 분류·원래 메서드 위임을 먼저 조사하며 불완전한 선택 결과를 전체 기여/품질 통과로 승격하지 않는다.
+
+원인은 계측의 instance spy가 이미 mock인 상속 prototype 메서드를 재사용해, 저장한 함수의 구현까지 변경하고 자기 자신으로 위임한 재귀였다. 첫 조회 IdentitySession은 등록 모델 밖이라 OTHER에 재귀 횟수가 쌓였다. private 로그의 고정 분류 STACK_OVERFLOW=true·QUERY_RUNNER_RELEASED=false와 실제 메서드 signature를 대조했다. 계측을 독립 own descriptor wrapper로 바꾸어 원래 profiler 메서드에 한 번만 위임하고 finally에서 원래 descriptor 또는 상속 상태로 복구한다. 같은 시험 파일 SHA708fee7a09fc80ea14c4df2b513d7da82db135c4b4aa426379baa6b20f6fa3b6으로 고정했으며 제품 코드나 원래 profiler 구현은 바꾸지 않았다.
+
+수정 후 r2의 타입·해당 lint/format·합성 DB 준비는exit0이었다. 선택 assertion은1 PASS/0 FAIL·나머지11 pending이며 실제coverage 명령exit1이다. evidence는passed=false·completeScope=false·tests12/1/11/0으로 부분 범위 차단을 유지한다. root가 새 시험 JSON과 evidence의Node22.23.3·HEAD eec8998을 확인했다. 이것은 전체 CI 또는 전체 기여 통과가 아니다.
+
+private 닫힌 집계는 Account98·ProviderBinding69·StaffRoleGrant201·StaffRole216·RoleRevisionState163·VerificationEvidence30·VerificationPolicy28·PersonVerification8·VerifiedPersonLink8·IdentityHistory8·RequestReceipt18·AgreementHistory14·AgreementRevision5·EnterpriseContract7·Product5·CommonOfferRevision11·CustomerRole9·CustomerRoleGrant9·ScopeV2 3·OTHER81이었다. root가 합계991을 확인해 기존profiler currentProtected991과 일치했다. 앞의 계정/Binding/직원 grant/role/state 5종이747회로 약75.4%를 차지했다.
+
+APPLY_REVIEW1854.2ms·protectedExecute1748.6ms·currentProtected1175.7ms·transactionGet925회/287.5ms·validateUri14241회/47.4ms·validateSchema1905회/11.9ms·assertPremises1회/96.8ms이며 관측 rejection은0이다. 중첩 시간을 합산하지 않는다. source SHA는 전후 동일했다. Linux CI의944회/약3초와 같다고 주장하지 않고, 같은 권위 검사 내부에서 검증 완료된 원본을 재사용할 수 있는 좁은 경계만 조사한다.

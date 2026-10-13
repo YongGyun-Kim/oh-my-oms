@@ -39,7 +39,69 @@ describe('실제 가격 변경·정확한 동의·한 번 적용·다음 제안�
     input: U3ApplyOrderChangeInput,
   ) {
     const context = await f.requestContext(f.registrant);
-    return profileU3Budget(phase, context, () => f.orders.apply(context, input, f.ingress), test);
+    return profileU3Budget(
+      phase,
+      context,
+      async () => {
+        if (phase !== 'APPLY_REVIEW' || process.env.OMS_U3_LOOKUP_PROFILE !== '1')
+          return f.orders.apply(context, input, f.ingress);
+        const models = [
+          'Account',
+          'ProviderBinding',
+          'StaffRoleGrant',
+          'StaffRole',
+          'RoleRevisionState',
+          'VerificationEvidence',
+          'VerificationPolicy',
+          'PersonVerification',
+          'VerifiedPersonLink',
+          'IdentityHistory',
+          'RequestReceipt',
+          'AgreementHistory',
+          'AgreementRevision',
+          'EnterpriseContract',
+          'Product',
+          'CommonOfferRevision',
+          'CustomerRole',
+          'CustomerRoleGrant',
+          'ScopeV2',
+          'OTHER',
+        ] as const;
+        const counts = Object.fromEntries(models.map((model) => [model, 0])) as Record<
+          (typeof models)[number],
+          number
+        >;
+        // Capture after profileU3Budget has installed its prototype instrumentation.
+        // Only this APPLY_REVIEW instance is observed; no IDs/args/data are retained.
+        const currentProtected = store.currentProtected,
+          originalDescriptor = Object.getOwnPropertyDescriptor(store, 'currentProtected');
+        // spyOn reuses an inherited mock; replacing its implementation would
+        // make the captured profiler mock delegate to itself. An own wrapper
+        // leaves that prototype mock and its timing implementation untouched.
+        Object.defineProperty(store, 'currentProtected', {
+          configurable: true,
+          writable: true,
+          value: function (
+            this: ProtectedStore,
+            ...args: Parameters<ProtectedStore['currentProtected']>
+          ): ReturnType<ProtectedStore['currentProtected']> {
+            const model = models.find((registered) => registered === args[0]) ?? 'OTHER';
+            counts[model]++;
+            return currentProtected.apply(this, args);
+          },
+        });
+        try {
+          return await f.orders.apply(context, input, f.ingress);
+        } finally {
+          if (originalDescriptor)
+            Object.defineProperty(store, 'currentProtected', originalDescriptor);
+          else Reflect.deleteProperty(store, 'currentProtected');
+          // Private, local-only numerical observation; no public reporter field.
+          console.log('TEST_U3_LOOKUP_COUNTS ' + JSON.stringify(counts));
+        }
+      },
+      test,
+    );
   }
   async function original(f: Awaited<ReturnType<typeof seedOrderChange>>) {
     const order = (await store.currentProtected('Order', f.orderRef.id))!;
