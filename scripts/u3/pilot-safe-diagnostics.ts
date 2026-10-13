@@ -1,3 +1,72 @@
+import {
+  closeSync,
+  constants,
+  fstatSync,
+  lstatSync,
+  openSync,
+  readSync,
+  realpathSync,
+} from 'node:fs';
+import { dirname, resolve } from 'node:path';
+
+export const U3_COVERAGE_TEST_REPORT = '.reports/u3/pilot/u3-coverage-tests.json';
+export const MAX_DIAGNOSTIC_REPORT_BYTES = 8 * 1024 * 1024;
+
+// Read only the owned, fresh coverage-test output. This file is diagnostic
+// input, never a replacement for source-bound coverage evidence or a receipt.
+export function readCoverageTestDiagnostic(
+  startedAt: string,
+  finishedAt: string,
+  root = process.cwd(),
+): Buffer | null {
+  let descriptor: number | undefined;
+  try {
+    const start = Date.parse(startedAt),
+      end = Date.parse(finishedAt),
+      file = resolve(realpathSync(root), U3_COVERAGE_TEST_REPORT);
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return null;
+    if (realpathSync(dirname(file)) !== dirname(file)) return null;
+    const initial = lstatSync(file);
+    const eligible = (stat: typeof initial) =>
+      stat.isFile() &&
+      stat.size > 0 &&
+      stat.size <= MAX_DIAGNOSTIC_REPORT_BYTES &&
+      stat.mtimeMs >= start &&
+      Math.floor(stat.mtimeMs) <= end;
+    if (!eligible(initial)) return null;
+    descriptor = openSync(file, constants.O_RDONLY | constants.O_NOFOLLOW);
+    const opened = fstatSync(descriptor);
+    const same = (stat: typeof initial) =>
+      eligible(stat) &&
+      stat.dev === initial.dev &&
+      stat.ino === initial.ino &&
+      stat.size === initial.size &&
+      stat.mtimeMs === initial.mtimeMs &&
+      stat.ctimeMs === initial.ctimeMs;
+    if (!same(opened)) return null;
+    // One extra byte detects growth without an unbounded read/JSON allocation.
+    const bytes = Buffer.allocUnsafe(initial.size + 1);
+    let length = 0;
+    while (length < bytes.length) {
+      const count = readSync(descriptor, bytes, length, bytes.length - length, null);
+      if (count === 0) break;
+      length += count;
+    }
+    if (
+      length !== initial.size ||
+      !same(fstatSync(descriptor)) ||
+      !same(lstatSync(file)) ||
+      realpathSync(file) !== file
+    )
+      return null;
+    return bytes.subarray(0, length);
+  } catch {
+    return null;
+  } finally {
+    if (descriptor !== undefined) closeSync(descriptor);
+  }
+}
+
 // 진단은 성공 증거가 아니다. 실제 오류의 닫힌 scalar만 읽고 원문/기대값을 추측하지 않는다.
 export const diagnosticCodes = [
   'UNKNOWN',

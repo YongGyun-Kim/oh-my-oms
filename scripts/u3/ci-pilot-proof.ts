@@ -22,17 +22,24 @@ import {
 } from './pilot-validation.js';
 import type { PilotProof, PilotReceipt } from './pilot-validation.js';
 import { pilotCoveragePath } from './coverage-evidence.js';
-import { safeFailure } from './pilot-safe-diagnostics.js';
+import {
+  MAX_DIAGNOSTIC_REPORT_BYTES,
+  readCoverageTestDiagnostic,
+  safeFailure,
+  U3_COVERAGE_TEST_REPORT,
+} from './pilot-safe-diagnostics.js';
 
 export interface PilotPorts extends ProofPorts {
   archive(path: string): void;
   write(path: string, bytes: Buffer): void;
+  readCoverageTests?(startedAt: string, finishedAt: string): Buffer | null;
 }
 const actualPorts: PilotPorts = {
   identity: pilotSourceIdentity,
   exists: existsSync,
   read: readFileSync,
   mtime: (path) => statSync(path).mtimeMs,
+  readCoverageTests: readCoverageTestDiagnostic,
   archive: preserveOutput,
   write: (path, bytes) => {
     mkdirSync(dirname(path), { recursive: true, mode: 0o700 });
@@ -196,6 +203,143 @@ function failedAssertions(
   }
   return result;
 }
+function diagnosticTestCounts(report: Record<string, unknown>) {
+  if (
+    typeof report.success !== 'boolean' ||
+    !vitestCountFields.every(
+      (field) => Number.isSafeInteger(report[field]) && Number(report[field]) >= 0,
+    ) ||
+    Number(report.numPassedTests) +
+      Number(report.numFailedTests) +
+      Number(report.numPendingTests) +
+      Number(report.numTodoTests) !==
+      report.numTotalTests ||
+    (report.success &&
+      (report.numFailedTests !== 0 ||
+        report.numPendingTests !== 0 ||
+        report.numTodoTests !== 0 ||
+        report.numFailedTestSuites !== 0 ||
+        report.numPendingTestSuites !== 0)) ||
+    !Array.isArray(report.testResults) ||
+    !report.testResults.every(
+      (suite) =>
+        suite &&
+        typeof suite === 'object' &&
+        Array.isArray(suite.assertionResults) &&
+        suite.assertionResults.every(
+          (assertion: unknown) =>
+            assertion &&
+            typeof assertion === 'object' &&
+            'status' in assertion &&
+            ['passed', 'failed', 'pending', 'todo', 'skipped'].includes(String(assertion.status)),
+        ),
+    ) ||
+    report.testResults.reduce((sum, suite) => sum + suite.assertionResults.length, 0) !==
+      report.numTotalTests
+  )
+    return null;
+  const counts: Record<string, number | boolean> = Object.fromEntries(
+    vitestCountFields.map((field) => [field, Number(report[field])]),
+  );
+  counts.success = report.success;
+  return counts;
+}
+function coverageTestDiagnostics(
+  proof: PilotProof,
+  spec: PilotCommand,
+  receipt: PilotReceipt,
+  ports: PilotPorts,
+) {
+  const result: {
+    diagnosticOnly: true;
+    reportStatus: 'UNCONFIRMED' | 'INVALID' | 'VALID_COUNTS';
+    completeScope: boolean | null;
+    tests: Record<string, number | boolean> | null;
+    assertions: ReturnType<typeof failedAssertions>;
+    suites: ReturnType<typeof failedSuites>;
+  } = {
+    diagnosticOnly: true,
+    reportStatus: 'UNCONFIRMED',
+    completeScope: null,
+    tests: null,
+    assertions: [],
+    suites: [],
+  };
+  try {
+    if (
+      spec.key !== 'u3-coverage' ||
+      spec.scope !== 'u3' ||
+      proof.version !== 2 ||
+      proof.mode !== 'pilot-current' ||
+      receipt.passed !== false ||
+      receipt.mode !== 'pilot-current' ||
+      receipt.execution?.observed !== true ||
+      !Number.isFinite(Date.parse(receipt.startedAt)) ||
+      !Number.isFinite(Date.parse(receipt.finishedAt)) ||
+      Date.parse(receipt.finishedAt) < Date.parse(receipt.startedAt) ||
+      receipt.path !== spec.path ||
+      canonicalJson(receipt.command) !== canonicalJson(spec.command) ||
+      canonicalJson(receipt.environment) !== canonicalJson(spec.environment) ||
+      canonicalJson(receipt.source) !== canonicalJson(proof.source) ||
+      canonicalJson(ports.identity()) !== canonicalJson(proof.source)
+    )
+      return result;
+    const bytes = ports.readCoverageTests?.(receipt.startedAt, receipt.finishedAt);
+    if (
+      !bytes ||
+      bytes.length === 0 ||
+      bytes.length > MAX_DIAGNOSTIC_REPORT_BYTES ||
+      canonicalJson(ports.identity()) !== canonicalJson(proof.source)
+    )
+      return result;
+    result.reportStatus = 'INVALID';
+    const value: unknown = JSON.parse(bytes.toString());
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return result;
+    const report = value as Record<string, unknown>,
+      counts = diagnosticTestCounts(report);
+    if (
+      !counts ||
+      !Array.isArray(report.testResults) ||
+      vitestCountFields.some((field) => Number(report[field]) > 100000)
+    )
+      return result;
+    const expected = pilotTestInventory(proof.source, 'u3'),
+      files: string[] = [],
+      states = { passed: 0, failed: 0, pending: 0, todo: 0 };
+    for (const suite of report.testResults) {
+      if (
+        typeof suite.name !== 'string' ||
+        !['passed', 'failed', 'pending', 'skipped'].includes(suite.status)
+      )
+        return result;
+      const file = relative(process.cwd(), resolve(suite.name)).replaceAll('\\', '/');
+      if (!expected.includes(file) || files.includes(file)) return result;
+      files.push(file);
+      for (const assertion of suite.assertionResults) {
+        if (assertion.status === 'passed') states.passed++;
+        else if (assertion.status === 'failed') states.failed++;
+        else if (assertion.status === 'todo') states.todo++;
+        else states.pending++;
+      }
+    }
+    if (
+      states.passed !== report.numPassedTests ||
+      states.failed !== report.numFailedTests ||
+      states.pending !== report.numPendingTests ||
+      states.todo !== report.numTodoTests
+    )
+      return result;
+    result.reportStatus = 'VALID_COUNTS';
+    result.completeScope = canonicalJson(files.sort()) === canonicalJson(expected);
+    result.tests = counts;
+    result.assertions = failedAssertions(report, spec, proof.source);
+    result.suites = failedSuites(report, spec, proof.source);
+    return result;
+  } catch {
+    // Raw JSON/errors/paths are never copied into the failure summary.
+    return result;
+  }
+}
 function failedChildDiagnostics(proof: PilotProof, ports: PilotPorts) {
   return pilotCommands(proof.source).flatMap((spec) => {
     const receipt = proof.reports[spec.key];
@@ -215,45 +359,9 @@ function failedChildDiagnostics(proof: PilotProof, ports: PilotPorts) {
           const report = value as Record<string, unknown>;
           assertions = failedAssertions(report, spec, proof.source);
           suites = failedSuites(report, spec, proof.source);
-          if (
-            typeof report.success === 'boolean' &&
-            vitestCountFields.every(
-              (field) => Number.isSafeInteger(report[field]) && Number(report[field]) >= 0,
-            ) &&
-            Number(report.numPassedTests) +
-              Number(report.numFailedTests) +
-              Number(report.numPendingTests) +
-              Number(report.numTodoTests) ===
-              report.numTotalTests &&
-            (report.success === false ||
-              (report.numFailedTests === 0 &&
-                report.numPendingTests === 0 &&
-                report.numTodoTests === 0 &&
-                report.numFailedTestSuites === 0 &&
-                report.numPendingTestSuites === 0)) &&
-            Array.isArray(report.testResults) &&
-            report.testResults.every(
-              (suite) =>
-                suite &&
-                typeof suite === 'object' &&
-                Array.isArray(suite.assertionResults) &&
-                suite.assertionResults.every(
-                  (assertion: unknown) =>
-                    assertion &&
-                    typeof assertion === 'object' &&
-                    'status' in assertion &&
-                    ['passed', 'failed', 'pending', 'todo', 'skipped'].includes(
-                      String(assertion.status),
-                    ),
-                ),
-            ) &&
-            report.testResults.reduce((sum, suite) => sum + suite.assertionResults.length, 0) ===
-              report.numTotalTests
-          ) {
-            tests = Object.fromEntries(
-              vitestCountFields.map((field) => [field, Number(report[field])]),
-            );
-            tests.success = report.success;
+          const counts = diagnosticTestCounts(report);
+          if (counts) {
+            tests = counts;
             reportStatus = 'VALID_COUNTS';
           }
         }
@@ -305,6 +413,9 @@ function failedChildDiagnostics(proof: PilotProof, ports: PilotPorts) {
             : null,
         assertions,
         suites,
+        ...(spec.key === 'u3-coverage'
+          ? { coverageTests: coverageTestDiagnostics(proof, spec, receipt, ports) }
+          : {}),
       },
     ];
   });
@@ -317,6 +428,7 @@ export async function collectPilotCommand(
 ): Promise<PilotReceipt> {
   ports.archive(spec.path);
   ports.archive('.reports/u2/project-' + spec.key + '.log');
+  if (spec.key === 'u3-coverage') ports.archive(U3_COVERAGE_TEST_REPORT);
   if (spec.key.endsWith('-coverage') && spec.scope !== 'project')
     for (const suffix of [
       'coverage-final.json',

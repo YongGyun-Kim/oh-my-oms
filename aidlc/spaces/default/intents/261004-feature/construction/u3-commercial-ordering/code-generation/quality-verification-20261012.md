@@ -241,3 +241,39 @@ Luna의 TypeScript·지정 ESLint는 exit0이다. 첫 Prettier 검사는 contrac
 독립 Ajv 비교는 같은5개 서버 schema를 warm compile한 뒤 순서를 교차해 설정별5회씩 총10개 관측을 만들었다. 관측마다 Ref9000회와100행 OrderInput30회를 따로 측정했다. Ref9000회는 allErrors:true5.636~6.391ms·false1.637~2.358ms, OrderInput30회는true134.858~158.824ms·false8.606~18.754ms다. 입력 JSON 불변·exit0과 실제 숫자 JSON을 root가 확인했다. 앞선5개 혼합 duration은 Ref/Order를 함께 측정해 이 분리 비교의 증거로 사용하지 않는다. 이 비교는 boolean schema 검증 비용만이며 DB·의미 검증·보호 저장·최종 전제 검증·실제CI 시간은 포함하지 않는다.
 
 검사 전후 두 source SHA가 같았고 root가 baseline a2d694f 이후 실제176개 source 경로와 manifest176개를 대조해 누락/추가0을 확인했다. 같은 수정의 새 실제 CI를 실행한 뒤 전체 품질·보안·80%와 별도 리뷰를 판정한다.
+
+## 10349e2의 실제 CI 검증
+
+스키마 비용 수정과 회귀·품질 기록은10349e2993f7d16a499f8ef1f1b5f811d0651f1f로 커밋·push했다. 새 실제 CI run38339978025의 PR checkout HEAD는ffd5413d342642a9b03b384b56fd897d4f65f11d이고 sourceDigest는f7e3f923ce5c9af5bdd198e8110d19651a54652cd62114288fb2821a4f92f843이다.
+
+root가 새 U1 성공 artifact의 단위571/571·통합168/168·같은739개 coverage 재실행을 확인했다. fail/pending/todo/failedSuite0·success=true이고 validation-u1은pilot-current·위 checkout/digest를 보존한다. 각 검사마다 passed/observed/exists/fresh=true·exit0·signal/errorCode=null·expired/logFailed=false다. U2/U3와 project 전체80%·품질·보안은 아직 진행 중이며 Step19/20을 완료로 바꾸지 않는다.
+
+같은 run의 U2 job도 success로 종료됐다. root가 실제 artifact에서 단위465/465·통합274/274·같은739개 coverage 재실행을 확인했으며 fail/pending/todo/failedSuite0·success=true다. validation-u2의 각 검사와 u2-e2e는 위 같은 checkout/digest·observed/exists/fresh/passed=true·exit0·signal/errorCode=null·expired/logFailed=false다. 실제 PC 보고서도 expected5·skipped/unexpected/flaky0·errors0을 확인했다. U3와 project는 아직 진행 중이다.
+
+run38339978025은 failure로 종료됐다. 새 U3 안전 summary는completed에u3-unit·u3-integration을 기록했지만u3-coverage는observed=true·exit1·signal/errorCode=null·expired/logFailed=false, artifact.exists/fresh=false·bytes=null·reportStatus NOT_APPLICABLE·tests=null이다. 완료되지 않은 커버리지의 테스트 수를 추정하지 않으며 새 U3 성공 원문 artifact도 없어 전체 unit/integration의 상세 개수는 이 기록에서 확정하지 않는다.
+
+project 전체80%·품질/보안은 선행 실패로 실행되지 않았고 최종 성공 결과가 없어 보존 단계도 실패했다. source와 제품/DB/시험 기한을 유지한 채 coverage 실행/보고서 미생성 원인을 조사한다. root가 내려받은 job 로그는 소유0700 경로/0600 파일로만 보존하고 원문은 공개하지 않는다. 지금까지의 제한된 고정 패턴 검사만으로 OOM·디스크 부족·DB timeout 또는 다른 원인을 확정하지 않는다. Step19/20·별도 리뷰·main 머지는 미완료다.
+
+추가 소스 대조에서 실패 spec.path는u3-coverage/evidence.json이며 coverage-tests.json이나coverage-final.json 존재 여부는 summary에 포함되지 않는 점을 확인했다. 실제 명령은tests/project/vitest.pilot.coverage.config.ts를 사용한다. job 로그에는child 원문이 없고 고정 분류PILOT_CHILD_FAILED만 확인돼, 실행·V8·exporter·증명 변환 중 어느 원인인지 확정할 수 없다. 같은 설정의 계약/두100행 선택 진단으로 이 경계를 조사하며 선택 범위의completeScope:false 차단은 기대된 실패로 따로 보존한다. 전체 inventory·80%·각 시간 제한을 바꾸지 않는다.
+
+## 로컬 임시 런타임 복구와 증거 정정
+
+같은 config의 첫 로컬 진단은SOURCE_TOOL_VERSION으로 테스트 시작 전에 실패했고 종료 reporter의PILOT_COVERAGE_RUN도 발생했다. source guard가 요구하는22.23.3과 실제 기본Node22.23.1이 달랐으며 root가 기존/tmp/oms-u1-runtime 경로가 사라져 있음을 확인했다. 이 실행에서 V8·DB 예산·exporter 원인을 재현했다고 주장하지 않는다.
+
+이번 복구의 앞선 로컬 타입/선택120개·통합21개·Ajv 비교는 실제 pinned 버전 확인 없이 실행된 증거로 정정한다. 진단 때 임시 경로 부재와 기본Node22.23.1이 확인됐지만 앞선 각 실행의process.version은 기록하지 않아 당시 버전을 확정하지 않는다. source 지문과 당시 판정은 보존하되 요구 runtime의 최종 품질 증거로 재사용하지 않는다. 반면 새 CI의 U1/U2 원문 source.tools는Node22.23.3·Vitest/V85.0.3·TypeScript6.0.3을 실제로 보존하므로 이 로컬 불일치가 CI 실패 원인이라는 결론은 내리지 않는다.
+
+root가 공식nodejs.org의v22.23.3 darwin-arm64 archive를 내려받고 같은 공식SHASUMS256.txt로 checksum OK를 확인해 임시 runtime을 복구했다. 직접 고정 경로에서Node22.23.3/npm10.9.9를 확인했다. 다음 검증은 실행 전 실제 버전과 경로를 확인하고 기존 결과와 구분한다. source/lock/기한/하한은 변경하지 않았다.
+
+위임된 동적 사전 확인 명령은 실행 전에 차단됐다. 루트의 고정 경로 버전 확인을 사용하고 중첩 셸/명령 치환 없이 같은 Node의 CLI를 직접 호출해 검증을 진행했다. 제한을 낮추거나 차단된 명령을 숨겨 실행하지 않았다. Node22.23.3의 TypeScript·지정 ESLint·Prettier는exit0이며 새220233 결과의 U3 선택77/77·U1 선택23/23·U2 선택20/20을 root가 실제 JSON에서 확인했다. 각각 fail/pending/todo/failedSuite0·success=true이고 두 source SHA는 전후 동일하다.
+
+같은 Node의 실제pilot coverage config로 계약·두100행 파일을 선택한 진단은70/70 PASS·fail/pending/todo/failedSuite0·success=true·3파일이다. coverage-final.json·evidence.json은 새로 생성됐고 evidence는passed=true·completeScope=false·tests70/70/0/0·source.tools Node22.23.3을 보존한다. root가 원문 hash7362fc355128304575ca0f5ee7ab840cb516a0eb5c18f2a10da285947f1087cb 일치를 확인했다. 실제exit1은 전체 시험 범위가 아닌 선택 실행을 차단한PILOT_COVERAGE_FAILED다. V8/JSON exporter/증명 변환은 이 진단에서 정상이며 전체 CI/80%의 성공으로 승격하지 않는다.
+
+로컬 V8 진단의READ_100은780.3~904.6ms·DECISION_100은1180.9~1198.3ms이며 정상과 변조 거절 관측을 포함한다. 중첩 시간을 합산하지 않고 CI 수치/운영용량으로 일반화하지 않는다. 이번 진단은 실제 CI의 구체 실패를 재현하지 못했다. 다음 실패에서 고정된 소유 coverage-tests.json이 새로 존재하면 허용된 counts·위치·받은 오류만 요약해 조사할 수 있도록 보완한다. 실패 판정·source·원문 보호·전체 분모/하한·시간 제한은 유지한다.
+
+## 커버리지 실패의 별도 테스트 결과 관측
+
+실제 실패 spec의evidence.json과 별개로 U3 coverage-tests.json을 읽지 않는 관측 누락을 확인했다. U3 커버리지 실패에만coverageTests.diagnosticOnly=true를 추가한다. 실제child exit/receipt/source/기여 판정은 보존하며 source/key/path/command/env·관측 여부·시각 창을 대조한다. 고정된 소유 경로의 새8MiB 이하 일반 파일만O_NOFOLLOW·parent realpath·읽기 전후inode/dev/mtime/ctime/size로 확인한다. missing/stale/source불일치 등은UNCONFIRMED, 잘못된JSON/count/foreign/중복/enum은INVALID이며 선택 범위는completeScope:false로 관측한다. 원문/로그/SQL/입력은 공개하거나 성공 증거로 승격하지 않는다. 새child 전 기존 시험 JSON도 원래archive로 보존한다.
+
+첫 진단 회귀는36개 중34 PASS/2 FAIL, 다음은37개 중34 PASS/3 FAIL이었다. 당시 타입·린트·형식은exit0이었다. Vitest는파일과 중첩describe를 모두suite로 세므로 실패 파일 수와numFailedTestSuites의 동일성 강제가 잘못된 것을 확인해 제거했고 실제JsonReporter hierarchy 회귀를 추가했다. 별도의 테스트 fixture가 동일 argv를 가진U1/U2/U3 coverage 명령을argv만으로 선택해U1을 골라U3 JSON을 쓰지 않는 원인을 확인했다. 단일 선택 진단은총21개 중1 FAIL·20 미실행이며 bufferPresent:false·bytes0·modified0을 관측했다. 새U3 fake runner3곳의scope 선택만 정정하고 중간 계측을 제거했다. 원래reader/source/receipt guard는 완화하지 않았다.
+
+최종r4는Node22.23.3에서 타입·해당 lint/format exit0이고 두 실제 파일37/37 PASS·fail/pending/todo/failedSuite0·success=true·exit0이다. root도r4 JSON을 확인했다. 안정된4파일 SHA는ci-pilot-proof.ts a2b1e15e1f08fa5c9253816daaff0e91f99fc2b3eb7e2589fb6396e92fd52e1b, pilot-safe-diagnostics.ts caa3f3b6385a7e5ff12f8ae5ba12fa8a93eb5255da594dd9e5ca7bfbee7519f8, pilot-ci.spec.ts8058d42107a97439efc93078556fb433c0676f7d20ea04e179b4cc86827b4f37, safe-diagnostics.spec.ts811be878ed2f811075c1a3ef92b244994635d19aa49ad2b6c0d04593ba364246이다. 검사 전후 지문이 같았고 root가 실제176개 경로와manifest176개를 대조해 누락/추가0을 확인했다. 실제 CI 실패 원인의 해소나 전체80%·품질/보안·별도 리뷰 완료는 아직 주장하지 않는다.

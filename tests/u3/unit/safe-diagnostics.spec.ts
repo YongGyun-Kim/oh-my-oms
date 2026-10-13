@@ -1,13 +1,122 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import {
+  mkdirSync,
+  mkdtempSync,
+  readSync,
+  rmSync,
+  symlinkSync,
+  truncateSync,
+  utimesSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, resolve } from 'node:path';
 import { OmsError } from '@oms/contracts';
 import { QueryFailedError } from 'typeorm';
 import {
   observedError,
   observedHttp,
+  MAX_DIAGNOSTIC_REPORT_BYTES,
+  readCoverageTestDiagnostic,
   safeFailure,
+  U3_COVERAGE_TEST_REPORT,
 } from '../../../scripts/u3/pilot-safe-diagnostics.js';
 import SafeJsonReporter from '../fixtures/safe-json-reporter.js';
 import type { TestCase } from 'vitest/node';
+
+vi.mock('node:fs', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('node:fs')>();
+  return { ...actual, readSync: vi.fn(actual.readSync) };
+});
+
+describe('coverage 보조 시험 파일의 소유·기한·유한 읽기 경계', () => {
+  it('고정 경로의 fresh regular bytes만 읽고 파일을 바꾸지 않는다', () => {
+    const root = mkdtempSync(resolve(tmpdir(), 'oms-u3-diagnostic-')),
+      file = resolve(root, U3_COVERAGE_TEST_REPORT),
+      bytes = Buffer.from('{"success":false,"private":"never-public"}');
+    try {
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, bytes, { mode: 0o600 });
+      const start = new Date(Date.now() - 1000).toISOString(),
+        end = new Date(Date.now() + 1000).toISOString();
+      expect(readCoverageTestDiagnostic(start, end, root)).toEqual(bytes);
+      expect(readCoverageTestDiagnostic(start, end, root)).toEqual(bytes);
+      expect(readCoverageTestDiagnostic('invalid', end, root)).toBeNull();
+      expect(readCoverageTestDiagnostic(end, start, root)).toBeNull();
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it.each([
+    'missing',
+    'foreign-name',
+    'stale',
+    'future',
+    'directory',
+    'oversized',
+    'leaf-link',
+    'parent-link',
+  ])('%s 산출물을 새 실행의 관측으로 읽지 않는다', (mode) => {
+    const root = mkdtempSync(resolve(tmpdir(), 'oms-u3-diagnostic-')),
+      foreign = mkdtempSync(resolve(tmpdir(), 'oms-u3-foreign-')),
+      file = resolve(root, U3_COVERAGE_TEST_REPORT),
+      start = new Date(Date.now() - 1000).toISOString(),
+      end = new Date(Date.now() + 1000).toISOString();
+    try {
+      mkdirSync(dirname(file), { recursive: true });
+      if (mode === 'parent-link') {
+        rmSync(dirname(file), { recursive: true });
+        writeFileSync(resolve(foreign, 'u3-coverage-tests.json'), '{}', { mode: 0o600 });
+        symlinkSync(foreign, dirname(file), 'dir');
+      } else if (mode === 'leaf-link') {
+        const target = resolve(foreign, 'private.json');
+        writeFileSync(target, '{}', { mode: 0o600 });
+        symlinkSync(target, file);
+      } else if (mode === 'directory') mkdirSync(file);
+      else if (mode === 'foreign-name')
+        writeFileSync(resolve(dirname(file), 'u2-coverage-tests.json'), '{}', { mode: 0o600 });
+      else if (mode !== 'missing') {
+        writeFileSync(file, '{}', { mode: 0o600 });
+        if (mode === 'oversized') truncateSync(file, MAX_DIAGNOSTIC_REPORT_BYTES + 1);
+        if (mode === 'stale' || mode === 'future') {
+          const time = new Date(Date.now() + (mode === 'stale' ? -3600000 : 3600000));
+          utimesSync(file, time, time);
+        }
+      }
+      expect(readCoverageTestDiagnostic(start, end, root)).toBeNull();
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+      rmSync(foreign, { recursive: true, force: true });
+    }
+  });
+
+  it.each(['grow', 'replace'])('읽는 동안 %s된 원본 bytes를 투영하지 않는다', (mode) => {
+    const root = mkdtempSync(resolve(tmpdir(), 'oms-u3-diagnostic-')),
+      file = resolve(root, U3_COVERAGE_TEST_REPORT),
+      originalRead = vi.mocked(readSync).getMockImplementation()!;
+    try {
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, '{"before":1}', { mode: 0o600 });
+      vi.mocked(readSync).mockImplementationOnce((descriptor, ...args) => {
+        const length = originalRead(descriptor, ...args);
+        if (mode === 'replace') rmSync(file);
+        writeFileSync(file, '{"changed":123456789}', { mode: 0o600 });
+        return length;
+      });
+      expect(
+        readCoverageTestDiagnostic(
+          new Date(Date.now() - 1000).toISOString(),
+          new Date(Date.now() + 1000).toISOString(),
+          root,
+        ),
+      ).toBeNull();
+    } finally {
+      vi.mocked(readSync).mockImplementation(originalRead);
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
 
 const failure = () => ({
   version: 1,

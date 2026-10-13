@@ -10,6 +10,8 @@ import { sha256 } from '../../../scripts/u2/runtime-source.js';
 import type { SourceIdentity } from '../../../scripts/u2/runtime-source.js';
 import { collectPilotCommand, collectPilotProof } from '../../../scripts/u3/ci-pilot-proof.js';
 import type { PilotPorts } from '../../../scripts/u3/ci-pilot-proof.js';
+import { JsonReporter } from 'vitest/node';
+import type { TestModule, Vitest } from 'vitest/node';
 import { pilotCommands, PILOT_DEFERRED } from '../../../scripts/u3/pilot-commands.js';
 import {
   mergePilotProofs,
@@ -22,7 +24,11 @@ import { validatePilotImage } from '../../../scripts/u3/pilot-tools.js';
 import { pilotProductInventory, pilotTestInventory } from '../../../scripts/u3/runtime-source.js';
 import { buildPilotCoverageEvidence } from '../../../scripts/u3/coverage-evidence.js';
 import { aggregatePilotCoverage } from '../../../scripts/u3/coverage-aggregate.js';
-import { observedError } from '../../../scripts/u3/pilot-safe-diagnostics.js';
+import {
+  MAX_DIAGNOSTIC_REPORT_BYTES,
+  observedError,
+  U3_COVERAGE_TEST_REPORT,
+} from '../../../scripts/u3/pilot-safe-diagnostics.js';
 
 const text = 'const a = 1;',
   product = 'scripts/u3/fixture.ts',
@@ -75,7 +81,8 @@ function memoryPorts() {
   const files = new Map<string, Buffer>(),
     archived: string[] = [];
   let current = source,
-    modified = Date.now();
+    modified = Date.now(),
+    diagnosticModified = modified;
   const ports: PilotPorts = {
     identity: () => current,
     exists: (path) => files.has(path),
@@ -85,12 +92,25 @@ function memoryPorts() {
       return value;
     },
     mtime: () => modified,
+    readCoverageTests: (startedAt, finishedAt) => {
+      const value = files.get(U3_COVERAGE_TEST_REPORT);
+      return value &&
+        diagnosticModified >= Date.parse(startedAt) &&
+        diagnosticModified <= Date.parse(finishedAt)
+        ? value
+        : null;
+    },
     archive: (path) => {
       if (files.has(path)) archived.push(path);
+      if (path === U3_COVERAGE_TEST_REPORT) {
+        files.delete(path);
+        diagnosticModified = 0;
+      }
     },
     write: (path, value) => {
       files.set(path, value);
       modified = Date.now();
+      if (path === U3_COVERAGE_TEST_REPORT) diagnosticModified = modified;
     },
   };
   return {
@@ -102,6 +122,7 @@ function memoryPorts() {
     },
     stale: () => {
       modified = 0;
+      diagnosticModified = 0;
     },
   };
 }
@@ -679,6 +700,348 @@ describe('pilot-current child·보고서·동일 image의 차단 경계', () => 
         { path: 'scripts/u3/fixture.ts', line: 12, column: 4 },
       ],
     });
+  });
+  it('coverage의 fresh 시험 관측을 별도 투영하고 evidence 없는 실제 실패는 그대로 보존한다', async () => {
+    for (const mode of ['failed', 'all-passed', 'subset'] as const) {
+      vi.stubEnv('OMS_U2_SYNTHETIC_PROFILE', 'approved-local-only');
+      const f = memoryPorts();
+      const diagnosticRead = vi.fn(f.ports.readCoverageTests!);
+      f.ports.readCoverageTests = diagnosticRead;
+      const paths = pilotTestInventory(source, 'u3');
+      const report = testReport(mode === 'subset' ? paths.slice(0, 1) : paths);
+      if (mode === 'failed') {
+        report.success = false;
+        report.numPassedTests--;
+        report.numFailedTests = report.numFailedTestSuites = 1;
+        report.testResults[0]!.status = 'failed';
+        report.testResults[0]!.assertionResults = [
+          {
+            status: 'failed',
+            ...{
+              title: 'private-title',
+              failureMessages: ['private-query scripts/u3/fixture.ts:10:2'],
+              meta: {
+                u3SafeFailure: {
+                  version: 1,
+                  errors: [observedError({ code: 'EXECUTION_DEADLINE', message: 'private' })],
+                  phases: [],
+                  http: [],
+                },
+              },
+            },
+          },
+        ];
+      }
+      await expect(
+        collectPilotProof(
+          'u3',
+          async (command, args) => {
+            const spec = pilotCommands(source).find(
+              (item) =>
+                item.scope === 'u3' &&
+                item.command[0] === command &&
+                canonicalJson(item.command.slice(1)) === canonicalJson(args),
+            )!;
+            if (spec.key === 'u3-coverage') {
+              f.ports.write(U3_COVERAGE_TEST_REPORT, bytes({ ...report, message: 'private' }));
+              return { ...execution, exitCode: 1 };
+            }
+            f.ports.write(
+              spec.path,
+              bytes(
+                testReport(
+                  paths.filter((path) => path.includes('/' + spec.key.split('-')[1] + '/')),
+                ),
+              ),
+            );
+            return execution;
+          },
+          f.ports,
+        ),
+      ).rejects.toMatchObject({ code: 'PILOT_CHILD_FAILED' });
+      const output = f.ports.read('.reports/u3/pilot/u3-job-summary.json').toString();
+      expect(output).not.toContain('private');
+      const summary = JSON.parse(output),
+        failure = summary.failures[0];
+      expect(diagnosticRead).toHaveBeenCalledOnce();
+      expect(Buffer.isBuffer(diagnosticRead.mock.results[0]!.value)).toBe(true);
+      expect(summary).toMatchObject({
+        passed: false,
+        completed: ['u3-unit', 'u3-integration'],
+        realActivationAllowed: false,
+      });
+      expect(failure).toMatchObject({
+        key: 'u3-coverage',
+        execution: { exitCode: 1, observed: true },
+        artifact: { exists: false, fresh: false },
+        tests: null,
+        reportStatus: 'NOT_APPLICABLE',
+        coverageTests: {
+          diagnosticOnly: true,
+          reportStatus: 'VALID_COUNTS',
+          completeScope: mode !== 'subset',
+          tests: {
+            success: mode !== 'failed',
+            numTotalTests: mode === 'subset' ? 1 : 2,
+            numFailedTests: mode === 'failed' ? 1 : 0,
+          },
+        },
+      });
+      expect(failure.coverageTests.assertions).toHaveLength(mode === 'failed' ? 1 : 0);
+      expect(failure.coverageTests.suites).toHaveLength(mode === 'failed' ? 1 : 0);
+      if (mode === 'failed')
+        expect(failure.coverageTests.assertions[0]).toMatchObject({
+          file: paths[0],
+          ordinal: 1,
+          frames: [{ path: 'scripts/u3/fixture.ts', line: 10, column: 2 }],
+          received: { errors: [{ code: 'EXECUTION_DEADLINE' }] },
+        });
+      expect(
+        JSON.parse(f.ports.read('.reports/u3/pilot/validation-u3.json').toString()).reports[
+          'u3-coverage'
+        ].passed,
+      ).toBe(false);
+    }
+  });
+  it('실제 JsonReporter의 중첩 describe suite 수를 파일 수와 혼동하지 않는다', async () => {
+    vi.stubEnv('OMS_U2_SYNTHETIC_PROFILE', 'approved-local-only');
+    const logged: string[] = [],
+      reporter = new JsonReporter({ stdout: true });
+    reporter.onInit({
+      config: { root: process.cwd(), passWithNoTests: false },
+      snapshot: { summary: {} },
+      logger: { log: (value: string) => logged.push(value), warn: () => {} },
+    } as unknown as Vitest);
+    const file = {
+      id: 'file',
+      type: 'suite',
+      name: 'private-file',
+      mode: 'run',
+      filepath: resolve('tests/u3/unit/fixture.spec.ts'),
+      result: { state: 'fail' },
+      tasks: [] as unknown[],
+    };
+    const outer = {
+      id: 'outer',
+      type: 'suite',
+      name: 'private-outer',
+      mode: 'run',
+      suite: file,
+      result: { state: 'fail' },
+      tasks: [] as unknown[],
+    };
+    const inner = {
+      id: 'inner',
+      type: 'suite',
+      name: 'private-inner',
+      mode: 'run',
+      suite: outer,
+      result: { state: 'fail' },
+      tasks: [] as unknown[],
+    };
+    file.tasks.push(outer);
+    outer.tasks.push(inner);
+    for (const id of ['first', 'second'])
+      inner.tasks.push({
+        id,
+        type: 'test',
+        name: 'private-test',
+        mode: 'run',
+        suite: inner,
+        result: { state: 'fail', startTime: Date.now(), duration: 1 },
+        meta: {},
+      });
+    await reporter.onTestRunEnd([{ task: file }] as unknown as TestModule[]);
+    const report = JSON.parse(logged[0]!);
+    expect(report).toMatchObject({
+      numTotalTests: 2,
+      numFailedTests: 2,
+      numFailedTestSuites: 3,
+    });
+    expect(report.testResults).toHaveLength(1);
+    const f = memoryPorts();
+    await expect(
+      collectPilotProof(
+        'u3',
+        async (command, args) => {
+          const spec = pilotCommands(source).find(
+            (item) =>
+              item.scope === 'u3' &&
+              item.command[0] === command &&
+              canonicalJson(item.command.slice(1)) === canonicalJson(args),
+          )!;
+          if (spec.key === 'u3-coverage') {
+            f.ports.write(U3_COVERAGE_TEST_REPORT, bytes(report));
+            return { ...execution, exitCode: 1 };
+          }
+          f.ports.write(
+            spec.path,
+            bytes(
+              testReport(
+                pilotTestInventory(source, 'u3').filter((path) =>
+                  path.includes('/' + spec.key.split('-')[1] + '/'),
+                ),
+              ),
+            ),
+          );
+          return execution;
+        },
+        f.ports,
+      ),
+    ).rejects.toMatchObject({ code: 'PILOT_CHILD_FAILED' });
+    const output = f.ports.read('.reports/u3/pilot/u3-job-summary.json').toString();
+    expect(output).not.toContain('private');
+    const diagnostic = JSON.parse(output).failures[0].coverageTests;
+    expect(diagnostic).toMatchObject({
+      diagnosticOnly: true,
+      reportStatus: 'VALID_COUNTS',
+      completeScope: false,
+      tests: { numFailedTests: 2, numFailedTestSuites: 3 },
+    });
+    expect(diagnostic.suites).toHaveLength(1);
+    expect(diagnostic.assertions).toHaveLength(2);
+  });
+  it('coverage 보조 JSON의 누락·옛 source·과대·오염·타unit/중복/상태-count 불일치를 관측으로 승격하지 않는다', async () => {
+    for (const mode of [
+      'missing',
+      'prior',
+      'stale',
+      'source-before',
+      'source-during',
+      'oversized',
+      'json',
+      'count',
+      'foreign',
+      'duplicate',
+      'enum',
+      'states',
+    ] as const) {
+      vi.stubEnv('OMS_U2_SYNTHETIC_PROFILE', 'approved-local-only');
+      const f = memoryPorts(),
+        report = testReport(pilotTestInventory(source, 'u3'));
+      if (mode === 'prior') f.ports.write(U3_COVERAGE_TEST_REPORT, bytes(report));
+      if (mode === 'count') Reflect.set(report, 'numTotalTests', 'private');
+      if (mode === 'foreign')
+        report.testResults[0]!.name = resolve('tests/u2/unit/fixture.spec.ts');
+      if (mode === 'duplicate') report.testResults[1]!.name = report.testResults[0]!.name;
+      if (mode === 'enum') report.testResults[0]!.status = 'private';
+      if (mode === 'states') report.testResults[0]!.assertionResults[0]!.status = 'failed';
+      if (mode === 'source-during') {
+        const read = f.ports.readCoverageTests!;
+        f.ports.readCoverageTests = (...args) => {
+          const value = read(...args);
+          f.source({ ...source, digest: 'f'.repeat(64) });
+          return value;
+        };
+      }
+      await expect(
+        collectPilotProof(
+          'u3',
+          async (command, args) => {
+            const spec = pilotCommands(source).find(
+              (item) =>
+                item.scope === 'u3' &&
+                item.command[0] === command &&
+                canonicalJson(item.command.slice(1)) === canonicalJson(args),
+            )!;
+            if (spec.key !== 'u3-coverage') {
+              f.ports.write(
+                spec.path,
+                bytes(
+                  testReport(
+                    pilotTestInventory(source, 'u3').filter((path) =>
+                      path.includes('/' + spec.key.split('-')[1] + '/'),
+                    ),
+                  ),
+                ),
+              );
+              return execution;
+            }
+            if (mode !== 'missing' && mode !== 'prior')
+              f.ports.write(
+                U3_COVERAGE_TEST_REPORT,
+                mode === 'json'
+                  ? Buffer.from('private-invalid-json')
+                  : mode === 'oversized'
+                    ? Buffer.alloc(MAX_DIAGNOSTIC_REPORT_BYTES + 1)
+                    : bytes(report),
+              );
+            if (mode === 'stale') f.stale();
+            if (mode === 'source-before') f.source({ ...source, digest: 'f'.repeat(64) });
+            return { ...execution, exitCode: 1 };
+          },
+          f.ports,
+        ),
+      ).rejects.toMatchObject({ code: 'PILOT_CHILD_FAILED' });
+      const output = f.ports.read('.reports/u3/pilot/u3-job-summary.json').toString();
+      expect(output).not.toContain('private');
+      const diagnostic = JSON.parse(output).failures[0].coverageTests;
+      expect(diagnostic).toEqual({
+        diagnosticOnly: true,
+        reportStatus: ['json', 'count', 'foreign', 'duplicate', 'enum', 'states'].includes(mode)
+          ? 'INVALID'
+          : 'UNCONFIRMED',
+        completeScope: null,
+        tests: null,
+        assertions: [],
+        suites: [],
+      });
+    }
+  });
+  it('다른 key의 실패에서는 coverage 보조 경로를 읽지 않는다', async () => {
+    vi.stubEnv('OMS_U2_SYNTHETIC_PROFILE', 'approved-local-only');
+    const f = memoryPorts();
+    f.ports.readCoverageTests = vi
+      .fn()
+      .mockReturnValue(bytes(testReport(pilotTestInventory(source, 'u3'))));
+    await expect(
+      collectPilotProof('u3', async () => ({ ...execution, exitCode: 1 }), f.ports),
+    ).rejects.toMatchObject({ code: 'PILOT_CHILD_FAILED' });
+    expect(f.ports.readCoverageTests).not.toHaveBeenCalled();
+    expect(
+      JSON.parse(f.ports.read('.reports/u3/pilot/u3-job-summary.json').toString()).failures[0],
+    ).not.toHaveProperty('coverageTests');
+  });
+  it('coverage receipt의 source/경로/명령/환경/관측/실행시간 바인딩이 다르면 보조 관측을 읽지 않는다', async () => {
+    for (const mode of [
+      'source',
+      'path',
+      'command',
+      'environment',
+      'unobserved',
+      'time',
+    ] as const) {
+      vi.stubEnv('OMS_U2_SYNTHETIC_PROFILE', 'approved-local-only');
+      const f = memoryPorts(),
+        prior = wholeProof(),
+        receipt = prior.proof.reports['u3-coverage']!;
+      for (const [path, value] of prior.files) f.files.set(path, value);
+      receipt.passed = false;
+      receipt.execution = { ...execution, exitCode: 1 };
+      if (mode === 'source') receipt.source = { ...source, digest: 'f'.repeat(64) };
+      if (mode === 'path') receipt.path = '.reports/u3/pilot/u2-coverage/evidence.json';
+      if (mode === 'command') receipt.command = ['node', 'private'];
+      if (mode === 'environment')
+        receipt.environment = { ...receipt.environment, PRIVATE: 'private' };
+      if (mode === 'unobserved') receipt.execution.observed = false;
+      if (mode === 'time') receipt.startedAt = 'private-invalid-time';
+      f.ports.readCoverageTests = vi
+        .fn()
+        .mockReturnValue(bytes(testReport(pilotTestInventory(source, 'u3'))));
+      f.ports.write('.reports/u3/pilot/validation-u3.json', bytes(prior.proof));
+      await expect(collectPilotProof('u3', async () => execution, f.ports)).rejects.toMatchObject({
+        code: 'PILOT_COMMAND_PROOF',
+      });
+      expect(f.ports.readCoverageTests).not.toHaveBeenCalled();
+      const output = f.ports.read('.reports/u3/pilot/u3-job-summary.json').toString();
+      expect(output).not.toContain('private');
+      expect(JSON.parse(output).failures[0].coverageTests).toMatchObject({
+        diagnosticOnly: true,
+        reportStatus: 'UNCONFIRMED',
+        completeScope: null,
+        tests: null,
+      });
+    }
   });
   it('void·실패·signal·cancel·timeout·log 오류와 없거나 옛 report를 성공으로 바꾸지 않는다', async () => {
     for (const mode of [
