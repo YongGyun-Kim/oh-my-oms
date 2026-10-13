@@ -197,3 +197,17 @@ run38210116465은 전체 failure로 종료됐다. U1·U2는 success, U3 integrat
 currentOrderTerms에서 같은 조회 구간에 검증한 snapshot/choice/lines를 출력에 재사용하고 applicationSource의 검증된 Product를 정확 u3Ref와 대조해 apply 경계에 전달했다. 독립적인 applicationSource 전후·권한/근거/U7와 최종 assertPremises는 유지한다. 후단100번째 primary 행 변조 거절과 application 기록 뒤 Product 미보호 개정 변경의 전체 rollback 시험을 추가했다.
 
 Luna의4파일 TypeScript·ESLint·Prettier는 종료 코드0이고 same-phase-read-product-integration-20261012.json의 두 실제 파일21/21 PASS·fail/pending/todo/failedSuite0·success=true를 root도 확인했다. 네 파일 SHA는 검사 전후 동일했다. 로컬 READ_100은1445.695ms/1337.722ms이며 APPLY_RESPONSE_LOSS는2929.544ms였다. 계측 overhead를 포함하고 중첩 시간을 합산하지 않는다. 부분적인 개선이 모든 CI 실패를 해결했다는 증거가 아니며, 적용의 직원 권위검증에서 발견한 동일 StaffRole 연속 재조회만 추가로 줄이되 전후 권위검증·grant 전체 scan은 유지한다. 실제 새 전체 CI와 공식 리뷰는 미완료다.
+
+## 직원 권위 검사 내부의 동일 역할 재조회 제거
+
+검증된 조회/상품 수정4파일과 당시 품질 기록은960d2dd로 로컬 커밋했다. 추가 Authorization의 private staffRoleAuthority가 lookup으로 보호/primary 전체 원상 대조를 마친 StaffRole을 private roleState에 전달한다. public currentRoleState(kind,id,transaction)의3인수·독립 재조회·출력, CustomerRole 자체 쓰기, 권위 전후 검사와 전체 grant 순회는 유지한다. 외부 호출자가 RoleData를 제공하는 public 인수나 전역/phase간 proof cache는 추가하지 않는다. 역할/개정/profile 혼동·전체 이미지 오염·뒤쪽 grant 오염·다음 검사 권한 회수/변조·원래 보호 이미지와 패자 요청 미생성 시험을 보완했다.
+
+첫 타입 검사는 새 테스트 request.audience의 넓은 string 추론으로 TS2345/exit2였고 후속 검사를 중단했다. 실제 WriteRequest 타입을 명시한 뒤 Luna의 타입·지정 ESLint·Prettier가 모두 exit0이다. 전체 U3 단위는 staff-authority-private-unit-20261012.json의31파일303/303 PASS, 영향 U1 단위는1파일8/8, U2 단위는2파일18/18이다. root도 실제 JSON의 fail/pending/todo/failedSuite0·success=true와 파일 수를 확인했다. 관련 U3 통합과 U1/U2 통합 회귀는 아직 실행 중이며 전체 CI/80%·보안·별도 리뷰·main 머지는 미완료다.
+
+## 2026-10-13 스트림 복구와 저장된 통합 결과
+
+요청85fbe283-fc4c-4d49-a8f8-e093eaf0724e 중단 후 원래 PATH aidlc로 같은 U3 Code Generation과 기존 승인 상태를 복구했다. 작업 소스는 로컬960d2dd와 직원 권위 수정3파일이며, 수정3파일과 기존4파일의 SHA가 앞선 고정값과 동일함을 root가 확인했다. 미추적 aidlc_change.sh·tests/u1/.reports는 보존한다.
+
+Luna와 root가 기존 JSON을 읽기 전용으로 대조했다. staff-authority-private-integration-20261012.json은7파일65/65 PASS, staff-authority-u2-integration-20261012.json은2파일17/17 PASS다. 모두 fail/pending/todo/failedSuite0·success=true다. staff-authority-u1-selected-integration-20261012.json은1파일의 총53개 중선택3 PASS·50 pending/미실행·fail/todo/failedSuite0·success=true다. 선택 밖50개를 통과로 표시하지 않는다. 앞선 U3 단위303·U1 단위8·U2 단위18의 성공도 같은 source 지문에서 확인했다.
+
+진행 중인 Vitest 프로세스는 없었고 이전 프로세스의 최종 exit scalar는 복구 시 확인하지 못했다. JSON success를 새 observed exit0 receipt로 만들지 않으며, 소스 변경이나 새 실패가 없는 선택 검사를 반복하지 않는다. 저장된 로컬 결과와 새 커밋의 실제 CI·전체80%/품질·보안·별도 리뷰·main 머지는 별도 판정한다. Step19/20 미완료는 유지한다.

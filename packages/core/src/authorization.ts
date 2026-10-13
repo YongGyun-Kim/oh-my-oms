@@ -133,6 +133,28 @@ export class Authorization {
     id: string,
     transaction?: ProtectedTransaction,
   ): Promise<ModelData | null> {
+    return this.roleState(kind, id, transaction);
+  }
+  private async staffRoleAuthority(id: string, transaction?: ProtectedTransaction) {
+    const role = await this.lookup('StaffRole', id, transaction);
+    if (!role) return { role, state: null };
+    requireCondition(
+      role.staffRoleId === id,
+      503,
+      'CURRENT_AUTH_NOT_PROTECTED',
+      '현재 보호 역할의 정확한 식별자가 필요합니다.',
+    );
+    // 같은 권위 검사에서 전체 보호 대조를 마친 역할만 재사용한다.
+    // 공개 상태 조회나 다음 권위 검사의 현재 조회를 대신하지 않는다.
+    const state = await this.roleState('StaffRole', id, transaction, role);
+    return { role, state };
+  }
+  private async roleState(
+    kind: 'CustomerRole' | 'StaffRole',
+    id: string,
+    transaction?: ProtectedTransaction,
+    checkedStaffRole?: ModelData,
+  ): Promise<ModelData | null> {
     const field = kind === 'CustomerRole' ? 'roleRef' : 'staffRoleRef';
     const raw = await this.store.primary.query(
       'SELECT "roleStateId" AS id FROM u1_role_revision_state WHERE "' +
@@ -191,7 +213,7 @@ export class Authorization {
         );
         role = current;
       } else {
-        role = await this.lookup(kind, id, transaction);
+        role = checkedStaffRole ?? (await this.lookup(kind, id, transaction));
       }
       requireCondition(
         role?.modelVersion !== 2 ||
@@ -230,9 +252,8 @@ export class Authorization {
         Date.parse(String(grant.effectiveFrom)) > this.now().getTime()
       )
         continue;
-      const role = await this.lookup('StaffRole', (grant.roleRef as Ref).id, transaction);
+      const { role, state } = await this.staffRoleAuthority((grant.roleRef as Ref).id, transaction);
       if (!role) continue;
-      const state = await this.currentRoleState('StaffRole', String(role.staffRoleId), transaction);
       if (state) {
         requireCondition(
           (state.staffRoleRef as Ref).revision === role.revision,
@@ -296,9 +317,8 @@ export class Authorization {
         Date.parse(String(grant.effectiveFrom)) > this.now().getTime()
       )
         continue;
-      const role = await this.lookup('StaffRole', (grant.roleRef as Ref).id, transaction);
+      const { role, state } = await this.staffRoleAuthority((grant.roleRef as Ref).id, transaction);
       if (!role) continue;
-      const state = await this.currentRoleState('StaffRole', String(role.staffRoleId), transaction);
       if (state) {
         requireCondition(
           (state.staffRoleRef as Ref).revision === role.revision,

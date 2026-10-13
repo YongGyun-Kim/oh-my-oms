@@ -1,9 +1,10 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { canonicalJson } from '@oms/contracts';
+import { canonicalJson, fingerprint } from '@oms/contracts';
 import type { ServiceContext } from '@oms/contracts';
 import { Authorization, StaffAccess, U3StaffAccess, ref } from '@oms/core';
 import { decodePayload, ProtectedStore } from '@oms/persistence';
+import type { WriteRequest } from '@oms/persistence';
 import { initializeU3Databases, resetU3Databases, u3Sources } from '../fixtures/databases.js';
 import { seedU3CommandAuthority } from '../fixtures/command-authority.js';
 import { assertProtectedCandidate } from '../fixtures/protected-candidate.js';
@@ -60,6 +61,9 @@ describe('C01 새 역할의 등록·부여·현재 권위·취소', () => {
     await expect(
       authorization.requireStaff(fixture.staff, 'contract.propose'),
     ).resolves.toBeUndefined();
+    await expect(
+      authorization.requireStaffSource(fixture.staff.actorAccountRef!, 'contract.propose'),
+    ).resolves.toBeUndefined();
     await grants.grantRole(fixture.staff, {
       meta: meta(1),
       accountRef: fixture.staff.actorAccountRef!,
@@ -69,6 +73,9 @@ describe('C01 새 역할의 등록·부여·현재 권위·취소', () => {
     await expect(
       authorization.requireStaff(fixture.staff, 'contract.propose'),
     ).rejects.toMatchObject({ code: 'ACTION_DENIED' });
+    await expect(
+      authorization.requireStaffSource(fixture.staff.actorAccountRef!, 'contract.propose'),
+    ).rejects.toMatchObject({ code: 'ISSUER_AUTHORITY' });
   });
   it('역할 등록의 실제 보호 payload/row는 명시 version2와 등록3을 가진다', async () => {
     const created = await roles.defineRole(fixture.staff, {
@@ -123,6 +130,12 @@ describe('C01 새 역할의 등록·부여·현재 권위·취소', () => {
     await expect(
       authorization.requireStaff(fixture.staff, 'contract.approve'),
     ).resolves.toBeUndefined();
+    await expect(
+      authorization.requireStaffSource(fixture.staff.actorAccountRef!, 'contract.propose'),
+    ).rejects.toMatchObject({ code: 'ISSUER_AUTHORITY' });
+    await expect(
+      authorization.requireStaffSource(fixture.staff.actorAccountRef!, 'contract.approve'),
+    ).resolves.toBeUndefined();
     expect(canonicalJson(await store.readRevision('StaffRole', created.targetRef!.id, 1))).toBe(
       before,
     );
@@ -157,6 +170,9 @@ describe('C01 새 역할의 등록·부여·현재 권위·취소', () => {
     await expect(
       authorization.requireStaff(fixture.staff, 'contract.propose'),
     ).rejects.toMatchObject({ code: 'ACTION_DENIED' });
+    await expect(
+      authorization.requireStaffSource(fixture.staff.actorAccountRef!, 'contract.propose'),
+    ).rejects.toMatchObject({ code: 'ISSUER_AUTHORITY' });
   });
   it('unknown 행위/관리 권한 없는 고객·SYSTEM·만료 신원은 등록하지 못한다', async () => {
     const before = (await store.list('StaffRole', { limit: 100 })).length;
@@ -229,6 +245,51 @@ describe('C01 새 역할의 등록·부여·현재 권위·취소', () => {
     await expect(
       authorization.requireStaff(fixture.staff, 'product.register'),
     ).rejects.toMatchObject({ code: 'CURRENT_AUTH_NOT_PROTECTED' });
+    await expect(
+      authorization.requireStaffSource(fixture.staff.actorAccountRef!, 'product.register'),
+    ).rejects.toMatchObject({ code: 'CURRENT_AUTH_NOT_PROTECTED' });
+  });
+  it('보호된 직원 확인 뒤에도 다음 transaction 대조에서 역할 전체 원상의 변조를 거절한다', async () => {
+    const account = fixture.staff.actorAccountRef!,
+      roleId = String(fixture.staffRole.staffRoleId),
+      before = canonicalJson(await store.currentProtected('StaffRole', roleId));
+    await authorization.requireStaffSource(account, 'product.register');
+    await sources.primaryAdmin
+      .getRepository('StaffRole')
+      .update({ staffRoleId: roleId }, { label: '합성 후단 미보호 변경' });
+    const key = randomUUID(),
+      request: WriteRequest = {
+        principalId: 'synthetic-staff-source-test',
+        audience: 'SYSTEM',
+        owner: 'EnterpriseAccess',
+        operation: 'fixture-staff-source-recheck',
+        target: null,
+        idempotencyKey: key,
+        input: { synthetic: true },
+        correlationId: randomUUID(),
+        epoch: await store.currentEpoch(),
+      };
+    await expect(
+      store.execute(request, async (tx) =>
+        authorization.requireStaffSource(account, 'product.register', tx),
+      ),
+    ).rejects.toMatchObject({ code: 'CURRENT_AUTH_NOT_PROTECTED' });
+    expect(canonicalJson(await store.read('StaffRole', roleId))).toBe(before);
+    expect(
+      await sources.primaryAdmin.query(
+        'SELECT count(*)::integer AS count FROM u1_request_key WHERE scoped_key=$1',
+        [
+          fingerprint({
+            principalId: request.principalId,
+            audience: request.audience,
+            owner: request.owner,
+            operation: request.operation,
+            target: request.target,
+            key,
+          }),
+        ],
+      ),
+    ).toEqual([{ count: 0 }]);
   });
   it('새 역할의 현재 상태가 없으면 base 투영으로 권한을 되살리지 않는다', async () => {
     const state = await authorization.currentRoleState(

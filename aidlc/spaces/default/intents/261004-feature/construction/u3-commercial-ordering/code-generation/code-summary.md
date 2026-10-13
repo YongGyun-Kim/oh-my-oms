@@ -6,6 +6,10 @@
 
 최종 기본 경로는 PR/main pilot-current CI의 독립 U1/U2/U3 matrix와 project gate다. 실제 결과는 root 소유 [품질 기록](quality-verification-20261012.md)에 source/HEAD·보고서 지문·종료 metadata와 함께 기록한다. main 머지/AWS 배포/실거래는 이 문서 생성으로 수행되지 않는다.
 
+스트림 복구 시 마지막 수정의 소스 지문과 저장된 결과를 대조했다. U3 전체 단위303개·관련 통합65개(7파일), U1 영향 단위8개, U2 영향 단위18개·권한 경쟁 통합17개가 성공으로 기록되어 있다. U1 직원 흐름은 선택3개 성공·나머지50개 미실행이다. 복구된 통합 JSON은 success=true지만 이전 프로세스의 최종 종료 코드는 다시 관측하지 못했다. 새 같은 소스의 실제 CI·전체80%·품질/보안·별도 리뷰는 아직 필요하다.
+
+마지막 ef17200 CI는 U1/U2 성공·U3 통합8건 실패였다. 안전한 received 정보에서 두 구간의25P04(transaction_timeout)와 다른 구간의 약3초 QUERY_RUNNER_RELEASED를 확인했으며 모든 사례가 같은 DB 코드를 받았다고 확대하지 않는다. 이후 조회의 같은 구간 snapshot/choice/lines, 적용의 검증된 Product, 직원 권위 검사의 검증된 StaffRole 연속 재조회를 줄였다. 최종 원상/권한·applicationSource 전후·grant 전체 순회와 공개 currentRoleState의3인수 독립 조회를 보존한다. 서비스10초·DB3초·statement2초·lock500ms·100행·80%는 유지했다.
+
 ## 파일과 구현
 
 [source-manifest.json](source-manifest.json)은 승인 기준 a2d694f 이후 실제 제품/시험/설정 변경 전체를 path-only version1로 주장한다. 신규 U3 파일뿐 아니라 shared core/persistence·U1/U2 fixture/회귀·보안/CI helper·package.json·tsconfig.json·.gitignore를 포함한다. package-lock/infra 자원 변경을 임의 주장하지 않고 실제 경로 목록에 따른다. 원래 사용자 aidlc_change.sh·tests/u1/.reports와 private runtime/report/credential은 manifest/커밋 대상이 아니다.
