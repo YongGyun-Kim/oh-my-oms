@@ -1,0 +1,53 @@
+# U4 보안·정확성 상세 설계 확인
+
+## 확정한 기준과 범위
+
+U4의 [보안·정확성 요구](../nfr-requirements/security-requirements.md)와 [기술 적용](../nfr-requirements/tech-stack-decisions.md)을 상세 설계로 구체화한다. 증빙 참조만 등록하는 Q1 A, 입력 상한의 Q2 A와 Looks correct는 이미 확인됐으며 다시 선정하지 않는다. 필수 산출물은 security-design.md, logical-components.md, traceability.json이다. 이 확인 파일은 설계 방향의 제안이며 해당 산출물·제품 코드를 아직 작성하지 않았다.
+
+실제 거래 식별의 네 안전장치·입금당 한 주문·주문당 복수 청구·같은 주문 내 수동 배분·제공 전/후 혼합 약정·현재 권한·금액 보존·원본/보호 기록을 유지한다. R-03의 미해결 상태와 실제 증빙/접근/국내 보관·복구/운영 증거의 미확인은 그대로 인계한다.
+
+## 현재 구현에서 확인한 재사용 경계
+
+- [protected-write.ts](../../../../../../../../packages/persistence/src/protected-write.ts)는 primary 트랜잭션에서 현재 epoch의 commit counter를 잠그고 원래 요청 식별/내용을 대조한다. 업무 원본·요청 키·복구 후보를 기록한 뒤 primary commit 밖에서 별도 보호 저장과 현재 epoch를 확인한다. 두 DB가 단일 물리 트랜잭션이라는 뜻이 아니다.
+- 같은 코드의 statement 최대2000ms·lock 최대500ms는 남은 실행 예산에 맞춰 제한된다. [request-budget.ts](../../../../../../../../apps/api/src/request-budget.ts)는 GET5000ms/변경10000ms, [admission.ts](../../../../../../../../apps/api/src/admission.ts)는 프로세스 HTTP25개를 사용한다. 기존 제한값이며 U4 성능/처리 용량의 측정값이 아니다.
+- [application.ts](../../../../../../../../apps/api/src/application.ts)의 일반 JSON parser는65536바이트, U3의 지정 주문 경로만1048576바이트를 사용한다. U4에는 일반64KiB 경계를 유지하고 실제 body 제한과 새 명령의 등록/실행 검증을 연결한다.
+- [u3-commercial-v2.json](../../../../../../../../packages/contracts/schemas/u3-commercial-v2.json)의 Money는 KRW 정수 문자열, [u3-validation.ts](../../../../../../../../packages/contracts/src/u3-validation.ts)는 BigInt 계산을 사용한다. U4도 원 단위 정수 문자열과 정확한 계산을 유지하고 손실 Number 변환·임의 반올림을 사용하지 않는 방향이다. 현행 형식/길이 범위와 새 합계·저장/직렬화의 일치는 구현 검증 대상이다.
+
+이 읽기는 현행 구현의 연결 지점을 확인한 것이며 U4의 새 계약·DB 유일성·동시성·보호 복구 자료가 구현/검증됐다는 증거는 아니다. 실제 금융 source profile은 확보 전이므로 은행별 식별 산식을 임의로 정하지 않는다.
+
+## 설계 방향과 모호성 분석
+
+추가 제품 정책을 새로 고르는 질문은 발견되지 않았다. 아래는 이미 승인한 안전장치를 구현할 기술적 구체화 제안이다. 입력 크기/건수·증빙 방식·사업 승인 경계는 바꾸지 않으며, 현재 구조가 보장하지 않은 U4 전용 저장/계약 항목은 명시적인 설계·구현/회귀 대상으로 적는다.
+
+- 실제 거래 식별은 검증된 수취 원본과 안정 거래 ID·별칭을 기준으로 유일하게 예약한다. 기업/주문/요청 UUID·입력 채널·source profile 버전으로 유일성 범위를 분할하지 않는다. 식별 부족은 REVIEW로 남기고 신규 현금 효과를 만들지 않는다.
+- 기존 공통 보호 쓰기를 통과하는 동일 primary 트랜잭션에서 현재 권한/원본/계획 개정·입금/청구 잔액·공통 환불 한도를 재대조한다. 업무 식별 예약의 물리 유일성, 입금당 현재 주문0..1, 청구 의무의 유효 개정과 환불 예약/확정 소비를 보호한다. 별도 분산 잠금/Redis/샤딩을 도입하지 않는다. 전역 counter 직렬화만으로 미래의 모든 진입 경로가 보호된다고 가정하지 않는다.
+- 유일성/별칭·주문 결합의 기술 인덱스도 원래 보호된 업무 원본과 정정 이력에서 복구 가능해야 한다. 복구 세대 전환·중간 실패 때 인덱스만 누락/해제돼 중복 등록이 가능해지는 경로를 검증한다. 인덱스가 원본 기록을 대신하지 않는다.
+- 원본/요청/결과/이력/Outbox를 primary에 원자 기록하고 별도 보호 확인 후 성공을 반환한다. primary commit 뒤 timeout/보호 실패는 미확정 접수의 원래 결과를 대조한다. 자동 새 입금/새 환불 실행이나 금액 예약 해제를 하지 않는다.
+- 전역 실제 거래 중복과 기업별 조회 범위를 구별한다. 내부 대조는 권한 있는 범위에서 수행하고, 외부 응답에는 다른 기업의 거래 존재/금액/계좌를 내보내지 않는다.
+
+R-03의 상태 전이 모순은 위 원금/예약 보호 설계로 해결됐다고 해석하지 않는다. 이 단계가 환불 부분 실패 재시도의 기능 상태표를 몰래 수정하거나 관련 시험을 통과 처리하지 않는다. 구체 상태 일관성은 원래 결함으로 계속 추적한다.
+
+## Sources
+
+- [U4 NFR 질문·통합 확인](../nfr-requirements/nfr-requirements-questions.md), [보안·정확성 요구](../nfr-requirements/security-requirements.md), [기술 적용](../nfr-requirements/tech-stack-decisions.md): 상세36개 NFR·확정한 제품/운영 경계.
+- [U4 기능 명세](../functional-design/functional-spec.md), [규칙](../functional-design/rules.md), [이전 기능 검토](../functional-design/reviews/review-02.md): 업무 소유·잔액/한도·원래 거래/작업·미해결 R-03.
+- [공통 계약](../../../inception/contract-design/contract-summary.md), [컴포넌트](../../../inception/domain-design/components.md), [첫 배포 실행 계획](../../../release-planning/first-release-delivery-plan.md): in-process/지속 사실·단일 원본 소유·지원 범위/후속 실증.
+- [기존 U3 상세 설계](../../u3-commercial-ordering/nfr-design/security-design.md): 공통 보호 쓰기/실행 예산·현재 권한·최소 정보 설계의 연결 사례. U3 문서 존재를 U4 구현/성공 증거로 사용하지 않음.
+
+## Consolidated Summary Confirmation
+
+아래 기준으로 U4 상세 설계 문서3개를 작성한다. 추천 이유는 새 제품 선택이 아니라 이미 확인한 안전장치를 기존 구조에서 구현하기 위한 판단이다.
+
+- **구조:** 기존 Nest API/standalone worker·TypeORM/PostgreSQL·보호 DB·Outbox/별도 큐를 재사용한다. 이유: 새 금융 서비스·계정·분산 잠금의 운영 부담 없이 업무 소유권을 유지할 수 있다.
+- **입력·접근:** 증빙 참조만 등록하며100/2000/256자·배분1..100건·JSON64KiB를 독립 검증한다. 현재 MFA·기업/조직/행위/대상·직원망을 조회/변경/이력/오류까지 적용한다. 이유: UI나 요청 형식만으로 원본과 파생 정보의 접근을 보호할 수 없기 때문이다.
+- **거래·동시성:** 실제 거래 식별/별칭의 DB 유일성, 입금당 한 주문, 입금/청구/공통 환불 한도의 같은 트랜잭션 재검증과 정정 보존을 설계한다. 이유: 같은 요청의 재전송 방지만으로 다른 요청의 동일 입금·초과 소비를 막을 수 없기 때문이다.
+- **보존·복구:** 기존 primary 원자 기록과 별도 보호 확인 후 성공, 응답 유실의 원래 결과 조회, 거래 식별/별칭/기술 인덱스의 보호 원본 기반 복구를 연결한다. 이유: 실패 응답이 미기록을 뜻하거나 인덱스 누락이 새 가용 현금을 뜻하지 않기 때문이다. 실제 재해 실증은 보류 상태를 유지한다.
+- **자원·정보:** 기존 유한 HTTP/시간/DB 대기·목록 경계를 재사용하고 금융 원문·계좌·거래 참조/근거 요약을 일반 로그·오류·알림에 내보내지 않는다. 이유: 파일럿도 과대 입력/대기와 민감 정보 노출을 방지해야 하기 때문이다. 기존 제한값은 성능 달성 증거가 아니다.
+- **미해결·검증:** R-03·실제 금융 원본/증빙 보관·기존 U2/U3 위험을 그대로 인계한다. 지원 경로의 정확성/권한·새 계약·DB 경합·보호 복구 자료 호환을 검증 대상으로 적고, 새 대량 부하·AWS 배포·재해 시험은 추가하지 않는다. 이유: 요구/설계와 실제 검증 성과를 구별하기 위해서다.
+
+Does this all look correct before I generate the artifact?
+
+- Looks correct
+- Request changes
+
+[Answer]: Looks correct

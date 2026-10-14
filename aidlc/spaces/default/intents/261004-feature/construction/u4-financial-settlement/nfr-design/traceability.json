@@ -1,0 +1,349 @@
+{
+  "stage": "nfr-design",
+  "unit": "u4-financial-settlement",
+  "scope": "first-release-pilot-library",
+  "meaning": "OK는 상세 요구와 구체 설계의 연결이며 구현·제품 검사·운영 달성 증거가 아니다. Deferred는 전체 실증의 후속 상태이고 첫 배포 보호 의무 면제가 아니다. NFR5.4의 환불 상태 모순 R-03은 미해결로 인계하며 설계가 이를 해결하지 않는다.",
+  "upstream_ids": [
+    "NFR1.1",
+    "NFR1.2",
+    "NFR1.3",
+    "NFR1.4",
+    "NFR1.5",
+    "NFR2.1",
+    "NFR3.1",
+    "NFR4.1",
+    "NFR4.2",
+    "NFR4.3",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR5.3",
+    "NFR5.4",
+    "NFR5.5",
+    "NFR5.6",
+    "NFR6.1",
+    "NFR6.2",
+    "NFR7.1",
+    "NFR7.2",
+    "NFR8.1",
+    "NFR9.1",
+    "NFR9.2",
+    "NFR10.1",
+    "NFR10.2",
+    "NFR11.1",
+    "NFR11.2",
+    "NFR11.3",
+    "NFR11.4",
+    "NFR12.1",
+    "NFR12.2",
+    "NFR13.1",
+    "NFR13.2",
+    "NFR13.3",
+    "NFR14.1",
+    "NFR14.2"
+  ],
+  "coverage": [
+    {
+      "id": "NFR1.1",
+      "status": "OK",
+      "target": "security-design.md#sd01",
+      "solution": "현재 신원/MFA·세션·직원 접점"
+    },
+    {
+      "id": "NFR1.2",
+      "status": "OK",
+      "target": "security-design.md#sd02",
+      "solution": "모든 대상/파생 조회와 현재 쓰기 권한"
+    },
+    {
+      "id": "NFR1.3",
+      "status": "OK",
+      "target": "security-design.md#sd01",
+      "solution": "현재 직원망·행위·대상과 worker 진입"
+    },
+    {
+      "id": "NFR1.4",
+      "status": "OK",
+      "target": "security-design.md#sd01",
+      "solution": "정확한 승인 개정과 다른 사람 계약 승인"
+    },
+    {
+      "id": "NFR1.5",
+      "status": "OK",
+      "target": "security-design.md#sd02",
+      "solution": "전역 거래 중복과 기업별 비노출 응답"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "Deferred",
+      "target": "security-design.md#sd09",
+      "solution": "업무별 실패/가용성 관측과 원래 목표",
+      "reason": "30일99.9% 실제 관측은 U10 후속이다. 업무별 관측 준비는 유지한다."
+    },
+    {
+      "id": "NFR3.1",
+      "status": "Deferred",
+      "target": "security-design.md#sd09",
+      "solution": "fence 아래 원본/보조 기록 복구 대조",
+      "reason": "전체 재해/야간 장애의30분 복구 실증은 보류다. 원본/보조 자료 대조와 쓰기 fence 준비는 첫 배포 의무다."
+    },
+    {
+      "id": "NFR4.1",
+      "status": "OK",
+      "target": "security-design.md#sd07",
+      "solution": "원자 primary 기록·별도 보호 확인 후 성공"
+    },
+    {
+      "id": "NFR4.2",
+      "status": "OK",
+      "target": "security-design.md#sd05",
+      "solution": "요청 식별과 실제 거래/별칭 물리 유일성"
+    },
+    {
+      "id": "NFR4.3",
+      "status": "Deferred",
+      "target": "security-design.md#sd09",
+      "solution": "보호 rows 기반 식별·연결·집계 재구성",
+      "reason": "정의한 전체 장애 범위 RPO0 실증은 후속이다. 식별/별칭·binding·집계/예약의 보호/재구성은 구현 검증 의무다."
+    },
+    {
+      "id": "NFR5.1",
+      "status": "OK",
+      "target": "security-design.md#sd06",
+      "solution": "입금/청구/공통 한도의 같은 트랜잭션 재대조"
+    },
+    {
+      "id": "NFR5.2",
+      "status": "OK",
+      "target": "security-design.md#sd06",
+      "solution": "정확 정수와 정상 상태 원금/예약 보존"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "OK",
+      "target": "security-design.md#sd10",
+      "solution": "목적별 지급 판단·현재 계획과 갱신 회차 분리"
+    },
+    {
+      "id": "NFR5.4",
+      "status": "OK",
+      "target": "security-design.md#sd06",
+      "solution": "같은 승인 root의 부분 확정/예약 소비 보호; 상태 모순 R-03 별도 인계"
+    },
+    {
+      "id": "NFR5.5",
+      "status": "OK",
+      "target": "security-design.md#sd07",
+      "solution": "원래 요청·사실·개정·정정 관계와 원자 보존"
+    },
+    {
+      "id": "NFR5.6",
+      "status": "OK",
+      "target": "security-design.md#sd10",
+      "solution": "원래 완료 사실 개정·KST 달력일 기한과 수동 지연 판단"
+    },
+    {
+      "id": "NFR6.1",
+      "status": "Deferred",
+      "target": "security-design.md#sd08",
+      "solution": "유한 처리/측정 의미·접수/완료 구별",
+      "reason": "대량 부하/원래 전체 profile 실증은 후속이다. 유한 예산/측정 의미 보존과 실제 짧은 검증 준비는 유지한다."
+    },
+    {
+      "id": "NFR6.2",
+      "status": "OK",
+      "target": "security-design.md#sd08",
+      "solution": "기존 HTTP/DB 예산·필터/페이지·취소 전달"
+    },
+    {
+      "id": "NFR7.1",
+      "status": "OK",
+      "target": "security-design.md#sd03",
+      "solution": "실제 JSON64KiB·경로별 단일 parser"
+    },
+    {
+      "id": "NFR7.2",
+      "status": "OK",
+      "target": "security-design.md#sd03",
+      "solution": "Unicode code point 상한·중복 없는 배분1..100건·전체 거절"
+    },
+    {
+      "id": "NFR8.1",
+      "status": "OK",
+      "target": "security-design.md#sd09",
+      "solution": "기존 점검/중단 관측·통지 소유자 인계"
+    },
+    {
+      "id": "NFR9.1",
+      "status": "OK",
+      "target": "security-design.md#sd10",
+      "solution": "단일 호스트의 원본 소유권과 추가 서비스 없는 운영"
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "security-design.md#sd01",
+      "solution": "개발 인력과 사업 승인/실제 거래 확인 책임 분리"
+    },
+    {
+      "id": "NFR10.1",
+      "status": "OK",
+      "target": "security-design.md#sd09",
+      "solution": "최소 허용 식별·원본 대조/불변조건 이상 관측"
+    },
+    {
+      "id": "NFR10.2",
+      "status": "OK",
+      "target": "security-design.md#sd09",
+      "solution": "기존 Slack+이메일·복구 시도부터 알림과 수신 구별"
+    },
+    {
+      "id": "NFR11.1",
+      "status": "OK",
+      "target": "security-design.md#sd04",
+      "solution": "원문 보관처의 수동 참조만 기록"
+    },
+    {
+      "id": "NFR11.2",
+      "status": "OK",
+      "target": "security-design.md#sd04",
+      "solution": "금융 원문·계좌·참조/요약의 일반 출력 제외"
+    },
+    {
+      "id": "NFR11.3",
+      "status": "OK",
+      "target": "security-design.md#sd04",
+      "solution": "원본/보호/로그/백업·외부 국내 경로 실제 근거"
+    },
+    {
+      "id": "NFR11.4",
+      "status": "OK",
+      "target": "security-design.md#sd04",
+      "solution": "보존/삭제 정책과 중복 식별 유지 경계"
+    },
+    {
+      "id": "NFR12.1",
+      "status": "OK",
+      "target": "security-design.md#sd10",
+      "solution": "한국어/KRW/KST·PC1280 및 금액/미확인 표시"
+    },
+    {
+      "id": "NFR12.2",
+      "status": "OK",
+      "target": "security-design.md#sd10",
+      "solution": "모바일/미국 영어 후속·권한/금액 의미 유지"
+    },
+    {
+      "id": "NFR13.1",
+      "status": "OK",
+      "target": "security-design.md#sd11",
+      "solution": "실제 DB 경합/권한/계약·정정/복구 호환 검증 경로"
+    },
+    {
+      "id": "NFR13.2",
+      "status": "OK",
+      "target": "security-design.md#sd11",
+      "solution": "test-after/Standard·제품 코드80%·실패 차단"
+    },
+    {
+      "id": "NFR13.3",
+      "status": "OK",
+      "target": "security-design.md#sd10",
+      "solution": "닫힌 새 계약·호스트/모델/전달/복구 버전 일치"
+    },
+    {
+      "id": "NFR14.1",
+      "status": "OK",
+      "target": "security-design.md#sd11",
+      "solution": "변경 영향에 맞는 필수 보안 검사/보고서"
+    },
+    {
+      "id": "NFR14.2",
+      "status": "OK",
+      "target": "security-design.md#sd11",
+      "solution": "보안 예외·노출·기존 미해결의 독립 이력"
+    }
+  ],
+  "reverse": [
+    {
+      "id": "SD01",
+      "status": "OK",
+      "target": "NFR1.1, NFR1.3, NFR1.4, NFR9.2"
+    },
+    {
+      "id": "SD02",
+      "status": "OK",
+      "target": "NFR1.2, NFR1.5"
+    },
+    {
+      "id": "SD03",
+      "status": "OK",
+      "target": "NFR7.1, NFR7.2"
+    },
+    {
+      "id": "SD04",
+      "status": "OK",
+      "target": "NFR11.1, NFR11.2, NFR11.3, NFR11.4"
+    },
+    {
+      "id": "SD05",
+      "status": "OK",
+      "target": "NFR4.2"
+    },
+    {
+      "id": "SD06",
+      "status": "OK",
+      "target": "NFR5.1, NFR5.2, NFR5.4"
+    },
+    {
+      "id": "SD07",
+      "status": "OK",
+      "target": "NFR4.1, NFR5.5"
+    },
+    {
+      "id": "SD08",
+      "status": "OK",
+      "target": "NFR6.1, NFR6.2"
+    },
+    {
+      "id": "SD09",
+      "status": "OK",
+      "target": "NFR2.1, NFR3.1, NFR4.3, NFR8.1, NFR10.1, NFR10.2"
+    },
+    {
+      "id": "SD10",
+      "status": "OK",
+      "target": "NFR5.3, NFR5.6, NFR9.1, NFR12.1, NFR12.2, NFR13.3"
+    },
+    {
+      "id": "SD11",
+      "status": "OK",
+      "target": "NFR13.1, NFR13.2, NFR14.1, NFR14.2"
+    }
+  ],
+  "verification_dependencies": [
+    {
+      "id": "UPSTREAM-U4-FD-R-03",
+      "requirements": [
+        "NFR5.4",
+        "NFR13.1"
+      ],
+      "designs": [
+        "SD06",
+        "SD11"
+      ],
+      "source": "../functional-design/reviews/review-02.md",
+      "status": "unresolved",
+      "effect": "60성공·40확정 실패 뒤40만 재예약할 때의 PARTIAL/IN_PROGRESS 모순은 기능 결함으로 남는다. 원금/한도 보호 설계 또는 진행 승인을 해소/시험 통과로 해석하지 않는다."
+    }
+  ],
+  "sources": [
+    "../nfr-requirements/security-requirements.md",
+    "../nfr-requirements/tech-stack-decisions.md",
+    "../nfr-requirements/traceability.json",
+    "../functional-design/functional-spec.md",
+    "../../../inception/contract-design/contract-summary.md",
+    "../../../inception/domain-design/components.md",
+    "../../../release-planning/first-release-delivery-plan.md",
+    "nfr-design-questions.md"
+  ]
+}
