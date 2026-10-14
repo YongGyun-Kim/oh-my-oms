@@ -89,6 +89,7 @@ describe('U4 전체 종료 결과의 안전한 보고', () => {
     expect(report).toMatchObject({ success: false, numPassedTests: 1, numAssertionErrors: 1 });
   });
   it('지정한 합성 경계 파일의 단계·개수·경과만 투영한다', () => {
+    let stage = 'INVOICES';
     const module = {
       ...moduleResult(),
       relativeModuleId: 'tests/u4/integration/financial-result-boundaries.spec.ts',
@@ -98,7 +99,7 @@ describe('U4 전체 종료 결과의 안전한 보고', () => {
             result: () => ({ state: 'failed' }),
             meta: () => ({
               u4Boundary: {
-                stage: 'INVOICES',
+                stage,
                 enteredAtMs: 1234,
                 completedInvoices: 90,
                 secret: 'synthetic-secret',
@@ -127,6 +128,11 @@ describe('U4 전체 종료 결과의 안전한 보고', () => {
         ),
       ).includes('INVOICES'),
     ).toBe(false);
+    for (stage of ['SUBMIT_ORDER', 'ACCEPT_ORDER'])
+      expect(
+        safeU4TestReport([module], [], 'failed').testResults[0]!.assertionResults[0]!
+          .boundaryProgress?.stage,
+      ).toBe(stage);
   });
   it('임의 단계·범위 밖 개수·비유한 경과·다른 metadata는 폐기한다', () => {
     for (const [progress, duration] of [

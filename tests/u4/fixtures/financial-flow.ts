@@ -49,9 +49,11 @@ export async function seedU4FinancialFlow(
   );
   const approved = await f.approve();
   async function acceptedOrder() {
+    shape.onPreparationStage?.('SUBMIT_ORDER');
     const submitted = await f
       .orders()
       .submit(await f.requestContext(f.seller.customer), await f.orderInput(approved.targetRef!));
+    shape.onPreparationStage?.('ACCEPT_ORDER');
     return (
       await f.orders().decide(
         await f.requestContext(f.registrant),

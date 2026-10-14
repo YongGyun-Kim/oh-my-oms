@@ -3,6 +3,12 @@ const CODES = new Set([
   '23502',
   '23503',
   '23505',
+  '25P02',
+  '08P01',
+  '42P01',
+  '42703',
+  '54000',
+  '54001',
   '42501',
   '40001',
   '40P01',
@@ -58,6 +64,12 @@ const NAMES = new Set([
   'TypeError',
   'RangeError',
 ]);
+const PG_TRANSPORT_MESSAGES = new Set([
+  'Connection terminated',
+  'Connection terminated unexpectedly',
+  'Client has encountered a connection error and is not queryable',
+  'Client was closed and is not queryable',
+]);
 const LOCATION =
   /((?:packages\/persistence\/src\/(?:protected-write|protected-store|protected-transaction|u4-repository|recovery-types|model-catalog|u4-model-decoder|u4-completion-link|u4-recovery-verification|recovery-security-observation|recovery-security-write|recovery-security)|packages\/core\/src\/(?:u4-commercial-adapter|u4-payment-plan|u4-commercial-order|u4-order-terms|u4-plan-proposal|u4-proposal-proof|u4-staff-access|u4-financial-access|u4-financial-source|u4-financial-commands|u4-financial-ledger|u4-due-basis|u4-owner-sources|u4-invoice-due|u4-eligibility|u3-current-basis|authorization)|tests\/u4\/fixtures\/(?:commercial-plan|financial-flow|security-oracle|owner-facts)|tests\/u4\/unit\/(?:due-basis|owner-sources|eligibility|completion-basis|completion-link|result-boundaries)\.spec|tests\/u4\/integration\/(?:persistence|concurrency|protection-replay|commercial-plan|renewal-plan|staff-access|financial-flow|financial-ledger|financial-races|financial-corrections|financial-cancellation|financial-binding|owner-facts|completion-migration|financial-result-boundaries)\.spec)\.ts):(\d+):(\d+)/g;
 
@@ -66,19 +78,33 @@ export function safeU4Error(value: unknown): {
   code: string;
   name: string;
   locations: { file: string; line: number; column: number }[];
+  sqlStateFields?: {
+    code: 'MISSING' | 'STRING' | 'OTHER';
+    driverCode: 'MISSING' | 'STRING' | 'OTHER';
+  };
 } {
   const row = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
   const driver =
     row.driverError && typeof row.driverError === 'object'
-      ? (row.driverError as { code?: unknown })
+      ? (row.driverError as { code?: unknown; message?: unknown })
       : {};
   const code = [row.code, driver.code].find(
-    (candidate) => typeof candidate === 'string' && CODES.has(candidate),
+    (candidate) =>
+      typeof candidate === 'string' &&
+      (CODES.has(candidate) ||
+        (row.name === 'QueryFailedError' && /^[0-9A-Z]{5}$/.test(candidate))),
   );
+  const fieldType = (candidate: unknown): 'MISSING' | 'STRING' | 'OTHER' =>
+    candidate === undefined ? 'MISSING' : typeof candidate === 'string' ? 'STRING' : 'OTHER';
   const testTimeout =
     row.name === 'Error' &&
     row.message ===
       'Test timed out in 120000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".';
+  const transportClosed =
+    row.name === 'QueryFailedError' &&
+    [row.message, driver.message].some(
+      (message) => typeof message === 'string' && PG_TRANSPORT_MESSAGES.has(message),
+    );
   const stack =
     typeof row.stackStr === 'string'
       ? row.stackStr
@@ -87,10 +113,21 @@ export function safeU4Error(value: unknown): {
         : '';
   return {
     code:
-      typeof code === 'string' ? code : testTimeout ? 'VITEST_TEST_TIMEOUT' : 'UNCLASSIFIED_ERROR',
+      typeof code === 'string'
+        ? code
+        : transportClosed
+          ? 'PG_TRANSPORT_CLOSED'
+          : testTimeout
+            ? 'VITEST_TEST_TIMEOUT'
+            : 'UNCLASSIFIED_ERROR',
     name: typeof row.name === 'string' && NAMES.has(row.name) ? row.name : 'Error',
     locations: [...stack.matchAll(LOCATION)]
       .slice(0, 5)
       .map((match) => ({ file: match[1]!, line: Number(match[2]), column: Number(match[3]) })),
+    ...(row.name === 'QueryFailedError'
+      ? {
+          sqlStateFields: { code: fieldType(row.code), driverCode: fieldType(driver.code) },
+        }
+      : {}),
   };
 }

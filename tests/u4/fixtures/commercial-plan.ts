@@ -36,6 +36,7 @@ import { u4Plan } from './contracts.js';
 export interface U4FixtureShape {
   lineCount?: 1 | 100;
   obligationCount?: 2 | 100;
+  onPreparationStage?: (stage: 'SUBMIT_ORDER' | 'ACCEPT_ORDER') => void;
 }
 export async function seedU4CommercialPlan(
   store: ProtectedStore,

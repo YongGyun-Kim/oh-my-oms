@@ -8,8 +8,24 @@ describe('U4 허용 오류 진단', () => {
         name: 'QueryFailedError',
         driverError: { code: '55P03', message: 'synthetic-secret', detail: 'synthetic-secret' },
       }),
-    ).toEqual({ code: '55P03', name: 'QueryFailedError', locations: [] });
+    ).toEqual({
+      code: '55P03',
+      name: 'QueryFailedError',
+      locations: [],
+      sqlStateFields: { code: 'MISSING', driverCode: 'STRING' },
+    });
     expect(safeU4Error({ driverError: { code: 'synthetic-secret' } }).code).toBe(
+      'UNCLASSIFIED_ERROR',
+    );
+    for (const code of ['25P02', '08P01', '42P01', '42703', '54000', '54001']) {
+      const result = safeU4Error({
+        name: 'QueryFailedError',
+        driverError: { code, message: 'synthetic-secret', detail: 'synthetic-secret' },
+      });
+      expect(result.code).toBe(code);
+      expect(JSON.stringify(result).includes('synthetic-secret')).toBe(false);
+    }
+    expect(safeU4Error({ driverError: { code: '25P02-synthetic-secret' } }).code).toBe(
       'UNCLASSIFIED_ERROR',
     );
   });
@@ -75,5 +91,58 @@ describe('U4 허용 오류 진단', () => {
       expect(JSON.stringify(result).includes('synthetic-secret')).toBe(false);
     }
     expect(safeU4Error({ name: 'OmsError', message }).code).toBe('UNCLASSIFIED_ERROR');
+  });
+  it('QueryFailedError의 구조화5자리 SQLSTATE와 고정 필드형식만 보존한다', () => {
+    expect(
+      safeU4Error({
+        name: 'QueryFailedError',
+        code: '25P04',
+        driverError: { code: '25P04', message: 'synthetic-secret' },
+      }),
+    ).toMatchObject({
+      code: '25P04',
+      sqlStateFields: { code: 'STRING', driverCode: 'STRING' },
+    });
+    expect(safeU4Error({ name: 'QueryFailedError', code: null, driverError: {} })).toMatchObject({
+      code: 'UNCLASSIFIED_ERROR',
+      sqlStateFields: { code: 'OTHER', driverCode: 'MISSING' },
+    });
+    for (const code of ['25P04-secret', '25p04', '25P0', '25P040', 'synthetic-secret']) {
+      const result = safeU4Error({
+        name: 'QueryFailedError',
+        code,
+        driverError: { code, message: 'synthetic-secret', query: 'synthetic-sql' },
+      });
+      expect(result.code).toBe('UNCLASSIFIED_ERROR');
+      expect(JSON.stringify(result).includes('synthetic-secret')).toBe(false);
+      expect(JSON.stringify(result).includes('synthetic-sql')).toBe(false);
+    }
+    for (const name of ['Error', 'OmsError', 'synthetic-secret'])
+      expect(safeU4Error({ name, code: '25P04', driverError: { code: '25P04' } })).toMatchObject({
+        code: 'UNCLASSIFIED_ERROR',
+      });
+  });
+  it('설치된 pg의 정확한 연결종료 문구만 분류하며 다른 Error나 변형문구는 버린다', () => {
+    for (const message of [
+      'Connection terminated',
+      'Connection terminated unexpectedly',
+      'Client has encountered a connection error and is not queryable',
+      'Client was closed and is not queryable',
+    ]) {
+      expect(safeU4Error({ name: 'QueryFailedError', message }).code).toBe('PG_TRANSPORT_CLOSED');
+      expect(safeU4Error({ name: 'QueryFailedError', driverError: { message } }).code).toBe(
+        'PG_TRANSPORT_CLOSED',
+      );
+      for (const error of [
+        { name: 'Error', message },
+        { name: 'OmsError', driverError: { message } },
+        { name: 'QueryFailedError', message: message + 'synthetic-secret' },
+      ]) {
+        const result = safeU4Error(error);
+        expect(result.code).toBe('UNCLASSIFIED_ERROR');
+        expect(JSON.stringify(result).includes('synthetic-secret')).toBe(false);
+        expect(JSON.stringify(result).includes(message)).toBe(false);
+      }
+    }
   });
 });

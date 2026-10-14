@@ -74,8 +74,9 @@ export class U4CommercialOrder {
       current.price.total!,
     );
     confirmed(exact(approved, { ...current.plan, customerConsentRef: null }));
-    for (const line of current.captured) {
-      const source = await this.catalog(scope, target, line);
+    const catalog = await this.catalogLines(scope, target, current.captured);
+    for (const [index, line] of current.captured.entries()) {
+      const source = catalog[index]!;
       confirmed(
         exact(source.bindings, line.conditionBindings) &&
           exact(
@@ -399,6 +400,27 @@ export class U4CommercialOrder {
       ),
     };
   }
+  async catalogLines(
+    scope: U4Transaction,
+    target: TargetScope,
+    lines: readonly U4OrderLineInput[],
+  ) {
+    // catalog가 읽는 입력은 전체 범위와 정확 상품/offer Ref다. 한 검증 호출 안에서만 재사용한다.
+    // 수락 전/후 호출과 다른 요청에는 Map을 공유하지 않으며 최종 권한/원상 대조는 그대로 수행한다.
+    const sources = new Map<string, Awaited<ReturnType<U4CommercialOrder['catalog']>>>();
+    const result: Awaited<ReturnType<U4CommercialOrder['catalog']>>[] = [];
+    for (const line of lines) {
+      const key = canonicalJson([target, line.productRef, line.commonOfferRevisionRef]);
+      let source = sources.get(key);
+      if (!source) {
+        source = await this.catalog(scope, target, line);
+        sources.set(key, structuredClone(source));
+      }
+      // 줄별 처리에서 조건/근거 배열이 다른 줄이나 보관된 snapshot을 바꾸지 못하게 한다.
+      result.push(structuredClone(source));
+    }
+    return result;
+  }
   async submit(context: ServiceContext, input: U4OrderInput): Promise<Receipt> {
     return this.adapter.run(
       context,
@@ -485,8 +507,9 @@ export class U4CommercialOrder {
         };
         const captured: U4CapturedLine[] = [];
         const records: ModelData[] = [];
+        const catalog = await this.catalogLines(scope, input.targetScope, input.lines);
         for (const [index, line] of input.lines.entries()) {
-          const source = await this.catalog(scope, input.targetScope, line);
+          const source = catalog[index]!;
           requireCondition(
             source.product.productType === input.productType,
             400,

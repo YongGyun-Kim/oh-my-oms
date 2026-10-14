@@ -16,6 +16,8 @@ type RunReason = 'passed' | 'failed' | 'interrupted';
 
 const BOUNDARY_STAGES = new Set([
   'PREPARE',
+  'SUBMIT_ORDER',
+  'ACCEPT_ORDER',
   'INVOICES',
   'PAYMENT',
   'ROLLBACK',
