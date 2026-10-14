@@ -129,4 +129,4 @@ Q1의 복수 청구와 고정 유형 없는 표현은 확정했다. 기존 첫 �
 - Looks correct — 이 기준으로 상세 기능 설계 문서를 작성한다.
 - Request changes — 기준을 수정한 뒤 다시 확인한다.
 
-[Answer]:
+[Answer]: Looks correct

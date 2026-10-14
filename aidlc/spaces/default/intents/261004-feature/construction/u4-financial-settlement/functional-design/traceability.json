@@ -1,0 +1,2203 @@
+{
+  "stage": "functional-design",
+  "unit": "u4-financial-settlement",
+  "upstream_ids": [
+    "AC4.1.1",
+    "AC4.1.2",
+    "AC4.1.3",
+    "AC4.2.1",
+    "AC4.2.2",
+    "AC4.2.3",
+    "AC4.3.1",
+    "AC4.3.2",
+    "AC4.3.3",
+    "AC4.4.1",
+    "AC4.4.2",
+    "AC4.4.3",
+    "AC4.4.4",
+    "AC4.5.1",
+    "AC4.5.2",
+    "AC4.5.3",
+    "AC4.6.1",
+    "AC4.6.2",
+    "AC4.6.3",
+    "AC7.8.1",
+    "AC7.8.2",
+    "AC7.8.3",
+    "AC8.6.1",
+    "AC8.6.2",
+    "AC8.6.3",
+    "AC8.6.4",
+    "AC1.5.1",
+    "AC1.5.2",
+    "AC1.5.3",
+    "AC1.5.4",
+    "AC1.6.1",
+    "AC1.6.2",
+    "AC1.6.3",
+    "AC1.7.1",
+    "AC1.7.2",
+    "AC1.7.3",
+    "AC3.2.1",
+    "AC3.2.2",
+    "AC3.2.3",
+    "AC3.3.1",
+    "AC3.3.2",
+    "AC3.3.3",
+    "AC3.4.1",
+    "AC3.4.2",
+    "AC3.4.3",
+    "AC3.6.1",
+    "AC3.6.2",
+    "AC3.6.3",
+    "AC5.1.1",
+    "AC5.1.2",
+    "AC5.1.3",
+    "AC5.2.1",
+    "AC5.2.2",
+    "AC5.2.3",
+    "AC5.3.1",
+    "AC5.3.2",
+    "AC5.3.3",
+    "AC5.4.1",
+    "AC5.4.2",
+    "AC5.4.3",
+    "AC5.5.1",
+    "AC5.5.2",
+    "AC5.5.3",
+    "AC5.6.1",
+    "AC5.6.2",
+    "AC5.6.3",
+    "AC5.7.1",
+    "AC5.7.2",
+    "AC5.7.3",
+    "AC6.1.1",
+    "AC6.1.2",
+    "AC6.1.3",
+    "AC6.2.1",
+    "AC6.2.2",
+    "AC6.2.3",
+    "AC6.3.1",
+    "AC6.3.2",
+    "AC6.3.3",
+    "AC6.4.1",
+    "AC6.4.2",
+    "AC6.4.3",
+    "AC6.4.4",
+    "AC6.5.1",
+    "AC6.5.2",
+    "AC6.5.3",
+    "AC6.6.1",
+    "AC6.6.2",
+    "AC6.6.3",
+    "AC7.1.1",
+    "AC7.1.2",
+    "AC7.1.3",
+    "AC7.2.1",
+    "AC7.2.2",
+    "AC7.2.3",
+    "AC7.3.1",
+    "AC7.3.2",
+    "AC7.3.3",
+    "AC7.3.4",
+    "AC7.4.1",
+    "AC7.4.2",
+    "AC7.4.3",
+    "AC7.5.1",
+    "AC7.5.2",
+    "AC7.5.3",
+    "AC7.5.4",
+    "AC7.6.1",
+    "AC7.6.2",
+    "AC7.6.3",
+    "AC7.7.1",
+    "AC7.7.2",
+    "AC7.7.3",
+    "AC7.7.4",
+    "AC8.1.1",
+    "AC8.1.2",
+    "AC8.1.3",
+    "AC8.10.1",
+    "AC8.10.2",
+    "AC8.10.3",
+    "AC8.10.4",
+    "AC8.11.1",
+    "AC8.11.2",
+    "AC8.11.3",
+    "AC8.12.1",
+    "AC8.12.2",
+    "AC8.12.3",
+    "AC8.2.1",
+    "AC8.2.2",
+    "AC8.2.3",
+    "AC8.3.1",
+    "AC8.3.2",
+    "AC8.3.3",
+    "AC8.4.1",
+    "AC8.4.2",
+    "AC8.4.3",
+    "AC8.4.4",
+    "AC8.5.1",
+    "AC8.5.2",
+    "AC8.5.3",
+    "AC8.7.1",
+    "AC8.7.2",
+    "AC8.7.3",
+    "AC8.8.1",
+    "AC8.8.2",
+    "AC8.8.3",
+    "AC8.8.4",
+    "AC8.8.5",
+    "AC8.8.6",
+    "AC8.9.1",
+    "AC8.9.2",
+    "AC8.9.3",
+    "AC8.9.4",
+    "AC9.1.1",
+    "AC9.1.2",
+    "AC9.1.3",
+    "AC9.2.1",
+    "AC9.2.2",
+    "AC9.2.3",
+    "AC9.3.1",
+    "AC9.3.2",
+    "AC9.3.3",
+    "AC9.3.4",
+    "AC9.4.1",
+    "AC9.4.2",
+    "AC9.4.3",
+    "AC9.5.1",
+    "AC9.5.2",
+    "AC9.5.3",
+    "AC9.6.1",
+    "AC9.6.2",
+    "AC9.6.3",
+    "AC9.7.1",
+    "AC9.7.2",
+    "AC9.7.3"
+  ],
+  "coverage": [
+    {
+      "id": "AC4.1.1",
+      "status": "OK",
+      "target": "BR4.1, BR4.2, BR4.3, BR4.4, BR4.21, BR4.23"
+    },
+    {
+      "id": "AC4.1.2",
+      "status": "OK",
+      "target": "BR4.5, BR4.8, BR4.9"
+    },
+    {
+      "id": "AC4.1.3",
+      "status": "OK",
+      "target": "BR4.10, BR4.16, BR4.21"
+    },
+    {
+      "id": "AC4.2.1",
+      "status": "Deferred",
+      "target": "functional-spec.md#후속-범위와-추적",
+      "reason": "실제 외부 수금 결과 자동 연동은 후속이며 직원 확인 경로와 구별한다.",
+      "design_rules": [
+        "BR4.4",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC4.2.2",
+      "status": "Deferred",
+      "target": "functional-spec.md#후속-범위와-추적",
+      "reason": "외부 결과 자동 수신 전체 AC는 후속이다. 현재 직원 결과의 반복은 별도 보호한다.",
+      "design_rules": [
+        "BR4.5",
+        "BR4.9"
+      ]
+    },
+    {
+      "id": "AC4.2.3",
+      "status": "Deferred",
+      "target": "functional-spec.md#후속-범위와-추적",
+      "reason": "외부 연동과 직원 근거 충돌의 전체 연결은 후속이다. 현재 대조·보류 원칙은 유지한다.",
+      "design_rules": [
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC4.3.1",
+      "status": "Deferred",
+      "target": "functional-spec.md#후속-범위와-추적",
+      "reason": "자동 배분은 후속이고 첫 버전은 직원이 같은 주문 청구별로 금액을 지정한다.",
+      "design_rules": [
+        "BR4.6",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC4.3.2",
+      "status": "Deferred",
+      "target": "functional-spec.md#후속-범위와-추적",
+      "reason": "자동 분기 전체 AC는 후속이다. 현재 미확인·불일치의 미배분 보존은 수동 경로 규칙으로 유지한다.",
+      "design_rules": [
+        "BR4.4",
+        "BR4.7",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC4.3.3",
+      "status": "OK",
+      "target": "BR4.4, BR4.5, BR4.6"
+    },
+    {
+      "id": "AC4.4.1",
+      "status": "OK",
+      "target": "BR4.1, BR4.6, BR4.7, BR4.21"
+    },
+    {
+      "id": "AC4.4.2",
+      "status": "OK",
+      "target": "BR4.6, BR4.7, BR4.8"
+    },
+    {
+      "id": "AC4.4.3",
+      "status": "OK",
+      "target": "BR4.10, BR4.11, BR4.16, BR4.21"
+    },
+    {
+      "id": "AC4.4.4",
+      "status": "OK",
+      "target": "BR4.7, BR4.8, BR4.9"
+    },
+    {
+      "id": "AC4.5.1",
+      "status": "Deferred",
+      "target": "functional-spec.md#후속-범위와-추적",
+      "reason": "다른 날짜의 부분 제공 건별 전체 AC는 후속이다. FULL 완료의 합의 기산과 원본 식별/개정은 첫 버전에 설계한다.",
+      "design_rules": [
+        "BR4.13",
+        "BR4.15"
+      ]
+    },
+    {
+      "id": "AC4.5.2",
+      "status": "OK",
+      "target": "BR4.11, BR4.13, BR4.14, BR4.15"
+    },
+    {
+      "id": "AC4.5.3",
+      "status": "OK",
+      "target": "BR4.13, BR4.15, BR4.16, BR4.21"
+    },
+    {
+      "id": "AC4.6.1",
+      "status": "OK",
+      "target": "BR4.1, BR4.16, BR4.17"
+    },
+    {
+      "id": "AC4.6.2",
+      "status": "OK",
+      "target": "BR4.4, BR4.16, BR4.17"
+    },
+    {
+      "id": "AC4.6.3",
+      "status": "OK",
+      "target": "BR4.17, BR4.20, BR4.21"
+    },
+    {
+      "id": "AC7.8.1",
+      "status": "Deferred",
+      "target": "functional-spec.md#후속-범위와-추적",
+      "reason": "보상 중첩 갱신 요금 산식/자동 계산은 후속이며 승인 없이 금액·기간을 변경하지 않는다.",
+      "design_rules": [
+        "BR4.20"
+      ]
+    },
+    {
+      "id": "AC7.8.2",
+      "status": "Deferred",
+      "target": "functional-spec.md#후속-범위와-추적",
+      "reason": "보상 요금 조정 실행의 전체 AC는 후속이다. 중복 차감 방지 의무는 보존한다.",
+      "design_rules": [
+        "BR4.20"
+      ]
+    },
+    {
+      "id": "AC7.8.3",
+      "status": "OK",
+      "target": "BR4.18, BR4.20"
+    },
+    {
+      "id": "AC8.6.1",
+      "status": "OK",
+      "target": "BR4.1, BR4.2, BR4.18, BR4.19, BR4.21, BR4.24"
+    },
+    {
+      "id": "AC8.6.2",
+      "status": "OK",
+      "target": "BR4.7, BR4.8, BR4.18, BR4.19, BR4.24"
+    },
+    {
+      "id": "AC8.6.3",
+      "status": "OK",
+      "target": "BR4.18, BR4.19, BR4.21, BR4.24"
+    },
+    {
+      "id": "AC8.6.4",
+      "status": "OK",
+      "target": "BR4.7, BR4.8, BR4.9, BR4.18, BR4.19, BR4.24"
+    },
+    {
+      "id": "AC1.5.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U2이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1–WF4.3 및 BR4.1에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U2",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1"
+      ]
+    },
+    {
+      "id": "AC1.5.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U2이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1–WF4.3 및 BR4.1에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U2",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1"
+      ]
+    },
+    {
+      "id": "AC1.5.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U2이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1–WF4.3 및 BR4.1에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U2",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1"
+      ]
+    },
+    {
+      "id": "AC1.5.4",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U2이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1–WF4.3 및 BR4.1에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U2",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1"
+      ]
+    },
+    {
+      "id": "AC1.6.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U2이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1 및 BR4.1, BR4.3, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U2",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.3",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC1.6.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U2이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1 및 BR4.1, BR4.3, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U2",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.3",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC1.6.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U2이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1 및 BR4.1, BR4.3, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U2",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.3",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC1.7.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U2이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U2",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1"
+      ]
+    },
+    {
+      "id": "AC1.7.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U2이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U2",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1"
+      ]
+    },
+    {
+      "id": "AC1.7.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U2이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U2",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1"
+      ]
+    },
+    {
+      "id": "AC3.2.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.12, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.12",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC3.2.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.12, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.12",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC3.2.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.12, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.12",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC3.3.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U1이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.1, BR4.12, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U1",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.12",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC3.3.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U1이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.1, BR4.12, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U1",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.12",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC3.3.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U1이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.1, BR4.12, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U1",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.12",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC3.4.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1, WF4.5 및 BR4.3, BR4.12, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.12",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC3.4.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1, WF4.5 및 BR4.3, BR4.12, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.12",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC3.4.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1, WF4.5 및 BR4.3, BR4.12, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.12",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC3.6.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC3.6.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC3.6.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC5.1.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.13, BR4.15, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.15",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC5.1.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.13, BR4.15, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.15",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC5.1.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.13, BR4.15, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.15",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC5.2.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.15, BR4.16, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.15",
+        "BR4.16",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC5.2.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.15, BR4.16, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.15",
+        "BR4.16",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC5.2.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.15, BR4.16, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.15",
+        "BR4.16",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC5.3.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.12에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.12"
+      ]
+    },
+    {
+      "id": "AC5.3.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.12에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.12"
+      ]
+    },
+    {
+      "id": "AC5.3.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.12에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.12"
+      ]
+    },
+    {
+      "id": "AC5.4.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC5.4.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC5.4.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC5.5.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC5.5.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC5.5.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC5.6.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.13, BR4.15에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.15"
+      ]
+    },
+    {
+      "id": "AC5.6.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.13, BR4.15에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.15"
+      ]
+    },
+    {
+      "id": "AC5.6.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.13, BR4.15에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.15"
+      ]
+    },
+    {
+      "id": "AC5.7.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4–WF4.6 및 BR4.11, BR4.15, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.15",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC5.7.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4–WF4.6 및 BR4.11, BR4.15, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.15",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC5.7.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4–WF4.6 및 BR4.11, BR4.15, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.15",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC6.1.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC6.1.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC6.1.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5 및 BR4.11, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC6.2.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U8이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U8",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC6.2.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U8이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U8",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC6.2.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U8이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U8",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC6.3.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.13, BR4.14, BR4.20에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.14",
+        "BR4.20"
+      ]
+    },
+    {
+      "id": "AC6.3.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.13, BR4.14, BR4.20에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.14",
+        "BR4.20"
+      ]
+    },
+    {
+      "id": "AC6.3.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.13, BR4.14, BR4.20에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.14",
+        "BR4.20"
+      ]
+    },
+    {
+      "id": "AC6.4.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.15, BR4.20, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.15",
+        "BR4.20",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC6.4.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.15, BR4.20, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.15",
+        "BR4.20",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC6.4.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.15, BR4.20, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.15",
+        "BR4.20",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC6.4.4",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.15, BR4.20, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.15",
+        "BR4.20",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC6.5.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.13, BR4.15에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.15"
+      ]
+    },
+    {
+      "id": "AC6.5.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.13, BR4.15에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.15"
+      ]
+    },
+    {
+      "id": "AC6.5.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.6 및 BR4.13, BR4.15에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.15"
+      ]
+    },
+    {
+      "id": "AC6.6.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5–WF4.6 및 BR4.11, BR4.15, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.15",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC6.6.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5–WF4.6 및 BR4.11, BR4.15, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.15",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC6.6.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.5–WF4.6 및 BR4.11, BR4.15, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.15",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC7.1.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4 협력은 functional-spec.md의 WF4.8 회차별 갱신 주문·청구/배분·현재 대금 판단 및 BR4.23으로 연결한다. 과거 회차 지급을 새 회차에 재사용하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.11",
+        "BR4.23"
+      ]
+    },
+    {
+      "id": "AC7.1.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4 협력은 functional-spec.md의 WF4.8 회차별 갱신 주문·청구/배분·현재 대금 판단 및 BR4.23으로 연결한다. 과거 회차 지급을 새 회차에 재사용하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.11",
+        "BR4.23"
+      ]
+    },
+    {
+      "id": "AC7.1.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4 협력은 functional-spec.md의 WF4.8 회차별 갱신 주문·청구/배분·현재 대금 판단 및 BR4.23으로 연결한다. 과거 회차 지급을 새 회차에 재사용하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.11",
+        "BR4.23"
+      ]
+    },
+    {
+      "id": "AC7.2.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.2.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.2.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.3.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.3.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.3.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.3.4",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.4.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.9, BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.9",
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.4.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.9, BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.9",
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.4.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.9, BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.9",
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.5.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1 및 BR4.3, BR4.20에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.20"
+      ]
+    },
+    {
+      "id": "AC7.5.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1 및 BR4.3, BR4.20에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.20"
+      ]
+    },
+    {
+      "id": "AC7.5.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1 및 BR4.3, BR4.20에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.20"
+      ]
+    },
+    {
+      "id": "AC7.5.4",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U3이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.1 및 BR4.3, BR4.20에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U3",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.20"
+      ]
+    },
+    {
+      "id": "AC7.6.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.11, BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.6.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.11, BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.6.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.11, BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.11",
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.7.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.13, BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.7.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.13, BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.7.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.13, BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC7.7.4",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 후속 범위와 추적 및 BR4.13, BR4.20, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.13",
+        "BR4.20",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC8.1.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4 및 BR4.3, BR4.10에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.10"
+      ]
+    },
+    {
+      "id": "AC8.1.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4 및 BR4.3, BR4.10에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.10"
+      ]
+    },
+    {
+      "id": "AC8.1.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4 및 BR4.3, BR4.10에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.3",
+        "BR4.10"
+      ]
+    },
+    {
+      "id": "AC8.10.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4, WF4.7 및 BR4.10, BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.10.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4, WF4.7 및 BR4.10, BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.10.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4, WF4.7 및 BR4.10, BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.10.4",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4, WF4.7 및 BR4.10, BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.11.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.7 및 BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.11.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.7 및 BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.11.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U5이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.7 및 BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U5",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.12.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U9이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U9",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC8.12.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U9이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U9",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC8.12.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U9이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U9",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC8.2.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4, WF4.7 및 BR4.10, BR4.18, BR4.19에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.18",
+        "BR4.19"
+      ]
+    },
+    {
+      "id": "AC8.2.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4, WF4.7 및 BR4.10, BR4.18, BR4.19에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.18",
+        "BR4.19"
+      ]
+    },
+    {
+      "id": "AC8.2.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4, WF4.7 및 BR4.10, BR4.18, BR4.19에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.18",
+        "BR4.19"
+      ]
+    },
+    {
+      "id": "AC8.3.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.7 및 BR4.18, BR4.19에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.18",
+        "BR4.19"
+      ]
+    },
+    {
+      "id": "AC8.3.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.7 및 BR4.18, BR4.19에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.18",
+        "BR4.19"
+      ]
+    },
+    {
+      "id": "AC8.3.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.7 및 BR4.18, BR4.19에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.18",
+        "BR4.19"
+      ]
+    },
+    {
+      "id": "AC8.4.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4, WF4.7 및 BR4.10, BR4.16, BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.16",
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.4.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4, WF4.7 및 BR4.10, BR4.16, BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.16",
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.4.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4, WF4.7 및 BR4.10, BR4.16, BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.16",
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.4.4",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4, WF4.7 및 BR4.10, BR4.16, BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.16",
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.5.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.7 및 BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.5.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.7 및 BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.5.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U6이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.7 및 BR4.18에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U6",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.18"
+      ]
+    },
+    {
+      "id": "AC8.7.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4 및 BR4.10, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC8.7.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4 및 BR4.10, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC8.7.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4 및 BR4.10, BR4.16에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.10",
+        "BR4.16"
+      ]
+    },
+    {
+      "id": "AC8.8.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.16, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.16",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC8.8.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.16, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.16",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC8.8.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.16, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.16",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC8.8.4",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.16, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.16",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC8.8.5",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.16, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.16",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC8.8.6",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.16, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.16",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC8.9.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.3, 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC8.9.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.3, 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC8.9.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.3, 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC8.9.4",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.3, 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.1.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.9, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.9",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.1.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.9, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.9",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.1.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.9, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.9",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.2.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.2–WF4.4 및 BR4.8, BR4.9, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.8",
+        "BR4.9",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.2.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.2–WF4.4 및 BR4.8, BR4.9, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.8",
+        "BR4.9",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.2.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.2–WF4.4 및 BR4.8, BR4.9, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.8",
+        "BR4.9",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.3.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 계약 변경과 기존 동작 호환 및 BR4.9, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.9",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC9.3.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 계약 변경과 기존 동작 호환 및 BR4.9, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.9",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC9.3.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 계약 변경과 기존 동작 호환 및 BR4.9, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.9",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC9.3.4",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 계약 변경과 기존 동작 호환 및 BR4.9, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.9",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC9.4.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4 및 BR4.1, BR4.10, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.10",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.4.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4 및 BR4.1, BR4.10, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.10",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.4.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U7이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 WF4.4 및 BR4.1, BR4.10, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U7",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.10",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.5.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.5.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.5.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 실패·보안·화면 경계 및 BR4.1, BR4.21에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.1",
+        "BR4.21"
+      ]
+    },
+    {
+      "id": "AC9.6.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 시나리오와 검증 인수인계 및 BR4.21, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.21",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC9.6.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 시나리오와 검증 인수인계 및 BR4.21, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.21",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC9.6.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 시나리오와 검증 인수인계 및 BR4.21, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.21",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC9.7.1",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 시나리오와 검증 인수인계 및 BR4.21, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.21",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC9.7.2",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 시나리오와 검증 인수인계 및 BR4.21, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.21",
+        "BR4.22"
+      ]
+    },
+    {
+      "id": "AC9.7.3",
+      "status": "N/A",
+      "target": "전체 AC의 주 책임은 U10이며 U4 단독 완성 대상이 아니다. U4의 협력 경계는 functional-spec.md의 시나리오와 검증 인수인계 및 BR4.21, BR4.22에 연결한다. 실제 이행·화면·운영 또는 후속 자동화의 전체 완료를 이 표로 주장하지 않는다.",
+      "primary_unit": "U10",
+      "coverage_scope": "collaboration-only",
+      "design_rules": [
+        "BR4.21",
+        "BR4.22"
+      ]
+    }
+  ],
+  "reverse": [
+    {
+      "id": "BR4.12",
+      "status": "N/A",
+      "target": "FR6.1/FR6.3 및 Q&A 통합 확인의 판매 수락과 제공 판단 구분. 주 책임 AC는 U3이며 U4는 순환 의존을 방지한다."
+    },
+    {
+      "id": "BR4.22",
+      "status": "N/A",
+      "target": "Q1/Q4/Q5 및 첫 배포 변경에 필요한 계약 호환·기존 데이터 보존 규칙. 후속 AC를 첫 배포 완료로 오인하지 않게 한다."
+    }
+  ],
+  "primary_upstream_ids": [
+    "AC4.1.1",
+    "AC4.1.2",
+    "AC4.1.3",
+    "AC4.2.1",
+    "AC4.2.2",
+    "AC4.2.3",
+    "AC4.3.1",
+    "AC4.3.2",
+    "AC4.3.3",
+    "AC4.4.1",
+    "AC4.4.2",
+    "AC4.4.3",
+    "AC4.4.4",
+    "AC4.5.1",
+    "AC4.5.2",
+    "AC4.5.3",
+    "AC4.6.1",
+    "AC4.6.2",
+    "AC4.6.3",
+    "AC7.8.1",
+    "AC7.8.2",
+    "AC7.8.3",
+    "AC8.6.1",
+    "AC8.6.2",
+    "AC8.6.3",
+    "AC8.6.4"
+  ],
+  "collaboration_upstream_ids": [
+    "AC1.5.1",
+    "AC1.5.2",
+    "AC1.5.3",
+    "AC1.5.4",
+    "AC1.6.1",
+    "AC1.6.2",
+    "AC1.6.3",
+    "AC1.7.1",
+    "AC1.7.2",
+    "AC1.7.3",
+    "AC3.2.1",
+    "AC3.2.2",
+    "AC3.2.3",
+    "AC3.3.1",
+    "AC3.3.2",
+    "AC3.3.3",
+    "AC3.4.1",
+    "AC3.4.2",
+    "AC3.4.3",
+    "AC3.6.1",
+    "AC3.6.2",
+    "AC3.6.3",
+    "AC5.1.1",
+    "AC5.1.2",
+    "AC5.1.3",
+    "AC5.2.1",
+    "AC5.2.2",
+    "AC5.2.3",
+    "AC5.3.1",
+    "AC5.3.2",
+    "AC5.3.3",
+    "AC5.4.1",
+    "AC5.4.2",
+    "AC5.4.3",
+    "AC5.5.1",
+    "AC5.5.2",
+    "AC5.5.3",
+    "AC5.6.1",
+    "AC5.6.2",
+    "AC5.6.3",
+    "AC5.7.1",
+    "AC5.7.2",
+    "AC5.7.3",
+    "AC6.1.1",
+    "AC6.1.2",
+    "AC6.1.3",
+    "AC6.2.1",
+    "AC6.2.2",
+    "AC6.2.3",
+    "AC6.3.1",
+    "AC6.3.2",
+    "AC6.3.3",
+    "AC6.4.1",
+    "AC6.4.2",
+    "AC6.4.3",
+    "AC6.4.4",
+    "AC6.5.1",
+    "AC6.5.2",
+    "AC6.5.3",
+    "AC6.6.1",
+    "AC6.6.2",
+    "AC6.6.3",
+    "AC7.1.1",
+    "AC7.1.2",
+    "AC7.1.3",
+    "AC7.2.1",
+    "AC7.2.2",
+    "AC7.2.3",
+    "AC7.3.1",
+    "AC7.3.2",
+    "AC7.3.3",
+    "AC7.3.4",
+    "AC7.4.1",
+    "AC7.4.2",
+    "AC7.4.3",
+    "AC7.5.1",
+    "AC7.5.2",
+    "AC7.5.3",
+    "AC7.5.4",
+    "AC7.6.1",
+    "AC7.6.2",
+    "AC7.6.3",
+    "AC7.7.1",
+    "AC7.7.2",
+    "AC7.7.3",
+    "AC7.7.4",
+    "AC8.1.1",
+    "AC8.1.2",
+    "AC8.1.3",
+    "AC8.10.1",
+    "AC8.10.2",
+    "AC8.10.3",
+    "AC8.10.4",
+    "AC8.11.1",
+    "AC8.11.2",
+    "AC8.11.3",
+    "AC8.12.1",
+    "AC8.12.2",
+    "AC8.12.3",
+    "AC8.2.1",
+    "AC8.2.2",
+    "AC8.2.3",
+    "AC8.3.1",
+    "AC8.3.2",
+    "AC8.3.3",
+    "AC8.4.1",
+    "AC8.4.2",
+    "AC8.4.3",
+    "AC8.4.4",
+    "AC8.5.1",
+    "AC8.5.2",
+    "AC8.5.3",
+    "AC8.7.1",
+    "AC8.7.2",
+    "AC8.7.3",
+    "AC8.8.1",
+    "AC8.8.2",
+    "AC8.8.3",
+    "AC8.8.4",
+    "AC8.8.5",
+    "AC8.8.6",
+    "AC8.9.1",
+    "AC8.9.2",
+    "AC8.9.3",
+    "AC8.9.4",
+    "AC9.1.1",
+    "AC9.1.2",
+    "AC9.1.3",
+    "AC9.2.1",
+    "AC9.2.2",
+    "AC9.2.3",
+    "AC9.3.1",
+    "AC9.3.2",
+    "AC9.3.3",
+    "AC9.3.4",
+    "AC9.4.1",
+    "AC9.4.2",
+    "AC9.4.3",
+    "AC9.5.1",
+    "AC9.5.2",
+    "AC9.5.3",
+    "AC9.6.1",
+    "AC9.6.2",
+    "AC9.6.3",
+    "AC9.7.1",
+    "AC9.7.2",
+    "AC9.7.3"
+  ],
+  "coverage_semantics": "주 책임26개는 전체 AC 설계 범위로 판정한다. 협력147개는 주 책임 Unit과 U4 기여를 연결하고 전체 AC의 U4 단독 적용은 N/A로 명시한다. 모든 상태는 설계 추적이며 구현·검증 완료가 아니다."
+}
