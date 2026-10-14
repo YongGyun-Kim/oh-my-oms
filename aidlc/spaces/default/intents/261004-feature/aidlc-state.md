@@ -328,6 +328,12 @@
 
 
 
+- **Active Unit**: u4-financial-settlement
+
+- **Unit Stage**: code-generation
+
+- **Unit State**: in-progress
+
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
 
@@ -389,7 +395,7 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-14T16:00:55Z
+- **Last Updated**: 2026-10-14T16:01:56Z
 
 - **Construction Autonomy Mode**: autonomous
 
