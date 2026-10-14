@@ -12,10 +12,48 @@ import {
 } from '@oms/persistence';
 import { modelFixture, legacyProduct } from '../../u3/fixtures/models.js';
 import { u4ModelFixture } from '../fixtures/models.js';
-import { u4Money, u4Plan } from '../fixtures/contracts.js';
+import { u4Money, u4Plan, u4Ref, u4Scope } from '../fixtures/contracts.js';
 
 describe('U4 model originals and version boundaries', () => {
   const schema = new SchemaValidator();
+  it('공통 금융 사실의 정확한 계약4에서만 실제 사람 검증 Ref를 보존한다', () => {
+    const fact = {
+      eventId: 'synthetic-financial-fact',
+      sourceOwner: 'FinancialSettlement',
+      aggregateRef: u4Ref('FinancialSettlement', 'Invoice'),
+      aggregateVersion: 1,
+      sourceFactRef: u4Ref('FinancialSettlement', 'FinancialHistory'),
+      targetScope: u4Scope(),
+      causationRequestId: 'synthetic-request',
+      correlationId: 'synthetic-correlation',
+      schemaVersion: 'urn:oms:contract:u4-financial:1',
+      supersedesFactRef: null,
+      evidenceRefs: [
+        u4Ref('IdentityRecovery', 'PersonVerification'),
+        u4Ref('IdentityRecovery', 'VerificationEvidence'),
+      ],
+      occurredAt: '2026-12-01T00:00:00.000Z',
+      sourceContract: U4_SOURCE_CONTRACT,
+    };
+    expect(validateModel('FactEnvelope', fact, schema)).toBe(fact);
+    for (const sourceContract of [
+      null,
+      { profile: 'urn:oms:contract:u3-commercial:2', registryVersion: 3 },
+      { ...U4_SOURCE_CONTRACT, registryVersion: 3 },
+      { ...U4_SOURCE_CONTRACT, extra: true },
+      { profile: 'urn:oms:contract:unregistered:1', registryVersion: 4 },
+    ])
+      expect(() => validateModel('FactEnvelope', { ...fact, sourceContract }, schema)).toThrow();
+    expect(() =>
+      validateModel(
+        'FactEnvelope',
+        { ...fact, evidenceRefs: [u4Ref('IdentityRecovery', 'UnregisteredEvidence')] },
+        schema,
+      ),
+    ).toThrow();
+    const legacy = { ...fact, evidenceRefs: [], sourceContract: null };
+    expect(validateModel('FactEnvelope', legacy, schema)).toBe(legacy);
+  });
   it('validates all nine business originals and eight protected auxiliary models', () => {
     expect(U4_MODELS).toHaveLength(9);
     expect(U4_SUPPORT_MODELS).toHaveLength(8);

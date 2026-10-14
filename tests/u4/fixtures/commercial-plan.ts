@@ -33,7 +33,11 @@ import { resolveConditionBindings } from '../../../packages/core/src/commercial-
 import { u4Plan } from './contracts.js';
 
 // U1/U2 실권한·MFA와 U3 소유자 등록 경로를 재사용한다. 운영 은행/이행 생산자의 등록 증거가 아니다.
-export async function seedU4CommercialPlan(store: ProtectedStore, software = false) {
+export async function seedU4CommercialPlan(
+  store: ProtectedStore,
+  software = false,
+  agreedEndAt: string | null = null,
+) {
   const f = await seedAgreementAuthority(store);
   const ingress = 'synthetic-private-ingress';
   const meta = (revision: number | null = null) => ({
@@ -100,6 +104,8 @@ export async function seedU4CommercialPlan(store: ProtectedStore, software = fal
     syntheticCommercialEvidence,
   );
   const input = f.input();
+  if (agreedEndAt !== null)
+    input.effectiveWindow = { ...input.effectiveWindow, endAt: agreedEndAt, endInclusive: false };
   input.productRefs = [productRef];
   input.commercialTermsRef = offerRef;
   input.provisionTermsRef = offerRef;

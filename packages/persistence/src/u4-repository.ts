@@ -219,6 +219,94 @@ export class U4Transaction {
       );
     }
   }
+  async financialCollection(
+    model: string,
+    equals: Record<string, unknown>,
+    deadlineAt: string,
+  ): Promise<ModelData[]> {
+    requireCondition(
+      modelDefinition(model).owner === 'FinancialSettlement',
+      400,
+      'U4_LEDGER_MODEL',
+      '금융 소유 원본만 완전 대조합니다.',
+    );
+    const key = primaryAttribute(modelDefinition(model)).name;
+    const expected = new Map<string, ModelData>();
+    const checkBudget = () => {
+      ExecutionBudget.current()?.check();
+      requireCondition(
+        Date.now() < Date.parse(deadlineAt),
+        503,
+        'QUERY_DEADLINE',
+        '금융 원본 전체 대조 기한을 넘었습니다.',
+      );
+    };
+    let cursor: string | null = null;
+    for (;;) {
+      checkBudget();
+      const page = await this.transaction.financialProtectedPage(
+        model,
+        { equals, cursor, limit: 100 },
+        this.boundary.prefixes,
+      );
+      for (const row of page) expected.set(String(row[key]), row);
+      if (page.length < 100) break;
+      const next = String(page.at(-1)![key]);
+      requireCondition(
+        cursor === null || next > cursor,
+        503,
+        'U4_LEDGER_CURSOR',
+        '안정 금융 원본 cursor가 필요합니다.',
+      );
+      cursor = next;
+    }
+    const matches = (data: ModelData) =>
+      Object.entries(equals).every(([field, value]) =>
+        value !== null && typeof value === 'object'
+          ? data[field] !== null &&
+            typeof data[field] === 'object' &&
+            Object.entries(value).every(
+              ([part, expectedValue]) =>
+                canonicalJson((data[field] as ModelData)[part]) === canonicalJson(expectedValue),
+            )
+          : canonicalJson(data[field]) === canonicalJson(value),
+      );
+    for (const row of this.transaction.rows().filter((row) => row.model === model)) {
+      expected.delete(row.id);
+      if (!row.deleted && matches(row.data)) expected.set(row.id, row.data);
+    }
+    const actual = new Map<string, ModelData>();
+    cursor = null;
+    for (;;) {
+      checkBudget();
+      const page = await this.transaction.financialCurrentPage(model, equals, cursor);
+      for (const row of page)
+        actual.set(String(row[key]), (await this.optional(model, String(row[key])))!);
+      if (page.length < 100) break;
+      const next = String(page.at(-1)![key]);
+      requireCondition(
+        cursor === null || next > cursor,
+        503,
+        'U4_LEDGER_CURSOR',
+        '안정 금융 원본 cursor가 필요합니다.',
+      );
+      cursor = next;
+    }
+    requireCondition(
+      canonicalJson([...actual.keys()].sort()) === canonicalJson([...expected.keys()].sort()),
+      503,
+      'CURRENT_U4_NOT_PROTECTED',
+      '현재 금융 원본 전체와 보호 prefix가 일치해야 합니다.',
+    );
+    for (const [id, row] of expected)
+      requireCondition(
+        same(model, row, actual.get(id) ?? null, this.schema),
+        503,
+        'CURRENT_U4_NOT_PROTECTED',
+        '현재 금융 원본 개정 전체를 보호 원상과 대조해야 합니다.',
+      );
+    return [...actual.values()];
+  }
   lock(
     paymentIds: readonly string[],
     invoiceIds: readonly string[],

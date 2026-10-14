@@ -150,7 +150,7 @@ export class U4CommercialAdapter {
       },
     };
   }
-  private async authorize(
+  async authorize(
     context: ServiceContext,
     action: string,
     access: U4CommercialAccess,

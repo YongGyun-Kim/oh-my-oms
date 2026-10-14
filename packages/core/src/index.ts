@@ -64,3 +64,7 @@ export type { U2DeliveryHandler, PrivatePurposeReceiver } from './worker-consume
 export { RecoveryFactorEnrollment } from './identity-factor.js';
 export { RecoveryPurposeCodes } from './identity-codes.js';
 export * from './u4-staff-access.js';
+export * from './u4-financial-commands.js';
+export * from './u4-financial-access.js';
+export * from './u4-financial-source.js';
+export * from './u4-financial-ledger.js';

@@ -2,6 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { safeU4Error } from '../fixtures/safe-error.js';
 
 describe('U4 허용 오류 진단', () => {
+  it('driverError에서도 정적 SQLSTATE만 읽고 원문/임의 코드를 버린다', () => {
+    expect(
+      safeU4Error({
+        name: 'QueryFailedError',
+        driverError: { code: '55P03', message: 'synthetic-secret', detail: 'synthetic-secret' },
+      }),
+    ).toEqual({ code: '55P03', name: 'QueryFailedError', locations: [] });
+    expect(safeU4Error({ driverError: { code: 'synthetic-secret' } }).code).toBe(
+      'UNCLASSIFIED_ERROR',
+    );
+  });
   it('DB/업무 코드만 정적 허용 목록으로 투영한다', () => {
     expect(safeU4Error({ code: '22023', name: 'QueryFailedError' }).code).toBe('22023');
     expect(safeU4Error({ code: 'arbitrary-sensitive', name: 'arbitrary-sensitive' })).toMatchObject(

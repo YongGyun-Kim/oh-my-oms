@@ -159,6 +159,37 @@ export class ProtectedTransaction {
     );
     return rows[0] && !rows[0].deleted ? validateModel(model, rows[0].data, this.schema) : null;
   }
+  async financialCurrentPage(
+    model: string,
+    equals: Record<string, unknown>,
+    cursor: string | null,
+  ): Promise<ModelData[]> {
+    const definition = modelDefinition(model);
+    requireCondition(
+      definition.owner === 'FinancialSettlement',
+      400,
+      'U4_LEDGER_MODEL',
+      '금융 소유 원본만 완전 대조합니다.',
+    );
+    for (const field of Object.keys(equals))
+      requireCondition(
+        definition.attributes.some((attribute) => attribute.name === field),
+        400,
+        'FILTER_FIELD',
+        '등록된 금융 원본 필드가 필요합니다.',
+      );
+    if (cursor !== null) this.schema.validate('Id', cursor);
+    ExecutionBudget.current()?.check();
+    const key = primaryAttribute(definition).name;
+    const query = this.manager
+      .getRepository<ModelData>(model)
+      .createQueryBuilder('record')
+      .where('to_jsonb("record") @> :filter::jsonb', { filter: JSON.stringify(equals) })
+      .orderBy('record.' + key, 'ASC')
+      .take(100);
+    if (cursor !== null) query.andWhere('record.' + key + ' > :cursor', { cursor });
+    return (await query.getMany()).map((row) => storedModelData(model, row));
+  }
   async financialRoleStateIds(
     field: 'roleRef' | 'staffRoleRef',
     id: string,

@@ -3,6 +3,38 @@
   "$id": "urn:oms:contract:u4-financial:1",
   "title": "U4 financial revision1 — operation registry4; closed manual financial contracts",
   "$defs": {
+    "PaymentBindingCorrectionInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" },
+        "targetScope": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope" },
+        "paymentEvidenceRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentRef" },
+        "previousOrderRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef" },
+        "orderRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef" },
+        "sourceEvidence": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence" }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "paymentEvidenceRef",
+        "previousOrderRef",
+        "orderRef",
+        "sourceEvidence"
+      ],
+      "additionalProperties": false
+    },
+    "CancelInvoiceInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" },
+        "targetScope": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope" },
+        "orderRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef" },
+        "invoiceRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/InvoiceRef" },
+        "sourceEvidence": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence" }
+      },
+      "required": ["meta", "targetScope", "orderRef", "invoiceRef", "sourceEvidence"],
+      "additionalProperties": false
+    },
     "RecoverySecurityObservation": {
       "type": "object",
       "properties": {

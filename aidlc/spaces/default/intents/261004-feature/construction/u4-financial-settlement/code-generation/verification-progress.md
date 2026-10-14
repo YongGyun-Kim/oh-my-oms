@@ -184,3 +184,124 @@
 - 기존 실제 DB 회귀: U1 auth-access/recovery-security28/28, U2 authority-race/membership-role-race17/17, U3 staff-role-boundaries/recovery-role-source/migration-compatibility25/25. 각 Unit의 기존 pretest로 격리 DB만 준비했으며 모두 exit0·미실행/수집 오류0이었다.
 - 실행은 기존 tests/uN/vitest.unit.config.ts·vitest.integration.config.ts, 공통 Node22 PATH, 실제 DB의 OMS_UN_DATABASE_PROFILE=verification-isolated를 사용했다. 대량 재난/복구 부하 시험은 추가하지 않았다.
 - 이 결과는 금융 직원 권한의 정상 부여·버전/복구 기술 접점 마일스톤이다. Step8/9의 실제 청구·입금·배분 업무와 전체 제품 커버리지/공식 검증은 아직 미완료다. 계획의 완료 수는7/18 그대로 유지한다.
+
+## Step8 금융 명령 구현 중 확인한 취소 경계
+
+- 현재 Step8의 직원 접근·실거래 출처·전체 원장 대조·청구/입금/배분 명령을 구현 중이다. 이 변경 이후의 금융 업무 시험은 아직 실행하지 않았다. 직전76/49 통과를 새 명령의 검증으로 사용하지 않는다.
+- 기능 명세의 약정/금액 보존과 WF4.4, BR4.10은 취소를 U3 승인 계획/청구 개정에 결합하고 기존 소비·예약·이행 영향과 원본 이력을 보존하도록 한다. CANCELLED 상태 값만으로 직원이 현재 지급 의무를 독립 면제하는 기능을 만들지 않는다.
+- 원 단위 양수 청구 입력에0원이나 임의 명칭을 넣어 취소를 가장하지 않는다. 필요하면 명시 취소 입력/명령을 기술 접점으로 추가하되, 현재 승인·고객 동의/적용 원본에서 의무 제거를 입증하는 경로로 한정한다. 잔존 의무·확인 불가 영향은 HOLD이며 계약 총액·현금 원금·배분을 청구 취소만으로 변경하지 않는다.
+- 별도 사업 정책과 승인 계획/Testing Contract를 변경한 결정이 아니다. 실제 명령·거절 경계·시험 결과는 후속 검증에서 대조한다. Step8/9의 완료 체크는 아직 반영하지 않는다.
+
+## Step8 출처·전체 원본 대조 하위 계층 검증
+
+- 제품과 시험 의존 소스를 고정하고 Luna가 `tests/u4/vitest.unit.config.ts`로 financial-source.spec.ts와 financial-collection.spec.ts 두 파일을 한 번 실행했다. Node22 PATH를 사용했으며 DB 시험은 포함하지 않았다.
+- 출처8/8·전체 원본 대조8/8, 총16/16이 exit0으로 통과했다. 보고서는 success=true·runReason=passed·미실행/수집/assertion/전역 오류0이며 주 실행자도 JSON 집계를 확인했다.
+- 실제 원장/금융 명령과 DB 흐름은 별도 작성 중이다. 이 하위 계층 성공으로 Step8/9 전체나 첫 배포 준비를 완료했다고 표시하지 않는다.
+
+## Step8 원장 계산 하위 계층 검증
+
+- 이어 제품/공유 의존을 고정하고 Luna가 같은 Node22·U4 단위 설정에서 financial-ledger.spec.ts를 한 번 실행했다.8/8·exit0·success=true·runReason=passed이며 미실행/수집/assertion/전역 오류0을 주 실행자도 JSON으로 확인했다.
+- 정확 정수와 순배분·예약 구분, 집계 불일치 및 별칭 원본 보존을 다루는 단위 계층 결과다. 실제 DB 금융 명령/원금 보존·동시 소비는 아직 검증 전이며 Step8/9는 계속 미완료다.
+
+## Step8 금융 명령 업무 단위 검증
+
+- 제품/공유 의존과 선택 시험을 고정해 Luna가 financial-commands.spec.ts를 같은 Node22·U4 단위 설정으로 한 번 실행했다.8/8·exit0·success=true·runReason=passed이며 미실행/수집/assertion/전역 오류0을 주 실행자도 보고서로 대조했다.
+- 미수락 주문·승인 의무 변조·중복 청구 차단, 청구의 현금 미생성, 입금 후보/미등록 확인의 REVIEW, 거래 중복 DISPUTED, 소비된 배분 원금의 반전 차단을 검사했다.
+- access.run을 분리한 업무 단위 시험이므로 실제 직원 권한·DB 저장/보호 접수 성공을 입증하지 않는다. 실제 금융 흐름의 격리 DB 검증을 계속 준비하며 Step8/9 완료 수는 아직 바꾸지 않는다.
+
+## Step9 첫 실제 금융 흐름 — 저장 입력 실패
+
+- 제품/공유 의존과 시험 소스를 고정하고 Luna가 U4 격리 DB 준비 후 financial-flow.spec.ts의 `청구200/800` 핵심 흐름1건을 실행했다. 준비 exit0, 선택 실행 exit1이었다.
+- 총13건 중0통과·1실패·12필터 미실행, success=false·runReason=failed·수집/전역 오류0이다. 안전 오류 INVALID_INPUT/OmsError와 model-catalog.ts:244 → protected-transaction.ts:314 → u4-financial-access.ts:312의 저장 경계만 확인했다. 주 실행자도 안전 JSON을 대조했다.
+- 원문 입력·SQL·금융 근거를 출력하지 않았다. 전체13건 및 후속 원장 DB 시험은 실행하지 않았고 동일 소스 재시도도 하지 않았다. 해당 저장 모델/필드/Ref 검증의 원인을 개발 담당이 조사한다. Step8/9는 미완료다.
+
+## U4 공통 사실의 참조 context 수정과 금융 흐름 통과
+
+- 공통 FactEnvelope의 실제 사람 검증 근거를 구형 common:2 Ref로 검증한 것이 원인이었다. 근거를 지우거나 구형 schema를 완화하지 않고, RequestReceipt/WorkItem/FactEnvelope의 recordedSourceContract를 먼저 닫힌 검증한 뒤 정확 U4 profile/registry4에만 새 attribute context를 선택했다.
+- 모델 회귀는 사람 검증 참조의 U4 허용과 null/구형/위조 계약·추가 필드·미등록 profile/Ref 거절, 기존 빈 근거 common 원상 보존을 검사한다. Luna의 models10/10이 exit0·success=true로 통과했다.
+- 이어 같은 소스의 핵심 금융 흐름 선택1건이 exit0(12필터·success=false), 전체 financial-flow.spec.ts13/13은 exit0·success=true로 통과했다. 두 실행은 수집/assertion/전역 오류0·runReason=passed다. 선택 실행을 전체 성공으로 기록하지 않았다.
+- 실제 금융 흐름은 정상 권한 부여·현재 승인/수락된 주문부터 청구·입금 후보/확정·60/40 배분·재전송·중복 및 정정 경계를 연결한다. 이후 확인한 다른 주문 연결의 무소비 재결합 차단 보완과 추가 명령 경합 회귀가 남아 있어 Step8/9 완료 체크는 유지하지 않는다.
+
+## 실제 원장 DB6건의 공통 준비 경계 실패
+
+- 마지막 financial-ledger.spec.ts 통합은 exit1·0/6통과·6실패·미실행/수집/전역 오류0·runReason=failed·success=false였다. 전건 같은 protected-transaction.ts:361 → 시험 파일:50의 초기 저장 경계를 가리켰다.
+- 안전 진단은 UNCLASSIFIED_ERROR/OmsError이며 실제 정적 오류 코드가 없다는 뜻은 아니다. 원문 메시지·SQL·금융 자료를 출력하지 않고 공통 fixture 저장/참조 원인을 소스로 조사한다. 주 실행자도 안전 보고서6개 실패를 대조했다.
+- 같은 소스 반복 실행은 하지 않았다. 제품의 보호·참조/원금 검증을 완화하지 않고 원인 수정 후 좁은 재검증부터 수행한다. 앞선 실제 금융 흐름13건 통과와 원장 DB6건 실패를 구별한다.
+
+## 원장 fixture 배치 수정과101번째 선택 검증
+
+- 공통 실패의 실제 코드는 기존 putNewBatch의 BATCH_LIMIT이었다. fixture가101개를 한 배치로 넣었으므로 같은 트랜잭션에서100+1로 나눴다. 제품의1..100 상한을 늘리지 않았다. 고의 primary-only 오염 준비도 정상 physicalData로 필수 FK를 보존하고 보호 누락만 주입하도록 수정했다.
+- Luna가 같은 U4 격리 DB에서 financial-ledger.spec.ts의 `101번째 배분까지`만 한 번 실행해 exit0·1통과/5필터·실패/수집/assertion/전역 오류0·runReason=passed였다. 선택 실행의 success=false를 전체 suite 통과로 바꾸지 않았다.
+- 전체 원장6건은 아직 재실행하지 않았다. 다른 주문 연결 이동 차단·금융 명령 경합·소비 원금/입금 정정 회귀를 보완한 뒤 같은 안정 소스로 전체 묶음을 확인한다. Step8/9는 미완료다.
+
+## BR4.6·정정·실제 금융 경합 첫 묶음
+
+- 일반 배분에서 이미 다른 주문에 연결된 입금은 소비0이어도 거절하도록 좁혔다. 별도 정정과 일반 배분을 구분한다. 실제 정정7건과 금융 명령 경합3건을 작성했으며 예약/환불 소비 원상은 보호된 합성 seed로서 환불 명령/U7 운영 성공이 아니다.
+- 고정 소스에서 Luna의 금융 명령/출처/집합/원장/모델 단위5파일42/42가 exit0·success=true·runReason=passed·미실행/수집/assertion/전역 오류0으로 통과했다.
+- 다음 corrections/races 실제 DB는10건 중6통과·4실패, exit1·success=false·runReason=failed·미실행/수집/전역 오류0이었다. 정정3/4번은 financial-commands.ts:379/557의 OmsError, 경합1/2번은 시험 파일:51의 AssertionError다. 안전 진단의 UNCLASSIFIED_ERROR를 실제 오류 코드 부재로 해석하지 않는다.
+- 후속 flow13+ledger6 실행은 중단했고 재시도하지 않았다. 제품의 원금/권한/현재성 기준과 실제1회 효과를 보존하며 실패 원인을 조사한다. Step8/9는 미완료다.
+
+## 청구 취소의 정상 계획 전환 검증 준비
+
+- 무기한 승인 계획의 충돌 차단은 유지한다. 처음부터 명시된 종료를 가진 계획이 끝난 뒤 비중첩 구간의 새 계약/계획을 정상 등록·다른 사람 승인·고객 동의/적용하는 기존 생산자 경로로 취소 성공을 검증할 수 있는지 대조했다.
+- raw 승인/계획 변조로 긍정 결과를 만들지 않는다. 실제 U7 운영 등록 대신 명시된 합성 후속 판단 포트를 사용했다는 한계를 유지하고, 해당 정상 경로의 실제 시험은 아직 준비 중이다.
+
+## 정정 입력·경합 패자 사유 선택 재검증
+
+- 정정 fixture가 등록 truth의 actualPaidAt 대신 새 시각을 전달해 U4_SOURCE_UNVERIFIED를 유발한 경로를 수정했다. 경합의 예상 밖 패자 예외는 원래 안전 오류로 전달하도록 했으며 허용 실패 사유를 넓히지 않았다.
+- Luna가 선택4건만 실행해 전체10건 기준1통과·3실패·6필터, exit1·success=false·runReason=failed·수집/전역 오류0이었다. 정정3번은 통과했고4번은 여전히 U4_SOURCE_UNVERIFIED다. 경합1/2번은 AssertionError 대신 protected-write.ts:73의 QueryFailedError로 확인됐다.
+- 원문 DB 메시지/SQL/매개변수를 출력하지 않았다. 정정의 원래 identity/provenance 불변값을 추가 대조하고, 경합은 알려진 SQLSTATE만 확인해 정상 충돌인지 판단한다. QueryFailedError 전체를 허용해 시험을 녹색으로 바꾸지 않는다. 추가 전체 실행이나 같은 소스 재시도는 하지 않았다.
+
+## 정정 근거 문서 수정과 잠금 충돌 식별
+
+- 남은 정정 fixture는 원래 입금 시각 외 sourceEvidence 문서도 등록 truth와 달랐다. 원래 문서/identity를 재사용하도록 수정했다. 안전 진단은 driverError.code의 알려진 SQLSTATE만 읽도록 보완하고 원문 메시지·detail·SQL/parameters는 계속 제외했다.
+- Luna의 안전 진단 단위6/6이 exit0·success=true로 통과했다. 이어 선택3건은 정정1통과·경합2실패·나머지7필터, exit1·success=false·runReason=failed·수집/전역 오류0이었다.
+- 경합의 실제 안전 코드는55P03이며 counter FOR UPDATE 위치를 가리킨다. 제품 lock_timeout/시험 barrier를 대조하여 유한 잠금 충돌과 인위적 fixture 지연을 구별한다. 승자1회·패자 전체 rollback·원금/현재성·기한과 원래 키 재확인을 유지하며 임의 허용 사유 확장이나 제품 timeout 증대로 결과를 맞추지 않는다.
+
+## 유한 금융 진입 경합과 정정·취소 묶음 통과
+
+- barrier는 명령 진입 전이며 트랜잭션 안에서 상대를 기다리지 않는다. 기존 ExecutionBudget의 lock_timeout=min(500ms,남은예산)에서 발생한55P03이었다. 기존 직접 저장 시험에는 이 budget 경계가 없었다.
+- 제품 timeout은 유지했다. 실제 TypeORM QueryFailedError의55P03만 안전한503 U4_FINANCIAL_BUSY로 바꾸며 다른 오류/원문은 통과 조건에 넣지 않는다. 기존 API도 비OmsError를 원문 없이503으로 처리하지만 금융 진입의 구체 재확인 경계를 별도로 두었다.
+- 원래 요청 키/내용 재확인과 새 키/현재 Ref를 이용한 잔여 한도 검증을 구분했다. 패자 접수/배분0·승자 효과1회, 정상 소비 반전/확인 정정·별칭 보존, 현재 계획이 정상 비중첩 승인·고객 동의/적용된 뒤 청구 취소와 소비 후 취소 거절을 포함한다.
+- 고정 소스에서 Luna의 financial-access/safe-diagnostics11/11, races/corrections/cancellation 실제 DB12/12가 모두 exit0·success=true·runReason=passed·미실행/수집/assertion/전역 오류0으로 통과했다. 이어 같은 소스의 기본 흐름13+원장6 검증을 실행 중이다.
+- 미연결 입금의 첫 주문 binding·정상 다른 기업/새 후보의 전역 실제 거래 중복·잘못된 주문 연결의 명시 정정 경계는 마지막 보완으로 남아 있다. 일반 배분의 암묵적 이동을 되살리지 않으며 REVERSED 이력과 현재 APPLIED 귀속을 분리하되 원래 보호 이력/원금을 보존한다. Step8/9는 아직 미완료다.
+
+## 같은 소스의 금융 기본 흐름·누적 원장 통과
+
+- 마지막 flow13+ledger6 통합19/19도 exit0·success=true·runReason=passed·미실행/수집/assertion/전역 오류0으로 통과했다. 주 실행자가 현재 단위11/11 및 통합19/19 보고서의 파일별 실제 집계도 확인했다.
+- 이번 고정 소스3단계 결과는 단위11/11·정정/경합/취소12/12·기본 흐름/원장19/19다.42/42는 앞선 소스의 선택 단위 묶음이며 이번11건과 바꿔 적지 않는다. 실행 담당의 마지막 요약에서 혼동한 수치를 원래 명령/보고서 기준으로 바로잡았다.
+- 정상 비중첩 승인 계획·고객 동의/적용을 통한 취소 긍정2건은 실제 합성 생산자 경로로 통과했으며 무기한 승인 충돌 차단은 유지한다. 실제 U7/금융 운영 등록·배포 준비를 뜻하지 않는다.
+- 미연결 첫 binding·두 정상 기업/새 후보의 전역 중복·명시 잘못된 binding 정정의 마지막 묶음을 이어 구현한다. 전체 U4 및 공유 변경의 기존 영향 회귀는 이 묶음 후 안정 소스로 검증하며 아직 Step8/9 완료 체크를 바꾸지 않는다.
+
+## 마지막 금융 연결·전역 중복 묶음 구현과 검증 시작
+
+- 닫힌 PaymentBindingCorrectionInput/명령을 추가했다. 정확한 기존 입금과 양쪽 주문·현재 권한/계획·원본 확인·실제 영향, 절대 소비 L/RA/RU/HA/HU0을 확인하고 현재 binding 하나와 정정 이력만 원자 변경한다. 일반 배분의 다른 주문 연결은 계속 거절한다.
+- REVERSED 과거 원본은 현재 binding과 구별하면서 원래 allocation/invoice/order 보호 개정·FinancialHistory 전후·이전 이력·동일 기업/범위를 검증한다. 같은 명령의 새 반전은 실제 transaction.rows의 after-image로 구별하며 기존 보호 이력을 생략하지 않는다.
+- binding8건, 미연결 첫 배분과 정상 두 기업/새 후보 전역 거래 중복2건, 닫힌 계약 회귀를 작성했다. 원래 실제 거래 namespace는 기업/채널/profile 개정으로 쪼개지 않으며 타 기업 원본 정보를 노출하지 않는다.
+- 고정 소스에서 Luna가 관련 계약/원장/명령/access/안전 진단36/36을 exit0·success=true·runReason=passed·미실행/수집/assertion/전역 오류0으로 확인했다. 이어 새 binding8+flow15의 실제 DB23건을 실행한다.
+- 새 묶음 통과 후 바로 전체 U4 단위/통합으로 넓힌다. 기존 정정/경합/취소/원장18건은 전체 통합에 포함되므로 별도로 같은 소스를 두 번 실행하지 않는다. 공유 context/페이지 조회/원상 대조 변경의 기존 U1/U2/U3 영향 회귀도 이후 직렬 확인한다. Step8/9는 아직 미완료다.
+
+## 마지막 연결 묶음과 전체 U4 단위 통과
+
+- 같은 소스의 binding8+flow15 실제 DB23/23이 exit0·success=true·runReason=passed·미실행/수집/assertion/전역 오류0으로 통과했다. 주 실행자도 보고서의8/15 파일별 실제 집계를 확인했다.
+- 이어 전체 U4 단위116/116·15파일이 exit0·success=true·runReason=passed·미실행/수집/assertion/전역 오류0으로 통과했다. 전체 U4 DB 통합을 이어 실행 중이며, 이 결과 전에 완료 체크/커밋을 하지 않는다.
+- 기존 영향은 공통 source4 attribute context·ProtectedTransaction의 금융 전용 현재 페이지·U4Repository의 전체 집합 대조·core 공개 접점이다. 기존 쓰기/권한·역할/복구 전이를 이번 묶음에서 재작성하지 않았다. U1/U2/U3의 구형 모델/Ref·보호 payload·DB 권한·계약/접수 영향 회귀를 별도 좁은 목록으로 확인한다.
+
+## 전체 U4 DB 통과와 기존 영향 회귀
+
+- 전체 U4 실제 DB90/90·12파일이 exit0·success=true·runReason=passed·미실행/수집/assertion/전역 오류0으로 통과했다. 주 실행자도 전체 단위116/116·15파일 및 DB90/90의 현재 보고서를 직접 확인했다.
+- 파일별 DB는 commercial14·concurrency4·binding8·cancellation2·corrections7·flow15·ledger6·races3·persistence7·protection-replay14·renewal2·staff-access8이다. 전체 제품 coverage/공식 검증·SYSTEM 지속 기록·실제 금융 운영/배포 성공을 선언한 결과가 아니다.
+- 기존 영향은 Luna 두 명으로 분리했다. 한 명은 DB 없는 U1/U2/U3 선택 단위를 직렬 실행하고, 다른 한 명은 Unit별 격리 DB 준비/통합을 직렬 실행한다. 단위/통합 보고서 경로를 분리하고 DB 병렬 실행은 하지 않는다.
+- U1 선택 단위38/38·실제 DB32/32, U2 실제 DB32/32는 exit0으로 통과했다. 기존 보고서에는 runReason이 없는 경우가 있어 그 필드를 새 보고서처럼 있다고 기록하지 않는다.
+- U2 선택 단위는34건 중33통과·1실패였다. models.spec.ts:68의 전체 등록 이름 기대가 기존 MODELS+U2_MODELS+U3_MODELS만 합쳐 ALL_MODELS와 비교한 것이 원인이다. U3 선택 단위는 이 실패 뒤 미실행했다. CLI와 기존 JSON의 suite 집계 차이는 테스트 assertion 집계와 구분했다.
+- 기존 MODELS의43개와 원래 모델 파일/구형 decoder는 변경하지 않았다. U4가 별도17개 물리 이름을 추가했으므로 해당 U2 단위 파일만 기존 합집합 보존과 명시 신버전 추가·중복/누락·물리 schema 일치를 별도로 검사하도록 보완한다. 제품/현재 DB 실행 의존은 고정하고 수정된 U2 선택 및 미실행 U3 선택만 재검증한다.
+- 전체 DB 중 간헐적인 동일 PG client query 대기 deprecation 경고가 있었다. 정적 후보는 기존 Authorization의 유한 병렬 grant 검사와 U4 동일 manager 읽기 접점이며, 경고 stack으로 동적 위치를 확정한 결과는 아니다. 오류/원금·권한 정합성 결함으로 확인되지 않아 경고를 숨기거나 timeout·권한 알고리즘을 수정하지 않았다.
+
+## Step8/9 최종 영향 회귀 통과
+
+- U2 단위 한 파일의 전체 목록 기대만 위 원칙으로 보완했다. 제품·기존 구형 모델/decoder·U4 시험 실행 의존은 바꾸지 않았다. 주 실행자도 diff에서 기존43개와 기존합집합 보존 및 신규17개 literal의 정확추가·비중첩/누락/중복 검사 유지를 확인했다.
+- Luna의 수정 후 U2 선택 단위34/34·3파일, 미실행 U3 선택 단위119/119·7파일이 모두 exit0·success=true·실패/미실행/수집 오류0으로 통과했다. 기존 보고서의 runReason 부재와 JSON suite 중복 집계는 CLI 파일/실제 assertion 수와 구분한다.
+- 같은 제품 소스의 기존 단위는 U1 모델/스냅샷/payload/budget38, U2 모델/payload/권한34, U3 모델/현재원상/Ref/repository/payload/receipt/계약119다. DB는 U1 모델/계약binding/권한32, U2 모델/migration/repository32, U3 계약/고객동의/migration/repository경계61이며 모두 통과했다. 주 실행자도 DB 보고서의 실제32/32/61과 실패0을 확인했다.
+- 각 DB 준비는 기존 Unit의 격리 검증 경로만 사용해 보존 원본을 초기화하지 않았다. 단위/DB를 Luna 두 명으로 분리했지만 DB 실행은 직렬로 유지했다. 수정된 구형 단위 파일을 U4 전체의 제품 변경으로 취급해 의미 없이 동일116/90 실행을 반복하지 않았다.
+- 승인 계획 Step8/9의 금융 명령과 그 시험을 완료로 기록한다. 총9/18 완료이며 다음은 Step10/11 제공 자격·기한·수동 제한이다. 정상 SYSTEM 지속 기록·실제 환불 명령/U7운영·API/worker·전체 coverage/CI·공식 검증·R-03은 이 마일스톤의 완료 범위가 아니다.
+- 현재 제품/시험/작업기록의 diff-check는 audit 경로를 제외하고 exit0이다. 도구 소유 audit의 기존 trailing whitespace는 직접 편집하지 않았으며 전체 diff가 깨끗하다고 주장하지 않는다. 이 마일스톤을 명시 경로로 커밋·push하고 다음 계층을 진행한다.

@@ -6,7 +6,7 @@ import { validateAttribute } from './model-attribute.js';
 import { U2_MODELS } from './u2-model-catalog.js';
 import { validateU2ModelConstraints } from './u2-model-decoder.js';
 import { U3_MODELS, U3_PERSISTENCE_MODELS, physicalU3Model } from './u3-model-catalog.js';
-import { validateU3ModelConstraints } from './u3-model-decoder.js';
+import { validateU3ModelConstraints, recordedSourceContract } from './u3-model-decoder.js';
 import { U4_PERSISTENCE_MODELS, U4_VERSION3_MODELS } from './u4-model-catalog.js';
 import { validateU4ModelConstraints } from './u4-model-decoder.js';
 
@@ -193,12 +193,21 @@ export function materialSchemas(models: readonly Model[] = ALL_MODELS): EntitySc
 
 export function validateModel(name: string, data: ModelData, schema: SchemaValidator): ModelData {
   const definition = modelForData(name, data);
+  // 공통 원본도 기록한 계약이 Ref 범위를 결정한다. 구버전/미등록 profile을 추정 승격하지 않는다.
+  const sharedSource = ['RequestReceipt', 'WorkItem', 'FactEnvelope'].includes(name)
+    ? recordedSourceContract(data, schema)
+    : { knowledge: 'UNKNOWN' as const };
   const attributeContext = {
     schema,
     columnType,
     findModel: (name: string) => modelByName.get(name),
     u3: data.modelVersion === 2 && u3ByName.has(name),
-    u4: u4ByName.has(name) || data.modelVersion === 3,
+    u4:
+      u4ByName.has(name) ||
+      data.modelVersion === 3 ||
+      (sharedSource.knowledge === 'KNOWN' &&
+        sharedSource.profile === 'urn:oms:contract:u4-financial:1' &&
+        sharedSource.registryVersion === 4),
     u2DecisionBasis:
       name === 'EnterpriseMembership' &&
       !!data.designationBasis &&

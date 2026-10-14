@@ -151,6 +151,10 @@ export interface U4ConfirmPaymentInput extends U4CommandInput {
   identity: U4PaymentIdentity;
   sourceEvidence: U4Evidence;
 }
+export interface U4CancelInvoiceInput extends U4OrderCommandInput {
+  invoiceRef: Ref;
+  sourceEvidence: U4Evidence;
+}
 export interface U4PaymentCorrectionInput extends U4CommandInput {
   paymentEvidenceRef: Ref;
   correctionKind: 'DISPUTE' | 'REVERSE' | 'CONFIRM';
@@ -167,6 +171,11 @@ export interface U4AllocationBatchInput extends U4OrderCommandInput {
 }
 export interface U4AllocationCorrectionInput extends U4OrderCommandInput {
   allocationRef: Ref;
+  sourceEvidence: U4Evidence;
+}
+export interface U4PaymentBindingCorrectionInput extends U4OrderCommandInput {
+  paymentEvidenceRef: Ref;
+  previousOrderRef: Ref;
   sourceEvidence: U4Evidence;
 }
 export interface U4EligibilityInput extends U4OrderCommandInput {

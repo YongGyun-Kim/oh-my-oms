@@ -14,6 +14,33 @@ describe('U4 closed contracts', () => {
   const validator = new SchemaValidator();
   const validate = (definition: string, value: unknown) =>
     validator.validateUri(U4_PROFILE + '#/$defs/' + definition, value);
+  it('명시 연결 정정은 정확한 이전·새 주문과 직원 금융 권한의 닫힌 계약4다', () => {
+    const allocation = u4Allocation();
+    const input = {
+      meta: allocation.meta,
+      targetScope: allocation.targetScope,
+      paymentEvidenceRef: allocation.paymentEvidenceRef,
+      previousOrderRef: u4Ref('OrderAcceptance', 'Order', 'previous'),
+      orderRef: allocation.orderRef,
+      sourceEvidence: u4Evidence(),
+    };
+    expect(validate('PaymentBindingCorrectionInput', input)).toBe(input);
+    for (const patch of [
+      { previousOrderRef: null },
+      { paymentEvidenceRef: input.orderRef },
+      { automatic: true },
+    ])
+      expect(() => validate('PaymentBindingCorrectionInput', { ...input, ...patch })).toThrow();
+    const registry = new OperationRegistry(validator);
+    declareU3Operations(registry);
+    declareU4Operations(registry);
+    expect(registry.lookup('FinancialSettlement', 'correctPaymentBinding', 4)).toMatchObject({
+      action: 'financial.manage',
+      audience: ['STAFF'],
+      targetKind: 'RECORD',
+    });
+    expect(() => registry.lookup('FinancialSettlement', 'correctPaymentBinding', 3)).toThrow();
+  });
 
   it('accepts explicit mixed obligations and free contract labels', () => {
     const plan = u4Plan();

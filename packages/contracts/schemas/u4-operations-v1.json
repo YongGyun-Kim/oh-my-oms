@@ -1,5 +1,58 @@
 [
   {
+    "owner": "FinancialSettlement",
+    "name": "correctPaymentBinding",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "financial.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/PaymentBindingCorrectionInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": {
+          "allOf": [
+            { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref" },
+            {
+              "type": "object",
+              "properties": {
+                "owner": { "const": "FinancialSettlement" },
+                "entity": { "const": "PaymentEvidence" }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "FinancialSettlement",
+    "name": "cancelInvoice",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "financial.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/CancelInvoiceInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/InvoiceRef" }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
     "owner": "EnterpriseAccess",
     "name": "defineStaffRole",
     "contract": "u4-financial",

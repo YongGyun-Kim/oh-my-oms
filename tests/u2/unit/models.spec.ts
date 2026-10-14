@@ -62,9 +62,34 @@ const security = {
 describe('U2 additive 모델과 원래 ID/decoder', () => {
   it('기존 MODELS versioned 목록은 보존하고 물리 schema는 추가 모델을 등록한다', () => {
     expect(MODELS).toHaveLength(43);
-    const expectedNames = [
+    const legacyNames = [
       ...new Set([...MODELS, ...U2_MODELS, ...U3_MODELS].map((model) => model.name)),
     ].sort();
+    // U4의 새 물리 원본만 명시한다. 기존 이름의 model3 표현은 새 테이블이 아니다.
+    const addedNames = [
+      'Invoice',
+      'PaymentEvidence',
+      'PaymentAllocation',
+      'FinancialEligibility',
+      'RefundCase',
+      'RenewalFeeAdjustment',
+      'FinancialExchange',
+      'FinancialReconciliationCase',
+      'FinancialHistory',
+      'FinancialIdentityClaim',
+      'FinancialPaymentBinding',
+      'FinancialInvoiceBinding',
+      'FinancialPaymentBalance',
+      'FinancialInvoiceBalance',
+      'FinancialApprovalBalance',
+      'FinancialRefundIdentityClaim',
+      'FinancialRestriction',
+    ].sort();
+    const actualNames = ALL_MODELS.map((model) => model.name).sort();
+    expect(actualNames.filter((name) => legacyNames.includes(name))).toEqual(legacyNames);
+    expect(actualNames.filter((name) => !legacyNames.includes(name))).toEqual(addedNames);
+    expect(addedNames.filter((name) => legacyNames.includes(name))).toEqual([]);
+    const expectedNames = [...legacyNames, ...addedNames].sort();
     expect(ALL_MODELS.map((model) => model.name).sort()).toEqual(expectedNames);
     expect(new Set(ALL_MODELS.map((model) => model.name)).size).toBe(ALL_MODELS.length);
     expect(

@@ -46,10 +46,10 @@
 - [x] 약정/주문 계층 후 `tests/u4/unit/payment-plan.spec.ts`, `integration/commercial-plan.spec.ts`를 작성·실행한다. 총액 불일치·미승인/동일인·stale revision·명시 전액후불과 미확인·혼합 제공 전200/후800·미발행 필수 의무·동의 없는 변경·같은 회차의 별도 주문 중복·과거 지급 재사용 거절을 검증한다. U3의 기존 구버전 혼합 거절을 제거하지 않고 신버전 지원 회귀를 추가한다. 대응: Step6·VS4.1/4.2/4.14/4.15.
 
 ### Step 8
-- [ ] 핵심 금융 명령을 구현한다. 신규 `packages/core/src/u4-financial-commands.ts`, `u4-financial-ledger.ts`, `u4-financial-access.ts`, `u4-financial-source.ts`에 청구 발행/정정·입금 REVIEW/확정/분쟁·한 주문 binding·수동 배분/정정·대조·불변 이력을 구현한다. 서버 등록 source profile/검증된 직원·원본 없이는 confirmed로 승격하지 않으며 파일hash/UUID/요청 키를 거래 증거로 쓰지 않는다. 정정/취소 후 별칭을 유지하고 기존 환불/예약 원금이 새 현금이 되지 않게 한다. 대응: US4.1/4.4, US4.3의 미지원 자동 연결 거절 기여·BR4.1–4.10/4.16/4.21.
+- [x] 핵심 금융 명령을 구현한다. 신규 `packages/core/src/u4-financial-commands.ts`, `u4-financial-ledger.ts`, `u4-financial-access.ts`, `u4-financial-source.ts`에 청구 발행/정정·입금 REVIEW/확정/분쟁·한 주문 binding·수동 배분/정정·대조·불변 이력을 구현한다. 서버 등록 source profile/검증된 직원·원본 없이는 confirmed로 승격하지 않으며 파일hash/UUID/요청 키를 거래 증거로 쓰지 않는다. 정정/취소 후 별칭을 유지하고 기존 환불/예약 원금이 새 현금이 되지 않게 한다. 대응: US4.1/4.4, US4.3의 미지원 자동 연결 거절 기여·BR4.1–4.10/4.16/4.21.
 
 ### Step 9
-- [ ] 금융 명령 계층 후 `tests/u4/unit/financial-commands.spec.ts`와 기존 Step5 통합 시험을 확장해 `integration/financial-flow.spec.ts`를 실행한다. 청구→원본 확인→입금100→청구60/40 수동 배분→원래 접수 재조회·정정의 완전 경로, 다른 주문/기업/채널/profile 개정의 동일 거래 차단, 한 항목 오류의 전체 rollback, 권한 회수·원본 실패·이미 환불/예약한 배분 취소 거절을 검증한다. 대응: VS4.3–4.6/4.8/4.10/4.11·주 책임 AC4.1/4.4.
+- [x] 금융 명령 계층 후 `tests/u4/unit/financial-commands.spec.ts`와 기존 Step5 통합 시험을 확장해 `integration/financial-flow.spec.ts`를 실행한다. 청구→원본 확인→입금100→청구60/40 수동 배분→원래 접수 재조회·정정의 완전 경로, 다른 주문/기업/채널/profile 개정의 동일 거래 차단, 한 항목 오류의 전체 rollback, 권한 회수·원본 실패·이미 환불/예약한 배분 취소 거절을 검증한다. 대응: VS4.3–4.6/4.8/4.10/4.11·주 책임 AC4.1/4.4.
 
 ### Step 10
 - [ ] 제공 자격·기한·수동 제한과 후속 원본 포트를 구현한다. 신규 `packages/core/src/u4-eligibility.ts`, `u4-due-basis.ts`, `u4-owner-sources.ts`로 SALE_ACCEPTANCE/PROVISION 목적·현재 계획/의무/회차·명시 빈 집합을 검증한다. KST 실제 완료일+합의 달력N·기한일 전체·다음날 후보, 고정일/다른 확인 사건·상위 정정 개정을 구별한다. 직원이 계약상 제한/해제를 기록하고 U5/U6 실제 완료/회수·U7 승인 root를 등록된 포트로 읽는다. 미등록 주체는 UNVERIFIED/HOLD이며 실제 완료/기간을 만들어 넣지 않는다. 대응: US4.5/4.6·협력 US3.4/5.5/6.1/6.5/7.1·BR4.11–4.17/4.23.
