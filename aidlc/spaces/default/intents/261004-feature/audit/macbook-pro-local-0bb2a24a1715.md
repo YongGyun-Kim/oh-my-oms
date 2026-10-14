@@ -72789,3 +72789,102 @@
 **Unit**: u4-financial-settlement
 
 ---
+
+## Human Turn
+**Timestamp**: 2026-10-14T06:33:25Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T06:34:01Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/functional-design/functional-design-questions.md
+**Context**: construction > u4-financial-settlement > functional-design > functional-design-questions.md
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-14T06:34:01Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/.aidlc-engine/answer-text/answer.txt
+**Context**: .aidlc-engine > answer-text > answer.txt
+
+---
+
+## Question Answered
+**Timestamp**: 2026-10-14T06:34:08Z
+**Event**: QUESTION_ANSWERED
+**Stage**: functional-design
+**Details**: 1번이 A라면 계약금과 물건을 받고난 다음 원금 지불은 불가능한거 아니냐?\n\n2. A
+**Unit**: u4-financial-settlement
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-14T06:34:17Z
+**Event**: DECISION_RECORDED
+**Stage**: functional-design
+**Decision**: Q4 추천을 B로 정정한다. A에서는 제공 전 일부 지급 후 물건을 받고 나머지를 지급하는 계약을 지원할 수 없다. 추천 B: 계약에 제공 전 필수 지급분을 명시하고 그 충족 확인 후 출고·활성화하며, 나머지는 계약의 후속 기한에 지급한다. 청구는 계약금·중도금·잔금 유형으로 고정하지 않는다. 이 혼합 지급을 첫 버전에 포함할지 확인한다. Q5 A인 같은 주문 내 직원 수동 배분은 확정됐으며 다시 묻지 않는다.
+**Options**: B 혼합 지급 포함,A 기존 선불 또는 후불 한 조건 유지,X 다른 기준
+**Unit**: u4-financial-settlement
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-14T06:34:44Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T06:35:38Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/functional-design/functional-design-questions.md
+**Context**: construction > u4-financial-settlement > functional-design > functional-design-questions.md
+
+---
+
+## Question Answered
+**Timestamp**: 2026-10-14T06:35:38Z
+**Event**: QUESTION_ANSWERED
+**Stage**: functional-design
+**Details**: ㅇㅇ
+**Unit**: u4-financial-settlement
+
+---
+
+## Error Logged
+**Timestamp**: 2026-10-14T06:36:05Z
+**Event**: ERROR_LOGGED
+**Tool**: aidlc-log
+**Command**: aidlc-log engine log decision --stage functional-design --unit u4-financial-settlement --checkpoint summary-confirmation --questions-file aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/functional-design/functional-design-questions.md --decision 이 기준 전체가 맞으면 상세 기능 설계 문서를 작성할까요? --options Looks correct,Request changes
+**Error**: Summary confirmation questions file aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/functional-design/functional-design-questions.md is invalid: unsupported H2 heading "Sources" after the consolidated summary; only Q<n>, "Requested Changes Feedback", or one "Assumption Confirmation" section may follow.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T06:36:32Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/functional-design/functional-design-questions.md
+**Context**: construction > u4-financial-settlement > functional-design > functional-design-questions.md
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-14T06:36:32Z
+**Event**: DECISION_RECORDED
+**Stage**: functional-design
+**Decision**: 이 기준 전체가 맞으면 상세 기능 설계 문서를 작성할까요?
+**Options**: Looks correct,Request changes
+**Checkpoint**: Consolidated Summary Confirmation
+**Questions File**: aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/functional-design/functional-design-questions.md
+**Unit**: u4-financial-settlement
+
+---
