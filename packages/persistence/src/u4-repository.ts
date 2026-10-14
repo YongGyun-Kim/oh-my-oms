@@ -5,16 +5,27 @@ import {
   U4_PROFILE,
   U4_REGISTRY_VERSION,
   type Ref,
+  ExecutionBudget,
+  SchemaValidator,
 } from '@oms/contracts';
-import type { ProtectedStore, WriteRequest, CommitResult } from './protected-store.js';
+import type {
+  ProtectedStore,
+  WriteRequest,
+  CommitResult,
+  ModelQuery,
+  ProtectedReadSource,
+} from './protected-store.js';
 import type { ProtectedTransaction } from './protected-transaction.js';
 import {
   modelDefinition,
-  storedModelData,
+  modelForData,
   validateModel,
+  primaryAttribute,
   type ModelData,
 } from './model-catalog.js';
 import { U4_PERSISTENCE_MODELS, U4_U3_MODELS } from './u4-model-catalog.js';
+import { U3_MODELS } from './u3-model-catalog.js';
+import { currentSecurityMatches } from './security-state.js';
 
 export const U4_SOURCE_CONTRACT = Object.freeze({
   profile: U4_PROFILE,
@@ -33,11 +44,33 @@ const shared = new Set([
   'ExecutionPermit',
   'OutboxDelivery',
 ]);
-function same(model: string, left: ModelData | null, right: ModelData | null): boolean {
+function same(
+  model: string,
+  left: ModelData | null,
+  right: ModelData | null,
+  schema: SchemaValidator,
+): boolean {
   if (left === null || right === null) return left === right;
-  return (
-    canonicalJson(storedModelData(model, left)) === canonicalJson(storedModelData(model, right))
-  );
+  const comparable = (image: ModelData) => {
+    validateModel(model, image, schema);
+    const optionalNullable = new Set(
+      modelForData(model, image)
+        .attributes.filter(
+          (attribute) =>
+            !attribute.required &&
+            attribute.nullable === true &&
+            !['modelVersion', 'sourceContract'].includes(attribute.name),
+        )
+        .map((attribute) => attribute.name),
+    );
+    // 보호 논리 원상에 물리 확장 필드를 다시 주입하지 않는다. 등록된 선택 NULL만 비교용으로 생략한다.
+    return Object.fromEntries(
+      Object.entries(image).filter(
+        ([name, value]) => value !== undefined && (!optionalNullable.has(name) || value !== null),
+      ),
+    );
+  };
+  return canonicalJson(comparable(left)) === canonicalJson(comparable(right));
 }
 
 // All current-source reads below use the SAME manager that holds the epoch/counter.
@@ -45,12 +78,80 @@ function same(model: string, left: ModelData | null, right: ModelData | null): b
 export class U4Transaction {
   private readonly premises = new Map<
     string,
-    { model: string; id: string; data: ModelData | null }
+    { model: string; id: string; data: ModelData | null; authority?: boolean }
   >();
   constructor(
     readonly transaction: ProtectedTransaction,
     private readonly boundary: ProtectedBoundary,
+    private readonly schema = new SchemaValidator(),
   ) {}
+  readSource(): ProtectedReadSource {
+    return {
+      currentProtected: this.authority.bind(this),
+      currentEpoch: () => this.transaction.financialSecurityEpoch(this.boundary.epoch),
+      readRevision: (model, id, revision) =>
+        this.transaction.financialProtectedRevision(model, id, revision, this.boundary.prefixes),
+      list: this.list.bind(this),
+      scan: this.scan.bind(this),
+      roleStateIds: this.transaction.financialRoleStateIds.bind(this.transaction),
+    };
+  }
+  private async authority(model: string, id: string): Promise<ModelData | null> {
+    await this.transaction.financialSecurityEpoch(this.boundary.epoch);
+    if (this.transaction.rows().some((row) => row.model === model && row.id === id))
+      return this.optional(model, id);
+    const visible = await this.transaction.financialProtectedImage(
+      model,
+      id,
+      this.boundary.prefixes,
+    );
+    const raw = await this.transaction.get(model, id);
+    requireCondition(
+      currentSecurityMatches(model, visible, raw),
+      503,
+      'CURRENT_AUTH_NOT_PROTECTED',
+      '현재 권위 원본의 보호 확인이 필요합니다.',
+    );
+    this.premises.set(model + '/' + id, { model, id, data: visible, authority: true });
+    return visible;
+  }
+  private async list(model: string, query: ModelQuery = {}): Promise<ModelData[]> {
+    await this.transaction.financialSecurityEpoch(this.boundary.epoch);
+    requireCondition(
+      Object.keys(query).every((key) => ['equals', 'cursor', 'limit'].includes(key)),
+      400,
+      'U4_READ_FILTER',
+      '등록된 권위 조회 조건만 허용합니다.',
+    );
+    const visible = await this.transaction.financialProtectedPage(
+      model,
+      query,
+      this.boundary.prefixes,
+    );
+    for (const data of visible)
+      await this.authority(model, String(data[primaryAttribute(modelDefinition(model)).name]));
+    return visible;
+  }
+  private async *scan(
+    model: string,
+    equals: Record<string, unknown>,
+    deadlineAt: string,
+  ): AsyncGenerator<ModelData> {
+    let cursor: string | null = null;
+    for (;;) {
+      ExecutionBudget.current()?.check();
+      requireCondition(
+        Date.now() < Date.parse(deadlineAt),
+        503,
+        'QUERY_DEADLINE',
+        '현재 권위 조회 기한을 확인해야 합니다.',
+      );
+      const rows = await this.list(model, { equals, cursor, limit: 100 });
+      for (const row of rows) yield row;
+      if (rows.length < 100) return;
+      cursor = String(rows.at(-1)![primaryAttribute(modelDefinition(model)).name]);
+    }
+  }
   async current(reference: Ref): Promise<ModelData> {
     requireCondition(
       modelDefinition(reference.entity).owner === reference.owner,
@@ -72,7 +173,7 @@ export class U4Transaction {
     if (written) {
       const raw = await this.transaction.get(model, id);
       requireCondition(
-        !written.deleted && same(model, raw, written.data),
+        !written.deleted && same(model, raw, written.data, this.schema),
         409,
         'U4_PREMISE_CHANGED',
         '같은 변경의 원본이 다릅니다.',
@@ -86,7 +187,7 @@ export class U4Transaction {
     );
     const raw = await this.transaction.get(model, id);
     requireCondition(
-      same(model, visible, raw),
+      same(model, visible, raw, this.schema),
       503,
       'CURRENT_U4_NOT_PROTECTED',
       '선행 원본의 보호 확인 후 다시 대조해야 합니다.',
@@ -100,7 +201,10 @@ export class U4Transaction {
       const change = changes.get(key);
       const current = await this.transaction.get(premise.model, premise.id);
       requireCondition(
-        !change?.deleted && same(premise.model, current, change?.data ?? premise.data),
+        !change?.deleted &&
+          (premise.authority && !change
+            ? currentSecurityMatches(premise.model, premise.data, current)
+            : same(premise.model, current, change?.data ?? premise.data, this.schema)),
         409,
         'U4_PREMISE_CHANGED',
         '처리 중 원본 전제가 변경되었습니다.',
@@ -152,13 +256,13 @@ export class U4Repository {
     return this.store.execute(
       prepared,
       async (transaction, requestId) => {
-        const scope = new U4Transaction(transaction, boundary);
+        const scope = new U4Transaction(transaction, boundary, this.store.schema);
         await revalidate(scope);
         await operation(scope, requestId);
         await revalidate(scope);
         await scope.assertPremises();
         for (const row of transaction.rows()) {
-          const own = [...U4_PERSISTENCE_MODELS, ...U4_U3_MODELS].some(
+          const own = [...U4_PERSISTENCE_MODELS, ...U4_U3_MODELS, ...U3_MODELS].some(
             (model) => model.name === row.model && model.owner === request.owner,
           );
           requireCondition(
@@ -171,7 +275,7 @@ export class U4Repository {
         }
       },
       async (transaction) => {
-        const scope = new U4Transaction(transaction, boundary);
+        const scope = new U4Transaction(transaction, boundary, this.store.schema);
         await revalidate(scope);
         await scope.assertPremises();
       },

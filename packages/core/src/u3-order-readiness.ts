@@ -12,8 +12,10 @@ import type {
   U3OrderLineInput,
   U3OrderPriceBreakdown,
   U3Period,
+  U4CapturedLine,
+  U4AgreedPaymentPlan,
 } from '@oms/contracts';
-import type { ProtectedStore } from '@oms/persistence';
+import type { ProtectedStore, ProtectedReadSource } from '@oms/persistence';
 
 export type U3ReadinessOwner = 'FinancialSettlement' | 'HardwareFulfillment' | 'SoftwareLifecycle';
 export interface U3ReadinessLine extends U3OrderLineInput {
@@ -244,6 +246,212 @@ export class U3OrderReadiness {
       // 확인 수량은 수락 판단의 근거이며 후속 지급·출고·발급 완료를 뜻하지 않는다.
       confirmed(line.knowledge !== 'KNOWN' || line.readyQuantity !== null);
     }
+    return structuredClone(result);
+  }
+}
+
+export interface U4ReadinessRequest extends Omit<U3ReadinessRequest, 'paymentKind' | 'lines'> {
+  paymentKind: 'PREPAY' | 'POSTPAY' | 'MIXED';
+  lines: (U4CapturedLine & { lineRef: Ref })[];
+  paymentPlan: U4AgreedPaymentPlan;
+  assessmentPurpose: 'SALE_ACCEPTANCE';
+}
+export interface U4ReadinessBinding extends U4ReadinessRequest {
+  owner: U3ReadinessOwner;
+  ownerRegistration: string;
+  purpose: 'U4_SALE_ACCEPTANCE_READINESS';
+}
+export interface U4ReadinessObservation extends Omit<U3ReadinessObservation, 'binding'> {
+  binding: U4ReadinessBinding;
+}
+export type U4ReadinessRegistration =
+  | { kind: 'UNREGISTERED'; owner: U3ReadinessOwner }
+  | {
+      kind: 'REGISTERED_OWNER' | 'LOCAL_SYNTHETIC';
+      owner: U3ReadinessOwner;
+      ownerRegistration: string;
+      readReadiness(
+        binding: U4ReadinessBinding,
+        signal: AbortSignal,
+      ): Promise<U4ReadinessObservation>;
+    };
+
+// 새 프로필은 수락 가능 판단만 요청한다. 제공 전 입금 충족을 주장하거나 구형 혼합 거절을 완화하지 않는다.
+export class U4OrderReadiness {
+  private readonly registrations = new Map<U3ReadinessOwner, U4ReadinessRegistration>();
+  constructor(
+    readonly store: ProtectedStore,
+    readonly now: () => Date,
+    registrations: U4ReadinessRegistration[] = [],
+  ) {
+    for (const registration of registrations) {
+      confirmed(
+        Object.hasOwn(entities, registration.owner) && !this.registrations.has(registration.owner),
+      );
+      requireCondition(
+        registration.kind !== 'LOCAL_SYNTHETIC' || process.env.NODE_ENV !== 'production',
+        503,
+        'ORDER_SYNTHETIC_READINESS',
+        '운영에서는 합성 준비 원본을 등록할 수 없습니다.',
+      );
+      confirmed(
+        registration.kind === 'UNREGISTERED' ||
+          ((registration.kind === 'LOCAL_SYNTHETIC' || registration.kind === 'REGISTERED_OWNER') &&
+            typeof registration.readReadiness === 'function'),
+      );
+      if (registration.kind === 'UNREGISTERED')
+        this.registrations.set(registration.owner, Object.freeze({ ...registration }));
+      else {
+        store.schema.validate('Id', registration.ownerRegistration);
+        confirmed(typeof registration.readReadiness === 'function');
+        this.registrations.set(
+          registration.owner,
+          Object.freeze({
+            ...registration,
+            readReadiness: registration.readReadiness.bind(registration),
+          }),
+        );
+      }
+    }
+  }
+  async current(
+    owner: U3ReadinessOwner,
+    request: U4ReadinessRequest,
+    reads: Pick<ProtectedReadSource, 'currentEpoch'>,
+  ): Promise<U4ReadinessObservation> {
+    const registration = this.registrations.get(owner);
+    confirmed(registration && registration.kind !== 'UNREGISTERED');
+    if (!registration || registration.kind === 'UNREGISTERED')
+      throw new OmsError(
+        503,
+        'ORDER_READINESS_UNCONFIRMED',
+        '수락 판단 원본 생산자가 등록되지 않았습니다.',
+      );
+    const schema = this.store.schema;
+    schema.validateUri('urn:oms:contract:u4-financial:1#/$defs/TargetScope', request.targetScope);
+    schema.validateUri(
+      'urn:oms:contract:u4-financial:1#/$defs/AgreedPaymentPlan',
+      request.paymentPlan,
+    );
+    schema.validateUri(U3_PROFILE + '#/$defs/OrderPriceBreakdown', request.priceBreakdown);
+    for (const reference of [
+      request.orderRef,
+      request.purchaseTermsRef,
+      request.currentTermsRef,
+      request.enterpriseRef,
+    ])
+      schema.validateUri(U3_PROFILE + '#/$defs/Ref', reference);
+    confirmed(
+      request.assessmentPurpose === 'SALE_ACCEPTANCE' &&
+        request.priceBreakdown.knowledge === 'KNOWN' &&
+        exact(request.paymentPlan.total, request.priceBreakdown.total) &&
+        request.paymentKind ===
+          (request.paymentPlan.obligations.every((value) => !value.requiredBeforeProvision)
+            ? 'POSTPAY'
+            : request.paymentPlan.obligations.every((value) => value.requiredBeforeProvision)
+              ? 'PREPAY'
+              : 'MIXED') &&
+        request.provisionChoice === 'FULL' &&
+        exact(request.enterpriseRef, request.targetScope.enterpriseRef) &&
+        request.orderRef.owner === 'OrderAcceptance' &&
+        request.orderRef.entity === 'Order' &&
+        request.purchaseTermsRef.owner === 'OrderAcceptance' &&
+        request.purchaseTermsRef.entity === 'PurchaseTermsSnapshot' &&
+        request.currentTermsRef.owner === 'OrderAcceptance' &&
+        ['PurchaseTermsSnapshot', 'OrderChangeApplication'].includes(
+          request.currentTermsRef.entity,
+        ) &&
+        ['PREPAY', 'POSTPAY', 'MIXED'].includes(request.paymentKind) &&
+        ['HARDWARE', 'SOFTWARE'].includes(request.productType) &&
+        request.lines.length > 0 &&
+        request.lines.length <= 100 &&
+        /^[a-f0-9]{64}$/.test(request.decisionDigest) &&
+        request.epoch === (await reads.currentEpoch()),
+    );
+    const ids = new Set<string>();
+    for (const line of request.lines) {
+      const { lineRef, ...captured } = line;
+      schema.validateUri('urn:oms:contract:u4-financial:1#/$defs/CapturedLine', captured);
+      schema.validateUri(U3_PROFILE + '#/$defs/Ref', lineRef);
+      confirmed(
+        lineRef.owner === 'OrderAcceptance' &&
+          lineRef.entity === 'OrderLine' &&
+          !ids.has(lineRef.id) &&
+          line.paymentMode === request.paymentKind,
+      );
+      ids.add(lineRef.id);
+    }
+    const binding: U4ReadinessBinding = {
+      ...structuredClone(request),
+      owner,
+      ownerRegistration: registration.ownerRegistration,
+      purpose: 'U4_SALE_ACCEPTANCE_READINESS',
+    };
+    const signal = ExecutionBudget.current()?.signalWithin(5000) ?? AbortSignal.timeout(5000);
+    const began = this.now().getTime();
+    let onAbort: () => void = () => {};
+    const aborted = new Promise<never>((_resolve, reject) => {
+      onAbort = () =>
+        reject(
+          new OmsError(
+            503,
+            'ORDER_READINESS_UNCONFIRMED',
+            '소유자 수락 판단 조회 기한이 종료됐습니다.',
+          ),
+        );
+      signal.addEventListener('abort', onAbort, { once: true });
+      if (signal.aborted) onAbort();
+    });
+    let result: U4ReadinessObservation;
+    try {
+      result = await Promise.race([
+        registration.readReadiness(structuredClone(binding), signal),
+        aborted,
+      ]);
+    } catch {
+      throw new OmsError(
+        503,
+        'ORDER_READINESS_UNCONFIRMED',
+        '수락 판단 원본을 현재 확인하지 못했습니다.',
+      );
+    } finally {
+      signal.removeEventListener('abort', onAbort);
+    }
+    confirmed(
+      result &&
+        Object.keys(result).sort().join(',') ===
+          'binding,expiresAt,knowledge,lines,observedAt,sourceRef,sourceRefs' &&
+        exact(result.binding, binding) &&
+        ['KNOWN', 'UNKNOWN', 'CONFLICT', 'UNAVAILABLE'].includes(result.knowledge) &&
+        !signal.aborted &&
+        Date.parse(result.observedAt) >= began &&
+        Date.parse(result.observedAt) <= this.now().getTime() &&
+        Date.parse(result.expiresAt) > this.now().getTime() &&
+        request.epoch === (await reads.currentEpoch()),
+    );
+    schema.validateUri(U3_PROFILE + '#/$defs/Ref', result.sourceRef);
+    schema.validateUri(U3_PROFILE + '#/$defs/Refs', result.sourceRefs);
+    confirmed(
+      result.sourceRef.owner === owner &&
+        result.sourceRef.entity === entities[owner] &&
+        result.sourceRefs.length > 0 &&
+        result.sourceRefs.length <= 100 &&
+        result.sourceRefs.every((reference) => reference.owner === owner) &&
+        result.sourceRefs.some((reference) => exact(reference, result.sourceRef)) &&
+        Array.isArray(result.lines) &&
+        result.lines.length === request.lines.length,
+    );
+    for (const [index, line] of result.lines.entries())
+      confirmed(
+        Object.keys(line).sort().join(',') ===
+          'activationResolution,knowledge,lineRef,readyQuantity' &&
+          exact(line.lineRef, request.lines[index]!.lineRef) &&
+          ['KNOWN', 'UNKNOWN', 'CONFLICT', 'UNAVAILABLE'].includes(line.knowledge) &&
+          ['NOT_REQUIRED', 'CONFIRMED', 'UNCONFIRMED'].includes(line.activationResolution) &&
+          (line.readyQuantity === null ||
+            (Number.isSafeInteger(line.readyQuantity) && line.readyQuantity >= 0)) &&
+          (line.knowledge !== 'KNOWN' || line.readyQuantity !== null),
+      );
     return structuredClone(result);
   }
 }

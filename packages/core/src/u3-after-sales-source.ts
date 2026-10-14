@@ -6,7 +6,7 @@ import {
   U3_PROFILE,
 } from '@oms/contracts';
 import type { Ref, TargetScope } from '@oms/contracts';
-import type { ProtectedStore } from '@oms/persistence';
+import type { ProtectedStore, ProtectedReadSource } from '@oms/persistence';
 
 export interface U3AfterSalesBinding {
   owner: 'AfterSalesDecision';
@@ -98,6 +98,7 @@ export class U3AfterSalesSource {
   }
   async current(
     request: Omit<U3AfterSalesBinding, 'owner' | 'ownerRegistration' | 'operation'>,
+    reads: Pick<ProtectedReadSource, 'currentEpoch'> = this.store,
   ): Promise<U3AfterSalesObservation> {
     const registration = this.registration;
     verified(registration.kind !== 'UNREGISTERED');
@@ -128,7 +129,7 @@ export class U3AfterSalesSource {
         request.consentRef.entity === 'CustomerConsent' &&
         /^[a-f0-9]{64}$/.test(request.termsFingerprint) &&
         /^[a-f0-9]{64}$/.test(request.applicationDigest) &&
-        request.epoch === (await this.store.currentEpoch()),
+        request.epoch === (await reads.currentEpoch()),
     );
     const binding: U3AfterSalesBinding = {
         ...structuredClone(request),
@@ -170,7 +171,7 @@ export class U3AfterSalesSource {
         Date.parse(result.facts.observedAt) >= began &&
         Date.parse(result.facts.observedAt) <= this.now().getTime() &&
         Date.parse(result.expiresAt) > this.now().getTime() &&
-        request.epoch === (await this.store.currentEpoch()) &&
+        request.epoch === (await reads.currentEpoch()) &&
         exact(result.facts.data.orderRef, request.orderRef) &&
         exact(result.facts.data.decisionRef, request.decisionRef) &&
         result.facts.data.decision === 'ALLOW' &&

@@ -1,8 +1,18 @@
 import { canonicalJson, requireCondition, ExecutionBudget, OmsError } from '@oms/contracts';
 import type { Ref } from '@oms/contracts';
-import type { ModelData, ProtectedStore, U3Transaction } from '@oms/persistence';
+import type {
+  ModelData,
+  ProtectedStore,
+  ProtectedTransaction,
+  ProtectedReadSource,
+} from '@oms/persistence';
 import { Authorization } from './authorization.js';
-import { ref, u3Ref } from './references.js';
+import { ref, u3Ref, u4Ref } from './references.js';
+
+export interface U3BasisScope {
+  current(reference: Ref): Promise<ModelData>;
+  readonly transaction: ProtectedTransaction;
+}
 
 export interface U3EvidenceRegistration {
   kind: 'UNREGISTERED' | 'LOCAL_SYNTHETIC' | 'REGISTERED_OWNER';
@@ -58,10 +68,12 @@ const confirmed = (condition: unknown) =>
 export class U3CurrentBasis {
   readonly registration: U3EvidenceRegistration;
   private readonly authorization: Authorization;
+  private readonly reads: ProtectedReadSource;
   constructor(
     readonly store: ProtectedStore,
     readonly now: () => Date,
     registration: U3EvidenceRegistration = UNREGISTERED_U3_EVIDENCE,
+    reads?: ProtectedReadSource,
   ) {
     this.registration = Object.freeze({
       ...registration,
@@ -74,7 +86,8 @@ export class U3CurrentBasis {
           })
         : undefined,
     });
-    this.authorization = new Authorization(store, now);
+    this.authorization = new Authorization(store, now, reads);
+    this.reads = this.authorization.reads;
     requireCondition(
       registration.kind !== 'LOCAL_SYNTHETIC' || process.env.NODE_ENV !== 'production',
       503,
@@ -96,7 +109,7 @@ export class U3CurrentBasis {
     );
   }
   private async ownerProof(
-    scope: U3Transaction,
+    scope: U3BasisScope,
     kind: 'verifyEvidence' | 'verifyPerson',
     purpose: string,
     subjectRef: Ref,
@@ -113,7 +126,7 @@ export class U3CurrentBasis {
         context!.targetEnterpriseRef.entity === 'Enterprise',
     );
     await scope.current(context!.targetEnterpriseRef);
-    confirmed(context!.epoch === (await this.store.currentEpoch()));
+    confirmed(context!.epoch === (await this.reads.currentEpoch()));
     const sourceRefs = [
       ...new Map(
         [...references, context!.targetEnterpriseRef].map((value) => [canonicalJson(value), value]),
@@ -163,7 +176,7 @@ export class U3CurrentBasis {
         Date.parse(result.observedAt) <= this.now().getTime() &&
         Date.parse(result.expiresAt) > this.now().getTime() &&
         !signal.aborted &&
-        context!.epoch === (await this.store.currentEpoch()),
+        context!.epoch === (await this.reads.currentEpoch()),
     );
     // 같은 namespace의 안정적인 비식별 digest만 비교한다. 원문 신원값을 반환/저장하지 않는다.
     if (kind === 'verifyPerson')
@@ -172,14 +185,18 @@ export class U3CurrentBasis {
     return kind === 'verifyPerson' ? result!.personKey! : null;
   }
   async collection(
-    scope: U3Transaction,
+    scope: U3BasisScope,
     model: string,
     equals: Record<string, unknown>,
   ): Promise<ModelData[]> {
     const reference = (data: ModelData) =>
-      data.modelVersion === 2 ? u3Ref(model, data, this.store.schema) : ref(model, data);
+      data.modelVersion === 3
+        ? u4Ref(model, data, this.store.schema)
+        : data.modelVersion === 2
+          ? u3Ref(model, data, this.store.schema)
+          : ref(model, data);
     const raw = await scope.transaction.list(model, equals, 100),
-      visible = await this.store.list(model, { equals, limit: 100 });
+      visible = await this.reads.list(model, { equals, limit: 100 });
     confirmed(
       raw.length < 100 &&
         visible.length < 100 &&
@@ -193,7 +210,7 @@ export class U3CurrentBasis {
     return records;
   }
   async evidence(
-    scope: U3Transaction,
+    scope: U3BasisScope,
     references: Ref[],
     purpose: string,
     accountRef: Ref,
@@ -286,7 +303,7 @@ export class U3CurrentBasis {
       );
   }
   async person(
-    scope: U3Transaction,
+    scope: U3BasisScope,
     accountRef: Ref,
     personRef: Ref | null,
     context?: U3ApprovalProofContext,
@@ -399,7 +416,7 @@ export class U3CurrentBasis {
     return { link, identityKey: personKey ?? String(link.personLinkId) };
   }
   async differentPeople(
-    scope: U3Transaction,
+    scope: U3BasisScope,
     registrant: Ref,
     registeredPerson: Ref | null,
     approver: Ref,

@@ -1,4 +1,12 @@
 import type { CommandMeta, Knowledge, Money, Ref, TargetScope } from './types.js';
+import type {
+  U3CapturedLine,
+  U3OrderInput,
+  U3OrderLineInput,
+  ConditionBinding,
+  U3AppliedTerms,
+  U3ProposalInput,
+} from './u3-types.js';
 export type FinancialSourceContract =
   | { profile: 'urn:oms:contract:u3-commercial:2'; registryVersion: 3 }
   | { profile: 'urn:oms:contract:u4-financial:1'; registryVersion: 4 };
@@ -38,6 +46,62 @@ export interface U4AgreedPaymentPlan {
   customerConsentRef: Ref | null;
   knowledge: 'KNOWN';
 }
+export type U4PaymentPlanDraft = Pick<
+  U4AgreedPaymentPlan,
+  'planRevision' | 'total' | 'obligations' | 'knowledge'
+>;
+export interface U4AgreementPlanInput {
+  meta: CommandMeta;
+  enterpriseRef: Ref;
+  sourceAgreementRevisionRef: Ref;
+  planDraft: U4PaymentPlanDraft;
+}
+export type U4ConditionBinding =
+  | ConditionBinding
+  | {
+      conditionKey: 'PAYMENT';
+      value: { mode: 'MIXED'; termsRef: Ref };
+      sourceRef: Ref;
+      effectiveWindow: import('./u3-types.js').EffectiveWindow;
+      evidenceRefs: Ref[];
+    };
+export interface U4OrderLineInput extends Omit<
+  U3OrderLineInput,
+  'paymentMode' | 'conditionBindings'
+> {
+  conditionBindings: U4ConditionBinding[];
+}
+export interface U4OrderInput extends Omit<U3OrderInput, 'lines'> {
+  lines: U4OrderLineInput[];
+  paymentPlanRef: Ref;
+  renewal: { entitlementRef: Ref; renewalCycleRef: Ref; originalTermsRef: Ref } | null;
+}
+export interface U4CapturedLine extends Omit<U3CapturedLine, 'paymentMode' | 'conditionBindings'> {
+  paymentMode: 'PREPAY' | 'POSTPAY' | 'MIXED';
+  conditionBindings: U4ConditionBinding[];
+}
+export interface U4AppliedTerms extends Omit<U3AppliedTerms, 'capturedLines'> {
+  capturedLines: U4CapturedLine[];
+}
+export interface U4PlanProposalInput extends Omit<
+  U3ProposalInput,
+  'targetOrderRef' | 'targetEntitlementRef' | 'targetRenewalCycleRef'
+> {
+  targetOrderRef: Ref;
+  targetEntitlementRef: null;
+  targetRenewalCycleRef: null;
+  paymentPlanRef: Ref;
+}
+export type U4ApplyPlanInput = {
+  meta: CommandMeta;
+  targetScope: TargetScope;
+  orderRef: Ref;
+  customerConsentRef: Ref;
+  newTermsRef: Ref;
+} & (
+  | { changeKind: 'REVIEW_PAYMENT_PLAN_CHANGE'; afterSalesDecisionRef: null }
+  | { changeKind: 'ACCEPTED_AFTERSALES_CHANGE'; afterSalesDecisionRef: Ref }
+);
 export interface U4PaymentIdentity {
   sourceProfileId: string;
   sourceProfileRevision: number;

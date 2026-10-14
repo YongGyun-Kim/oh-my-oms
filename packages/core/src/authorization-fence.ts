@@ -21,7 +21,7 @@ export class AuthorizationFence {
     profile: 'u1:2' | 'u2:1' = 'u2:1',
   ): Promise<AuthorizationSnapshot> {
     const a = this.authorization,
-      store = a.store;
+      store = a.reads;
     const account = await a.identity(context, transaction);
     requireCondition(
       context.audience !== 'SYSTEM',

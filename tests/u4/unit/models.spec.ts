@@ -91,6 +91,32 @@ describe('U4 model originals and version boundaries', () => {
     expect(modelForData('Product', legacyProduct()).name).toBe('Product');
     expect(() => storedModelData('Order', { ...old, paymentPlan: u4Plan() })).toThrow();
   });
+  it('model3 계약의 합의 근거 목록은 U4 Ref로 검증하며 기존 model2·위조 거절을 보존한다', () => {
+    const evidence = {
+      owner: 'IdentityRecovery',
+      entity: 'VerificationEvidence',
+      id: 'synthetic-proof',
+      revision: 1,
+    };
+    const old = { ...modelFixture('AgreementRevision'), agreementEvidenceRefs: [evidence] };
+    expect(validateModel('AgreementRevision', old, schema)).toBe(old);
+    const { planRevision, total, obligations, knowledge } = u4Plan();
+    const current = {
+      ...old,
+      modelVersion: 3,
+      paymentPlan: null,
+      paymentPlanDraft: { planRevision, total, obligations, knowledge },
+    };
+    expect(validateModel('AgreementRevision', current, schema)).toBe(current);
+    for (const original of [old, current])
+      expect(() =>
+        validateModel(
+          'AgreementRevision',
+          { ...original, agreementEvidenceRefs: [{ ...evidence, entity: 'UnregisteredEvidence' }] },
+          schema,
+        ),
+      ).toThrow();
+  });
   it('refuses refund portion totals and current operation mismatch', () => {
     const row = u4ModelFixture('RefundCase');
     expect(() =>

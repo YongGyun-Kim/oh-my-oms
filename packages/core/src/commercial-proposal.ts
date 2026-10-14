@@ -425,10 +425,11 @@ export class CommercialProposal {
     confirmed(recorded.receipt.requestFingerprint === fingerprint(originalInput));
     return { consent, proposal, proposalRef, content };
   }
-  private async currentConsentAuthority(
-    scope: U3Transaction,
+  async currentConsentAuthority(
+    scope: import('./u3-current-basis.js').U3BasisScope,
     consent: ModelData,
     target: TargetScope,
+    reads: import('@oms/persistence').ProtectedReadSource = this.commands.authorization.reads,
   ): Promise<void> {
     const references = consent.evidenceRefs as Ref[],
       sources: { ref: Ref; data: ModelData }[] = [];
@@ -453,7 +454,7 @@ export class CommercialProposal {
       exact(account.ref, actor) &&
         account.data.active &&
         (security.data.accountRef as Ref).id === actor.id &&
-        security.data.epoch === (await this.store.currentEpoch()) &&
+        security.data.epoch === (await reads.currentEpoch()) &&
         binding.data.active &&
         binding.data.audience === 'CUSTOMER' &&
         (binding.data.accountRef as Ref).id === actor.id &&
@@ -465,7 +466,7 @@ export class CommercialProposal {
         enterprise.data.usageEnabled &&
         (fence.data.enterpriseRef as Ref).id === target.enterpriseRef.id,
     );
-    const original = await this.store.readRevision(
+    const original = await reads.readRevision(
       'Enterprise',
       target.enterpriseRef.id,
       target.organisationRevision,

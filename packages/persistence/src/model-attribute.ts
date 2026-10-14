@@ -239,7 +239,11 @@ export function validateAttribute(
           type: 'array',
           minItems: 1,
           maxItems: 100,
-          items: { $ref: 'urn:oms:contract:common:2#/$defs/Ref' },
+          items: {
+            $ref: context.u4
+              ? 'urn:oms:contract:u4-financial:1#/$defs/Ref'
+              : 'urn:oms:contract:common:2#/$defs/Ref',
+          },
         },
         value,
       );
@@ -253,11 +257,13 @@ export function validateAttribute(
           type: 'array',
           maxItems: 100,
           items: {
-            $ref: context.u2
-              ? 'urn:oms:contract:u2-access-additions:1#/$defs/Ref'
-              : context.u3
-                ? 'urn:oms:contract:u3-commercial:2#/$defs/Ref'
-                : 'urn:oms:contract:common:2#/$defs/Ref',
+            $ref: context.u4
+              ? 'urn:oms:contract:u4-financial:1#/$defs/Ref'
+              : context.u2
+                ? 'urn:oms:contract:u2-access-additions:1#/$defs/Ref'
+                : context.u3
+                  ? 'urn:oms:contract:u3-commercial:2#/$defs/Ref'
+                  : 'urn:oms:contract:common:2#/$defs/Ref',
           },
         },
         value,

@@ -40,10 +40,10 @@
 - [x] 저장 계층 후 `tests/u4/unit/models.spec.ts`, `repository.spec.ts`, `recovery-payload.spec.ts` 및 `integration/persistence.spec.ts`, `concurrency.spec.ts`, `protection-replay.spec.ts`를 작성·실행한다. 실제 PostgreSQL 별도 연결/서로 다른 요청의 유일성 경합·입금100에80+80·두 입금의 청구100 소비·동일 승인 root 경합·rollback·101건 이상 누적 집계·보호 실패/응답 유실/epoch 변경·보조 원상/제약 복구 누락을 확인한다. old U1/U2/U3 자료와 새 원본의 decoder/replay를 함께 검사한다. 전체 DR 부하 시험으로 확대하지 않는다. 대응: AC4.1.2/4.4.2/4.4.4/8.6.2/8.6.4·NFR4/5/13.
 
 ### Step 6
-- [ ] U3 소유의 지급 계획/승인·주문 연결을 확장한다. 신규 `packages/core/src/u4-payment-plan.ts`, `u4-commercial-adapter.ts`와 기존 commercial-terms/commercial-agreement/commercial-proposal/proposal-terms/order-terms/order-acceptance/u3-order-readiness/u3-current-basis의 필요한 접점을 변경한다. 승인한 exact 총액과 의무 합계·현재 계약/계획·다른 사람 승인·제안/고객 동의를 연결한다. `u3-renewal-source.ts`의 검증된 회차를 별도 갱신 주문의 안정 키에 결합한다. 수락용 지급 판단은 제공용 충족과 분리하고 구버전 PREPAY/POSTPAY/기존 snapshot을 자동 변환하지 않는다. 다른 소유자의 테이블을 U4에서 직접 수정하지 않는다. 대응: US4.1/4.5·협력 US2.4/2.6/3.1/3.4/3.5/7.1/7.5·BR4.3/4.11/4.12/4.23.
+- [x] U3 소유의 지급 계획/승인·주문 연결을 확장한다. 신규 `packages/core/src/u4-payment-plan.ts`, `u4-commercial-adapter.ts`와 기존 commercial-terms/commercial-agreement/commercial-proposal/proposal-terms/order-terms/order-acceptance/u3-order-readiness/u3-current-basis의 필요한 접점을 변경한다. 승인한 exact 총액과 의무 합계·현재 계약/계획·다른 사람 승인·제안/고객 동의를 연결한다. `u3-renewal-source.ts`의 검증된 회차를 별도 갱신 주문의 안정 키에 결합한다. 수락용 지급 판단은 제공용 충족과 분리하고 구버전 PREPAY/POSTPAY/기존 snapshot을 자동 변환하지 않는다. 다른 소유자의 테이블을 U4에서 직접 수정하지 않는다. 대응: US4.1/4.5·협력 US2.4/2.6/3.1/3.4/3.5/7.1/7.5·BR4.3/4.11/4.12/4.23.
 
 ### Step 7
-- [ ] 약정/주문 계층 후 `tests/u4/unit/payment-plan.spec.ts`, `integration/commercial-plan.spec.ts`를 작성·실행한다. 총액 불일치·미승인/동일인·stale revision·명시 전액후불과 미확인·혼합 제공 전200/후800·미발행 필수 의무·동의 없는 변경·같은 회차의 별도 주문 중복·과거 지급 재사용 거절을 검증한다. U3의 기존 구버전 혼합 거절을 제거하지 않고 신버전 지원 회귀를 추가한다. 대응: Step6·VS4.1/4.2/4.14/4.15.
+- [x] 약정/주문 계층 후 `tests/u4/unit/payment-plan.spec.ts`, `integration/commercial-plan.spec.ts`를 작성·실행한다. 총액 불일치·미승인/동일인·stale revision·명시 전액후불과 미확인·혼합 제공 전200/후800·미발행 필수 의무·동의 없는 변경·같은 회차의 별도 주문 중복·과거 지급 재사용 거절을 검증한다. U3의 기존 구버전 혼합 거절을 제거하지 않고 신버전 지원 회귀를 추가한다. 대응: Step6·VS4.1/4.2/4.14/4.15.
 
 ### Step 8
 - [ ] 핵심 금융 명령을 구현한다. 신규 `packages/core/src/u4-financial-commands.ts`, `u4-financial-ledger.ts`, `u4-financial-access.ts`, `u4-financial-source.ts`에 청구 발행/정정·입금 REVIEW/확정/분쟁·한 주문 binding·수동 배분/정정·대조·불변 이력을 구현한다. 서버 등록 source profile/검증된 직원·원본 없이는 confirmed로 승격하지 않으며 파일hash/UUID/요청 키를 거래 증거로 쓰지 않는다. 정정/취소 후 별칭을 유지하고 기존 환불/예약 원금이 새 현금이 되지 않게 한다. 대응: US4.1/4.4, US4.3의 미지원 자동 연결 거절 기여·BR4.1–4.10/4.16/4.21.

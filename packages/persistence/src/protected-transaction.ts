@@ -101,6 +101,82 @@ export class ProtectedTransaction {
     );
     return rows[0] && !rows[0].deleted ? validateModel(model, rows[0].data, this.schema) : null;
   }
+  async financialSecurityEpoch(expected: string): Promise<string> {
+    const control = (
+      await this.manager.query(
+        'SELECT epoch,enabled,auth_ready FROM u1_recovery_control WHERE singleton=true',
+      )
+    )[0];
+    requireCondition(
+      control?.enabled && control.auth_ready && control.epoch === expected,
+      503,
+      'RECOVERY_SECURITY_UNCONFIRMED',
+      '현재 복구 세대와 독립 보안 확인이 필요합니다.',
+    );
+    return expected;
+  }
+  async financialProtectedPage(
+    model: string,
+    query: { equals?: Record<string, unknown>; cursor?: string | null; limit?: number },
+    prefixes: readonly { epoch: string; commitOrder: number }[],
+  ): Promise<ModelData[]> {
+    const definition = modelDefinition(model);
+    const limit = query.limit ?? 25;
+    requireCondition(
+      Number.isInteger(limit) && limit > 0 && limit <= 100,
+      400,
+      'PAGE_LIMIT',
+      '유한 목록 크기가 필요합니다.',
+    );
+    if (query.cursor) this.schema.validate('Id', query.cursor);
+    for (const field of Object.keys(query.equals ?? {}))
+      requireCondition(
+        definition.attributes.some((attribute) => attribute.name === field),
+        400,
+        'FILTER_FIELD',
+        '등록된 조회 필드가 필요합니다.',
+      );
+    ExecutionBudget.current()?.check();
+    const rows = await this.manager.query(
+      `WITH latest AS (SELECT DISTINCT ON (v.id) v.id,v.data,v.deleted FROM u1_entity_version v JOIN u1_epoch_sequence e ON e.epoch=v.epoch JOIN jsonb_to_recordset($2::jsonb) AS boundary(epoch text,"commitOrder" bigint) ON boundary.epoch=v.epoch AND v.commit_order<=boundary."commitOrder" WHERE v.model=$1 ORDER BY v.id,e.generation DESC,v.commit_order DESC) SELECT data FROM latest WHERE NOT deleted AND ($3::text IS NULL OR id>$3) AND data @> $4::jsonb ORDER BY id LIMIT $5`,
+      [model, JSON.stringify(prefixes), query.cursor ?? null, query.equals ?? {}, limit],
+    );
+    return rows.map((row: { data: ModelData }) => validateModel(model, row.data, this.schema));
+  }
+  async financialProtectedRevision(
+    model: string,
+    id: string,
+    revision: number,
+    prefixes: readonly { epoch: string; commitOrder: number }[],
+  ): Promise<ModelData | null> {
+    modelDefinition(model);
+    this.schema.validate('Id', id);
+    this.schema.validate('Revision', revision);
+    ExecutionBudget.current()?.check();
+    const rows = await this.manager.query(
+      `SELECT v.data,v.deleted FROM u1_entity_version v JOIN u1_epoch_sequence e ON e.epoch=v.epoch JOIN jsonb_to_recordset($4::jsonb) AS boundary(epoch text,"commitOrder" bigint) ON boundary.epoch=v.epoch AND v.commit_order<=boundary."commitOrder" WHERE v.model=$1 AND v.id=$2 AND v.revision=$3 ORDER BY e.generation DESC,v.commit_order DESC LIMIT 1`,
+      [model, id, revision, JSON.stringify(prefixes)],
+    );
+    return rows[0] && !rows[0].deleted ? validateModel(model, rows[0].data, this.schema) : null;
+  }
+  async financialRoleStateIds(
+    field: 'roleRef' | 'staffRoleRef',
+    id: string,
+  ): Promise<{ id: string }[]> {
+    this.schema.validate('Id', id);
+    requireCondition(
+      ['roleRef', 'staffRoleRef'].includes(field),
+      400,
+      'FILTER_FIELD',
+      '등록된 역할 축이 필요합니다.',
+    );
+    return this.manager.query(
+      'SELECT "roleStateId" AS id FROM u1_role_revision_state WHERE "' +
+        field +
+        "\"->>'id'=$1 LIMIT 2",
+      [id],
+    );
+  }
   async lockFinancialRows(
     paymentIds: readonly string[],
     invoiceIds: readonly string[],

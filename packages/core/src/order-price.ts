@@ -7,7 +7,7 @@ import type {
   U3PriceConfirmation,
   U3ProposalTerms,
 } from '@oms/contracts';
-import type { U3Transaction } from '@oms/persistence';
+import type { U3BasisScope } from './u3-current-basis.js';
 import type { Authorization } from './authorization.js';
 import type { U3CurrentBasis } from './u3-current-basis.js';
 import { validateProposalPrice } from './proposal-terms.js';
@@ -38,7 +38,7 @@ export function unconfirmedOrderPrice(
 }
 
 export async function confirmedOrderPrice(
-  scope: U3Transaction,
+  scope: U3BasisScope,
   terms: U3ProposalTerms,
   confirmation: U3PriceConfirmation,
   enterpriseRef: Ref,

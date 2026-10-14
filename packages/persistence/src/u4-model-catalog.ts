@@ -27,11 +27,35 @@ export const U4_U3_MODELS: readonly Model[] = Object.freeze(
       ...model.attributes.map((attribute) =>
         attribute.name === 'modelVersion'
           ? { ...attribute, allowed_values: ['3'] }
-          : ['paymentKind', 'requestedPaymentMode'].includes(attribute.name)
-            ? { ...attribute, allowed_values: ['PREPAY', 'POSTPAY', 'MIXED'] }
-            : attribute,
+          : attribute.name === 'conditionBindings'
+            ? { ...attribute, type: 'U4Contract:ConditionBindings' }
+            : attribute.name === 'capturedLines'
+              ? { ...attribute, type: 'U4Contract:CapturedLines' }
+              : attribute.name === 'appliedTerms'
+                ? { ...attribute, type: 'U4Contract:AppliedTerms' }
+                : attribute.name === 'changeKind'
+                  ? {
+                      ...attribute,
+                      allowed_values: ['REVIEW_PAYMENT_PLAN_CHANGE', 'ACCEPTED_AFTERSALES_CHANGE'],
+                    }
+                  : ['paymentKind', 'requestedPaymentMode'].includes(attribute.name)
+                    ? { ...attribute, allowed_values: ['PREPAY', 'POSTPAY', 'MIXED'] }
+                    : attribute,
       ),
       { name: 'paymentPlan', type: 'U4Contract:AgreedPaymentPlan', required: true, nullable: true },
+      ...(model.name === 'AgreementRevision'
+        ? [
+            {
+              name: 'paymentPlanDraft',
+              type: 'U4Contract:PaymentPlanDraft',
+              required: true,
+              nullable: true,
+            },
+          ]
+        : []),
+      ...(model.name === 'Order' || model.name === 'PurchaseTermsSnapshot'
+        ? [{ name: 'renewalCycleRef', type: 'U4Contract:Ref', required: false, nullable: true }]
+        : []),
     ],
   })),
 );

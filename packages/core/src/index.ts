@@ -31,6 +31,10 @@ export * from './u3-order-readiness.js';
 export * from './u3-after-sales-source.js';
 export * from './u3-owner-query.js';
 export * from './u3-current-basis.js';
+export * from './u4-commercial-adapter.js';
+export * from './u4-payment-plan.js';
+export * from './u4-commercial-order.js';
+export * from './u4-plan-proposal.js';
 export * from './enterprise-query.js';
 export * from './history-query.js';
 

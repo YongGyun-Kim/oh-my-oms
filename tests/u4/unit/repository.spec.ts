@@ -36,6 +36,70 @@ function scopeFixture() {
   };
 }
 describe('U4 same-transaction repository premises', () => {
+  function evidenceScope(change: Record<string, unknown> = {}) {
+    const visible: ModelData = {
+      evidenceId: 'synthetic-evidence',
+      revision: 1,
+      accountRef: u4Ref('IdentityRecovery', 'Account'),
+      bindingRef: u4Ref('IdentityRecovery', 'ProviderBinding'),
+      policyRef: u4Ref('IdentityRecovery', 'VerificationPolicy'),
+      purpose: 'CONTRACT_AGREEMENT',
+      sourceKind: 'SYNTHETIC_A',
+      authorityRef: u4Ref('IdentityRecovery', 'Account'),
+      observedAt: '2026-10-15T00:00:00Z',
+      expiresAt: '2026-10-15T01:00:00Z',
+      synthetic: true,
+      state: 'CONFIRMED',
+      contactRef: null,
+      contactVersion: null,
+      enterpriseRef: null,
+      caseRef: null,
+      partyContextRef: null,
+      challengeId: null,
+    };
+    const raw = { ...visible, operatorAuthorityRef: null, ...change };
+    const tx = {
+      get: async () => raw,
+      financialProtectedImage: async () => visible,
+      rows: () => [],
+    } as unknown as ProtectedTransaction;
+    return {
+      scope: new U4Transaction(tx, {
+        epoch: 'initial',
+        prefixes: [{ epoch: 'initial', commitOrder: 1 }],
+      }),
+      raw,
+    };
+  }
+  it('VerificationEvidence의 보호 생략과 물리 확장 선택 NULL만 동등하게 비교한다', async () => {
+    const f = evidenceScope();
+    expect(
+      await f.scope.current(
+        u4Ref('IdentityRecovery', 'VerificationEvidence', 'synthetic-evidence'),
+      ),
+    ).toEqual(f.raw);
+    await f.scope.assertPremises();
+  });
+  it('정규화는 필수 값 누락·NULL과 등록되지 않은 필드를 허용하지 않는다', async () => {
+    for (const [change, code] of [
+      [{ purpose: undefined }, 'MODEL_FIELD_REQUIRED'],
+      [{ purpose: null }, 'MODEL_NULL_NOT_ALLOWED'],
+      [{ forged: true }, 'UNKNOWN_MODEL_FIELD'],
+    ] as const) {
+      await expect(
+        evidenceScope(change).scope.current(
+          u4Ref('IdentityRecovery', 'VerificationEvidence', 'synthetic-evidence'),
+        ),
+      ).rejects.toMatchObject({ code });
+    }
+  });
+  it('합법적인 선택 NULL 정규화 이후에도 미보호 상태 변경은 거절한다', async () => {
+    await expect(
+      evidenceScope({ state: 'REVOKED' }).scope.current(
+        u4Ref('IdentityRecovery', 'VerificationEvidence', 'synthetic-evidence'),
+      ),
+    ).rejects.toMatchObject({ code: 'CURRENT_U4_NOT_PROTECTED' });
+  });
   it('U4 writer는 U3 신표현 대상의 version2 기록을 DB 접근 전에 거절한다', async () => {
     const getRepository = vi.fn();
     const transaction = new ProtectedTransaction(

@@ -1,4 +1,4 @@
-import { requireCondition, U3_PROFILE } from '@oms/contracts';
+import { requireCondition, U3_PROFILE, U4_PROFILE } from '@oms/contracts';
 import type { Ref, SchemaValidator } from '@oms/contracts';
 import type { ModelData } from '@oms/persistence';
 import {
@@ -6,6 +6,8 @@ import {
   modelForData,
   primaryAttribute,
   U3_PERSISTENCE_MODELS,
+  U4_U3_MODELS,
+  U4_PERSISTENCE_MODELS,
   validateModel,
 } from '@oms/persistence';
 export function ref(model: string, data: ModelData): Ref {
@@ -44,6 +46,33 @@ export function u3Ref(model: string, data: ModelData, schema: SchemaValidator): 
     '등록 원본의 실제 저장 개정을 확인해야 합니다.',
   );
   return schema.validateUri<Ref>(U3_PROFILE + '#/$defs/Ref', {
+    owner: definition.owner,
+    entity: model,
+    id: String(data[primaryAttribute(definition).name]),
+    revision,
+  });
+}
+export function u4Ref(model: string, data: ModelData, schema: SchemaValidator): Ref {
+  requireCondition(
+    (data.modelVersion === 3 && U4_U3_MODELS.some((entry) => entry.name === model)) ||
+      (data.modelVersion === 1 && U4_PERSISTENCE_MODELS.some((entry) => entry.name === model)),
+    400,
+    'U4_REFERENCE_MODEL',
+    '명시 U4 원본 버전이 필요합니다.',
+  );
+  validateModel(model, data, schema);
+  const definition = modelForData(model, data);
+  const field = ['revision', 'aggregateVersion', 'sourceVersion', 'sourceRevision'].find((name) =>
+    definition.attributes.some((attribute) => attribute.name === name),
+  );
+  const revision = field ? data[field] : undefined;
+  requireCondition(
+    typeof revision === 'number' && Number.isSafeInteger(revision) && revision >= 1,
+    400,
+    'U4_REFERENCE_REVISION',
+    '등록 원본의 실제 저장 개정이 필요합니다.',
+  );
+  return schema.validateUri<Ref>(U4_PROFILE + '#/$defs/Ref', {
     owner: definition.owner,
     entity: model,
     id: String(data[primaryAttribute(definition).name]),

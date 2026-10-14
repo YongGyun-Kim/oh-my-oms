@@ -6,7 +6,7 @@ import {
   U3_PROFILE,
 } from '@oms/contracts';
 import type { Ref, TargetScope, U3OrderPriceBreakdown, U3ProposalTerms } from '@oms/contracts';
-import type { ProtectedStore } from '@oms/persistence';
+import type { ProtectedStore, ProtectedReadSource } from '@oms/persistence';
 
 export interface U3RenewalBinding {
   owner: 'SoftwareLifecycle';
@@ -77,6 +77,7 @@ export class U3RenewalSource {
   }
   async current(
     request: Omit<U3RenewalBinding, 'owner' | 'ownerRegistration' | 'purpose'>,
+    reads: Pick<ProtectedReadSource, 'currentEpoch'> = this.store,
   ): Promise<U3RenewalObservation> {
     const registration = this.registration;
     confirmed(registration.kind === 'REGISTERED_OWNER' || registration.kind === 'LOCAL_SYNTHETIC');
@@ -103,7 +104,7 @@ export class U3RenewalSource {
         request.renewalCycleRef.entity === 'RenewalCycle' &&
         exact(request.enterpriseRef, request.targetScope.enterpriseRef) &&
         /^[a-f0-9]{64}$/.test(request.proposalDigest) &&
-        request.epoch === (await this.store.currentEpoch()),
+        request.epoch === (await reads.currentEpoch()),
     );
     const binding: U3RenewalBinding = {
       ...structuredClone(request),
@@ -145,7 +146,7 @@ export class U3RenewalSource {
         Date.parse(result.observedAt) >= began &&
         Date.parse(result.observedAt) <= this.now().getTime() &&
         Date.parse(result.expiresAt) > this.now().getTime() &&
-        request.epoch === (await this.store.currentEpoch()),
+        request.epoch === (await reads.currentEpoch()),
     );
     this.store.schema.validateUri(U3_PROFILE + '#/$defs/ProposalTerms', result.originalTerms);
     this.store.schema.validateUri(

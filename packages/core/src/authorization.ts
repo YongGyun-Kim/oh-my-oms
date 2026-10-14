@@ -1,6 +1,11 @@
 import { requireCondition, ExecutionBudget, canonicalJson } from '@oms/contracts';
 import type { ActionScope, Ref, ServiceContext, TargetScope, ScopeV2 } from '@oms/contracts';
-import type { ModelData, ProtectedStore, ProtectedTransaction } from '@oms/persistence';
+import type {
+  ModelData,
+  ProtectedStore,
+  ProtectedTransaction,
+  ProtectedReadSource,
+} from '@oms/persistence';
 import {
   currentSecurityMatches,
   sameSessionAuthority,
@@ -12,10 +17,27 @@ import type { OrderingPolicy } from './scopes.js';
 import { scopeV2Includes } from './scope-v2.js';
 import { currentConsentScope, validateConsentScope } from './u3-consent-scope.js';
 export class Authorization {
+  readonly reads: ProtectedReadSource;
   constructor(
     readonly store: ProtectedStore,
     private readonly now: () => Date,
-  ) {}
+    reads?: ProtectedReadSource,
+  ) {
+    this.reads = reads ?? {
+      currentProtected: (model, id) => store.currentProtected(model, id),
+      currentEpoch: () => store.currentEpoch(),
+      readRevision: (model, id, revision) => store.readRevision(model, id, revision),
+      list: (model, query) => store.list(model, query),
+      scan: (model, equals, deadlineAt) => store.scan(model, equals, deadlineAt),
+      roleStateIds: (field, id) =>
+        store.primary.query(
+          'SELECT "roleStateId" AS id FROM u1_role_revision_state WHERE "' +
+            field +
+            "\"->>'id'=$1 LIMIT 2",
+          [id],
+        ),
+    };
+  }
   queryDeadline(context?: ServiceContext): string {
     // Authority TTL uses this owner's injected clock. The SQL scan uses wall
     // time; convert only the remaining duration, without renewing either TTL.
@@ -40,7 +62,7 @@ export class Authorization {
     id: string,
     transaction?: ProtectedTransaction,
   ): Promise<ModelData | null> {
-    const protectedValue = await this.store.currentProtected(model, id);
+    const protectedValue = await this.reads.currentProtected(model, id);
     if (!transaction) return protectedValue;
     const current = await transaction.get(model, id);
     requireCondition(
@@ -70,7 +92,7 @@ export class Authorization {
     const asserted =
       session?.revision === context.identityAssertionRef.revision
         ? session
-        : await this.store.readRevision(
+        : await this.reads.readRevision(
             'IdentitySession',
             context.identityAssertionRef.id,
             context.identityAssertionRef.revision,
@@ -80,7 +102,7 @@ export class Authorization {
         sameSessionAuthority(asserted, session) &&
         session.audience === context.audience &&
         (session.accountRef as Ref).id === context.principalId &&
-        session.recoveryEpoch === (await this.store.currentEpoch()) &&
+        session.recoveryEpoch === (await this.reads.currentEpoch()) &&
         Date.parse(String(session.deadlineAt)) > now &&
         now - Date.parse(String(session.lastActiveAt)) <
           (context.audience === 'STAFF' ? 15 : 30) * 60000 &&
@@ -91,7 +113,7 @@ export class Authorization {
     );
     const account = await this.lookup('Account', context.principalId, transaction);
     requireCondition(account?.active, 401, 'ACCOUNT_INACTIVE', '현재 계정을 확인하세요.');
-    const bindings = await this.store.list('ProviderBinding', {
+    const bindings = await this.reads.list('ProviderBinding', {
       equals: { accountRef: { id: context.principalId }, audience: context.audience, active: true },
       limit: 2,
     });
@@ -156,13 +178,8 @@ export class Authorization {
     checkedStaffRole?: ModelData,
   ): Promise<ModelData | null> {
     const field = kind === 'CustomerRole' ? 'roleRef' : 'staffRoleRef';
-    const raw = await this.store.primary.query(
-      'SELECT "roleStateId" AS id FROM u1_role_revision_state WHERE "' +
-        field +
-        "\"->>'id'=$1 LIMIT 2",
-      [id],
-    );
-    const visible = await this.store.list('RoleRevisionState', {
+    const raw = await this.reads.roleStateIds(field, id);
+    const visible = await this.reads.list('RoleRevisionState', {
       equals: { [field]: { id } },
       limit: 2,
     });
@@ -191,7 +208,7 @@ export class Authorization {
       if (own) {
         // 호출 소유자가 검증하고 기록한 자체 역할 after-image만 예외다.
         // 외부 primary 오염은 보호 before-image 조회에서, 무등록 tx 변경은 전체 원상 대조에서 거절한다.
-        const original = await this.store.currentProtected(kind, id);
+        const original = await this.reads.currentProtected(kind, id);
         validateModel(kind, own.data, this.store.schema);
         const current = await transaction!.get(kind, id);
         requireCondition(
@@ -236,7 +253,7 @@ export class Authorization {
     input: { accountId: string; action: string; deadline: string; source: boolean },
     transaction?: ProtectedTransaction,
   ): Promise<boolean> {
-    const grants = this.store.scan(
+    const grants = this.reads.scan(
       'StaffRoleGrant',
       { accountRef: { id: input.accountId }, revokedAt: null },
       input.deadline,
@@ -346,7 +363,7 @@ export class Authorization {
       '현재 직원 확인 원본이 필요합니다.',
     );
     const account = await this.lookup('Account', accountRef.id, transaction),
-      bindings = await this.store.list('ProviderBinding', {
+      bindings = await this.reads.list('ProviderBinding', {
         equals: { accountRef: { id: accountRef.id }, audience: 'STAFF', active: true },
         limit: 2,
       });
@@ -380,7 +397,7 @@ export class Authorization {
   ): Promise<ModelData> {
     await this.identity(context, transaction);
     requireCondition(context.audience === 'CUSTOMER', 403, 'CUSTOMER_REQUIRED', '고객 행위입니다.');
-    const members = await this.store.list('EnterpriseMembership', {
+    const members = await this.reads.list('EnterpriseMembership', {
       equals: {
         accountRef: { id: context.principalId },
         enterpriseRef: { id: enterpriseId },
@@ -418,7 +435,7 @@ export class Authorization {
       '기업 승인 또는 이용 가능 상태를 확인하세요.',
     );
     let allowed = false;
-    for await (const item of this.store.scan(
+    for await (const item of this.reads.scan(
       'CustomerRoleGrant',
       { membershipRef: { id: member.membershipId }, revokedAt: null },
       this.queryDeadline(context),

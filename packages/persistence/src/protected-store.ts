@@ -51,6 +51,12 @@ export interface ModelQuery {
   cursor?: string | null;
   limit?: number;
 }
+export interface ProtectedReadSource extends Pick<
+  ProtectedStore,
+  'currentProtected' | 'currentEpoch' | 'readRevision' | 'list' | 'scan'
+> {
+  roleStateIds(field: 'roleRef' | 'staffRoleRef', id: string): Promise<{ id: string }[]>;
+}
 // 고정된 보호 version 조회만 조합한다. 외부 입력은 JSON parameter로만 전달한다.
 function u2RolePredicate(alias: string, parameter: number): string {
   const configuration = `$${parameter}::jsonb`;

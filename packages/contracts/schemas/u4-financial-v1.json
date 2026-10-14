@@ -324,6 +324,332 @@
       ],
       "additionalProperties": false
     },
+    "OrderLineInput": {
+      "type": "object",
+      "properties": {
+        "productRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderLineInput/properties/productRef"
+        },
+        "commonOfferRevisionRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderLineInput/properties/commonOfferRevisionRef"
+        },
+        "agreementRevisionRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AgreementRefs"
+        },
+        "conditionBindings": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/ConditionBindings" },
+        "quantity": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderLineInput/properties/quantity"
+        },
+        "requestedActivationDate": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderLineInput/properties/requestedActivationDate"
+        }
+      },
+      "required": [
+        "productRef",
+        "commonOfferRevisionRef",
+        "agreementRevisionRefs",
+        "conditionBindings",
+        "quantity",
+        "requestedActivationDate"
+      ],
+      "additionalProperties": false
+    },
+    "CapturedLine": {
+      "type": "object",
+      "properties": {
+        "productRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CapturedLine/properties/productRef"
+        },
+        "commonOfferRevisionRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CapturedLine/properties/commonOfferRevisionRef"
+        },
+        "agreementRevisionRefs": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AgreementRefs"
+        },
+        "conditionBindings": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/ConditionBindings" },
+        "quantity": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CapturedLine/properties/quantity"
+        },
+        "paymentMode": { "enum": ["PREPAY", "POSTPAY", "MIXED"] },
+        "requestedActivationDate": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CapturedLine/properties/requestedActivationDate"
+        },
+        "purchasePrice": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CapturedLine/properties/purchasePrice"
+        },
+        "priceKnowledge": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CapturedLine/properties/priceKnowledge"
+        },
+        "paymentTermsRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CapturedLine/properties/paymentTermsRef"
+        },
+        "agreedPeriod": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CapturedLine/properties/agreedPeriod"
+        },
+        "completionBasisRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/CapturedLine/properties/completionBasisRef"
+        }
+      },
+      "required": [
+        "productRef",
+        "commonOfferRevisionRef",
+        "agreementRevisionRefs",
+        "conditionBindings",
+        "quantity",
+        "paymentMode",
+        "requestedActivationDate",
+        "purchasePrice",
+        "priceKnowledge",
+        "paymentTermsRef",
+        "agreedPeriod",
+        "completionBasisRef"
+      ],
+      "additionalProperties": false
+    },
+    "CapturedLines": {
+      "type": "array",
+      "items": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CapturedLine" },
+      "minItems": 1,
+      "maxItems": 100
+    },
+    "PlannedOrderInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" },
+        "targetScope": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope" },
+        "productType": { "enum": ["HARDWARE", "SOFTWARE"] },
+        "lines": {
+          "type": "array",
+          "items": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderLineInput" },
+          "minItems": 1,
+          "maxItems": 100
+        },
+        "provisionChoice": { "const": "FULL" },
+        "partialConsentRef": { "type": "null" },
+        "priceConfirmation": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderInput/properties/priceConfirmation"
+        },
+        "paymentPlanRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/AgreementRef" },
+        "renewal": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "entitlementRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref" },
+                "renewalCycleRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref" },
+                "originalTermsRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref" }
+              },
+              "required": ["entitlementRef", "renewalCycleRef", "originalTermsRef"],
+              "additionalProperties": false
+            },
+            { "type": "null" }
+          ]
+        }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "productType",
+        "lines",
+        "provisionChoice",
+        "partialConsentRef",
+        "paymentPlanRef",
+        "renewal"
+      ],
+      "additionalProperties": false
+    },
+    "PlanProposalInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" },
+        "targetScope": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope" },
+        "targetOrderRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef" },
+        "targetEntitlementRef": { "type": "null" },
+        "targetRenewalCycleRef": { "type": "null" },
+        "originalTermsRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref" },
+        "proposedTermsRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef" },
+        "proposedTerms": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ProposalTerms" },
+        "priceBreakdown": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AppliedTerms/properties/priceBreakdown"
+        },
+        "supersedesRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ProposalInput/allOf/0/properties/supersedesRef"
+        },
+        "agreementEvidenceRefs": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Refs" },
+        "paymentPlanRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/AgreementRef" }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "targetOrderRef",
+        "targetEntitlementRef",
+        "targetRenewalCycleRef",
+        "originalTermsRef",
+        "proposedTermsRef",
+        "proposedTerms",
+        "priceBreakdown",
+        "supersedesRef",
+        "agreementEvidenceRefs",
+        "paymentPlanRef"
+      ],
+      "additionalProperties": false
+    },
+    "PlanConsentInput": {
+      "allOf": [
+        { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConsentInput" },
+        {
+          "properties": { "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" } }
+        }
+      ]
+    },
+    "ApplyPlanInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" },
+        "targetScope": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope" },
+        "orderRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef" },
+        "customerConsentRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ApplyOrderChangeInput/properties/customerConsentRef"
+        },
+        "newTermsRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ApplyOrderChangeInput/properties/newTermsRef"
+        },
+        "changeKind": { "enum": ["REVIEW_PAYMENT_PLAN_CHANGE", "ACCEPTED_AFTERSALES_CHANGE"] },
+        "afterSalesDecisionRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ApplyOrderChangeInput/properties/afterSalesDecisionRef"
+        }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "orderRef",
+        "customerConsentRef",
+        "newTermsRef",
+        "changeKind",
+        "afterSalesDecisionRef"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "changeKind": { "const": "REVIEW_PAYMENT_PLAN_CHANGE" },
+            "afterSalesDecisionRef": { "type": "null" }
+          }
+        },
+        {
+          "properties": {
+            "changeKind": { "const": "ACCEPTED_AFTERSALES_CHANGE" },
+            "afterSalesDecisionRef": { "type": "object" }
+          }
+        }
+      ]
+    },
+    "AppliedTerms": {
+      "type": "object",
+      "properties": {
+        "terms": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ProposalTerms" },
+        "capturedLines": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CapturedLines" },
+        "priceBreakdown": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AppliedTerms/properties/priceBreakdown"
+        },
+        "targetScope": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope" },
+        "proposalRevision": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision" },
+        "termsFingerprint": { "type": "string", "pattern": "^[a-f0-9]{64}$", "maxLength": 64 }
+      },
+      "required": [
+        "terms",
+        "capturedLines",
+        "priceBreakdown",
+        "targetScope",
+        "proposalRevision",
+        "termsFingerprint"
+      ],
+      "additionalProperties": false
+    },
+    "PlannedOrderDecisionInput": {
+      "allOf": [
+        { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/OrderDecisionInput" },
+        {
+          "type": "object",
+          "properties": { "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" } }
+        }
+      ]
+    },
+    "ConditionBindings": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 700,
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding" },
+          {
+            "type": "object",
+            "properties": {
+              "conditionKey": { "const": "PAYMENT" },
+              "sourceRef": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding/oneOf/1/properties/sourceRef"
+              },
+              "value": {
+                "type": "object",
+                "properties": {
+                  "mode": { "const": "MIXED" },
+                  "termsRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TermsRef" }
+                },
+                "required": ["mode", "termsRef"],
+                "additionalProperties": false
+              },
+              "effectiveWindow": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/EffectiveWindow"
+              },
+              "evidenceRefs": {
+                "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ConditionBinding/oneOf/1/properties/evidenceRefs"
+              }
+            },
+            "required": ["conditionKey", "sourceRef", "value", "effectiveWindow", "evidenceRefs"],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "PaymentPlanDraft": {
+      "type": "object",
+      "properties": {
+        "planRevision": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision" },
+        "total": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money" },
+        "obligations": {
+          "type": "array",
+          "items": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentObligation" }
+        },
+        "knowledge": { "const": "KNOWN" }
+      },
+      "required": ["planRevision", "total", "obligations", "knowledge"],
+      "additionalProperties": false
+    },
+    "AgreementPlanApprovalInput": {
+      "allOf": [
+        { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/AgreementApprovalInput" },
+        {
+          "type": "object",
+          "properties": { "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" } }
+        }
+      ]
+    },
+    "AgreementPlanInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" },
+        "enterpriseRef": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope/properties/enterpriseRef"
+        },
+        "sourceAgreementRevisionRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/AgreementRef"
+        },
+        "planDraft": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentPlanDraft" }
+      },
+      "required": ["meta", "enterpriseRef", "sourceAgreementRevisionRef", "planDraft"],
+      "additionalProperties": false
+    },
     "AgreedPaymentPlan": {
       "type": "object",
       "properties": {

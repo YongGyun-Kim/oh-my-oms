@@ -1,5 +1,127 @@
 [
   {
+    "owner": "CommercialAgreement",
+    "name": "createPaymentPlanProposal",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "contract.propose",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/PlanProposalInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "recordPaymentPlanConsent",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["CUSTOMER"],
+    "action": "contract.consent",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/PlanConsentInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/ProposalRef" }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "applyPaymentPlanChange",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "order.change.apply",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/ApplyPlanInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef" }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "submitPlannedOrder",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["CUSTOMER"],
+    "action": "order.submit",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/PlannedOrderInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "decidePlannedOrder",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "order.decide",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/PlannedOrderDecisionInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": { "allOf": [{ "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef" }] }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "registerAgreementPaymentPlan",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "contract.register",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/AgreementPlanInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "approveAgreementPaymentPlan",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "contract.approve",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/AgreementPlanApprovalInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": {
+          "allOf": [{ "$ref": "urn:oms:contract:u4-financial:1#/$defs/AgreementRef" }]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
     "owner": "OrderAcceptance",
     "name": "registerPaymentPlan",
     "contract": "u4-financial",
