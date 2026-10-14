@@ -12,8 +12,8 @@ U3 ProductCatalog·CommercialAgreement·OrderAcceptance의 제한 파일럿 구�
 
 - [x] **Step 21 — 기업별 공개 예외의 업무 판단 보완.** 공통 VISIBILITY=false와 Product의 판매 중지 상태를 구분한다. 완성되고 유효한 공통 조건은 비공개 기본값만으로 SUSPENDED가 되지 않는다. 실제 INCOMPLETE/SUSPENDED·기간/정확한 개정 검사는 유지하고, 현재 기업의 유효한 승인 조건을 합성한 후 최종 공개·주문 가능 여부를 판정한다. 주문 제출뿐 아니라 전체 직원 수락의 현재 조건 재검증에도 같은 의미를 적용한다. 공통 조건 조회와 기업 최종 조건 조회의 정보 권한을 구분하며 타 기업 조건을 노출하지 않는다. 대상은 packages/core/src/catalog-conditions.ts·commercial-agreement.ts·catalog-query.ts·catalog.ts·order-acceptance.ts이며 필요한 기존 U3 input/response 매핑은 packages/contracts/src/u3-types.ts·u3-validation.ts 및 packages/contracts/schemas/u3-commercial-v2.json·u3-operations-v2.json에서 호환성을 함께 확인한다. US2.1/US2.3/US2.7/US3.1/US3.4, BR1.2–BR1.3·BR2.6·BR3.1/3.4에 연결한다.
 - [x] **Step 22 — 해당 계층 구현 후 공개 예외 회귀 작성·실행.** 기존 tests/u3/unit/catalog.spec.ts와 integration/catalog.spec.ts·commercial-agreement.spec.ts·order-submission.spec.ts·order-decision.spec.ts·http-host.spec.ts에서 공통 비공개+기업A 승인 공개의 조회→제출→직원 수락, 공통 공개+기업A 비공개, 기업B/미승인/미래·만료 조건 차단, 실제 판매 중지·미완성 상품 차단, 기존 주문 스냅샷 보존을 검증한다. 합성 primary/보호 DB의 실제 등록·다른 사람 승인 경로를 사용하며 알고리즘 mock 결과만으로 통합 통과를 선언하지 않는다. 단순 실행은 Luna가 맡고 기존 권한·근거·실행 예산·테스트 하한을 유지한다.
-- [ ] **Step 23 — 수정한 source의 필수 품질·CI 검증.** 현재 U3 전체 단위/통합/커버리지와 U1/U2 영향 회귀를 같은 source·lock·inventory로 확인한다. 전체 작성 제품 라인 커버리지 80%·type/lint/format·필수 보안·현재 image의 격리 검증을 유지한다. 기존 100k/50분·전체 DR·무중단 실증을 재개하지 않는다. 코드·회귀를 커밋·push해 현재 CI 결과와 실패/미실행을 기록하며 실제 AWS 배포를 하지 않는다.
-- [ ] **Step 24 — 최종 산출물과 완료 검증 준비.** code-summary·source-manifest·traceability·품질 기록을 현재 파일·실행 결과에 맞춰 정리한다. 원래 미해결·후속 범위와 실제 원본 미등록을 보존한다. 이 체크박스는 산출물 준비의 완료만 나타낸다. 준비 이후 별도 구현 검토와 공식 PC 완료 검증은 반드시 수행하며, 통과 후 사용자 지시대로 push·main squash 병합하고 U4부터 새 브랜치를 사용한다. 필수 실패나 필요한 승인 대기 상태에서 완료·병합으로 표시하지 않는다.
+- [x] **Step 23 — 수정한 source의 필수 품질·CI 검증.** 현재 U3 전체 단위/통합/커버리지와 U1/U2 영향 회귀를 같은 source·lock·inventory로 확인한다. 전체 작성 제품 라인 커버리지 80%·type/lint/format·필수 보안·현재 image의 격리 검증을 유지한다. 기존 100k/50분·전체 DR·무중단 실증을 재개하지 않는다. 코드·회귀를 커밋·push해 현재 CI 결과와 실패/미실행을 기록하며 실제 AWS 배포를 하지 않는다.
+- [x] **Step 24 — 최종 산출물과 완료 검증 준비.** code-summary·source-manifest·traceability·품질 기록을 현재 파일·실행 결과에 맞춰 정리한다. 원래 미해결·후속 범위와 실제 원본 미등록을 보존한다. 이 체크박스는 산출물 준비의 완료만 나타낸다. 준비 이후 별도 구현 검토와 공식 PC 완료 검증은 반드시 수행하며, 통과 후 사용자 지시대로 push·main squash 병합하고 U4부터 새 브랜치를 사용한다. 필수 실패나 필요한 승인 대기 상태에서 완료·병합으로 표시하지 않는다.
 
 ## 현재 코드와 변경 영향
 
@@ -41,26 +41,26 @@ HTTP 라우트가 서버측으로 정확한 U3 등록 버전을 선택하며 클
 
 각 테스트 가능한 계층을 구현한 다음 해당 계층의 시험을 작성·실행한다. 아래 원본 Testing Contract가 순서/품질의 기준이다. 새 테스트 설정은 첫 실행 전에 준비하며 초기 승인은 이 계획/지침을 함께 묶는다.
 
-- [ ] **Step 1 — 현재 기준·source inventory 준비.** 변경 영향과 구형 원본/등록 경계를 고정한다. 승인 뒤 기존 관련 U1/U2 정상·권한·호스트/저장 회귀의 현재 baseline을 기록한다. 대량 부하/전체 DR collector는 실행하지 않는다. 기존 FAIL/미실행은 보존한다.
-- [ ] **Step 2 — U3 runner·격리 fixture 준비.** tests/u3의 Vitest unit/integration/coverage 설정과 로컬 전용 DB/profile·clock/queue/기업/직원/근거 fixture를 준비한다. 아래 지침의 정확 명령을 등록하고 passWithNoTests:false·DB 이름/로컬 admission을 확인한다. 다른 프로젝트/실제 DB를 reset하지 않는다.
-- [ ] **Step 3 — v2 profile·값/등록 계약 구현.** 새로운 profile/schema·타입/operations에 TargetScope·닫힌 Ref·조건별 모든 계약 개정·Money/Period·100행·두 changeKind를 반영한다. 현재 schema/등록 :2를 같은 ID로 덮어쓰지 않고 서버측 :3 연결을 정의한다.
-- [ ] **Step 4 — 계약/값 시험 후 실행.** closed input/producer·unknown owner/entity/field·wrong version/target/null·enum 대응·정수/범위·100행·조건 합집합·구/신 schema 구분을 독립 검사한다.
-- [ ] **Step 5 — 영속 모델·migration·보호 decoder 구현.** 논리 18엔티티/값 객체를 단일 current 모델·제약/인덱스·구형 version decoding에 매핑한다. 새 모델/필드의 원본/보호 후보·복구 대조·DB 역할 경계를 연결한다.
-- [ ] **Step 6 — 모델/migration 시험 후 실행.** 신규/구형 원본·정확 금액/기간·unknown field·누락·외래 대상/개정·이력 보존·명시 DDL/최소 역할·같은 모델 중복 등록·구형 미확인 승격 차단을 격리 DB에서 검증한다.
-- [ ] **Step 7 — U3 repository/현재 전제 구현.** 기존 보호 쓰기와 같은 primary transaction 안에 원본/전체 행·스냅샷/결과/이력/Outbox·요청 식별을 기록한다. 현재 권한/근거/개정 전후 대조·별도 보호 ack·원래 결과 조회를 연결한다.
-- [ ] **Step 8 — 저장/재전송/경쟁 시험 후 실행.** primary rollback·commit 후 보호 실패/timeout/응답 유실·같은 key 같은/다른 input·동시 요청·현재 원본 변경·보호 세대 불일치에서 부분 주문/중복/오래된 적용이 없는지 확인한다. 짧은 제어된 장애 시험이며 전체 DR 실증이 아니다.
-- [ ] **Step 9 — ProductCatalog 구현.** 내부 직원만 상품/타입/공통 조건 개정을 등록하고 허용 기업 조회·정확한 공통 조건/가격·이력과 원래 스냅샷을 보존한다.
-- [ ] **Step 10 — 상품 시험 후 실행.** 5–8개 이상 핵심 정상/오류/경계: 고객/외부망·타 기업 노출·타입/기간·소수 가격·오래된 offer·최초 가격 보존·현재 권한 회수.
-- [ ] **Step 11 — CommercialAgreement 구현.** 계약/변경 요청·예외·정확한 다른 사람 승인·유효 구간 충돌 차단·기업 우선·제안/동의·수동 갱신 대상/회차 근거와 단일 원본/이력을 연결한다. 원본 신뢰 미확인은 적용 차단한다.
-- [ ] **Step 12 — 계약/제안 시험 후 실행.** 5–8개 이상 핵심 정상/오류/경계와 필요 세부 사례: 같은 사람 다른 계정·오래된/목적 다른 근거·승인자 부재·상충/정상 우선·수정된 제안/이전 동의·잘못된 기업/갱신 회차·미확인 U2 원본.
-- [ ] **Step 13 — OrderAcceptance 구현.** 모든 행/조건의 구매 당시 스냅샷과 원 단위 합계·확인한 추가 항목을 보존하고 REVIEW 접수→직원 전체 수락/거절/HOLD와 두 changeKind의 한 번 적용을 연결한다. 최초 기간과 실제 SW 기간을 구분한다.
-- [ ] **Step 14 — 주문 시험 후 실행.** 5–8개 이상 핵심 정상/오류/경계와 세부 사례: 1/100/0/101행·타입/지급/FULL·미확인/0원/중복 비용·단가/합계 범위·부분 준비 HOLD·모든 계약 개정·수락/변경 경쟁·U7 없는 수락 후 변경 거절·원래 결과 조회.
-- [ ] **Step 15 — HTTP·in-process/worker 호스트 연결.** U3 owner/operation/현재 action·대상/version/route·예산/보안/단일 parser 선택을 실제 등록한다. 주문/변경만 1MiB, 다른 64KiB·413/무효 JSON 응답을 연결한다. 공유 notice/fact 전달·worker 진입 및 복구 decoder에 U3 version을 등록한다.
-- [ ] **Step 16 — HTTP/worker·소비자 계약 시험 후 실행.** 실제 왕복 input/response/producer·MFA/내부망·CSRF/타 기업·worker 우회·unknown operation/version·byte 이하/초과/압축·기존 상업 경로 우회 차단·큐 중복/역순/malformed 대조를 검사한다. U1/U2 영향 회귀는 별도 명령/결과로 기록한다.
-- [ ] **Step 17 — 파일럿 CI·전체 분모 집계 구현.** U1/U2/U3 job의 현재 같은 source/lock/image 결과와 전체 라인 실행 합집합·80%를 대조한다. pilot-current의 필수 검사/보안·minimal artifact와 별도 명시 full-proof를 연결한다. 원래 full-proof 기준/이력은 그대로 유지한다.
-- [ ] **Step 18 — CI/집계·보고서 시험 후 실행.** 실패/취소/skip·누락·source/SHA mismatch·좁은 분모·오래된 coverage/image·같은 key 다른 보고서·Deferred를 PASS로 바꾸는 경우를 거절한다. collector 시험은 제어된 fake child/report 자료로 수행하고 실제 장시간 부하/DR를 호출하지 않는다.
-- [ ] **Step 19 — 변경에 맞는 공통 품질/보안 검증.** type/lint/format·비밀/SAST/의존성·필요 합성 CDK/해당 image/격리 runtime를 기존 차단선으로 수행한다. tool 설치/공간 부족·미실행·미지원은 성공으로 치환하지 않고 필요한 증거/실패를 보존한다.
-- [ ] **Step 20 — 문서·source manifest·추적/검토 준비.** 구현/시험/명령·파일/모드/버전·제외/후속/미해결을 정리한다. source-manifest.json에 실제 생성/수정/삭제한 모든 제품/시험/설정 경로를 주장하고 code-summary/traceability에 실제 파일/실행 근거만 연결한다. 42 AC·29 BR·33 NFR를 누락 없이 보존하고 별도 리뷰를 요청할 산출물을 준비한다. 실제 별도 리뷰와 그 결과 기록은 이 준비를 마친 뒤 stage protocol에 따라 수행하며, 완료 승인 전에 반드시 통과해야 한다.
+- [x] **Step 1 — 현재 기준·source inventory 준비.** 변경 영향과 구형 원본/등록 경계를 고정한다. 승인 뒤 기존 관련 U1/U2 정상·권한·호스트/저장 회귀의 현재 baseline을 기록한다. 대량 부하/전체 DR collector는 실행하지 않는다. 기존 FAIL/미실행은 보존한다.
+- [x] **Step 2 — U3 runner·격리 fixture 준비.** tests/u3의 Vitest unit/integration/coverage 설정과 로컬 전용 DB/profile·clock/queue/기업/직원/근거 fixture를 준비한다. 아래 지침의 정확 명령을 등록하고 passWithNoTests:false·DB 이름/로컬 admission을 확인한다. 다른 프로젝트/실제 DB를 reset하지 않는다.
+- [x] **Step 3 — v2 profile·값/등록 계약 구현.** 새로운 profile/schema·타입/operations에 TargetScope·닫힌 Ref·조건별 모든 계약 개정·Money/Period·100행·두 changeKind를 반영한다. 현재 schema/등록 :2를 같은 ID로 덮어쓰지 않고 서버측 :3 연결을 정의한다.
+- [x] **Step 4 — 계약/값 시험 후 실행.** closed input/producer·unknown owner/entity/field·wrong version/target/null·enum 대응·정수/범위·100행·조건 합집합·구/신 schema 구분을 독립 검사한다.
+- [x] **Step 5 — 영속 모델·migration·보호 decoder 구현.** 논리 18엔티티/값 객체를 단일 current 모델·제약/인덱스·구형 version decoding에 매핑한다. 새 모델/필드의 원본/보호 후보·복구 대조·DB 역할 경계를 연결한다.
+- [x] **Step 6 — 모델/migration 시험 후 실행.** 신규/구형 원본·정확 금액/기간·unknown field·누락·외래 대상/개정·이력 보존·명시 DDL/최소 역할·같은 모델 중복 등록·구형 미확인 승격 차단을 격리 DB에서 검증한다.
+- [x] **Step 7 — U3 repository/현재 전제 구현.** 기존 보호 쓰기와 같은 primary transaction 안에 원본/전체 행·스냅샷/결과/이력/Outbox·요청 식별을 기록한다. 현재 권한/근거/개정 전후 대조·별도 보호 ack·원래 결과 조회를 연결한다.
+- [x] **Step 8 — 저장/재전송/경쟁 시험 후 실행.** primary rollback·commit 후 보호 실패/timeout/응답 유실·같은 key 같은/다른 input·동시 요청·현재 원본 변경·보호 세대 불일치에서 부분 주문/중복/오래된 적용이 없는지 확인한다. 짧은 제어된 장애 시험이며 전체 DR 실증이 아니다.
+- [x] **Step 9 — ProductCatalog 구현.** 내부 직원만 상품/타입/공통 조건 개정을 등록하고 허용 기업 조회·정확한 공통 조건/가격·이력과 원래 스냅샷을 보존한다.
+- [x] **Step 10 — 상품 시험 후 실행.** 5–8개 이상 핵심 정상/오류/경계: 고객/외부망·타 기업 노출·타입/기간·소수 가격·오래된 offer·최초 가격 보존·현재 권한 회수.
+- [x] **Step 11 — CommercialAgreement 구현.** 계약/변경 요청·예외·정확한 다른 사람 승인·유효 구간 충돌 차단·기업 우선·제안/동의·수동 갱신 대상/회차 근거와 단일 원본/이력을 연결한다. 원본 신뢰 미확인은 적용 차단한다.
+- [x] **Step 12 — 계약/제안 시험 후 실행.** 5–8개 이상 핵심 정상/오류/경계와 필요 세부 사례: 같은 사람 다른 계정·오래된/목적 다른 근거·승인자 부재·상충/정상 우선·수정된 제안/이전 동의·잘못된 기업/갱신 회차·미확인 U2 원본.
+- [x] **Step 13 — OrderAcceptance 구현.** 모든 행/조건의 구매 당시 스냅샷과 원 단위 합계·확인한 추가 항목을 보존하고 REVIEW 접수→직원 전체 수락/거절/HOLD와 두 changeKind의 한 번 적용을 연결한다. 최초 기간과 실제 SW 기간을 구분한다.
+- [x] **Step 14 — 주문 시험 후 실행.** 5–8개 이상 핵심 정상/오류/경계와 세부 사례: 1/100/0/101행·타입/지급/FULL·미확인/0원/중복 비용·단가/합계 범위·부분 준비 HOLD·모든 계약 개정·수락/변경 경쟁·U7 없는 수락 후 변경 거절·원래 결과 조회.
+- [x] **Step 15 — HTTP·in-process/worker 호스트 연결.** U3 owner/operation/현재 action·대상/version/route·예산/보안/단일 parser 선택을 실제 등록한다. 주문/변경만 1MiB, 다른 64KiB·413/무효 JSON 응답을 연결한다. 공유 notice/fact 전달·worker 진입 및 복구 decoder에 U3 version을 등록한다.
+- [x] **Step 16 — HTTP/worker·소비자 계약 시험 후 실행.** 실제 왕복 input/response/producer·MFA/내부망·CSRF/타 기업·worker 우회·unknown operation/version·byte 이하/초과/압축·기존 상업 경로 우회 차단·큐 중복/역순/malformed 대조를 검사한다. U1/U2 영향 회귀는 별도 명령/결과로 기록한다.
+- [x] **Step 17 — 파일럿 CI·전체 분모 집계 구현.** U1/U2/U3 job의 현재 같은 source/lock/image 결과와 전체 라인 실행 합집합·80%를 대조한다. pilot-current의 필수 검사/보안·minimal artifact와 별도 명시 full-proof를 연결한다. 원래 full-proof 기준/이력은 그대로 유지한다.
+- [x] **Step 18 — CI/집계·보고서 시험 후 실행.** 실패/취소/skip·누락·source/SHA mismatch·좁은 분모·오래된 coverage/image·같은 key 다른 보고서·Deferred를 PASS로 바꾸는 경우를 거절한다. collector 시험은 제어된 fake child/report 자료로 수행하고 실제 장시간 부하/DR를 호출하지 않는다.
+- [x] **Step 19 — 변경에 맞는 공통 품질/보안 검증.** type/lint/format·비밀/SAST/의존성·필요 합성 CDK/해당 image/격리 runtime를 기존 차단선으로 수행한다. tool 설치/공간 부족·미실행·미지원은 성공으로 치환하지 않고 필요한 증거/실패를 보존한다.
+- [x] **Step 20 — 문서·source manifest·추적/검토 준비.** 구현/시험/명령·파일/모드/버전·제외/후속/미해결을 정리한다. source-manifest.json에 실제 생성/수정/삭제한 모든 제품/시험/설정 경로를 주장하고 code-summary/traceability에 실제 파일/실행 근거만 연결한다. 42 AC·29 BR·33 NFR를 누락 없이 보존하고 별도 리뷰를 요청할 산출물을 준비한다. 실제 별도 리뷰와 그 결과 기록은 이 준비를 마친 뒤 stage protocol에 따라 수행하며, 완료 승인 전에 반드시 통과해야 한다.
 
 ## Story-to-Step Traceability
 

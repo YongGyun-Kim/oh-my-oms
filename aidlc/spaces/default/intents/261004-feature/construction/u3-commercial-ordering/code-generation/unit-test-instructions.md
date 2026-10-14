@@ -23,7 +23,7 @@
 | U3 worker 전달 선택 검증             | `OMS_U3_DATABASE_PROFILE=verification-isolated npx --no-install vitest run --config tests/u3/vitest.integration.config.ts tests/u3/integration/worker-handoff.spec.ts`          | Step 16의 확정 사실·소비/중복·역순·미확인                                          |
 | U3 pilot 기여                        | `NODE_ENV=test OMS_U2_SYNTHETIC_PROFILE=approved-local-only NEXT_TELEMETRY_DISABLED=1 node --import tsx scripts/u3/ci-pilot-proof.ts u3`                                        | 현재 U3 unit/integration/whole coverage 증거, .reports/u3/pilot/validation-u3.json |
 
-선택 실행은 전체 U3 suite 성공을 대신하지 않는다. scripts/config·명령/출력/보고서와 현재 source를 대조한다. 통합18파일 순차·passWithNoTests:false·test/hook30초·격리 profile과 서비스/DB 예산은 유지한다. pilot U3 integration child만20분, whole coverage child만30분이며 다른 명령의 기본/legacy 예산은 변경하지 않는다. 600초 실패의 전체 실행량이 근거이고 coverage30분은 V8 여유 가정으로 실제 검증 전이다. DB 준비 실패는 통합 미실행으로 남긴다.
+선택 실행은 전체 U3 suite 성공을 대신하지 않는다. scripts/config·명령/출력/보고서와 현재 source를 대조한다. 통합18파일 순차·passWithNoTests:false·test/hook30초·격리 profile과 서비스/DB 예산은 유지한다. pilot U3 integration child만20분, whole coverage child만30분이며 다른 명령의 기본/legacy 예산은 변경하지 않는다. 600초 실패의 전체 실행량이 예산 수정 근거다. coverage30분은 V8를 포함한 유한 수집 한도이며 운영 처리 목표가 아니다. 실제 결과는 해당 source의 보고서로 확인하고 DB 준비 실패는 통합 미실행으로 남긴다.
 
 ## Required Cases and Acceptance
 

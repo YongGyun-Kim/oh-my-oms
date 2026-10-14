@@ -4,7 +4,7 @@
 
 첫 제한 파일럿의 상품·기업 계약·전체 주문·조건 변경 경로를 기존 API/worker/DB/보호 저장에 구현했다. 현재 Testing Contract의 test-after/Standard 순서와 80% 라인 커버리지 기준을 유지했다. 기능과 보호 검증을 연결한 실제 변경은 [source-manifest.json](source-manifest.json)의176개 경로에 기록한다.
 
-수정 전 제품 d7d77d8의 [실제 CI run38353783066](https://github.com/YongGyun-Kim/oh-my-oms/actions/runs/38353783066)은 U1/U2/U3와 project 모두 성공했다. 동일 PR checkout source의 합산 라인 커버리지는11932/14377=82.9937%이며 type/lint/format·보안·image/runtime 검증도 통과했다. 아래 기업별 공개 예외 수정 이후의 전체 CI 증거로 재사용하지 않는다. 실제 운영 활성화는 허용하지 않으며 이 결과를 배포·운영 용량·전체 재해 복구의 증명으로 해석하지 않는다.
+기업별 공개 예외 수정과 README를 포함한4e1759e의 [실제 CI run38379574890](https://github.com/YongGyun-Kim/oh-my-oms/actions/runs/38379574890)은 U1/U2/U3와 project 모두 성공했다. 동일 PR checkout source의 합산 라인 커버리지는11955/14395=83.0497%이며 type/lint/format·보안·image/runtime 검증도 통과했다. 실제 운영 활성화는 허용하지 않으며 이 결과를 배포·운영 용량·전체 재해 복구의 증명으로 해석하지 않는다. 이전 d7d77d8의 성공과 수정 전 실패는 별도 역사로 품질 기록에 보존한다.
 
 이전 실패·수정·재검증, 선택 진단의 부분 범위 차단, 런타임 증거 정정과 보고서 지문은 [품질 기록](quality-verification-20261012.md)에 보존한다. 최종 기본 검증은 PR/main pilot-current CI이며 대량 부하·전체DR·무중단 실증은 별도 실행이다.
 
@@ -50,19 +50,19 @@ U3 전체18파일의 기본600초 collector 종료는 완료11파일/104시험 �
 
 ## 시험 증거와 제한
 
-기업별 공개 예외 수정 후 고정 Node22.23.3의 선택 단위12/12와 실제 primary/보호 DB·HTTP 통합5파일66/66이 통과했다. 실패/pending/todo0·success=true·두 명령 실제exit0이며 관련14파일 SHA가 실행 전후 동일하다. 새 tsc --noEmit·변경 TS lint·format도 exit0이다. 전체 U3 및 영향 U1/U2 CI·같은 전체 분모80%·보안/image의 이번 source 결과는 별도로 확인한다.
+기업별 공개 예외 수정 후 고정 Node22.23.3의 선택 단위12/12와 실제 primary/보호 DB·HTTP 통합5파일66/66이 통과했다. 실패/pending/todo0·success=true·두 명령 실제exit0이며 관련14파일 SHA가 실행 전후 동일하다. 새 tsc --noEmit·변경 TS lint·format도 exit0이다. 이어서 같은 제품/시험/README bytes의 전체 CI 결과를 확인했다.
 
-수정 전 d7d77d8 CI의 실제 결과는 다음과 같다. coverage 열은 단위·통합의 같은 시험을 V8로 재실행한 수이며 새로운 고유 시험으로 합산하지 않는다.
+최종 CI run38379574890의 실제 결과는 다음과 같다. coverage 열은 단위·통합의 같은 시험을 V8로 재실행한 수이며 새로운 고유 시험으로 합산하지 않는다.
 
 | Unit |    단위 |    통합 | 전체 coverage 재실행 |        PC |
 | ---- | ------: | ------: | -------------------: | --------: |
 | U1   | 571/571 | 168/168 |              739/739 | 해당 없음 |
 | U2   | 465/465 | 274/274 |              739/739 |       5/5 |
-| U3   | 330/330 | 162/162 |              492/492 | 해당 없음 |
+| U3   | 332/332 | 181/181 |              513/513 | 해당 없음 |
 
-각 시험은 fail/pending/todo0·success=true이며 coverage evidence는passed=true·completeScope=true다. source HEAD는f7f2bb036cd83e2e26c3f0ac8a65f38b5b342c2e·digest c2efe642c9163706184db0554f7231cc726dddbda9d5b2857738b5a42142da0f로 세 기여와 project가 일치한다. Node22.23.3/Vitest·V85.0.3/TypeScript6.0.3 및 원래 lock을 보존한다.
+각 시험은 fail/pending/todo0·success=true이며 coverage evidence는passed=true·completeScope=true다. source HEAD는480c978dfdd1f078a2ca30991ff2c1fd29a533cb·digest5d602283f1025df7cdc694d17f8b21e68998cddfe058ae1ac46c0b4c4790274b로 세 기여와 project가 일치한다. 각 report의 실제 실행은observed=true·exitCode0·expired=false·logFailed=false이고 산출물fresh와 원문 SHA가 일치한다.628개 source의 현재 로컬 bytes도 모두 동일하다. Node22.23.3/Vitest·V85.0.3/TypeScript6.0.3 및 원래 lock을 보존한다.
 
-project는18개 완료·실패0·Deferred4를 기록했다. 보안은 의존성·SAST·비밀·IaC 문맥·컨테이너 OS/라이브러리 검사를 완료했다. 동일 image ID sha256:3dc91dca275bc5dff8b0d21ea9e57b58ba7288081127c4167744d7b09224b794를 release/security/runtime 보고서가 대조한다. runtime의 동일 image/TLS 검증은true·cleanupFailed=false지만 Cognito/회사망 검증은false·realActivationAllowed=false다. 개별 exit/fresh 필드가 없는 project 검사의 값을 임의로 채우지 않는다.
+project는18개 완료·실패0·Deferred4를 기록했다. 보안은 의존성·SAST·비밀·IaC 문맥·컨테이너 OS/라이브러리 검사를 완료했다. 동일 image ID sha256:0e2fc1914a13faf9e9de8b8f8d77c1f6f769e856b840f7088eb8873517e4eaa9를 release/security/runtime 보고서가 대조한다. runtime의 동일 image/TLS 검증은true·cleanupFailed=false지만 Cognito/회사망 검증은false·realActivationAllowed=false다. 개별 exit/fresh 필드가 없는 project 검사의 값을 임의로 채우지 않는다.
 
 직원 grant별 기존 검증은 독립 권위 호출마다 최대4개씩 읽기를 겹친다. 보호 원상·개정/profile·전체 grant scan·독립 pre/post·최종 전제 대조를 유지하며 캐시·새 저장 API·시간 제한 완화는 없다. 시작한 조회를 모두 기다리고 원래 scan 순서의 첫 오류를 반환한다. 후행 변조·다음 독립 회수·상한·취소·형제 조회 종료 대기를 회귀로 검증했다. 동일 로컬 V8 선택의 보호 실행1748.6→1295.9ms 감소와 조회991회 동일성을 관측했으나 한 건의 지연을 운영 용량으로 일반화하지 않는다.
 

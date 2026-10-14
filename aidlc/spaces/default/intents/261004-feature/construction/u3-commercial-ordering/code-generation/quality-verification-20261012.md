@@ -353,6 +353,18 @@ Step19의 최신 같은 제품 source 품질/보안/80%·CI 확인을 마쳤다.
 
 ## 기업별 공개 예외의 미충족과 수정 재개
 
+이번 공식 PC 완료 검증 명령도exit0·4/4 PASS(38.0초)다. 검증ID430c2dd7-6447-41ce-bac3-c207271b31c2, command SHA256 c55e775d9822f4f9c21a7b5d9394ad8fe97ad5998faee9c755ad280427f55890, fingerprint4bec83877dca0d609404fc2ced11f014fcd4be29e473a1a2c8b812d8588cd0ab·evidence_unchanged=true다. 이는 기존1280 PC 통합4경로에 대한 관측이며 R-02의 새 목록 경로를 검증하지 않는다. Critical이 남아 있으므로 U3 인수 승인·main 병합은 보류한다.
+
+2026-10-14 최종 독립 검토는NOT-READY다. R-01은Resolved이나 고객 GET /products와 등록된 in-process 목록이 기존 CatalogQuery.list로 남아 기업 승인 비공개·실제 판매 중지를 확인하지 않는 R-02 Critical/New를 확인했다. 완성된 비공개 상품이 페이지에 있으면 기업 승인 공개와 무관하게 전체503을 만들 수 있다. 실제 route→registry→query→response schema를 연결한 정적 근거이며 새 HTTP 재현 시험을 실행했다고 주장하지 않는다. 기존 HTTP 회귀는 상세 offer와 주문을 다뤘다. 전체 CI83.0497% 통과가 누락된 목록 권한 경계를 면제하지 않는다. 이번 review-02.md를 그대로 보존하고 main 병합·U4 전환·실배포를 진행하지 않는다. 제품/검토 산출물은 동결하며 수정 재개에는 기록된 변경 요청 절차를 따른다.
+
+2026-10-14 재개 시 원격 run38379574890의 U1/U2/U3/project success를 확인하고 실제 산출물을 내려받아 대조했다. U1 unit571/integration168/coverage739, U2 unit465/integration274/coverage739, U3 unit332/integration181/coverage513가 모두 fail/pending/todo0·success=true다. coverage는 같은 시험의 재실행이며 고유 시험으로 더하지 않는다. U2 PC는expected5/skipped0/unexpected0/flaky0다. 모든 Unit report는observed=true·exitCode0·expired=false·logFailed=false·fresh=true이며 각 원문 SHA가 맞는다. coverage evidence의passed/completeScope와 rawHash·source도 일치한다. Luna와root가 실제 수치와 경계를 확인했다.
+
+세 기여와 project의 source HEAD480c978dfdd1f078a2ca30991ff2c1fd29a533cb/digest5d602283f1025df7cdc694d17f8b21e68998cddfe058ae1ac46c0b4c4790274b/lock·도구 버전이 동일하며628개 로컬 파일 bytes와 일치한다. 전체 분모14395·실행11955=83.049670024314%로80% 하한을 만족한다. check의type/lint/format과 보안5영역이passed=true다. release는18개validated·Deferred4를 보존한다. image/release/security/runtime의imageId는sha256:0e2fc1914a13faf9e9de8b8f8d77c1f6f769e856b840f7088eb8873517e4eaa9로 동일하다. runtime은sameProductImageVerified/actualTlsVerification=true·cleanupFailed=false, actualCognitoVerified/actualCompanyNetworkVerified/realActivationAllowed=false다. 합성 검사를 실제 provider/망 등록·운영 활성화·전체 DR의 증명으로 바꾸지 않는다.
+
+제품 수정은22946fb4ba43436e3cf54c62870386787d223f0c, 상품 정책 README 정리는4e1759ec57d77c569b9202999e0bfe5369423c56로 커밋·push했다. README도 inventory에 들어가므로 앞선 run38379239100에는 중복 실행 취소를 요청하고 최종 run38379574890를 사용한다. 취소를 시험 성공이나 결함 해소로 취급하지 않는다.
+
+최종 run의 U1 job은 success다. 실제 unit571/571·integration168/168·같은739개 coverage 재실행이 fail/pending/todo0·success=true다. 각 report의 execution은 observed=true/exitCode0/expired=false/logFailed=false·fresh=true이고 raw hash와 source가 일치한다. 실제 checkout HEAD480c978dfdd1f078a2ca30991ff2c1fd29a533cb/digest5d602283f1025df7cdc694d17f8b21e68998cddfe058ae1ac46c0b4c4790274b의628개 파일은 현재 로컬 bytes와 모두 동일하다. coverage passed/completeScope는true다. U2/U3 및 project가 완료되기 전 전체 합집합80%·보안/image·CI 성공으로 확대하지 않는다.
+
 재동결 후 선택 검증은 단위12/12와 통합5파일66/66 PASS·실제exit0이다. 통합은 catalog12·commercial-agreement18·http-host8·order-decision15·order-submission13이며 fail/pending/todo0·success=true다. root는 실제 두 JSON의 count와 SHA를 직접 확인했다. unit SHA는1d308efca11ac0c8c9f53c834c5779eefef030fbf2c3bb406762d4a5806e623c, integration SHA는c76292e6525f6830391c09c3133fb3f94fd953077e0e4391062f09798c2355dd다. Luna가14개 source/test SHA의 실행 전후 일치를 확인했다. 이 선택 통과는 현재 전체 suite/커버리지/보안/CI의 대체 증거가 아니다. 다음 커밋을 push해 같은 source의 전체 pilot-current를 확인한다.
 
 수정 시도의 기능 설계·NFR 요구·NFR 설계·인프라 설계는 기존 업무 기준 그대로 유지하고 각각 별도 검토를 완료했다. 기존 구현 이력과 추가4단계를 구분한 계획에 사용자 원문 Approve Plan을 기록했고 실제 testing-posture verify의 approved/receiptValid/contractValid/fingerprintValid/execution_allowed는 true였다.
