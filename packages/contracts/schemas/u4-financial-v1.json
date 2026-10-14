@@ -3,6 +3,158 @@
   "$id": "urn:oms:contract:u4-financial:1",
   "title": "U4 financial revision1 — operation registry4; closed manual financial contracts",
   "$defs": {
+    "RecoverySecurityObservation": {
+      "type": "object",
+      "properties": {
+        "observationVersion": { "const": 3 },
+        "sourceContract": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/SourceContract" },
+        "modelVersion": { "enum": [1, 2, 3, null] },
+        "checkId": { "$ref": "urn:oms:contract:common:2#/$defs/Id" },
+        "model": {
+          "$ref": "urn:oms:contract:u3-commercial:2#/$defs/RecoverySecurityObservation/properties/model"
+        },
+        "id": { "$ref": "urn:oms:contract:common:2#/$defs/Id" },
+        "sourceOwner": { "enum": ["IdentityRecovery", "EnterpriseAccess"] },
+        "sourceRevision": {
+          "anyOf": [{ "$ref": "urn:oms:contract:common:2#/$defs/Revision" }, { "type": "null" }]
+        },
+        "currentData": {
+          "anyOf": [{ "type": "object", "maxProperties": 100 }, { "type": "null" }]
+        },
+        "evidenceId": { "$ref": "urn:oms:contract:common:2#/$defs/Id" },
+        "observedAt": { "$ref": "urn:oms:contract:common:2#/$defs/Instant" },
+        "knowledge": { "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"] }
+      },
+      "required": [
+        "observationVersion",
+        "sourceContract",
+        "modelVersion",
+        "checkId",
+        "model",
+        "id",
+        "sourceOwner",
+        "sourceRevision",
+        "currentData",
+        "evidenceId",
+        "observedAt",
+        "knowledge"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": { "properties": { "currentData": { "type": "null" } } },
+          "then": { "properties": { "modelVersion": { "type": "null" } } },
+          "else": { "properties": { "modelVersion": { "enum": [1, 2, 3] } } }
+        },
+        {
+          "if": { "properties": { "modelVersion": { "const": 3 } } },
+          "then": {
+            "properties": {
+              "model": { "enum": ["StaffRole", "RoleRevisionState"] },
+              "sourceOwner": { "const": "EnterpriseAccess" }
+            }
+          }
+        }
+      ]
+    },
+    "StaffActionList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 19,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "application.read",
+          "enterprise.approve",
+          "enterprise.initial-administrator.designate",
+          "product.register",
+          "product.revise",
+          "product.read",
+          "order.read",
+          "order.review.read",
+          "staff.role.manage",
+          "identity.recovery.verify",
+          "identity.person.verify",
+          "enterprise.administrator.restore",
+          "contract.register",
+          "contract.approve",
+          "contract.propose",
+          "order.decide",
+          "order.change.apply",
+          "financial.read",
+          "financial.manage"
+        ]
+      }
+    },
+    "LegacyStaffActionProjection": {
+      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/LegacyStaffActionProjection"
+    },
+    "StaffRoleInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" },
+        "label": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Label" },
+        "actions": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/StaffActionList" }
+      },
+      "required": ["meta", "label", "actions"],
+      "additionalProperties": false
+    },
+    "StaffRoleRevisionInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" },
+        "roleRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/StaffRoleRef" },
+        "label": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Label" },
+        "actions": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/StaffActionList" }
+      },
+      "required": ["meta", "roleRef", "label", "actions"],
+      "additionalProperties": false
+    },
+    "StaffRoleDeactivateInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" },
+        "roleRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/StaffRoleRef" }
+      },
+      "required": ["meta", "roleRef"],
+      "additionalProperties": false
+    },
+    "StaffRoleRef": {
+      "allOf": [
+        { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref" },
+        {
+          "properties": {
+            "owner": { "const": "EnterpriseAccess" },
+            "entity": { "const": "StaffRole" }
+          }
+        }
+      ]
+    },
+    "StaffRolePageInput": { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/StaffRolePageInput" },
+    "StaffRolePage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "properties": {
+              "roleRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/StaffRoleRef" },
+              "label": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Label" },
+              "actions": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/StaffActionList" },
+              "active": { "type": "boolean" }
+            },
+            "required": ["roleRef", "label", "actions", "active"],
+            "additionalProperties": false
+          }
+        },
+        "nextCursor": { "type": ["string", "null"], "maxLength": 128 },
+        "observedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["items", "nextCursor", "observedAt"],
+      "additionalProperties": false
+    },
     "Id": {
       "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Id"
     },

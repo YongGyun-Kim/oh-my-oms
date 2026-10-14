@@ -2,7 +2,9 @@ import { readFileSync } from 'node:fs';
 import type { Model } from './model-catalog.js';
 import { U3_MODELS } from './u3-model-catalog.js';
 import { U4_SUPPORT_MODELS } from './u4-support-models.js';
+import { U4_ACCESS_MODELS } from './u4-access-models.js';
 export { U4_SUPPORT_MODELS } from './u4-support-models.js';
+export { U4_ACCESS_MODELS } from './u4-access-models.js';
 
 export const U4_MODELS: readonly Model[] = Object.freeze(
   (
@@ -60,3 +62,4 @@ export const U4_U3_MODELS: readonly Model[] = Object.freeze(
   })),
 );
 export const U4_PERSISTENCE_MODELS = Object.freeze([...U4_MODELS, ...U4_SUPPORT_MODELS]);
+export const U4_VERSION3_MODELS = Object.freeze([...U4_U3_MODELS, ...U4_ACCESS_MODELS]);

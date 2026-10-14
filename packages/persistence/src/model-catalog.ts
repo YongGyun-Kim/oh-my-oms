@@ -7,7 +7,7 @@ import { U2_MODELS } from './u2-model-catalog.js';
 import { validateU2ModelConstraints } from './u2-model-decoder.js';
 import { U3_MODELS, U3_PERSISTENCE_MODELS, physicalU3Model } from './u3-model-catalog.js';
 import { validateU3ModelConstraints } from './u3-model-decoder.js';
-import { U4_PERSISTENCE_MODELS, U4_U3_MODELS } from './u4-model-catalog.js';
+import { U4_PERSISTENCE_MODELS, U4_VERSION3_MODELS } from './u4-model-catalog.js';
 import { validateU4ModelConstraints } from './u4-model-decoder.js';
 
 export interface Attribute {
@@ -37,7 +37,7 @@ export const MODELS = Object.freeze(catalog.entities);
 const legacyModels = [...MODELS, ...U2_MODELS];
 const u3ByName = new Map(U3_PERSISTENCE_MODELS.map((model) => [model.name, model]));
 const u4ByName = new Map(U4_PERSISTENCE_MODELS.map((model) => [model.name, model]));
-const u4U3ByName = new Map(U4_U3_MODELS.map((model) => [model.name, model]));
+const u4U3ByName = new Map(U4_VERSION3_MODELS.map((model) => [model.name, model]));
 const physicalCurrent = (model: Model, current: Model) => {
   const previous = physicalU3Model(model, current);
   const u4 = u4U3ByName.get(current.name);

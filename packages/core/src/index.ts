@@ -63,3 +63,4 @@ export { U2Worker, PrivateU2Delivery } from './worker-consumer.js';
 export type { U2DeliveryHandler, PrivatePurposeReceiver } from './worker-consumer.js';
 export { RecoveryFactorEnrollment } from './identity-factor.js';
 export { RecoveryPurposeCodes } from './identity-codes.js';
+export * from './u4-staff-access.js';

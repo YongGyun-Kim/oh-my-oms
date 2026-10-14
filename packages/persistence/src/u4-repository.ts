@@ -44,6 +44,14 @@ const shared = new Set([
   'ExecutionPermit',
   'OutboxDelivery',
 ]);
+const accessOperations = new Set(['defineStaffRole', 'reviseStaffRole', 'deactivateStaffRole']);
+const accessModels = new Set([
+  'StaffRole',
+  'RoleRevisionState',
+  'AccessHistory',
+  'StaffAuthorityFence',
+  'RequestReceipt',
+]);
 function same(
   model: string,
   left: ModelData | null,
@@ -225,7 +233,10 @@ export class U4Repository {
   private prepare(request: WriteRequest): WriteRequest {
     this.store.schema.validateUri(U4_PROFILE + '#/$defs/SourceContract', request.sourceContract);
     requireCondition(
-      ['FinancialSettlement', 'CommercialAgreement', 'OrderAcceptance'].includes(request.owner),
+      ['FinancialSettlement', 'CommercialAgreement', 'OrderAcceptance'].includes(request.owner) ||
+        (request.owner === 'EnterpriseAccess' &&
+          accessOperations.has(request.operation) &&
+          request.audience === 'STAFF'),
       403,
       'U4_WRITE_OWNER',
       '등록된 금융/약정 소유자만 변경할 수 있습니다.',
@@ -266,7 +277,13 @@ export class U4Repository {
             (model) => model.name === row.model && model.owner === request.owner,
           );
           requireCondition(
-            !row.deleted && (own || shared.has(row.model)),
+            !row.deleted &&
+              (request.owner === 'EnterpriseAccess'
+                ? accessModels.has(row.model) &&
+                  (row.model === 'RequestReceipt'
+                    ? row.data.owner === request.owner
+                    : modelDefinition(row.model).owner === request.owner)
+                : own || shared.has(row.model)),
             403,
             'U4_WRITE_OWNER',
             '다른 소유자 변경이나 금융 원본 삭제는 허용하지 않습니다.',

@@ -74753,3 +74753,75 @@
 **Context**: construction > u4-financial-settlement > code-generation > code-generation-plan.md
 
 ---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T18:35:31Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T18:45:40Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: 첫 번째 단위 검증이 종료 코드 1로 실패해 중단했습니다. 37건 중 36건 통과, 1건 실패, pending은 0입니다. 실패는 `staff-access.spec.ts` case 1의 `AssertionError`이며 위치 정보는 없었습니다.\n\n지시에 따라 DB 준비와 통합 검사는 실행하지 않았습니다. 파일 수정이나 재시도는 하지 않았습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T18:47:26Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T18:47:50Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: U4 단위 회귀 37/37과 격리 DB 준비는 통과했습니다. `staff-access` 통합 검증은 종료 코드 1로 실패했습니다. 8건 중 7건 통과, 1건 실패, pending과 collection 오류는 0입니다. 실패는 case 5의 `OmsError`이며 위치는 `protected-store.ts:316`과 `staff-access.spec.ts:1
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T18:49:48Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: 선택된 보호 원상 검사는 1건 통과했고, 필터링된 7건은 실행 대상이 아니었습니다. 이어 실행한 전체 `staff-access` 통합 테스트는 8/8 통과했습니다. 실패·collection 오류는 없었습니다. 파일 수정이나 재실행은 하지 않았습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T18:50:42Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T18:54:24Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: 요청된 11개 검증을 모두 순서대로 완료했습니다. U4 단위 76/76, U4 통합 49/49, U1·U2·U3 단위·통합 회귀도 모두 통과했습니다. 격리 DB 준비 명령도 성공했고 기존 보존 DB는 초기화하지 않았습니다. 실패·대기·collection 오류는 없었습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T18:55:21Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---

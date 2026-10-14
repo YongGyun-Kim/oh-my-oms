@@ -64,7 +64,12 @@ describe('U4 closed contracts', () => {
         recordRef: u4Ref('OrderAcceptance', 'Order'),
       }),
     ).toBeDefined();
-    expect(operation.audience).toEqual(['CUSTOMER', 'STAFF']);
+    expect(operation.audience).toEqual(['STAFF']);
+    expect(operation.action).toBe('financial.read');
+    expect(registry.lookup('FinancialSettlement', 'readCustomerFinancial', 4)).toMatchObject({
+      action: 'payment.read',
+      audience: ['CUSTOMER'],
+    });
     expect(registry.lookup('FinancialSettlement', 'recordPaymentEvidence', 4).audience).toEqual([
       'STAFF',
     ]);

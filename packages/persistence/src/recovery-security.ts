@@ -16,8 +16,8 @@ import {
   canonicalSecurityData,
 } from './recovery-security-policy.js';
 export interface RecoverySecurityObservation {
-  observationVersion?: 2;
-  sourceContract?: { profile: 'urn:oms:contract:u3-commercial:2'; registryVersion: 3 };
+  observationVersion?: 2 | 3;
+  sourceContract?: import('@oms/contracts').FinancialSourceContract;
   modelVersion?: 1 | 2 | 3 | null;
   checkId: string;
   model: string;

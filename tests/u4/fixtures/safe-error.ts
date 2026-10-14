@@ -29,7 +29,7 @@ const NAMES = new Set([
   'RangeError',
 ]);
 const LOCATION =
-  /((?:packages\/persistence\/src\/(?:protected-write|protected-store|protected-transaction|u4-repository|recovery-types|model-catalog|u4-model-decoder)|packages\/core\/src\/(?:u4-commercial-adapter|u4-payment-plan|u4-commercial-order|u4-order-terms|u4-plan-proposal|u4-proposal-proof|u3-current-basis|authorization)|tests\/u4\/fixtures\/commercial-plan|tests\/u4\/integration\/(?:persistence|concurrency|protection-replay|commercial-plan|renewal-plan)\.spec)\.ts):(\d+):(\d+)/g;
+  /((?:packages\/persistence\/src\/(?:protected-write|protected-store|protected-transaction|u4-repository|recovery-types|model-catalog|u4-model-decoder|recovery-security-observation|recovery-security-write|recovery-security)|packages\/core\/src\/(?:u4-commercial-adapter|u4-payment-plan|u4-commercial-order|u4-order-terms|u4-plan-proposal|u4-proposal-proof|u4-staff-access|u3-current-basis|authorization)|tests\/u4\/fixtures\/(?:commercial-plan|security-oracle)|tests\/u4\/integration\/(?:persistence|concurrency|protection-replay|commercial-plan|renewal-plan|staff-access)\.spec)\.ts):(\d+):(\d+)/g;
 
 // 메시지·SQL·매개변수·환경·임의 속성은 읽거나 직렬화하지 않는다.
 export function safeU4Error(value: unknown): {

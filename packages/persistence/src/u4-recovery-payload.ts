@@ -1,11 +1,11 @@
 import { requireCondition } from '@oms/contracts';
-import { U4_PERSISTENCE_MODELS, U4_U3_MODELS } from './u4-model-catalog.js';
+import { U4_PERSISTENCE_MODELS, U4_VERSION3_MODELS } from './u4-model-catalog.js';
 import type { ModelData } from './model-catalog.js';
 import type { RecoveryPayload } from './recovery-types.js';
 
 export function validateU4RecoveryImage(model: string, version: number, data: ModelData): boolean {
   const u4 = U4_PERSISTENCE_MODELS.some((entry) => entry.name === model);
-  const u3 = version === 3 && U4_U3_MODELS.some((entry) => entry.name === model);
+  const u3 = version === 3 && U4_VERSION3_MODELS.some((entry) => entry.name === model);
   if (!u4 && !u3) return false;
   requireCondition(
     u4 ? version === 1 && data.modelVersion === 1 : data.modelVersion === 3,

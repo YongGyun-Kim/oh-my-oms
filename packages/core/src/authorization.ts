@@ -12,7 +12,7 @@ import {
   rowModelVersion,
   validateModel,
 } from '@oms/persistence';
-import { scopeIncludes } from './scopes.js';
+import { scopeIncludes, STAFF_ACTIONS } from './scopes.js';
 import type { OrderingPolicy } from './scopes.js';
 import { scopeV2Includes } from './scope-v2.js';
 import { currentConsentScope, validateConsentScope } from './u3-consent-scope.js';
@@ -231,6 +231,25 @@ export class Authorization {
         role = current;
       } else {
         role = checkedStaffRole ?? (await this.lookup(kind, id, transaction));
+      }
+      if (role?.modelVersion === 3 || state?.modelVersion === 3) {
+        const source = { profile: 'urn:oms:contract:u4-financial:1', registryVersion: 4 };
+        requireCondition(
+          kind === 'StaffRole' &&
+            role?.modelVersion === 3 &&
+            state?.modelVersion === 3 &&
+            canonicalJson(role.sourceContract) === canonicalJson(source) &&
+            canonicalJson(state.sourceContract) === canonicalJson(source) &&
+            canonicalJson([...(role.actions as string[])].sort()) ===
+              canonicalJson(
+                (state.actions as string[])
+                  .filter((action) => STAFF_ACTIONS.includes(action))
+                  .sort(),
+              ),
+          503,
+          'U4_ROLE_PROFILE_MIX',
+          '새 직원 역할과 현재 행위는 정확한 model3/source4 및 구형 투영이 일치해야 합니다.',
+        );
       }
       requireCondition(
         role?.modelVersion !== 2 ||

@@ -12,7 +12,7 @@ import {
 import type { ModelData } from './model-catalog.js';
 import type { RecoveryRow } from './recovery-types.js';
 import { U3_PERSISTENCE_MODELS } from './u3-model-catalog.js';
-import { U4_PERSISTENCE_MODELS, U4_U3_MODELS } from './u4-model-catalog.js';
+import { U4_PERSISTENCE_MODELS, U4_VERSION3_MODELS } from './u4-model-catalog.js';
 import type { FinancialSourceContract } from '@oms/contracts';
 
 export class ProtectedTransaction {
@@ -50,7 +50,7 @@ export class ProtectedTransaction {
         this.sourceContract?.profile === 'urn:oms:contract:u4-financial:1' &&
           (U4_PERSISTENCE_MODELS.some((entry) => entry.name === model)
             ? data.modelVersion === 1
-            : U4_U3_MODELS.some((entry) => entry.name === model) && data.modelVersion === 3),
+            : U4_VERSION3_MODELS.some((entry) => entry.name === model) && data.modelVersion === 3),
         400,
         'WRITE_CONTRACT_REQUIRED',
         '새 금융/약정 원본은 정확한 U4 변경 계약과 버전이 필요합니다.',
@@ -60,7 +60,7 @@ export class ProtectedTransaction {
     if (!U3_PERSISTENCE_MODELS.some((entry) => entry.name === model)) return;
     requireCondition(
       this.sourceContract?.profile !== 'urn:oms:contract:u4-financial:1' ||
-        !U4_U3_MODELS.some((entry) => entry.name === model),
+        !U4_VERSION3_MODELS.some((entry) => entry.name === model),
       400,
       'WRITE_MODEL_VERSION',
       '새 금융 계약의 약정/주문 원본은 명시 modelVersion3이 필요합니다.',

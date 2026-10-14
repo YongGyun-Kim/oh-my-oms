@@ -1,5 +1,71 @@
 [
   {
+    "owner": "EnterpriseAccess",
+    "name": "defineStaffRole",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/StaffRoleInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "reviseStaffRole",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/StaffRoleRevisionInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/StaffRoleRef" }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "deactivateStaffRole",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/StaffRoleDeactivateInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/StaffRoleRef" }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readStaffRoles",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "query",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/StaffRolePageInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/StaffRolePage",
+    "targetKind": "NONE"
+  },
+  {
     "owner": "CommercialAgreement",
     "name": "createPaymentPlanProposal",
     "contract": "u4-financial",
@@ -655,11 +721,11 @@
   },
   {
     "owner": "FinancialSettlement",
-    "name": "readFinancial",
+    "name": "readCustomerFinancial",
     "contract": "u4-financial",
     "version": 4,
-    "audience": ["CUSTOMER", "STAFF"],
-    "action": "financial.read",
+    "audience": ["CUSTOMER"],
+    "action": "payment.read",
     "kind": "query",
     "input": "urn:oms:contract:u4-financial:1#/$defs/FinancialQuery",
     "output": "urn:oms:contract:u4-financial:1#/$defs/FinancialView",
@@ -695,10 +761,55 @@
   },
   {
     "owner": "FinancialSettlement",
+    "name": "listCustomerFinancial",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["CUSTOMER"],
+    "action": "payment.read",
+    "kind": "query",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/FinancialPageQuery",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/FinancialPage",
+    "targetKind": "ENTERPRISE"
+  },
+  {
+    "owner": "FinancialSettlement",
+    "name": "readCustomerFinancialHistory",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["CUSTOMER"],
+    "action": "payment.read",
+    "kind": "query",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/FinancialPageQuery",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/FinancialHistoryPage",
+    "targetKind": "ENTERPRISE"
+  },
+  {
+    "owner": "FinancialSettlement",
+    "name": "readFinancial",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "financial.read",
+    "kind": "query",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/FinancialQuery",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/FinancialView",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef" }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "FinancialSettlement",
     "name": "listFinancial",
     "contract": "u4-financial",
     "version": 4,
-    "audience": ["CUSTOMER", "STAFF"],
+    "audience": ["STAFF"],
     "action": "financial.read",
     "kind": "query",
     "input": "urn:oms:contract:u4-financial:1#/$defs/FinancialPageQuery",
@@ -710,7 +821,7 @@
     "name": "readFinancialHistory",
     "contract": "u4-financial",
     "version": 4,
-    "audience": ["CUSTOMER", "STAFF"],
+    "audience": ["STAFF"],
     "action": "financial.read",
     "kind": "query",
     "input": "urn:oms:contract:u4-financial:1#/$defs/FinancialPageQuery",

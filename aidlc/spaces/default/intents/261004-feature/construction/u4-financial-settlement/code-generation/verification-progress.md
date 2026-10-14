@@ -156,3 +156,31 @@
 - 구현 조사에서 U4 초기 선언의 금융 조회/등록 토큰과 현행 역할의 정상 부여 경로가 맞지 않음을 확인했다. 고객은 승인된 U2 payment.read(허용된 대금 조회)를 재사용하고, 직원은 별도 조회/등록 권한을 U2 소유의 명시 역할 정의·개정·grant로 연결해야 한다.
 - 근거: U4 functional-design/rules.md BR4.1과 functional-spec.md의 U2 권한 책임, nfr-design/security-design.md의 현재 권한·조회/등록 분리. U2 functional-spec.md는 고객 payment.read와 직원 서버 허용 목록/명시 grant를 정의한다. 현행 u3-staff-access.ts의 model2/registry3 닫힌 목록에는 금융 직원 행위가 없다.
 - 이는 승인된 권한 분리를 실제 정상 부여 경로에 연결하기 위한 구현 접점이다. 자동 권한 승격·raw 역할 주입·구형 닫힌 목록 완화·U4의 다른 소유자 직접 쓰기로 우회하지 않는다. 정확한 새 버전과 구형 판독/복구 보존 범위를 다음 Step8의 access 연결에서 먼저 대조한다. 아직 이 권한 보완은 구현/검증하지 않았다.
+
+## Step6/7 저장과 Step8 권한 접점 구현 방안
+
+- Step6/7의 실제 구현/검증을 대조해 두 완료 체크만 반영하고 `fb5360a`로 커밋·push했다. 현재 승인 계획은7/18 완료이며 금융 핵심 명령은 아직 구현 전이다.
+- 승인 근거를 대조한 뒤, 별도 조회/금융 등록 권한의 정상 부여 경로를 만드는 기술 접점으로 정리했다. 기존 U4 profile/registry4에 닫힌 직원 역할 명령을 연결하고 StaffRole/RoleRevisionState의 명시 model3/source4 판독·보호·복구를 추가하되 기존 model1/2 및 grant를 보존하는 방안이다. 계획 문구/Testing Contract를 변경하거나 새로운 사업 권한 정책을 승인받았다고 기록한 것이 아니다.
+- 금융 전용 역할의 legacy 교집합이 비더라도 가짜 기존 권한을 채우지 않는다. EnterpriseAccess 명령은 해당 소유자의 등록 역할/상태/권한 이력·fence 변경으로 제한하고 실제 정의→명시 grant→현재 권한→회수·구형 거절·복구 회귀를 먼저 검증한다. 아직 이 접점의 구현/시험 결과는 없다.
+
+## 금융 역할 접점 첫 검증 — 기존 wire 경계의 시험 기대 불일치
+
+- 권한 접점의 닫힌 역할3/상태3/source4와 payload3·명시 등록한 복구 관측3 연결을 작성했다. 주문 model3의 지급 계획 제약과 역할 모델은 분리했다. 고객 payment.read 조회3개와 직원 financial.read 조회를 별도 선언으로 구분한다.
+- 첫 선택 단위는 staff-access·contracts·models·recovery-payload·safe-diagnostics의5파일37건 중36통과·1실패, exit1이었다. 실패는 staff-access 첫 case의 AssertionError이며 미실행·수집·전역 오류0이다. DB 준비/통합은 실행하지 않았다.
+- 기존 common:2 StaffRoleInput은 wire에서 일반 문자열 목록을 받고, 실제 구형 StaffAccess.defineRole이 STAFF_ACTIONS로 확인해 금융 문자열을 UNKNOWN_STAFF_ACTION으로 거절한다. 신규 시험이 구형 wire 스키마 자체의 거절을 기대해 기존 의미와 어긋났다.
+- 제품/구형 스키마는 바꾸지 않았다. 잘못된 단위 기대를 기존 wire 동작 보존으로 바로잡고, 실제 DB 시험에 정상 구형 역할 명령의 금융 권한 등록 거절을 명시 추가했다. 수정 후 단위→U4 DB 준비→새 역할 실제 DB8건을 순차 확인한다.
+
+## 금융 역할 실제 경로 검증
+
+- 수정 후 위 단위37/37과 U4 격리 DB 준비는 exit0으로 통과했다. 첫 역할 실제 DB 실행은8건 중7통과·1실패였다. 실패는 고의 primary 권한 오염 후 마지막 원상 assertion에서 currentProtected를 사용한 경우로, protected-store.ts:316의 CURRENT_AUTH_NOT_PROTECTED 차단 경로였다. 제품 차단이 잘못됐다는 근거가 아니다.
+- 제품 코드는 유지하고 마지막 원상 검사를 store.read의 보호 prefix와 primary의 실제 오염 상태로 구분했다. 같은 조회에서 현재 권한으로 승격하지 않음을 먼저 확인한다. 제목도 실제 시험하는 미보호 오염 경계로 수정했다.
+- 수정 후 선택1통과·7필터 미실행을 확인하고, 같은 소스로 전체 역할 DB8/8이 exit0, success=true, 미실행·수집·assertion·전역 오류0으로 통과했다. 실제 역할 정의→기존 명시 grant→개정/회수/비활성, 구형 소유자 명령 거절, 미보호 원본 차단, owner/rollback 및 재생→관측3 보안 재확인을 포함한다.
+- 현재 소스를 고정하고 전체 U4 단위/DB와 기존 권한·복구 정책/관측·role source·migration의 좁은 회귀를 순차 실행한다. 대량 DR 검증이나 금융 업무 명령 완료로 해석하지 않는다.
+
+## 금융 역할 접점 최종 호환 검증
+
+- 같은 소스로 Luna가11개 명령을 순차 실행했다. 전체 U4 단위76/76·실제 DB49/49가 exit0, success=true, 미실행·수집·assertion·전역 오류0, runReason=passed로 통과했다.
+- 기존 단위 회귀: U1 recovery-security-policy8/8, U2 authorization/role-revisions/scope-compatibility25/25, U3 staff-role-versions/role-own-write/recovery-observation-profile/recovery-role-source/recovery-payload60/60.
+- 기존 실제 DB 회귀: U1 auth-access/recovery-security28/28, U2 authority-race/membership-role-race17/17, U3 staff-role-boundaries/recovery-role-source/migration-compatibility25/25. 각 Unit의 기존 pretest로 격리 DB만 준비했으며 모두 exit0·미실행/수집 오류0이었다.
+- 실행은 기존 tests/uN/vitest.unit.config.ts·vitest.integration.config.ts, 공통 Node22 PATH, 실제 DB의 OMS_UN_DATABASE_PROFILE=verification-isolated를 사용했다. 대량 재난/복구 부하 시험은 추가하지 않았다.
+- 이 결과는 금융 직원 권한의 정상 부여·버전/복구 기술 접점 마일스톤이다. Step8/9의 실제 청구·입금·배분 업무와 전체 제품 커버리지/공식 검증은 아직 미완료다. 계획의 완료 수는7/18 그대로 유지한다.

@@ -6,7 +6,7 @@ import {
   modelForData,
   primaryAttribute,
   U3_PERSISTENCE_MODELS,
-  U4_U3_MODELS,
+  U4_VERSION3_MODELS,
   U4_PERSISTENCE_MODELS,
   validateModel,
 } from '@oms/persistence';
@@ -54,7 +54,7 @@ export function u3Ref(model: string, data: ModelData, schema: SchemaValidator): 
 }
 export function u4Ref(model: string, data: ModelData, schema: SchemaValidator): Ref {
   requireCondition(
-    (data.modelVersion === 3 && U4_U3_MODELS.some((entry) => entry.name === model)) ||
+    (data.modelVersion === 3 && U4_VERSION3_MODELS.some((entry) => entry.name === model)) ||
       (data.modelVersion === 1 && U4_PERSISTENCE_MODELS.some((entry) => entry.name === model)),
     400,
     'U4_REFERENCE_MODEL',

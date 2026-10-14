@@ -1,4 +1,4 @@
-import { requireCondition, SchemaValidator, U3_PROFILE } from '@oms/contracts';
+import { requireCondition, SchemaValidator, U3_PROFILE, U4_PROFILE } from '@oms/contracts';
 import {
   modelDefinition,
   primaryAttribute,
@@ -25,7 +25,9 @@ export function registeredRecoveryObservationProfile(
       ? LEGACY_RECOVERY_OBSERVATION_PROFILE
       : authority.observationProfile;
   requireCondition(
-    profile === LEGACY_RECOVERY_OBSERVATION_PROFILE || profile === U3_PROFILE,
+    profile === LEGACY_RECOVERY_OBSERVATION_PROFILE ||
+      profile === U3_PROFILE ||
+      profile === U4_PROFILE,
     503,
     'RECOVERY_OBSERVATION_PROFILE',
     '서버에 등록된 관측 계약이 필요합니다.',
@@ -39,7 +41,9 @@ export function validateRecoverySecurityObservation(
   input: unknown,
 ): RecoverySecurityObservation {
   requireCondition(
-    registeredProfile === LEGACY_RECOVERY_OBSERVATION_PROFILE || registeredProfile === U3_PROFILE,
+    registeredProfile === LEGACY_RECOVERY_OBSERVATION_PROFILE ||
+      registeredProfile === U3_PROFILE ||
+      registeredProfile === U4_PROFILE,
     503,
     'RECOVERY_OBSERVATION_PROFILE',
     '등록되지 않은 관측 계약입니다.',

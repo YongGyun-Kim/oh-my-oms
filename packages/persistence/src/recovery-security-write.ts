@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { fingerprint, requireCondition, U3_PROFILE } from '@oms/contracts';
+import { fingerprint, requireCondition, U3_PROFILE, U4_PROFILE } from '@oms/contracts';
 import { modelDefinition, rowModelVersion, validateModel } from './model-catalog.js';
 import type { ModelData } from './model-catalog.js';
 import type { ProtectedStore, WriteRequest } from './protected-store.js';
@@ -26,9 +26,9 @@ export async function writeRecoveredSecurityTransition(
     '복구 확인으로 원래 모델 버전을 바꾸지 않습니다.',
   );
   const sourceContract =
-    version === 2
+    version === 2 || version === 3
       ? store.schema.validateUri<NonNullable<WriteRequest['sourceContract']>>(
-          U3_PROFILE + '#/$defs/SourceContract',
+          (version === 3 ? U4_PROFILE : U3_PROFILE) + '#/$defs/SourceContract',
           current.sourceContract,
         )
       : undefined;

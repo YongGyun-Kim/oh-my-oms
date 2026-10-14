@@ -4,7 +4,7 @@ import { MODELS, tableName } from './model-catalog.js';
 import { U3_MODELS, U3_PERSISTENCE_MODELS } from './u3-model-catalog.js';
 import { U2_MODELS } from './u2-model-catalog.js';
 import { migrateMaterialModels } from './migration.js';
-import { U4_U3_MODELS } from './u4-model-catalog.js';
+import { U4_VERSION3_MODELS } from './u4-model-catalog.js';
 
 const quoted = (name: string) => {
   requireCondition(
@@ -33,7 +33,7 @@ export async function applyU3ModelConstraints(
     if (!legacy) continue;
     const name = tableName(current.name),
       constraint = 'u3_' + name + '_version';
-    const financial = U4_U3_MODELS.find((model) => model.name === current.name);
+    const financial = U4_VERSION3_MODELS.find((model) => model.name === current.name);
     await manager.query(
       'ALTER TABLE ' + quoted(name) + ' DROP CONSTRAINT IF EXISTS ' + quoted(constraint),
     );

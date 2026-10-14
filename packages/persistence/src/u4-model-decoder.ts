@@ -1,7 +1,7 @@
 import { canonicalJson, fingerprint, requireCondition, type SchemaValidator } from '@oms/contracts';
 import type { ModelData } from './model-catalog.js';
 import { validateModel, rowModelVersion } from './model-catalog.js';
-import { U4_PERSISTENCE_MODELS, U4_U3_MODELS } from './u4-model-catalog.js';
+import { U4_PERSISTENCE_MODELS, U4_U3_MODELS, U4_VERSION3_MODELS } from './u4-model-catalog.js';
 
 const check = (condition: unknown) =>
   requireCondition(
@@ -22,6 +22,19 @@ export function validateU4ModelConstraints(
   data: ModelData,
   schema: SchemaValidator,
 ): void {
+  if (data.modelVersion === 3 && ['StaffRole', 'RoleRevisionState'].includes(name)) {
+    schema.validateUri(
+      'urn:oms:contract:u4-financial:1#/$defs/SourceContract',
+      data.sourceContract,
+    );
+    if (name === 'RoleRevisionState')
+      check(
+        data.roleRef === null &&
+          data.staffRoleRef !== null &&
+          (data.scopeRefs as unknown[]).length === 0,
+      );
+    return;
+  }
   if (data.modelVersion === 3 && U4_U3_MODELS.some((model) => model.name === name)) {
     check(data.paymentPlan === null || typeof data.paymentPlan === 'object');
     if (name === 'Order' && data.paymentKind === 'MIXED') check(data.paymentPlan !== null);
@@ -102,7 +115,7 @@ export function decodeU4Model(
 ): ModelData {
   check(
     U4_PERSISTENCE_MODELS.some((model) => model.name === name) ||
-      U4_U3_MODELS.some((model) => model.name === name),
+      U4_VERSION3_MODELS.some((model) => model.name === name),
   );
   check(rowModelVersion(name, data) === version);
   return validateModel(name, data, schema);
