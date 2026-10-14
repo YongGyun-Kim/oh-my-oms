@@ -52,10 +52,10 @@
 - [x] 금융 명령 계층 후 `tests/u4/unit/financial-commands.spec.ts`와 기존 Step5 통합 시험을 확장해 `integration/financial-flow.spec.ts`를 실행한다. 청구→원본 확인→입금100→청구60/40 수동 배분→원래 접수 재조회·정정의 완전 경로, 다른 주문/기업/채널/profile 개정의 동일 거래 차단, 한 항목 오류의 전체 rollback, 권한 회수·원본 실패·이미 환불/예약한 배분 취소 거절을 검증한다. 대응: VS4.3–4.6/4.8/4.10/4.11·주 책임 AC4.1/4.4.
 
 ### Step 10
-- [ ] 제공 자격·기한·수동 제한과 후속 원본 포트를 구현한다. 신규 `packages/core/src/u4-eligibility.ts`, `u4-due-basis.ts`, `u4-owner-sources.ts`로 SALE_ACCEPTANCE/PROVISION 목적·현재 계획/의무/회차·명시 빈 집합을 검증한다. KST 실제 완료일+합의 달력N·기한일 전체·다음날 후보, 고정일/다른 확인 사건·상위 정정 개정을 구별한다. 직원이 계약상 제한/해제를 기록하고 U5/U6 실제 완료/회수·U7 승인 root를 등록된 포트로 읽는다. 미등록 주체는 UNVERIFIED/HOLD이며 실제 완료/기간을 만들어 넣지 않는다. 대응: US4.5/4.6·협력 US3.4/5.5/6.1/6.5/7.1·BR4.11–4.17/4.23.
+- [x] 제공 자격·기한·수동 제한과 후속 원본 포트를 구현한다. 신규 `packages/core/src/u4-eligibility.ts`, `u4-due-basis.ts`, `u4-owner-sources.ts`로 SALE_ACCEPTANCE/PROVISION 목적·현재 계획/의무/회차·명시 빈 집합을 검증한다. KST 실제 완료일+합의 달력N·기한일 전체·다음날 후보, 고정일/다른 확인 사건·상위 정정 개정을 구별한다. 직원이 계약상 제한/해제를 기록하고 U5/U6 실제 완료/회수·U7 승인 root를 등록된 포트로 읽는다. 미등록 주체는 UNVERIFIED/HOLD이며 실제 완료/기간을 만들어 넣지 않는다. 대응: US4.5/4.6·협력 US3.4/5.5/6.1/6.5/7.1·BR4.11–4.17/4.23.
 
 ### Step 11
-- [ ] 판단 계층 후 `tests/u4/unit/eligibility.spec.ts`, `due-basis.spec.ts`와 `integration/owner-facts.spec.ts`를 작성·실행한다. 제공 전후 혼합·필수 청구 미발행·현재/과거 회차·미등록 공급자·stale ALLOW·완료12/1+30=12/31·N0·한국 자정·윤일/연말·역순/공백/확인 정정·부분 미완료·조기 설치·수동 제한의 범위를 검사한다. 대응: VS4.1/4.2/4.7/4.14/4.15·NFR5.3/5.6.
+- [x] 판단 계층 후 `tests/u4/unit/eligibility.spec.ts`, `due-basis.spec.ts`와 `integration/owner-facts.spec.ts`를 작성·실행한다. 제공 전후 혼합·필수 청구 미발행·현재/과거 회차·미등록 공급자·stale ALLOW·완료12/1+30=12/31·N0·한국 자정·윤일/연말·역순/공백/확인 정정·부분 미완료·조기 설치·수동 제한의 범위를 검사한다. 대응: VS4.1/4.2/4.7/4.14/4.15·NFR5.3/5.6.
 
 ### Step 12
 - [ ] 환불 예약·실제 결과/정정 계층을 구현한다. 신규 `packages/core/src/u4-refund.ts`에서 U7 승인 root/원금/필요 회수·모든 case/시도/개정의 공통 한도, 부분별 성공/불명/실패 예약, 실제 결과 식별 중복·동일 작업의 추가 확인과 RECONCILING 정정을 구현한다. 성공분 재실행·불명분 해제·승인 개정마다 한도 복제를 금지한다.

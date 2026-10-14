@@ -332,7 +332,11 @@
 
 - **Unit Stage**: code-generation
 
-- **Unit State**: in-progress
+- **Unit State**: paused
+
+- **Unit Pause Reason**: Step1-11 완료. R-03 확정 실패분 재시도의 부모 상태 규칙에 대한 사용자 판단이 필요해 Step12 진입에서 중단합니다.
+
+- **Unit Next Action**: 사용자의 R-03 선택을 log answer로 기록하고 Unit을 resume한 뒤 승인된 방식의 기능 설계 보완 경로를 진행합니다.
 
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
@@ -395,7 +399,7 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-14T16:01:56Z
+- **Last Updated**: 2026-10-14T22:41:02Z
 
 - **Construction Autonomy Mode**: autonomous
 
