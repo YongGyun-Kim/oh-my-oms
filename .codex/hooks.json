@@ -5,7 +5,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex session-start"
+            "command": "aidlc engine adapter codex session-start",
+            "timeout": 1800
           }
         ]
       }
@@ -15,7 +16,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex record-human-turn"
+            "command": "aidlc engine adapter codex record-human-turn",
+            "timeout": 1800
           }
         ]
       }
@@ -25,7 +27,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex bind-bash-session"
+            "command": "aidlc engine adapter codex bind-bash-session",
+            "timeout": 1800
           }
         ],
         "matcher": "Bash"
@@ -34,7 +37,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex deliver-stage-rules"
+            "command": "aidlc engine adapter codex deliver-stage-rules",
+            "timeout": 1800
           }
         ],
         "matcher": "spawn_agent"
@@ -43,7 +47,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex state-transition-guard"
+            "command": "aidlc engine adapter codex state-transition-guard",
+            "timeout": 1800
           }
         ]
       },
@@ -51,7 +56,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex reviewer-scope"
+            "command": "aidlc engine adapter codex reviewer-scope",
+            "timeout": 1800
           }
         ]
       },
@@ -59,16 +65,17 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex review-freeze"
+            "command": "aidlc engine adapter codex review-freeze",
+            "timeout": 1800
           }
         ]
       },
       {
         "hooks": [
           {
-
             "type": "command",
-            "command": "aidlc engine adapter codex plan-approval-guard"
+            "command": "aidlc engine adapter codex plan-approval-guard",
+            "timeout": 1800
           }
         ]
       }
@@ -78,7 +85,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex record-human-turn"
+            "command": "aidlc engine adapter codex record-human-turn",
+            "timeout": 1800
           }
         ],
         "matcher": "request_user_input"
@@ -87,7 +95,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex audit-and-sensors"
+            "command": "aidlc engine adapter codex audit-and-sensors",
+            "timeout": 3600
           }
         ],
         "matcher": "apply_patch"
@@ -96,7 +105,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex sync-workflow-state"
+            "command": "aidlc engine adapter codex sync-workflow-state",
+            "timeout": 1800
           }
         ],
         "matcher": "update_plan"
@@ -105,7 +115,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex rebuild-stage-graph"
+            "command": "aidlc engine adapter codex rebuild-stage-graph",
+            "timeout": 1800
           }
         ],
         "matcher": "Bash"
@@ -116,7 +127,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex validate-state"
+            "command": "aidlc engine adapter codex validate-state",
+            "timeout": 1800
           }
         ]
       }
@@ -126,7 +138,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex log-subagent"
+            "command": "aidlc engine adapter codex log-subagent",
+            "timeout": 1800
           }
         ]
       }
@@ -136,7 +149,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "aidlc engine adapter codex continue-workflow"
+            "command": "aidlc engine adapter codex continue-workflow",
+            "timeout": 3600
           }
         ]
       }

@@ -6,7 +6,7 @@
 // subprocess-pipes into the named core hook, forwarding stdout/exit code.
 //
 // Codex payloads are near-isomorphic to Claude Code's (live corpus,
-// tmp/codex-dist/payload-corpus/ in the framework repo) with four
+// tmp/codex-dist/payload-corpus/ in the framework repo) with five
 // load-bearing differences:
 //   1. Edits arrive as tool_name "apply_patch" with the file paths INSIDE
 //      the patch envelope text (tool_input.command) — no file_path field.
@@ -27,6 +27,11 @@
 //      session-end hook (back-dating conveyed via the recorded fields),
 //      then records the new session. Rapid exec sessions each reconcile
 //      their predecessor — correct, since none of them can emit an end.
+//   5. UserPromptSubmit also fires inside subagents, carrying the agent's
+//      brief as `prompt` under the root session id. Spawned subagents carry
+//      agent_id; internal reviewers carry a transcript_path naming their own
+//      thread. record-human-turn never counts either as the person's turn
+//      (#1411).
 //
 // Output contracts:
 //   - session-start: the core hook prints
@@ -34,7 +39,8 @@
 //     wrapper (verified live, findings E1) — the shim re-wraps.
 //   - bind-bash-session: POSIX Bash input is rewritten through
 //     hookSpecificOutput.updatedInput so every command inherits the validated
-//     payload session without process inspection.
+//     payload session without process inspection, until a tool has seen
+//     Codex give a command that session as CODEX_THREAD_ID.
 //   - continue-workflow: {"decision":"block","reason"} passes through VERBATIM — the
 //     contract is identical on Codex (stop_hook_active included).
 //   - everything else: advisory; stdout ignored, exit 0.
@@ -61,8 +67,10 @@ import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  emptyPickerResult,
   isNonAnswer,
   sessionsDir,
+  codexThreadSessionPath,
   stateFilePath,
   validSessionId,
 } from "../tools/aidlc-lib.ts";
@@ -79,6 +87,7 @@ interface CodexHookInput {
   tool_input?: Record<string, unknown>;
   tool_response?: unknown;
   tool_use_id?: string;
+  transcript_path?: string | null;
   agent_type?: string;
   agent_id?: string;
   stop_hook_active?: boolean;
@@ -156,6 +165,17 @@ export function hasExplicitHumanSelection(toolResponse: unknown, toolInput?: unk
       return !isNonAnswer(answer) || offered.get(questionId)?.has(answer.trim()) === true;
     });
   });
+}
+
+// True when transcript_path is a Codex rollout file for a thread other than
+// the session's root thread (whose id is the session id).
+function otherThreadInput(transcriptPath: unknown, sessionId: unknown): boolean {
+  if (typeof transcriptPath !== "string" || typeof sessionId !== "string" || !sessionId) return false;
+  const name = transcriptPath.split(/[\\/]/).pop() ?? "";
+  const thread = name.match(
+    /^rollout-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:_[0-9a-f-]+)?\.jsonl(?:\.[a-z0-9]+)?$/i,
+  )?.[1];
+  return thread !== undefined && thread.toLowerCase() !== sessionId.trim().toLowerCase();
 }
 
 function explicitHumanSelectionText(toolResponse: unknown): string {
@@ -478,11 +498,19 @@ switch (target) {
       typeof codex.tool_input?.command === "string"
         ? codex.tool_input.command
         : "";
+    // Codex gives the command this session as CODEX_THREAD_ID (0.160 and
+    // later); once a tool has seen it there, the command keeps the words the
+    // agent wrote.
+    const threadNoted = (() => {
+      const path = payloadSessionId ? codexThreadSessionPath(projectDir, payloadSessionId) : null;
+      return path !== null && existsSync(path);
+    })();
     if (
       process.platform === "win32" ||
       codex.tool_name !== "Bash" ||
       !payloadSessionId ||
-      !command
+      !command ||
+      threadNoted
     ) {
       persistResponse("", 0);
       return 0;
@@ -505,10 +533,14 @@ switch (target) {
     // SESSION_STARTED) and resume-rebind OFFER (on source=resume) become
     // reachable — Codex already carries a real `source`, so with session_id
     // present the whole P8 rebind path works on Codex.
+    // The thread's rollout lets `next` see a compaction no hook reported
+    // (#2023). It is not passed as transcript_path, which names a Claude
+    // transcript to the usage tools.
     const fwd = JSON.stringify({
       hook_event_name: "SessionStart",
       source: codex.source ?? "startup",
       ...(codex.session_id ? { session_id: codex.session_id } : {}),
+      ...(typeof codex.transcript_path === "string" ? { rollout_path: codex.transcript_path } : {}),
     });
     const r = runCore("aidlc-session-start.ts", fwd);
     const wrapped = wrapContext(r.stdout, "SessionStart");
@@ -557,9 +589,15 @@ switch (target) {
 
   case "rebuild-stage-graph": {
     // Codex already names the shell tool "Bash" with tool_input.command —
-    // the core hook's exact contract. Verbatim pipe.
-    runCore("aidlc-rebuild-stage-graph.ts", rawInput);
+    // the core hook's exact contract. Verbatim pipe. The core hook's only
+    // stdout is the engine-error relay, one {"systemMessage": ...} line that
+    // Codex surfaces as a warning in the UI (documented for PostToolUse), so
+    // forward it. It is display-only, so unlike a decision it is deliberately
+    // NOT cached for the duplicate delivery: replaying it would show the same
+    // warning twice. The hook stays advisory (exit 0) either way.
+    const r = runCore("aidlc-rebuild-stage-graph.ts", rawInput);
     persistResponse("", 0);
+    if (r.stdout) process.stdout.write(r.stdout);
     return 0;
   }
 
@@ -733,6 +771,7 @@ switch (target) {
             hook_event_name: "PreToolUse",
             tool_name: f.tool,
             tool_input: { file_path: f.path },
+            ...(payloadSessionId ? { session_id: payloadSessionId } : {}),
           }),
         );
         if (r.code === 2) {
@@ -762,6 +801,7 @@ switch (target) {
         subagent_type: target,
         prompt: spawnAgentPrompt(spawnInput),
       },
+      ...(payloadSessionId ? { session_id: payloadSessionId } : {}),
     });
     const r = runCoreWithStderr("aidlc-plan-approval-guard.ts", fwd);
     persistResponse(r.stdout, r.code === 2 ? 2 : 0, r.stderr);
@@ -789,9 +829,44 @@ switch (target) {
   }
 
   case "record-human-turn": {
+    // Codex's question box runs out after two minutes with no answer. The core
+    // hook records that nobody answered and tells the agent to ask again;
+    // its PostToolUse context goes back to Codex as it is.
+    if (codex.tool_name === "request_user_input" && emptyPickerResult(codex.tool_response)) {
+      const r = runCoreWithStderr("aidlc-record-human-turn.ts", JSON.stringify({
+        hook_event_name: "PostToolUse",
+        ...(codex.session_id ? { session_id: codex.session_id } : {}),
+        tool_name: "request_user_input",
+        tool_input: codex.tool_input,
+        tool_response: { answers: {} },
+      }));
+      persistResponse(r.stdout, 0);
+      if (r.stdout) process.stdout.write(r.stdout);
+      return 0;
+    }
     if (
       codex.tool_name === "request_user_input" &&
       !hasExplicitHumanSelection(codex.tool_response, codex.tool_input)
+    ) {
+      persistResponse("", 0);
+      return 0;
+    }
+    // Codex runs UserPromptSubmit for every input to a thread, so a spawned
+    // subagent's brief, and each follow-up the agent sends it, arrive as
+    // `prompt` under the root session id. Codex marks those with agent_id
+    // (the subagent's thread id); the root thread's prompts never carry it.
+    // A subagent's prompt is the agent speaking: no HUMAN_TURN, no kept
+    // words, no answer, no typed switch (#1411).
+    // Codex's internal reviewers (the /review reviewer, Guardian auto-review)
+    // run as their own threads under the same root session id but carry no
+    // agent_id. transcript_path names the thread whose input this is
+    // (rollout-<timestamp>-<thread id>[_<rollout id>].jsonl), and the root
+    // thread's id is the session id, so a rollout naming another thread is not
+    // the main chat. A path in any other form decides nothing.
+    if (
+      codex.tool_name !== "request_user_input" &&
+      ((typeof codex.agent_id === "string" && codex.agent_id.trim().length > 0) ||
+        otherThreadInput(codex.transcript_path, codex.session_id))
     ) {
       persistResponse("", 0);
       return 0;
@@ -805,7 +880,8 @@ switch (target) {
     // A structured request_user_input selection is forwarded as the tool
     // response it is, never as typed prompt text: the core hook records the
     // Plan Approval choice from either channel, but the break-glass override
-    // phrase counts only when the human typed it as a prompt.
+    // phrase counts only when the human typed it as a prompt. The box's reply
+    // goes along as it came, so each question's reply is kept word for word.
     const selectionText = explicitHumanSelectionText(codex.tool_response);
     const forwarded =
       codex.tool_name === "request_user_input"
@@ -815,14 +891,22 @@ switch (target) {
             tool_name: "request_user_input",
             tool_input: codex.tool_input,
             tool_response: { answer: selectionText },
+            picker_reply: codex.tool_response,
           }
         : {
             hook_event_name: "UserPromptSubmit",
             ...(codex.session_id ? { session_id: codex.session_id } : {}),
             prompt: codex.prompt || codex.user_prompt || codex.message || "",
           };
-    runCoreWithStderr("aidlc-record-human-turn.ts", JSON.stringify(forwarded));
-    persistResponse("", 0);
+    const turn = runCoreWithStderr("aidlc-record-human-turn.ts", JSON.stringify(forwarded));
+    // The core hook's note says what a switch the person typed did, and that the
+    // engine already tells them. Dropping it is why the agent ran a setter of its
+    // own on the piece of work that was open instead of the one they asked about.
+    // Same context envelope as session-start; an output with nothing in it stays
+    // empty, so a turn with no note answers exactly as before.
+    const context = wrapContext(turn.stdout, "UserPromptSubmit");
+    persistResponse(context, 0);
+    if (context) process.stdout.write(context);
     return 0;
   }
 

@@ -49,8 +49,8 @@ Run `aidlc engine runtime summary --json`.
 If it exits non-zero (no `runtime-graph.json` yet), print:
 
 ```
-No session data yet — start a workflow with /aidlc before running
-/aidlc-replay.
+No session data yet — start a workflow with $aidlc before running
+$aidlc-replay.
 ```
 
 and STOP. Otherwise keep the parsed JSON; you'll cite its fields for
@@ -116,5 +116,5 @@ From user additions: {summary.learnings.from_user_addition}
 You may offer: "Want a different tone (more technical / more executive)
 or an added section?" — re-render to the terminal if asked. Do not loop
 on it; one offer is enough. If the user wants the replay saved, point
-them at `/aidlc-outcomes-pack` (the skill that writes a file) rather
+them at `$aidlc-outcomes-pack` (the skill that writes a file) rather
 than writing one here.
