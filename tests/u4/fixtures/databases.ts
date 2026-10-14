@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import {
   createDataSource,
   materialSchemas,
-  migrateU3Models,
+  migrateU4Models,
   migrateU2Models,
   migrateRecovery,
   migratePurposeVault,
@@ -93,7 +93,7 @@ export async function initializeU4Databases(): Promise<void> {
         'REVOKE CREATE ON SCHEMA public FROM PUBLIC; GRANT USAGE,CREATE ON SCHEMA public TO u1_owner',
       );
     }
-    await migrateU3Models(sources.primaryAdmin);
+    await migrateU4Models(sources.primaryAdmin);
     await migrateU2Models(sources.primaryAdmin);
     await migrateRecovery(sources.primaryAdmin, sources.journalAdmin);
     await migratePurposeVault(sources.journalAdmin);

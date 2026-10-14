@@ -1,4 +1,7 @@
 import type { CommandMeta, Knowledge, Money, Ref, TargetScope } from './types.js';
+export type FinancialSourceContract =
+  | { profile: 'urn:oms:contract:u3-commercial:2'; registryVersion: 3 }
+  | { profile: 'urn:oms:contract:u4-financial:1'; registryVersion: 4 };
 
 export type U4AssessmentPurpose = 'SALE_ACCEPTANCE' | 'PROVISION';
 export type U4DueBasis =
@@ -148,6 +151,10 @@ export interface U4RefundResultInput extends U4OrderCommandInput {
   results: U4RefundResultPortion[];
   sourceEvidence: U4Evidence;
   correctionOf: Ref | null;
+}
+export interface U4RefundStatePortion extends U4RefundPortion {
+  currentResult: U4RefundResultPortion;
+  priorAttempts: U4RefundResultPortion[];
 }
 export interface U4EligibilityView {
   orderRef: Ref;

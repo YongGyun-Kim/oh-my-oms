@@ -22,7 +22,11 @@ function validateNested(value: unknown): void {
   }
   if (!value || typeof value !== 'object') return;
   const row = value as Record<string, unknown>;
-  if (typeof row.sourceNamespace === 'string' && typeof row.canonicalIdentity === 'string') {
+  if (
+    typeof row.sourceNamespace === 'string' &&
+    typeof row.canonicalIdentity === 'string' &&
+    Array.isArray(row.aliases)
+  ) {
     const aliases = row.aliases as string[];
     distinct([row.canonicalIdentity, ...aliases]);
   }

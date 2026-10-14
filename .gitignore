@@ -53,8 +53,10 @@ aidlc/diagnostics/
 .runtime/u1/
 .runtime/u2/
 .runtime/u3/
+.runtime/u4/
 .reports/u2/
 .reports/u3/
+.reports/u4/
 .reports/project/
 apps/*/.next/
 playwright-report/

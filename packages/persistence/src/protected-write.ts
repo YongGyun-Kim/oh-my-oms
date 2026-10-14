@@ -28,6 +28,7 @@ export async function execute(
   host: ProtectedWriteHost,
   request: WriteRequest,
   operation: (transaction: ProtectedTransaction, requestId: string) => Promise<void>,
+  revalidateReplay?: (transaction: ProtectedTransaction) => Promise<void>,
 ): Promise<CommitResult> {
   const budget = ExecutionBudget.current();
   budget?.check();
@@ -48,7 +49,7 @@ export async function execute(
   });
   if (request.sourceContract !== undefined)
     host.schema.validateUri(
-      'urn:oms:contract:u3-commercial:2#/$defs/SourceContract',
+      request.sourceContract.profile + '#/$defs/SourceContract',
       request.sourceContract,
     );
   const inputFingerprint = fingerprint(
@@ -58,7 +59,7 @@ export async function execute(
   );
   let candidate: Candidate | undefined;
   let replay = false;
-  await host.primary.transaction(async (manager) => {
+  const write = async (manager: import('typeorm').EntityManager) => {
     budget?.check();
     if (budget)
       await manager.query(
@@ -86,6 +87,20 @@ export async function execute(
       scopedKey,
     ])) as { data: RequestKey }[];
     if (existing[0]) {
+      if (revalidateReplay) {
+        const replayTransaction = new ProtectedTransaction(
+          manager,
+          host.schema,
+          request.sourceContract,
+        );
+        await revalidateReplay(replayTransaction);
+        requireCondition(
+          replayTransaction.rows().length === 0,
+          503,
+          'REPLAY_WRITE',
+          '원래 요청 재확인에서 새 효과를 기록할 수 없습니다.',
+        );
+      }
       requireCondition(
         existing[0].data.inputFingerprint === inputFingerprint,
         409,
@@ -137,8 +152,14 @@ export async function execute(
       deleted: false,
     });
     const payload = sealPayload({
-      schemaVersion: rows.some((row) => row.schemaVersion === 2) ? 2 : 1,
-      ...(rows.some((row) => row.schemaVersion === 2)
+      schemaVersion:
+        request.sourceContract?.profile === 'urn:oms:contract:u4-financial:1'
+          ? 3
+          : rows.some((row) => row.schemaVersion === 2)
+            ? 2
+            : 1,
+      ...(request.sourceContract?.profile === 'urn:oms:contract:u4-financial:1' ||
+      rows.some((row) => row.schemaVersion === 2)
         ? { sourceContract: request.sourceContract }
         : {}),
       epoch: request.epoch,
@@ -181,7 +202,10 @@ export async function execute(
       digest: payload.contentDigest,
     };
     budget?.check();
-  });
+  };
+  if (request.sourceContract?.profile === 'urn:oms:contract:u4-financial:1')
+    await host.primary.transaction('READ COMMITTED', write);
+  else await host.primary.transaction(write);
   requireCondition(candidate, 503, 'COMMIT_NOT_FOUND', '접수 원본을 확인할 수 없습니다.');
   await host.fault?.('PRIMARY_COMMITTED');
   budget?.check();

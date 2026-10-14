@@ -1,4 +1,4 @@
-import type { Audience, ScopeV2 } from '@oms/contracts';
+import type { Audience, ScopeV2, FinancialSourceContract } from '@oms/contracts';
 import { canonicalJson, ExecutionBudget, requireCondition, SchemaValidator } from '@oms/contracts';
 import type { DataSource } from 'typeorm';
 import type { ModelData } from './model-catalog.js';
@@ -18,7 +18,7 @@ export interface WriteRequest {
   input: unknown;
   correlationId: string;
   epoch: string;
-  sourceContract?: { profile: 'urn:oms:contract:u3-commercial:2'; registryVersion: 3 };
+  sourceContract?: FinancialSourceContract;
 }
 export type FaultBoundary = 'PRIMARY_COMMITTED' | 'JOURNAL_PROTECTED' | 'VISIBILITY_UPDATED';
 export interface CommitResult {
@@ -93,6 +93,7 @@ export class ProtectedStore {
   execute(
     request: WriteRequest,
     operation: (transaction: ProtectedTransaction, requestId: string) => Promise<void>,
+    revalidateReplay?: (transaction: ProtectedTransaction) => Promise<void>,
   ): Promise<CommitResult> {
     return protectedwrite.execute(
       {
@@ -104,6 +105,7 @@ export class ProtectedStore {
       },
       request,
       operation,
+      revalidateReplay,
     );
   }
   async protect(candidate: Candidate): Promise<void> {

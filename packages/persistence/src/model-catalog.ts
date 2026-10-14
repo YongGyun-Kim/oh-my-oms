@@ -7,6 +7,8 @@ import { U2_MODELS } from './u2-model-catalog.js';
 import { validateU2ModelConstraints } from './u2-model-decoder.js';
 import { U3_MODELS, U3_PERSISTENCE_MODELS, physicalU3Model } from './u3-model-catalog.js';
 import { validateU3ModelConstraints } from './u3-model-decoder.js';
+import { U4_PERSISTENCE_MODELS, U4_U3_MODELS } from './u4-model-catalog.js';
+import { validateU4ModelConstraints } from './u4-model-decoder.js';
 
 export interface Attribute {
   name: string;
@@ -34,10 +36,17 @@ const catalog = JSON.parse(
 export const MODELS = Object.freeze(catalog.entities);
 const legacyModels = [...MODELS, ...U2_MODELS];
 const u3ByName = new Map(U3_PERSISTENCE_MODELS.map((model) => [model.name, model]));
+const u4ByName = new Map(U4_PERSISTENCE_MODELS.map((model) => [model.name, model]));
+const u4U3ByName = new Map(U4_U3_MODELS.map((model) => [model.name, model]));
+const physicalCurrent = (model: Model, current: Model) => {
+  const previous = physicalU3Model(model, current);
+  const u4 = u4U3ByName.get(current.name);
+  return u4 ? physicalU3Model(previous, u4) : previous;
+};
 export const ALL_MODELS = Object.freeze([
   ...MODELS.map<Model>((model) => {
     const current = u3ByName.get(model.name);
-    if (current) return physicalU3Model(model, current);
+    if (current) return physicalCurrent(model, current);
     if (['RequestReceipt', 'WorkItem', 'FactEnvelope'].includes(model.name))
       return {
         ...model,
@@ -45,7 +54,7 @@ export const ALL_MODELS = Object.freeze([
           ...model.attributes,
           {
             name: 'sourceContract',
-            type: 'U3Contract:SourceContract',
+            type: 'SharedContract:SourceContract',
             required: false,
             nullable: true,
           },
@@ -55,9 +64,12 @@ export const ALL_MODELS = Object.freeze([
   }),
   ...U2_MODELS.map<Model>((model) => {
     const current = u3ByName.get(model.name);
-    return current ? physicalU3Model(model, current) : model;
+    return current ? physicalCurrent(model, current) : model;
   }),
-  ...U3_MODELS.filter((model) => !MODELS.some((old) => old.name === model.name)),
+  ...U3_MODELS.filter((model) => !MODELS.some((old) => old.name === model.name)).map((model) =>
+    u4U3ByName.has(model.name) ? physicalU3Model(model, u4U3ByName.get(model.name)!) : model,
+  ),
+  ...U4_PERSISTENCE_MODELS,
 ]);
 requireCondition(
   new Set(ALL_MODELS.map((model) => model.name)).size === ALL_MODELS.length,
@@ -82,6 +94,12 @@ export function tableName(name: string): string {
 }
 
 function columnType(attribute: Attribute): EntitySchemaColumnOptions['type'] {
+  if (
+    ['U4Contract:Label', 'U4Contract:Description', 'U4Contract:ExternalReference'].includes(
+      attribute.type,
+    )
+  )
+    return 'varchar';
   if (['Revision', 'PositiveInteger', 'NonNegativeInteger'].includes(attribute.type))
     return 'bigint';
   if (attribute.type === 'Boolean') return 'boolean';
@@ -180,6 +198,7 @@ export function validateModel(name: string, data: ModelData, schema: SchemaValid
     columnType,
     findModel: (name: string) => modelByName.get(name),
     u3: data.modelVersion === 2 && u3ByName.has(name),
+    u4: u4ByName.has(name) || data.modelVersion === 3,
     u2DecisionBasis:
       name === 'EnterpriseMembership' &&
       !!data.designationBasis &&
@@ -226,10 +245,22 @@ export function validateModel(name: string, data: ModelData, schema: SchemaValid
   }
   validateU2ModelConstraints(name, data);
   validateU3ModelConstraints(name, data, schema);
+  validateU4ModelConstraints(name, data, schema);
   return data;
 }
 
 export function modelForData(name: string, data: ModelData): Model {
+  const financial = u4ByName.get(name);
+  if (financial) {
+    requireCondition(
+      data.modelVersion === 1,
+      400,
+      'MODEL_VERSION',
+      'U4 원본은 명시 modelVersion1이 필요합니다.',
+    );
+    return financial;
+  }
+  if (data.modelVersion === 3 && u4U3ByName.has(name)) return u4U3ByName.get(name)!;
   const current = u3ByName.get(name);
   if (!current) return modelDefinition(name);
   if (data.modelVersion === 2) return current;
@@ -242,11 +273,41 @@ export function modelForData(name: string, data: ModelData): Model {
   );
   return legacy;
 }
-export function rowModelVersion(name: string, data: ModelData): 1 | 2 {
+export function rowModelVersion(name: string, data: ModelData): 1 | 2 | 3 {
+  if (data.modelVersion === 3 && u4U3ByName.has(name)) return 3;
   return modelForData(name, data) === u3ByName.get(name) ? 2 : 1;
 }
 // Physical NULLs introduced by expand migration are not invented legacy fields.
 export function storedModelData(name: string, physical: ModelData): ModelData {
+  const financialVariant = u4U3ByName.get(name);
+  if (financialVariant && physical.modelVersion !== 3) {
+    const previous = new Set(
+      (u3ByName.get(name)?.attributes ?? []).map((attribute) => attribute.name),
+    );
+    for (const attribute of financialVariant.attributes)
+      requireCondition(
+        previous.has(attribute.name) || physical[attribute.name] == null,
+        503,
+        'MODEL_VERSION_MIX',
+        '구형 원본에 새 약정 필드를 섞을 수 없습니다.',
+      );
+  }
+  if (u4ByName.has(name) || (physical.modelVersion === 3 && u4U3ByName.has(name))) {
+    const definition = modelForData(name, physical);
+    const names = new Set(definition.attributes.map((attribute) => attribute.name));
+    for (const attribute of modelDefinition(name).attributes)
+      requireCondition(
+        names.has(attribute.name) || physical[attribute.name] == null,
+        503,
+        'MODEL_VERSION_MIX',
+        '등록 버전 밖의 원본 값이 섞였습니다.',
+      );
+    return Object.fromEntries(
+      definition.attributes
+        .filter((attribute) => physical[attribute.name] !== undefined)
+        .map((attribute) => [attribute.name, physical[attribute.name]]),
+    );
+  }
   const u3 = u3ByName.get(name),
     legacy = legacyModels.find((model) => model.name === name);
   if (!u3)
@@ -254,7 +315,9 @@ export function storedModelData(name: string, physical: ModelData): ModelData {
       modelDefinition(name)
         .attributes.filter(
           (attribute) =>
-            attribute.type !== 'U3Contract:SourceContract' ||
+            !['U3Contract:SourceContract', 'SharedContract:SourceContract'].includes(
+              attribute.type,
+            ) ||
             (physical[attribute.name] !== null && physical[attribute.name] !== undefined),
         )
         .map((attribute) => [attribute.name, physical[attribute.name]]),

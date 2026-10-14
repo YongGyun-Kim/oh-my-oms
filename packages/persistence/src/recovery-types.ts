@@ -4,18 +4,20 @@ import type { ModelData } from './model-catalog.js';
 import { validateU2RecoveryImage } from './u2-recovery-payload.js';
 import { validateU3RecoveryImage } from './u3-recovery-payload.js';
 import { rowModelVersion } from './model-catalog.js';
+import type { FinancialSourceContract } from '@oms/contracts';
+import { validateU4RecoveryImage, validateU4RecoveryPayload } from './u4-recovery-payload.js';
 
 export interface RecoveryRow {
   model: string;
-  schemaVersion: 1 | 2;
+  schemaVersion: 1 | 2 | 3;
   id: string;
   revision: number;
   data: ModelData;
   deleted: boolean;
 }
 export interface RecoveryPayload {
-  schemaVersion: 1 | 2;
-  sourceContract?: { profile: 'urn:oms:contract:u3-commercial:2'; registryVersion: 3 };
+  schemaVersion: 1 | 2 | 3;
+  sourceContract?: FinancialSourceContract;
   epoch: string;
   commitOrder: number;
   requestId: string;
@@ -83,7 +85,8 @@ export function validateRecoveryRow(row: RecoveryRow, schema: SchemaValidator): 
     '원상 decoder의 실제 등록 버전이 다릅니다.',
   );
   validateU2RecoveryImage(row.model, row.data);
-  validateU3RecoveryImage(row.model, row.schemaVersion, row.data);
+  if (!validateU4RecoveryImage(row.model, row.schemaVersion, row.data))
+    validateU3RecoveryImage(row.model, row.schemaVersion, row.data);
   requireCondition(
     row.id === row.data[primaryAttribute(definition).name] &&
       row.revision ===
@@ -109,9 +112,11 @@ export function decodePayload(text: string, schema: SchemaValidator): RecoveryPa
   );
   const raw = JSON.parse(text) as { schemaVersion?: unknown };
   const payload = schema.validateUri<RecoveryPayload>(
-    raw?.schemaVersion === 2
-      ? 'urn:oms:contract:u3-commercial:2#/$defs/RecoveryPayload'
-      : 'urn:oms:contract:foundation:1#/$defs/RecoveryPayload',
+    raw?.schemaVersion === 3
+      ? 'urn:oms:contract:u4-financial:1#/$defs/RecoveryPayload'
+      : raw?.schemaVersion === 2
+        ? 'urn:oms:contract:u3-commercial:2#/$defs/RecoveryPayload'
+        : 'urn:oms:contract:foundation:1#/$defs/RecoveryPayload',
     raw,
   );
   const { contentDigest, ...body } = payload;
@@ -122,6 +127,7 @@ export function decodePayload(text: string, schema: SchemaValidator): RecoveryPa
     '복구 자료 정규화/내용 해시가 다릅니다.',
   );
   for (const row of payload.rows) validateRecoveryRow(row, schema);
+  validateU4RecoveryPayload(payload);
   requireCondition(
     new Set(payload.rows.map((row) => row.model + '/' + row.id)).size === payload.rows.length,
     503,

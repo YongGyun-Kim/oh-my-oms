@@ -1,6 +1,7 @@
 import type { DataSource } from 'typeorm';
 import { requireCondition } from '@oms/contracts';
 import { applyU3ModelConstraints } from './u3-migration.js';
+import { applyU4ModelConstraints } from './u4-migration.js';
 
 export async function migrateMaterialModels(source: DataSource): Promise<void> {
   requireCondition(
@@ -26,6 +27,7 @@ export async function migrateMaterialModels(source: DataSource): Promise<void> {
     await runner.query('SET LOCAL ROLE u1_owner');
     for (const query of log.upQueries) await runner.query(query.query, query.parameters);
     await applyU3ModelConstraints(runner.manager);
+    await applyU4ModelConstraints(runner.manager);
     await runner.commitTransaction();
   } catch (error) {
     await runner.rollbackTransaction();

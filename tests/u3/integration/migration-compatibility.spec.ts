@@ -6,6 +6,8 @@ import {
   MODELS,
   U3_MODELS,
   U3_SUPPORT_MODELS,
+  U4_MODELS,
+  U4_SUPPORT_MODELS,
   ProtectedStore,
   createDataSource,
   materialSchemas,
@@ -107,7 +109,9 @@ describe('U3 명시 expand migration·과거 원상·최소 역할', () => {
     const columns = await sources.primaryAdmin.query(
       "SELECT table_name FROM information_schema.columns WHERE table_schema='public' AND column_name='modelVersion'",
     );
-    expect(columns).toHaveLength(U3_MODELS.length + U3_SUPPORT_MODELS.length);
+    expect(columns).toHaveLength(
+      U3_MODELS.length + U3_SUPPORT_MODELS.length + U4_MODELS.length + U4_SUPPORT_MODELS.length,
+    );
     expect(U3_SUPPORT_MODELS.map((model) => model.name)).toEqual([
       'StaffRole',
       'CustomerRole',

@@ -6,13 +6,14 @@ import { decodePayload } from './recovery-types.js';
 import type { RecoveryPayload } from './recovery-types.js';
 import { replayRows } from './recovery-replay.js';
 import { ProtectedStore } from './protected-store.js';
+import { verifyU4RecoveryState } from './u4-recovery-verification.js';
 interface Epoch {
   epoch: string;
   generation: string;
   commit_order: string;
   digest: string | null;
 }
-const APPEND_ROLES = ['u1_journal_append', 'u2_verify_journal_append'];
+const APPEND_ROLES = ['u1_journal_append', 'u2_verify_journal_append', 'u4_verify_journal_append'];
 const APPEND_FUNCTION = 'u1_append_entry(varchar,bigint,text,varchar,varchar,text)';
 async function suspendAppendRoles(journal: DataSource): Promise<void> {
   await journal.transaction(async (manager) => {
@@ -231,6 +232,9 @@ export async function restoreFromJournal(
       await manager.query('INSERT INTO u1_journal_prefix VALUES($1,0,NULL)', [epoch]);
     });
     await resumeAppendRoles(journalAdmin);
+    await primaryAdmin.transaction(async (manager) => {
+      await verifyU4RecoveryState(manager);
+    });
     await primaryAdmin.query('UPDATE u1_recovery_control SET enabled=true WHERE singleton=true');
     const restored = new ProtectedStore(primaryAdmin, journalAdmin);
     let workHolds = 0;

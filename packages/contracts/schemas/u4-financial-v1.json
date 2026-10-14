@@ -1555,6 +1555,169 @@
     },
     "Problem": {
       "$ref": "urn:oms:contract:common:2#/$defs/Problem"
+    },
+    "EvidenceList": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence"
+      }
+    },
+    "RefundPortions": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oms:contract:u4-financial:1#/$defs/RefundStatePortion"
+      },
+      "minItems": 1
+    },
+    "RefundResults": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oms:contract:u4-financial:1#/$defs/RefundResultPortion"
+      }
+    },
+    "RecoveryRow": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "schemaVersion": {
+          "enum": [1, 2, 3]
+        },
+        "id": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "revision": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision"
+        },
+        "data": {
+          "type": "object"
+        },
+        "deleted": {
+          "type": "boolean"
+        }
+      },
+      "required": ["model", "schemaVersion", "id", "revision", "data", "deleted"],
+      "additionalProperties": false
+    },
+    "RecoveryPayload": {
+      "type": "object",
+      "properties": {
+        "sourceContract": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/SourceContract"
+        },
+        "schemaVersion": {
+          "const": 3
+        },
+        "epoch": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "commitOrder": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision"
+        },
+        "requestId": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "correlationId": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u4-financial:1#/$defs/RecoveryRow"
+          },
+          "minItems": 1,
+          "maxItems": 1024
+        },
+        "previousDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contentDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "sourceContract",
+        "schemaVersion",
+        "epoch",
+        "commitOrder",
+        "requestId",
+        "correlationId",
+        "rows",
+        "previousDigest",
+        "contentDigest"
+      ],
+      "additionalProperties": false
+    },
+    "RefundStatePortion": {
+      "type": "object",
+      "properties": {
+        "portionKey": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "paymentEvidenceRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentRef"
+        },
+        "allocationRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/AllocationRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "invoiceRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/InvoiceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "amount": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PositiveMoney"
+        },
+        "operationId": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "attemptId": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "currentResult": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/RefundResultPortion"
+        },
+        "priorAttempts": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u4-financial:1#/$defs/RefundResultPortion"
+          }
+        }
+      },
+      "required": [
+        "portionKey",
+        "paymentEvidenceRef",
+        "allocationRef",
+        "invoiceRef",
+        "amount",
+        "operationId",
+        "attemptId",
+        "currentResult",
+        "priorAttempts"
+      ],
+      "additionalProperties": false
     }
   }
 }

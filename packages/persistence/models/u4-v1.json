@@ -1,0 +1,819 @@
+{
+  "unit": "u4-financial-settlement",
+  "entities": [
+    {
+      "name": "Invoice",
+      "owner": "FinancialSettlement",
+      "attributes": [
+        {
+          "name": "invoiceId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "orderRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Order",
+          "nullable": false
+        },
+        {
+          "name": "renewalCycleRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise",
+          "nullable": false
+        },
+        {
+          "name": "chargeTermsRef",
+          "type": "Ref",
+          "required": true,
+          "references": "PurchaseTermsSnapshot",
+          "nullable": false
+        },
+        {
+          "name": "planRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "obligationKey",
+          "type": "Identifier",
+          "required": true
+        },
+        {
+          "name": "label",
+          "type": "U4Contract:Label",
+          "required": true
+        },
+        {
+          "name": "amount",
+          "type": "U4Contract:Money",
+          "required": true
+        },
+        {
+          "name": "dueBasis",
+          "type": "U4Contract:DueBasis",
+          "required": true
+        },
+        {
+          "name": "dueDate",
+          "type": "LocalDate",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "requiredBeforeProvision",
+          "type": "Boolean",
+          "required": true
+        },
+        {
+          "name": "lifecycle",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["DRAFT", "ISSUED", "SUPERSEDED", "CANCELLED"]
+        },
+        {
+          "name": "providedTrancheRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "correctionOf",
+          "type": "Ref",
+          "required": true,
+          "references": "Invoice",
+          "nullable": true
+        },
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["1"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "targetScope",
+          "type": "U4Contract:TargetScope",
+          "required": true
+        },
+        {
+          "name": "knowledge",
+          "type": "KnowledgeState",
+          "required": true
+        },
+        {
+          "name": "historyRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "PaymentEvidence",
+      "owner": "FinancialSettlement",
+      "attributes": [
+        {
+          "name": "paymentEvidenceId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise",
+          "nullable": false
+        },
+        {
+          "name": "sourceRef",
+          "type": "U4Contract:Evidence",
+          "required": true
+        },
+        {
+          "name": "externalReference",
+          "type": "U4Contract:ExternalReference",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "identity",
+          "type": "U4Contract:PaymentIdentity",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "amount",
+          "type": "U4Contract:PositiveMoney",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "actualPaidAt",
+          "type": "Instant",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "confirmationRef",
+          "type": "U4Contract:Evidence",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "boundOrderRef",
+          "type": "U4Contract:OrderRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "lifecycle",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["REVIEW", "CONFIRMED", "DISPUTED", "REVERSED"]
+        },
+        {
+          "name": "correctionRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["1"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "targetScope",
+          "type": "U4Contract:TargetScope",
+          "required": true
+        },
+        {
+          "name": "knowledge",
+          "type": "KnowledgeState",
+          "required": true
+        },
+        {
+          "name": "historyRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "PaymentAllocation",
+      "owner": "FinancialSettlement",
+      "attributes": [
+        {
+          "name": "allocationId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "paymentEvidenceRef",
+          "type": "Ref",
+          "required": true,
+          "references": "PaymentEvidence",
+          "nullable": false
+        },
+        {
+          "name": "invoiceRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Invoice",
+          "nullable": false
+        },
+        {
+          "name": "orderRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Order",
+          "nullable": false
+        },
+        {
+          "name": "orderLineRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "renewalCycleRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "amount",
+          "type": "U4Contract:PositiveMoney",
+          "required": true
+        },
+        {
+          "name": "effect",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["APPLIED", "REVERSED"]
+        },
+        {
+          "name": "decisionEvidenceRefs",
+          "type": "U4Contract:EvidenceList",
+          "required": true
+        },
+        {
+          "name": "correctionOf",
+          "type": "Ref",
+          "required": true,
+          "references": "PaymentAllocation",
+          "nullable": true
+        },
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["1"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "targetScope",
+          "type": "U4Contract:TargetScope",
+          "required": true
+        },
+        {
+          "name": "knowledge",
+          "type": "KnowledgeState",
+          "required": true
+        },
+        {
+          "name": "historyRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "FinancialEligibility",
+      "owner": "FinancialSettlement",
+      "attributes": [
+        {
+          "name": "financialEligibilityId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "orderRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Order",
+          "nullable": false
+        },
+        {
+          "name": "agreementRevisionRef",
+          "type": "Ref",
+          "required": true,
+          "references": "AgreementRevision",
+          "nullable": false
+        },
+        {
+          "name": "renewalCycleRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "assessmentPurpose",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["SALE_ACCEPTANCE", "PROVISION"]
+        },
+        {
+          "name": "planRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "paymentBasisRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "restrictionBasisRef",
+          "type": "U4Contract:Evidence",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "decision",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["ALLOW", "HOLD", "UNVERIFIED"]
+        },
+        {
+          "name": "allowedQuantityBasisRef",
+          "type": "U4Contract:Evidence",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "sourceRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["1"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "targetScope",
+          "type": "U4Contract:TargetScope",
+          "required": true
+        },
+        {
+          "name": "knowledge",
+          "type": "KnowledgeState",
+          "required": true
+        },
+        {
+          "name": "historyRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "RefundCase",
+      "owner": "FinancialSettlement",
+      "attributes": [
+        {
+          "name": "refundCaseId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "afterSalesDecisionRef",
+          "type": "U4Contract:Ref",
+          "required": true
+        },
+        {
+          "name": "approvalRootId",
+          "type": "Identifier",
+          "required": true
+        },
+        {
+          "name": "orderRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Order",
+          "nullable": false
+        },
+        {
+          "name": "paymentEvidenceRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "allocationRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "agreedLimit",
+          "type": "U4Contract:Money",
+          "required": true
+        },
+        {
+          "name": "requestedAmount",
+          "type": "U4Contract:PositiveMoney",
+          "required": true
+        },
+        {
+          "name": "portions",
+          "type": "U4Contract:RefundPortions",
+          "required": true
+        },
+        {
+          "name": "actualResultRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "lifecycle",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": [
+            "REQUESTED",
+            "IN_PROGRESS",
+            "UNKNOWN",
+            "PARTIAL",
+            "COMPLETED",
+            "FAILED",
+            "CANCELLED",
+            "RECONCILING"
+          ]
+        },
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["1"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "targetScope",
+          "type": "U4Contract:TargetScope",
+          "required": true
+        },
+        {
+          "name": "knowledge",
+          "type": "KnowledgeState",
+          "required": true
+        },
+        {
+          "name": "historyRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "RenewalFeeAdjustment",
+      "owner": "FinancialSettlement",
+      "attributes": [
+        {
+          "name": "feeAdjustmentId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "renewalCycleRef",
+          "type": "U4Contract:Ref",
+          "required": true
+        },
+        {
+          "name": "periodAdjustmentRef",
+          "type": "U4Contract:Ref",
+          "required": true
+        },
+        {
+          "name": "approvedAmountRef",
+          "type": "U4Contract:Ref",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "invoiceRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Invoice",
+          "nullable": true
+        },
+        {
+          "name": "applicationResult",
+          "type": "KnowledgeState",
+          "required": true
+        },
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["1"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "targetScope",
+          "type": "U4Contract:TargetScope",
+          "required": true
+        },
+        {
+          "name": "knowledge",
+          "type": "KnowledgeState",
+          "required": true
+        },
+        {
+          "name": "historyRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "FinancialExchange",
+      "owner": "FinancialSettlement",
+      "attributes": [
+        {
+          "name": "financialExchangeId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "operationRef",
+          "type": "Identifier",
+          "required": true
+        },
+        {
+          "name": "requestRef",
+          "type": "Identifier",
+          "required": true
+        },
+        {
+          "name": "externalReference",
+          "type": "U4Contract:ExternalReference",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "sourceRef",
+          "type": "U4Contract:Evidence",
+          "required": true
+        },
+        {
+          "name": "confirmedResultRef",
+          "type": "U4Contract:Evidence",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "correctionOf",
+          "type": "Ref",
+          "required": true,
+          "references": "FinancialExchange",
+          "nullable": true
+        },
+        {
+          "name": "refundCaseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "RefundCase",
+          "nullable": false
+        },
+        {
+          "name": "results",
+          "type": "U4Contract:RefundResults",
+          "required": true
+        },
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["1"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "targetScope",
+          "type": "U4Contract:TargetScope",
+          "required": true
+        },
+        {
+          "name": "knowledge",
+          "type": "KnowledgeState",
+          "required": true
+        },
+        {
+          "name": "historyRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "FinancialReconciliationCase",
+      "owner": "FinancialSettlement",
+      "attributes": [
+        {
+          "name": "financialReconciliationId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "conflictingEvidenceRefs",
+          "type": "U4Contract:EvidenceList",
+          "required": true
+        },
+        {
+          "name": "affectedFactsRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "dependentActionRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "staffDecisionRef",
+          "type": "U4Contract:Evidence",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "remainingActionRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        },
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["1"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "targetScope",
+          "type": "U4Contract:TargetScope",
+          "required": true
+        },
+        {
+          "name": "knowledge",
+          "type": "KnowledgeState",
+          "required": true
+        },
+        {
+          "name": "historyRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "FinancialHistory",
+      "owner": "FinancialSettlement",
+      "attributes": [
+        {
+          "name": "historyId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "actorAccountId",
+          "type": "Identifier",
+          "required": true
+        },
+        {
+          "name": "verifiedPersonRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account",
+          "nullable": false
+        },
+        {
+          "name": "occurredAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "reason",
+          "type": "U4Contract:Description",
+          "required": true
+        },
+        {
+          "name": "beforeRef",
+          "type": "U4Contract:Ref",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "afterRef",
+          "type": "U4Contract:Ref",
+          "required": true
+        },
+        {
+          "name": "evidenceRefs",
+          "type": "U4Contract:EvidenceList",
+          "required": true
+        },
+        {
+          "name": "requestRef",
+          "type": "Identifier",
+          "required": true
+        },
+        {
+          "name": "correctionOf",
+          "type": "Ref",
+          "required": true,
+          "references": "FinancialHistory",
+          "nullable": true
+        },
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["1"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "targetScope",
+          "type": "U4Contract:TargetScope",
+          "required": true
+        },
+        {
+          "name": "knowledge",
+          "type": "KnowledgeState",
+          "required": true
+        },
+        {
+          "name": "historyRefs",
+          "type": "U4Contract:Refs",
+          "required": true
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

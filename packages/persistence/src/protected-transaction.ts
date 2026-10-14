@@ -12,21 +12,20 @@ import {
 import type { ModelData } from './model-catalog.js';
 import type { RecoveryRow } from './recovery-types.js';
 import { U3_PERSISTENCE_MODELS } from './u3-model-catalog.js';
+import { U4_PERSISTENCE_MODELS, U4_U3_MODELS } from './u4-model-catalog.js';
+import type { FinancialSourceContract } from '@oms/contracts';
 
 export class ProtectedTransaction {
   private readonly changes = new Map<string, RecoveryRow>();
   constructor(
     private readonly manager: EntityManager,
     private readonly schema: SchemaValidator,
-    private readonly sourceContract?: {
-      profile: 'urn:oms:contract:u3-commercial:2';
-      registryVersion: 3;
-    },
+    private readonly sourceContract?: FinancialSourceContract,
   ) {}
   private assertWriteVersion(model: string, data: ModelData): void {
     if (this.sourceContract !== undefined)
       this.schema.validateUri(
-        'urn:oms:contract:u3-commercial:2#/$defs/SourceContract',
+        this.sourceContract.profile + '#/$defs/SourceContract',
         this.sourceContract,
       );
     if (
@@ -36,7 +35,7 @@ export class ProtectedTransaction {
       )
     ) {
       this.schema.validateUri(
-        'urn:oms:contract:u3-commercial:2#/$defs/SourceContract',
+        this.sourceContract.profile + '#/$defs/SourceContract',
         data.sourceContract,
       );
       requireCondition(
@@ -45,6 +44,18 @@ export class ProtectedTransaction {
         'WRITE_CONTRACT_SOURCE',
         '접수/전달 원본의 실제 등록 계약을 보존해야 합니다.',
       );
+    }
+    if (U4_PERSISTENCE_MODELS.some((entry) => entry.name === model) || data.modelVersion === 3) {
+      requireCondition(
+        this.sourceContract?.profile === 'urn:oms:contract:u4-financial:1' &&
+          (U4_PERSISTENCE_MODELS.some((entry) => entry.name === model)
+            ? data.modelVersion === 1
+            : U4_U3_MODELS.some((entry) => entry.name === model) && data.modelVersion === 3),
+        400,
+        'WRITE_CONTRACT_REQUIRED',
+        '새 금융/약정 원본은 정확한 U4 변경 계약과 버전이 필요합니다.',
+      );
+      return;
     }
     if (!U3_PERSISTENCE_MODELS.some((entry) => entry.name === model)) return;
     requireCondition(
@@ -68,6 +79,48 @@ export class ProtectedTransaction {
       [at],
     );
     return Number(rows[0].count);
+  }
+  async financialProtectedImage(
+    model: string,
+    id: string,
+    prefixes: readonly { epoch: string; commitOrder: number }[],
+  ): Promise<ModelData | null> {
+    this.schema.validate('Id', id);
+    modelDefinition(model);
+    ExecutionBudget.current()?.check();
+    const rows = await this.manager.query(
+      `SELECT v.data,v.deleted FROM u1_entity_version v JOIN u1_epoch_sequence e ON e.epoch=v.epoch JOIN jsonb_to_recordset($3::jsonb) AS boundary(epoch text,"commitOrder" bigint) ON boundary.epoch=v.epoch AND v.commit_order<=boundary."commitOrder" WHERE v.model=$1 AND v.id=$2 ORDER BY e.generation DESC,v.commit_order DESC LIMIT 1`,
+      [model, id, JSON.stringify(prefixes)],
+    );
+    return rows[0] && !rows[0].deleted ? validateModel(model, rows[0].data, this.schema) : null;
+  }
+  async lockFinancialRows(
+    paymentIds: readonly string[],
+    invoiceIds: readonly string[],
+    approvalRootIds: readonly string[],
+  ): Promise<void> {
+    for (const [model, ids] of [
+      ['FinancialPaymentBalance', paymentIds],
+      ['FinancialInvoiceBalance', invoiceIds],
+      ['FinancialApprovalBalance', approvalRootIds],
+    ] as const) {
+      const sorted = [...new Set(ids)].sort();
+      for (const id of sorted) this.schema.validate('Id', id);
+      if (sorted.length === 0) continue;
+      const key = primaryAttribute(modelDefinition(model)).name;
+      await this.manager.query(
+        'SELECT "' +
+          key +
+          '" FROM "' +
+          tableName(model) +
+          '" WHERE "' +
+          key +
+          '"=ANY($1::text[]) ORDER BY "' +
+          key +
+          '" FOR UPDATE',
+        [sorted],
+      );
+    }
   }
   async get(model: string, id: string): Promise<ModelData | null> {
     ExecutionBudget.current()?.check();

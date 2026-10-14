@@ -18,7 +18,7 @@ import {
 export interface RecoverySecurityObservation {
   observationVersion?: 2;
   sourceContract?: { profile: 'urn:oms:contract:u3-commercial:2'; registryVersion: 3 };
-  modelVersion?: 1 | 2 | null;
+  modelVersion?: 1 | 2 | 3 | null;
   checkId: string;
   model: string;
   id: string;

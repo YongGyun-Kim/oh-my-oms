@@ -10,10 +10,25 @@ export function validateAttribute(
     columnType: (attribute: Attribute) => EntitySchemaColumnOptions['type'];
     u2?: boolean;
     u3?: boolean;
+    u4?: boolean;
     u2DecisionBasis?: boolean;
   },
 ): void {
   const { schema } = context;
+  if (attribute.type === 'SharedContract:SourceContract') {
+    const profile = (value as { profile?: unknown }).profile;
+    schema.validateUri(
+      (profile === 'urn:oms:contract:u4-financial:1'
+        ? 'urn:oms:contract:u4-financial:1'
+        : 'urn:oms:contract:u3-commercial:2') + '#/$defs/SourceContract',
+      value,
+    );
+    return;
+  }
+  if (attribute.type.startsWith('U4Contract:')) {
+    schema.validateUri('urn:oms:contract:u4-financial:1#/$defs/' + attribute.type.slice(11), value);
+    return;
+  }
   if (attribute.type.startsWith('U3Contract:')) {
     schema.validateUri(
       'urn:oms:contract:u3-commercial:2#/$defs/' + attribute.type.slice(11),
@@ -152,7 +167,9 @@ export function validateAttribute(
       '지원하지 않는 원본 상태입니다.',
     );
   if (['Identifier', 'Revision', 'Instant', 'Money'].includes(attribute.type)) {
-    if (context.u3 && ['Revision', 'Money'].includes(attribute.type))
+    if (context.u4 && ['Revision', 'Money'].includes(attribute.type))
+      schema.validateUri('urn:oms:contract:u4-financial:1#/$defs/' + attribute.type, value);
+    else if (context.u3 && ['Revision', 'Money'].includes(attribute.type))
       schema.validateUri('urn:oms:contract:u3-commercial:2#/$defs/' + attribute.type, value);
     else schema.validate(attribute.type === 'Identifier' ? 'Id' : attribute.type, value);
     return;
@@ -162,7 +179,8 @@ export function validateAttribute(
     return;
   }
   if (attribute.type === 'Ref' || attribute.type === 'ExternalRef') {
-    if (context.u3) schema.validateUri('urn:oms:contract:u3-commercial:2#/$defs/Ref', value);
+    if (context.u4) schema.validateUri('urn:oms:contract:u4-financial:1#/$defs/Ref', value);
+    else if (context.u3) schema.validateUri('urn:oms:contract:u3-commercial:2#/$defs/Ref', value);
     else if (context.u2)
       schema.validateUri('urn:oms:contract:u2-access-additions:1#/$defs/Ref', value);
     else schema.validate('Ref', value);

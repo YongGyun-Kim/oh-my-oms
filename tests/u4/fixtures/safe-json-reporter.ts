@@ -2,6 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { JsonReporter } from 'vitest/node';
 import type { TestModule } from 'vitest/node';
+import { safeU4Error } from './safe-error.js';
 
 // Do not serialize assertion errors, console output, arbitrary meta, or payloads.
 // This report is a contribution; process exit and required inventory still gate CI.
@@ -16,10 +17,15 @@ export default class SafeJsonReporter extends JsonReporter {
         : 'UNRECOGNIZED_TEST_FILE',
       status: module.state() === 'passed' ? 'passed' : 'failed',
       collectionErrorCount: module.errors().length,
+      collectionErrors: module.errors().slice(0, 3).map(safeU4Error),
       assertionResults: [...module.children.allTests()].map((test, index) => ({
         title: 'case-' + (index + 1),
         status: test.result().state,
         failureMessages: test.result().state === 'failed' ? ['U4_TEST_FAILED'] : [],
+        errors:
+          test.result().state === 'failed'
+            ? (test.result().errors ?? []).slice(0, 3).map(safeU4Error)
+            : [],
       })),
     }));
     const assertions = results.flatMap((result) => result.assertionResults);
