@@ -72256,3 +72256,60 @@
 **Context**: construction > u3-commercial-ordering > code-generation > quality-verification-20261012.md
 
 ---
+
+## Unit Started
+**Timestamp**: 2026-10-14T01:38:21Z
+**Event**: UNIT_STARTED
+**Stage**: functional-design
+**Unit**: u4-financial-settlement
+**Run floor**: STAGE_JUMPED:2026-10-04T17:59:13Z#1
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-14T01:40:48Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/functional-design/functional-design-questions.md
+**Context**: construction > u4-financial-settlement > functional-design > functional-design-questions.md
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-14T01:40:48Z
+**Event**: DECISION_RECORDED
+**Stage**: functional-design
+**Decision**: U4 Q1 첫 배포의 주문별 청구 단위: 주문당 유효 청구1개 또는 복수 청구
+**Options**: 주문당 1개 (Recommended),복수 청구
+**Unit**: u4-financial-settlement
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T01:41:18Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/functional-design/functional-design-questions.md
+**Context**: construction > u4-financial-settlement > functional-design > functional-design-questions.md
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-14T01:41:18Z
+**Event**: DECISION_RECORDED
+**Stage**: functional-design
+**Decision**: U4 Q2 확인된 입금 한 건의 수동 배분: 같은 고객사의 복수 주문 또는 한 주문
+**Options**: 복수 주문 배분 (Recommended),한 주문만
+**Unit**: u4-financial-settlement
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-14T01:41:18Z
+**Event**: DECISION_RECORDED
+**Stage**: functional-design
+**Decision**: U4 Q3 후불 기한: 실제 제공 완료일에 합의 달력일수 적용 또는 직원 확정 기한 등록
+**Options**: 달력일 계산 (Recommended),확정 기한 입력
+**Unit**: u4-financial-settlement
+
+---
