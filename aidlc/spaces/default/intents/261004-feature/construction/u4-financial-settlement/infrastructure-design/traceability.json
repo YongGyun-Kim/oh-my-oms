@@ -1,0 +1,332 @@
+{
+  "stage": "infrastructure-design",
+  "unit": "u4-financial-settlement",
+  "scope": "first-release-pilot-library",
+  "meaning": "OK는 공유 자원/CI·계약/전달·준비 검증 설계의 연결이며 자원 생성·검사 실행·제품/운영/배포 완료가 아니다. Deferred는 전체 실증의 후속 상태이고 첫 배포 정확성/접근·기본 준비 의무를 면제하지 않는다. R-03은 미해결이며 이 단계의 승인은 배포/시험 예외 승인이 아니다.",
+  "upstream_ids": [
+    "NFR1.1",
+    "NFR1.2",
+    "NFR1.3",
+    "NFR1.4",
+    "NFR1.5",
+    "NFR2.1",
+    "NFR3.1",
+    "NFR4.1",
+    "NFR4.2",
+    "NFR4.3",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR5.3",
+    "NFR5.4",
+    "NFR5.5",
+    "NFR5.6",
+    "NFR6.1",
+    "NFR6.2",
+    "NFR7.1",
+    "NFR7.2",
+    "NFR8.1",
+    "NFR9.1",
+    "NFR9.2",
+    "NFR10.1",
+    "NFR10.2",
+    "NFR11.1",
+    "NFR11.2",
+    "NFR11.3",
+    "NFR11.4",
+    "NFR12.1",
+    "NFR12.2",
+    "NFR13.1",
+    "NFR13.2",
+    "NFR13.3",
+    "NFR14.1",
+    "NFR14.2"
+  ],
+  "coverage": [
+    {
+      "id": "NFR1.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "solution": "IP02: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR1.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "solution": "IP02: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR1.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip01",
+      "solution": "IP01: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR1.4",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "solution": "IP02: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR1.5",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "solution": "IP03: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "Deferred",
+      "target": "cicd-pipeline.md#ip07",
+      "solution": "IP07: 기존 자원/파일럿 CI·호환 및 실제 준비 경계",
+      "reason": "30일99.9%의 실제 가용성 실증은 후속이다. 기본 업무별 관측/배포 준비는 유지한다."
+    },
+    {
+      "id": "NFR3.1",
+      "status": "Deferred",
+      "target": "cicd-pipeline.md#ip07",
+      "solution": "IP07: 기존 자원/파일럿 CI·호환 및 실제 준비 경계",
+      "reason": "전체 재해/야간30분 복구 실증은 사용자 보류 상태다. 기본 보호/복구 자료와 호환 준비는 유지한다."
+    },
+    {
+      "id": "NFR4.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip04",
+      "solution": "IP04: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR4.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "solution": "IP02: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR4.3",
+      "status": "Deferred",
+      "target": "cicd-pipeline.md#ip04",
+      "solution": "IP04: 기존 자원/파일럿 CI·호환 및 실제 준비 경계",
+      "reason": "정의한 전체 장애 범위 RPO0 실증은 후속이다. 새 식별/별칭·binding·집계의 보호/replay 호환 검증은 첫 배포 요구다."
+    },
+    {
+      "id": "NFR5.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "solution": "IP02: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR5.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "solution": "IP02: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip04",
+      "solution": "IP04: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR5.4",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "solution": "IP02: 기존 자원/파일럿 CI·호환 및 실제 준비 경계",
+      "reason": "공통 원금/환불 한도와 실제 DB 경합을 검사 대상으로 포함한다. R-03의 상태 모순은 미해결/미검증으로 남기고 skip/삭제로 전체 통과 처리하지 않는다."
+    },
+    {
+      "id": "NFR5.5",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip04",
+      "solution": "IP04: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR5.6",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "solution": "IP02: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR6.1",
+      "status": "Deferred",
+      "target": "cicd-pipeline.md#ip07",
+      "solution": "IP07: 기존 자원/파일럿 CI·호환 및 실제 준비 경계",
+      "reason": "대량100k/50분·원래 전체 부하 실증은 후속이다. 기존 예산/유한 입력과 짧은 실제 검증 준비를 유지한다."
+    },
+    {
+      "id": "NFR6.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip01",
+      "solution": "IP01: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR7.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "solution": "IP02: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR7.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "solution": "IP02: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR8.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip07",
+      "solution": "IP07: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR9.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip01",
+      "solution": "IP01: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip07",
+      "solution": "IP07: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR10.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "solution": "IP03: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR10.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip07",
+      "solution": "IP07: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR11.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip01",
+      "solution": "IP01: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR11.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "solution": "IP03: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR11.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip08",
+      "solution": "IP08: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR11.4",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip07",
+      "solution": "IP07: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR12.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip06",
+      "solution": "IP06: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR12.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip07",
+      "solution": "IP07: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR13.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip05",
+      "solution": "IP05: 합성·격리 primary/보호 DB와 queue/worker 경계에서 신규 U4 모델/제약·실행 대상을 검증"
+    },
+    {
+      "id": "NFR13.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "solution": "IP03: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR13.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip04",
+      "solution": "IP04: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR14.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "solution": "IP02: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    },
+    {
+      "id": "NFR14.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip08",
+      "solution": "IP08: 기존 자원/파일럿 CI·호환 및 실제 준비 경계"
+    }
+  ],
+  "reverse": [
+    {
+      "id": "IP01",
+      "status": "OK",
+      "target": "NFR1.3, NFR6.2, NFR9.1, NFR11.1"
+    },
+    {
+      "id": "IP02",
+      "status": "OK",
+      "target": "NFR1.1, NFR1.2, NFR1.4, NFR4.2, NFR5.1, NFR5.2, NFR5.4, NFR5.6, NFR7.1, NFR7.2, NFR14.1"
+    },
+    {
+      "id": "IP03",
+      "status": "OK",
+      "target": "NFR1.5, NFR10.1, NFR11.2, NFR13.2"
+    },
+    {
+      "id": "IP04",
+      "status": "OK",
+      "target": "NFR4.1, NFR4.3, NFR5.3, NFR5.5, NFR13.3"
+    },
+    {
+      "id": "IP05",
+      "status": "OK",
+      "target": "NFR13.1"
+    },
+    {
+      "id": "IP06",
+      "status": "OK",
+      "target": "NFR12.1"
+    },
+    {
+      "id": "IP07",
+      "status": "OK",
+      "target": "NFR2.1, NFR3.1, NFR6.1, NFR8.1, NFR9.2, NFR10.2, NFR11.4, NFR12.2"
+    },
+    {
+      "id": "IP08",
+      "status": "OK",
+      "target": "NFR11.3, NFR14.2"
+    }
+  ],
+  "verification_dependencies": [
+    {
+      "id": "UPSTREAM-U4-FD-R-03",
+      "requirements": [
+        "NFR5.4",
+        "NFR13.1"
+      ],
+      "source": "../functional-design/reviews/review-02.md",
+      "status": "unresolved",
+      "effect": "원금/예약 설계·NFR 진행·합성 CI를 환불 부분 실패 재시도 상태 일관성의 해소나 실제 배포 승인으로 해석하지 않는다."
+    }
+  ],
+  "sources": [
+    "../nfr-design/security-design.md",
+    "../nfr-design/logical-components.md",
+    "../nfr-design/traceability.json",
+    "../nfr-requirements/security-requirements.md",
+    "../functional-design/functional-spec.md",
+    "../../../inception/domain-design/components.md",
+    "../../../inception/contract-design/contract-summary.md",
+    "../../../release-planning/first-release-delivery-plan.md",
+    "infrastructure-design-questions.md"
+  ]
+}
