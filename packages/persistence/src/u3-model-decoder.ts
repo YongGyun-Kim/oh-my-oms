@@ -201,7 +201,9 @@ export function recordedSourceContract(
   if (data.sourceContract === undefined || data.sourceContract === null)
     return { knowledge: 'UNKNOWN' };
   const value = schema.validateUri<{ profile: string; registryVersion: number }>(
-    'urn:oms:contract:u3-commercial:2#/$defs/SourceContract',
+    ((data.sourceContract as { profile?: unknown }).profile === 'urn:oms:contract:u4-financial:1'
+      ? 'urn:oms:contract:u4-financial:1'
+      : 'urn:oms:contract:u3-commercial:2') + '#/$defs/SourceContract',
     data.sourceContract,
   );
   return { knowledge: 'KNOWN', ...value };

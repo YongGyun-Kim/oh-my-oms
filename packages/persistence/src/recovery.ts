@@ -231,10 +231,10 @@ export async function restoreFromJournal(
       await manager.query('INSERT INTO u1_journal_epoch VALUES($1,$2)', [epoch, generation]);
       await manager.query('INSERT INTO u1_journal_prefix VALUES($1,0,NULL)', [epoch]);
     });
-    await resumeAppendRoles(journalAdmin);
     await primaryAdmin.transaction(async (manager) => {
       await verifyU4RecoveryState(manager);
     });
+    await resumeAppendRoles(journalAdmin);
     await primaryAdmin.query('UPDATE u1_recovery_control SET enabled=true WHERE singleton=true');
     const restored = new ProtectedStore(primaryAdmin, journalAdmin);
     let workHolds = 0;

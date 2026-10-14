@@ -7,11 +7,16 @@ import {
   verifyU4RecoveryState,
   sealPayload,
   U4_SOURCE_CONTRACT,
+  U4_PERSISTENCE_MODELS,
+  restoreFromJournal,
+  u4IdentityClaimId,
   type FaultBoundary,
 } from '@oms/persistence';
 import { modernProduct, sourceContract } from '../../u3/fixtures/models.js';
 import { persistenceFixture, financialRequest } from '../fixtures/persistence.js';
 import { u4ModelFixture } from '../fixtures/models.js';
+import { u4Ref, u4Money } from '../fixtures/contracts.js';
+import { seedSyntheticAccount } from '../../u1/fixtures/identity.js';
 
 describe('U4 보호 실패·응답 유실·구형 접수 회귀', () => {
   const { sources, store, repository } = persistenceFixture();
@@ -31,6 +36,70 @@ describe('U4 보호 실패·응답 유실·구형 접수 회귀', () => {
           u4ModelFixture('FinancialPaymentBalance', 'protected'),
         ),
     );
+  const restore = async (observe: () => Promise<void>) => {
+    const appendFunction = 'u1_append_entry(varchar,bigint,text,varchar,varchar,text)';
+    const knownRoles = [
+      'u1_journal_append',
+      'u2_verify_journal_append',
+      'u4_verify_journal_append',
+    ];
+    const granted = await sources.journalAdmin.query(
+      "SELECT rolname FROM pg_roles WHERE rolname=ANY($1::text[]) AND has_function_privilege(oid,$2,'EXECUTE')",
+      [knownRoles, appendFunction],
+    );
+    try {
+      await observe();
+    } finally {
+      // 실패 시험도 다음 합성 시험의 역할 권한을 바꾸지 않는다.
+      for (const role of granted)
+        if (knownRoles.includes(role.rolname))
+          await sources.journalAdmin.query(
+            'GRANT EXECUTE ON FUNCTION ' + appendFunction + ' TO "' + role.rolname + '"',
+          );
+      await sources.journalAdmin.query('TRUNCATE u1_restore_append_role');
+    }
+  };
+  const seedEnterprise = async () => {
+    await seedSyntheticAccount(store, 'recovery-applicant', 'CUSTOMER');
+    const request = financialRequest();
+    await store.execute(
+      { ...request, sourceContract: undefined, owner: 'EnterpriseAccess' },
+      async (transaction) => {
+        await transaction.put('EnterpriseApplication', {
+          applicationId: 'recovery-application',
+          applicantAccountRef: u4Ref('IdentityRecovery', 'Account', 'recovery-applicant'),
+          legalName: '복구 합성 기업',
+          designatedContact: 'recovery@example.invalid',
+          registrationEvidenceRefs: [],
+          state: 'PENDING',
+          decisionBasis: null,
+          initialAdministratorRef: null,
+          submittedAt: '2026-12-01T00:00:00.000Z',
+          revision: 1,
+        });
+        await transaction.put('Enterprise', {
+          enterpriseId: 'pilot-a',
+          applicationRef: u4Ref(
+            'EnterpriseAccess',
+            'EnterpriseApplication',
+            'recovery-application',
+          ),
+          approvalState: 'UNVERIFIED',
+          usageEnabled: false,
+          orderingContextPolicy: {
+            departmentUsage: 'UNSET',
+            siteUsage: 'UNSET',
+            setBy: null,
+            setAt: null,
+            reason: '합성 미설정',
+          },
+          administratorCount: 0,
+          designatedNoticeContactRefs: [],
+          revision: 1,
+        });
+      },
+    );
+  };
 
   it('primary 후 보호 실패를 성공으로 반환하지 않고 원래 요청만 다시 확인한다', async () => {
     const request = financialRequest();
@@ -211,5 +280,219 @@ describe('U4 보호 실패·응답 유실·구형 접수 회귀', () => {
         ]),
       ).rejects.toMatchObject({ code: '22023' });
     }
+  });
+  it('PG는 modelVersion1인 모든 U4 업무·보조 원본의 legacy payload1 위장도 거절한다', async () => {
+    for (const model of U4_PERSISTENCE_MODELS) {
+      const data = u4ModelFixture(model.name);
+      const key = model.attributes.find(
+        (attribute) => attribute.unique && attribute.type === 'Identifier',
+      )!.name;
+      const payload = sealPayload({
+        schemaVersion: 1,
+        epoch: 'initial',
+        commitOrder: 1,
+        requestId: 'synthetic-legacy-disguise',
+        correlationId: 'synthetic-correlation',
+        previousDigest: null,
+        rows: [
+          {
+            model: model.name,
+            schemaVersion: 1,
+            id: String(data[key]),
+            revision: 1,
+            data,
+            deleted: false,
+          },
+        ],
+      });
+      const { contentDigest, ...body } = payload;
+      await expect(
+        sources.journalAppend.query('SELECT u1_append_entry($1,$2,$3,$4,$5,$6)', [
+          payload.epoch,
+          payload.commitOrder,
+          canonicalJson(payload),
+          contentDigest,
+          null,
+          canonicalJson(body),
+        ]),
+      ).rejects.toMatchObject({ code: '22023' });
+    }
+  });
+  it('복구 중 보류할 역할에 U4를 등록하고 임의 역할 등록은 거절한다', async () => {
+    try {
+      await sources.journalAdmin.query('INSERT INTO u1_restore_append_role VALUES($1)', [
+        'u4_verify_journal_append',
+      ]);
+      expect(
+        (
+          await sources.journalAdmin.query(
+            'SELECT count(*)::integer AS count FROM u1_restore_append_role',
+          )
+        )[0].count,
+      ).toBe(1);
+      await expect(
+        sources.journalAdmin.query('INSERT INTO u1_restore_append_role VALUES($1)', [
+          'unregistered-role',
+        ]),
+      ).rejects.toMatchObject({ code: '23514' });
+    } finally {
+      await sources.journalAdmin.query('TRUNCATE u1_restore_append_role');
+    }
+  });
+  it('실제 원장 재생이 U4 식별·별칭·연결·잔액 원상을 복원한 뒤 append를 재개한다', async () => {
+    await seedEnterprise();
+    const paymentId = 'replayed-payment';
+    const identity = {
+      sourceProfileId: 'synthetic-source-profile',
+      sourceProfileRevision: 1,
+      sourceNamespace: 'synthetic-receiver',
+      canonicalIdentity: 'canonical',
+      aliases: ['alias'],
+    };
+    const expected = new Map<string, Record<string, unknown>>();
+    await repository.mutate(
+      financialRequest(),
+      async () => {},
+      async (scope) => {
+        const payment = { ...u4ModelFixture('PaymentEvidence', paymentId), identity };
+        expected.set('PaymentEvidence', payment);
+        await scope.transaction.put('PaymentEvidence', payment);
+        for (const value of [identity.canonicalIdentity, ...identity.aliases]) {
+          const claim = {
+            ...u4ModelFixture('FinancialIdentityClaim'),
+            claimId: u4IdentityClaimId(identity.sourceNamespace, value),
+            canonicalPaymentId: paymentId,
+            canonicalIdentity: value,
+          };
+          await scope.transaction.put('FinancialIdentityClaim', claim);
+        }
+        for (const name of [
+          'FinancialPaymentBinding',
+          'FinancialPaymentBalance',
+          'FinancialInvoiceBinding',
+          'FinancialApprovalBalance',
+        ]) {
+          const data = u4ModelFixture(name, paymentId);
+          expected.set(name, data);
+          await scope.transaction.put(name, data);
+        }
+      },
+    );
+    await restore(async () => {
+      const report = await restoreFromJournal(sources.primaryAdmin, sources.journalAdmin);
+      expect(report.entries).toBe(3);
+      expect(report.rows).toBeGreaterThanOrEqual(7);
+      for (const [name, data] of expected) {
+        const key =
+          name === 'PaymentEvidence'
+            ? 'paymentEvidenceId'
+            : name === 'FinancialInvoiceBinding'
+              ? 'bindingId'
+              : name === 'FinancialApprovalBalance'
+                ? 'approvalRootId'
+                : 'paymentId';
+        const row = await sources.primaryAdmin.getRepository(name).findOneBy({ [key]: data[key] });
+        expect(row).toMatchObject(data);
+      }
+      for (const value of [identity.canonicalIdentity, ...identity.aliases])
+        expect(
+          await sources.primaryAdmin
+            .getRepository('FinancialIdentityClaim')
+            .findOneBy({ claimId: u4IdentityClaimId(identity.sourceNamespace, value) }),
+        ).toMatchObject({ canonicalPaymentId: paymentId, canonicalIdentity: value });
+      expect(
+        (await sources.primaryAdmin.query('SELECT enabled,auth_ready FROM u1_recovery_control'))[0],
+      ).toMatchObject({ enabled: true, auth_ready: false });
+      expect(
+        (
+          await sources.journalAdmin.query(
+            "SELECT has_function_privilege('u4_verify_journal_append','u1_append_entry(varchar,bigint,text,varchar,varchar,text)','EXECUTE') AS allowed",
+          )
+        )[0].allowed,
+      ).toBe(true);
+    });
+  });
+  it('복구 후 식별 보조 원상이 누락되면 U4 append 권한과 writer를 계속 차단한다', async () => {
+    await seedEnterprise();
+    await repository.mutate(
+      financialRequest(),
+      async () => {},
+      async (scope) => {
+        await scope.transaction.put('PaymentEvidence', {
+          ...u4ModelFixture('PaymentEvidence', 'missing-claim'),
+          identity: {
+            sourceProfileId: 'synthetic-source-profile',
+            sourceProfileRevision: 1,
+            sourceNamespace: 'synthetic-receiver',
+            canonicalIdentity: 'missing',
+            aliases: [],
+          },
+          boundOrderRef: u4Ref('OrderAcceptance', 'Order'),
+        });
+      },
+    );
+    await restore(async () => {
+      await expect(
+        restoreFromJournal(sources.primaryAdmin, sources.journalAdmin),
+      ).rejects.toMatchObject({ code: 'U4_RECOVERY_IDENTITY' });
+      expect(
+        (await sources.primaryAdmin.query('SELECT enabled,auth_ready FROM u1_recovery_control'))[0],
+      ).toMatchObject({ enabled: false, auth_ready: false });
+      expect(
+        (
+          await sources.journalAdmin.query(
+            "SELECT has_function_privilege('u4_verify_journal_append','u1_append_entry(varchar,bigint,text,varchar,varchar,text)','EXECUTE') AS allowed",
+          )
+        )[0].allowed,
+      ).toBe(false);
+      expect(
+        await sources.journalAdmin.query(
+          'SELECT role_name FROM u1_restore_append_role WHERE role_name=$1',
+          ['u4_verify_journal_append'],
+        ),
+      ).toHaveLength(1);
+    });
+  });
+  it('서로 다른 접수로 누적된 101번째 잔액도 전체 원본 대조에서 제외하지 않는다', async () => {
+    const rows = Array.from({ length: 101 }, (_, index) =>
+      u4ModelFixture('FinancialPaymentBalance', 'aggregate-' + String(index).padStart(3, '0')),
+    );
+    for (let offset = 0; offset < rows.length; offset += 100)
+      await repository.mutate(
+        financialRequest(),
+        async () => {},
+        async (scope) =>
+          scope.transaction.putNewBatch(
+            'FinancialPaymentBalance',
+            rows.slice(offset, offset + 100),
+          ),
+      );
+    expect(
+      (
+        await sources.primaryApp.query(
+          'SELECT count(*)::integer AS count FROM u1_financial_payment_balance',
+        )
+      )[0].count,
+    ).toBe(101);
+    await expect(
+      sources.primaryAdmin.transaction((manager) => verifyU4RecoveryState(manager)),
+    ).resolves.toBeUndefined();
+    await repository.mutate(
+      financialRequest(),
+      async () => {},
+      async (scope) => {
+        await scope.lock(['aggregate-100'], [], []);
+        const current = (await scope.optional('FinancialPaymentBalance', 'aggregate-100'))!;
+        await scope.transaction.put(
+          'FinancialPaymentBalance',
+          { ...current, allocatedPrincipal: u4Money('1'), revision: 2 },
+          1,
+        );
+      },
+    );
+    // 잔액 자체의 범위는 유효하지만 배분 원본이 없으므로 복구 준비를 차단해야 한다.
+    await expect(
+      sources.primaryAdmin.transaction((manager) => verifyU4RecoveryState(manager)),
+    ).rejects.toMatchObject({ code: 'U4_RECOVERY_AGGREGATE' });
   });
 });

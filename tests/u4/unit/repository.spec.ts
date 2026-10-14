@@ -12,6 +12,7 @@ import {
 import type { EntityManager } from 'typeorm';
 import { u4ModelFixture } from '../fixtures/models.js';
 import { u4Ref } from '../fixtures/contracts.js';
+import { modelFixture } from '../../u3/fixtures/models.js';
 
 function scopeFixture() {
   let raw: ModelData | null = u4ModelFixture('FinancialPaymentBalance');
@@ -35,6 +36,18 @@ function scopeFixture() {
   };
 }
 describe('U4 same-transaction repository premises', () => {
+  it('U4 writer는 U3 신표현 대상의 version2 기록을 DB 접근 전에 거절한다', async () => {
+    const getRepository = vi.fn();
+    const transaction = new ProtectedTransaction(
+      { getRepository } as unknown as EntityManager,
+      new SchemaValidator(),
+      U4_SOURCE_CONTRACT,
+    );
+    await expect(transaction.put('Order', modelFixture('Order'))).rejects.toMatchObject({
+      code: 'WRITE_MODEL_VERSION',
+    });
+    expect(getRepository).not.toHaveBeenCalled();
+  });
   it('reads protected images using the same transaction and captured prefix', async () => {
     const fixture = scopeFixture();
     expect(await fixture.scope.optional('FinancialPaymentBalance', 'payment')).toEqual(

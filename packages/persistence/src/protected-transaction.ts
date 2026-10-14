@@ -59,6 +59,13 @@ export class ProtectedTransaction {
     }
     if (!U3_PERSISTENCE_MODELS.some((entry) => entry.name === model)) return;
     requireCondition(
+      this.sourceContract?.profile !== 'urn:oms:contract:u4-financial:1' ||
+        !U4_U3_MODELS.some((entry) => entry.name === model),
+      400,
+      'WRITE_MODEL_VERSION',
+      '새 금융 계약의 약정/주문 원본은 명시 modelVersion3이 필요합니다.',
+    );
+    requireCondition(
       data.modelVersion !== 2 || this.sourceContract !== undefined,
       400,
       'WRITE_CONTRACT_REQUIRED',

@@ -1,4 +1,9 @@
 import type { DataSource } from 'typeorm';
+import { U4_PERSISTENCE_MODELS } from './u4-model-catalog.js';
+
+const financialModels = U4_PERSISTENCE_MODELS.map(
+  (model) => "'" + model.name.replaceAll("'", "''") + "'",
+).join(',');
 
 // Only the explicit DDL connection may register epochs or replace these objects.
 export async function migrateRecovery(primary: DataSource, journal: DataSource): Promise<void> {
@@ -35,6 +40,10 @@ export async function migrateRecovery(primary: DataSource, journal: DataSource):
   await journal.query(`CREATE TABLE IF NOT EXISTS u1_restore_append_role(role_name varchar(128) PRIMARY KEY CHECK(role_name IN ('u1_journal_append','u2_verify_journal_append')));
     REVOKE ALL ON u1_restore_append_role FROM PUBLIC,u1_journal_append;`);
   await journal.transaction(async (manager) => {
+    await manager.query(`ALTER TABLE u1_restore_append_role DROP CONSTRAINT IF EXISTS u1_restore_append_role_role_name_check;
+      ALTER TABLE u1_restore_append_role ADD CONSTRAINT u1_restore_append_role_role_name_check CHECK(role_name IN ('u1_journal_append','u2_verify_journal_append','u4_verify_journal_append'));`);
+  });
+  await journal.transaction(async (manager) => {
     await manager.query('SET LOCAL ROLE u1_owner');
     await manager.query(`
       CREATE TABLE IF NOT EXISTS u1_journal_epoch(epoch varchar(128) PRIMARY KEY,generation bigint NOT NULL UNIQUE);
@@ -54,6 +63,7 @@ export async function migrateRecovery(primary: DataSource, journal: DataSource):
            EXISTS(SELECT 1 FROM jsonb_array_elements(body->'rows') r WHERE r->'schemaVersion' IS NULL OR r->'schemaVersion' NOT IN ('1'::jsonb,'2'::jsonb,'3'::jsonb)) OR
            EXISTS(SELECT 1 FROM jsonb_array_elements(body->'rows') r WHERE r->'schemaVersion'='1'::jsonb AND r->'data'->'modelVersion' IN ('2'::jsonb,'3'::jsonb)) OR
            EXISTS(SELECT 1 FROM jsonb_array_elements(body->'rows') r WHERE r->'schemaVersion'='3'::jsonb AND (body->'schemaVersion'<>'3'::jsonb OR r->'data'->'modelVersion' IS DISTINCT FROM '3'::jsonb)) OR
+           EXISTS(SELECT 1 FROM jsonb_array_elements(body->'rows') r WHERE r->>'model' IN (${financialModels}) AND (body->'schemaVersion' IS DISTINCT FROM '3'::jsonb OR r->'schemaVersion' IS DISTINCT FROM '1'::jsonb OR r->'data'->'modelVersion' IS DISTINCT FROM '1'::jsonb)) OR
            (body->'schemaVersion'='1'::jsonb AND EXISTS(SELECT 1 FROM jsonb_array_elements(body->'rows') r WHERE r->'schemaVersion'<>'1'::jsonb)) OR
            (body->'schemaVersion'='2'::jsonb AND (body->'sourceContract' IS DISTINCT FROM '{"profile":"urn:oms:contract:u3-commercial:2","registryVersion":3}'::jsonb OR
              NOT EXISTS(SELECT 1 FROM jsonb_array_elements(body->'rows') r WHERE r->'schemaVersion'='2'::jsonb) OR

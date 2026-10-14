@@ -8,6 +8,12 @@ import { u4Money } from '../fixtures/contracts.js';
 
 describe('U4 real independent connection transaction races', () => {
   const { repository, sources } = persistenceFixture();
+  function assertLoser(results: PromiseSettledResult<unknown>[], codes: readonly string[]) {
+    expect(results.filter((result) => result.status === 'fulfilled')).toHaveLength(1);
+    const failed = results.filter((result) => result.status === 'rejected');
+    expect(failed).toHaveLength(1);
+    expect(codes).toContain((failed[0]!.reason as { code?: string }).code);
+  }
   async function compete(write: (repo: U4Repository, participant: number) => Promise<unknown>) {
     const second = u4Sources();
     await second.primaryApp.initialize();
@@ -35,7 +41,7 @@ describe('U4 real independent connection transaction races', () => {
         async (scope) => scope.transaction.putNewBatch('FinancialIdentityClaim', [claim]),
       ),
     );
-    expect(results.filter((result) => result.status === 'fulfilled')).toHaveLength(1);
+    assertLoser(results, ['23505']);
     expect(
       (
         await sources.primaryApp.query(
@@ -72,7 +78,7 @@ describe('U4 real independent connection transaction races', () => {
         },
       ),
     );
-    expect(results.filter((result) => result.status === 'fulfilled')).toHaveLength(1);
+    assertLoser(results, ['CURRENT_U4_NOT_PROTECTED', 'INSUFFICIENT_BALANCE']);
     const saved = await sources.primaryApp
       .getRepository('FinancialPaymentBalance')
       .findOneBy({ paymentId: 'principal' });
@@ -80,17 +86,30 @@ describe('U4 real independent connection transaction races', () => {
   });
   it('serializes two different fund sources against one invoice balance', async () => {
     const row = u4ModelFixture('FinancialInvoiceBalance', 'invoice');
+    const payments = [0, 1].map((participant) =>
+      u4ModelFixture('FinancialPaymentBalance', 'source-' + participant),
+    );
     await repository.mutate(
       financialRequest(),
       async () => {},
-      async (scope) => scope.transaction.put('FinancialInvoiceBalance', row),
+      async (scope) => {
+        await scope.transaction.put('FinancialInvoiceBalance', row);
+        await scope.transaction.putNewBatch('FinancialPaymentBalance', payments);
+      },
     );
-    const results = await compete((repo) =>
+    const results = await compete((repo, participant) =>
       repo.mutate(
         financialRequest(),
         async () => {},
         async (scope) => {
-          await scope.lock([], ['invoice'], []);
+          const paymentId = 'source-' + participant;
+          await scope.lock([paymentId], ['invoice'], []);
+          const payment = (await scope.optional('FinancialPaymentBalance', paymentId))!;
+          await scope.transaction.put(
+            'FinancialPaymentBalance',
+            { ...payment, allocatedPrincipal: u4Money('80'), revision: 2 },
+            1,
+          );
           const current = (await scope.optional('FinancialInvoiceBalance', 'invoice'))!;
           const used = BigInt((current.allocatedPrincipal as { value: string }).value);
           requireCondition(used + 80n <= 100n, 409, 'INVOICE_REMAINDER', '합성 청구 한도');
@@ -106,7 +125,29 @@ describe('U4 real independent connection transaction races', () => {
         },
       ),
     );
-    expect(results.filter((result) => result.status === 'fulfilled')).toHaveLength(1);
+    // 보호가 아직 확인되지 않은 선행 소비는 HOLD이며, 현재 보호가 확인됐으면 잔여 한도로 거절한다.
+    assertLoser(results, ['CURRENT_U4_NOT_PROTECTED', 'INVOICE_REMAINDER']);
+    for (const [participant, result] of results.entries()) {
+      const payment = await sources.primaryApp
+        .getRepository('FinancialPaymentBalance')
+        .findOneBy({ paymentId: 'source-' + participant });
+      expect(payment!.allocatedPrincipal).toEqual(
+        u4Money(result.status === 'fulfilled' ? '80' : '0'),
+      );
+      expect(payment!.revision).toBe(result.status === 'fulfilled' ? 2 : 1);
+    }
+    expect(
+      (await sources.primaryApp
+        .getRepository('FinancialInvoiceBalance')
+        .findOneBy({ invoiceId: 'invoice' }))!.allocatedPrincipal,
+    ).toEqual(u4Money('80'));
+    expect(
+      (
+        await sources.primaryApp.query(
+          'SELECT count(*)::integer AS count FROM u1_recovery_candidate',
+        )
+      )[0].count,
+    ).toBe(2);
   });
   it('uses one root budget across two independent refund cases', async () => {
     const row = u4ModelFixture('FinancialApprovalBalance', 'approval');
@@ -136,6 +177,11 @@ describe('U4 real independent connection transaction races', () => {
         },
       ),
     );
-    expect(results.filter((result) => result.status === 'fulfilled')).toHaveLength(1);
+    assertLoser(results, ['CURRENT_U4_NOT_PROTECTED', 'ROOT_REMAINDER']);
+    expect(
+      (await sources.primaryApp
+        .getRepository('FinancialApprovalBalance')
+        .findOneBy({ approvalRootId: 'approval' }))!.reserved,
+    ).toEqual(u4Money('80'));
   });
 });

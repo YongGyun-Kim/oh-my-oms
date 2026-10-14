@@ -1,6 +1,7 @@
 const CODES = new Set([
   '22023',
   '23502',
+  '23503',
   '23505',
   '42501',
   'INVALID_INPUT',

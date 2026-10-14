@@ -7,6 +7,8 @@ import {
   modelForData,
   rowModelVersion,
   storedModelData,
+  recordedSourceContract,
+  U4_SOURCE_CONTRACT,
 } from '@oms/persistence';
 import { modelFixture, legacyProduct } from '../../u3/fixtures/models.js';
 import { u4ModelFixture } from '../fixtures/models.js';
@@ -97,5 +99,29 @@ describe('U4 model originals and version boundaries', () => {
     const parts = structuredClone(row.portions) as { currentResult: { operationId: string } }[];
     parts[0]!.currentResult.operationId = 'other';
     expect(() => validateModel('RefundCase', { ...row, portions: parts }, schema)).toThrow();
+  });
+  it('공통 원본의 U4 계약을 정확히 판독하면서 구버전과 위조 거절을 유지한다', () => {
+    expect(recordedSourceContract({}, schema)).toEqual({ knowledge: 'UNKNOWN' });
+    expect(
+      recordedSourceContract(
+        { sourceContract: { profile: 'urn:oms:contract:u3-commercial:2', registryVersion: 3 } },
+        schema,
+      ),
+    ).toEqual({
+      knowledge: 'KNOWN',
+      profile: 'urn:oms:contract:u3-commercial:2',
+      registryVersion: 3,
+    });
+    expect(recordedSourceContract({ sourceContract: U4_SOURCE_CONTRACT }, schema)).toEqual({
+      knowledge: 'KNOWN',
+      ...U4_SOURCE_CONTRACT,
+    });
+    for (const sourceContract of [
+      { profile: 'urn:oms:contract:unregistered:1', registryVersion: 4 },
+      { ...U4_SOURCE_CONTRACT, registryVersion: 3 },
+      { profile: 'urn:oms:contract:u3-commercial:2', registryVersion: 4 },
+      { ...U4_SOURCE_CONTRACT, arbitrary: true },
+    ])
+      expect(() => recordedSourceContract({ sourceContract }, schema)).toThrow();
   });
 });

@@ -9,9 +9,30 @@ import {
 } from '@oms/persistence';
 import { persistenceFixture, financialRequest } from '../fixtures/persistence.js';
 import { u4ModelFixture } from '../fixtures/models.js';
+import { modelFixture } from '../../u3/fixtures/models.js';
 
 describe('U4 real PostgreSQL registration and physical safeguards', () => {
   const { sources, store, repository } = persistenceFixture();
+  it('U4 계약으로 구형 U3 주문을 쓰려 하면 모든 기록을 차단한다', async () => {
+    const request = { ...financialRequest(), owner: 'OrderAcceptance' };
+    await expect(
+      repository.mutate(
+        request,
+        async () => {},
+        async (scope) => scope.transaction.put('Order', modelFixture('Order')),
+      ),
+    ).rejects.toMatchObject({ code: 'WRITE_MODEL_VERSION' });
+    expect(
+      (await sources.primaryApp.query('SELECT count(*)::integer AS count FROM u1_order'))[0].count,
+    ).toBe(0);
+    expect(
+      (
+        await sources.primaryApp.query(
+          'SELECT count(*)::integer AS count FROM u1_recovery_candidate',
+        )
+      )[0].count,
+    ).toBe(0);
+  });
   it('uses only the two U4 isolated databases with all financial tables', async () => {
     expect((await sources.primaryApp.query('SELECT current_database() AS name'))[0].name).toBe(
       'oms_u4_verification',
