@@ -1,0 +1,11 @@
+{
+  "name": "@oms/ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./src/*.ts",
+    ".": "./src/index.ts",
+    "./portal": "./src/portal.tsx"
+  }
+}

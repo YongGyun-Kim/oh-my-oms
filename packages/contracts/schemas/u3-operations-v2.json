@@ -1,0 +1,628 @@
+[
+  {
+    "owner": "EnterpriseAccess",
+    "name": "defineCustomerRole",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ConsentRoleInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "ENTERPRISE"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "reviseCustomerRole",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ConsentRoleRevisionInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "RECORD"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "deactivateCustomerRole",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ConsentRoleDeactivateInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "RECORD"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readCustomerRoles",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ConsentRolePageInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/ConsentRolePage",
+    "targetKind": "ENTERPRISE"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "defineStaffRole",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/StaffRoleInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "reviseStaffRole",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/StaffRoleRevisionInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "StaffRole"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "deactivateStaffRole",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/StaffRoleDeactivateInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "StaffRole"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readStaffRoles",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/StaffRolePageInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/StaffRolePage",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "ProductCatalog",
+    "name": "registerProduct",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "product.register",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ProductInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "ProductCatalog",
+    "name": "reviseProduct",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "product.revise",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ProductInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/InvocationTarget"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "RECORD"
+            },
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "ProductCatalog"
+                    },
+                    "entity": {
+                      "const": "Product"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "owner": "ProductCatalog",
+    "name": "readCommonOffer",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
+    "action": "product.read",
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/CommonOfferQuery",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/ProductViewResult",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "registerAgreement",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "contract.register",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/AgreementRegistrationInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "approveAgreement",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "contract.approve",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/AgreementApprovalInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/InvocationTarget"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "RECORD"
+            },
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "CommercialAgreement"
+                    },
+                    "entity": {
+                      "const": "AgreementRevision"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "readAgreement",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/AgreementViewResultPage",
+    "targetKind": "ENTERPRISE",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/InvocationTarget"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "ENTERPRISE"
+            },
+            "enterpriseRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "EnterpriseAccess"
+                    },
+                    "entity": {
+                      "const": "Enterprise"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "requestContractChange",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER"],
+    "action": "contract.change.request",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ContractChangeInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "registerOfferException",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "contract.register",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OfferExceptionInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "createProposal",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "contract.propose",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ProposalInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "readProposal",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
+    "action": "order.read",
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ProposalQuery",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/ProposalViewResult",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/InvocationTarget"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "RECORD"
+            },
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "CommercialAgreement"
+                    },
+                    "entity": {
+                      "const": "CommercialProposal"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "recordConsent",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER"],
+    "action": "contract.consent",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ConsentInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/InvocationTarget"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "RECORD"
+            },
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "CommercialAgreement"
+                    },
+                    "entity": {
+                      "const": "CommercialProposal"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "effectiveAgreement",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OwnerRecordQuery",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/AgreementViewResult",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "readApprovedTerms",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
+    "action": "product.read",
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/CommercialTermsQuery",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/ResolvedCommercialTerms",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "submitOrder",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER"],
+    "action": "order.submit",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OrderInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "decideOrder",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF"],
+    "action": "order.decide",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OrderDecisionInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/InvocationTarget"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "RECORD"
+            },
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "OrderAcceptance"
+                    },
+                    "entity": {
+                      "const": "Order"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "readAcceptedOrder",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
+    "action": "order.read",
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OrderQuery",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/OrderViewResult",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "applyApprovedChange",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF", "SYSTEM"],
+    "action": "order.change.apply",
+    "kind": "command",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/ApplyOrderChangeInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/Receipt",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "ProductCatalog",
+    "name": "readOwnerDiagnostics",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF", "SYSTEM"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/DiagnosticInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/DiagnosticView",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "ProductCatalog",
+    "name": "readOwnerHistory",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OwnerRecordQuery",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/HistoryView",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "readOwnerDiagnostics",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF", "SYSTEM"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/DiagnosticInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/DiagnosticView",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "CommercialAgreement",
+    "name": "readOwnerHistory",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OwnerRecordQuery",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/HistoryView",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "readOwnerDiagnostics",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["STAFF", "SYSTEM"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/DiagnosticInput",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/DiagnosticView",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "readOwnerHistory",
+    "contract": "u3-commercial",
+    "version": 3,
+    "audience": ["CUSTOMER", "STAFF", "SYSTEM"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:u3-commercial:2#/$defs/OwnerRecordQuery",
+    "output": "urn:oms:contract:u3-commercial:2#/$defs/HistoryView",
+    "targetKind": "NONE"
+  }
+]

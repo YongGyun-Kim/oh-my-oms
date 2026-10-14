@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>주문·갱신 현황 · OMS 화면 시안</title><link rel="icon" href="data:,"><link rel="stylesheet" href="styles.css"></head>
+<body>
+<a class="skip" href="#main">본문으로 이동</a>
+<section class="preview-tools" aria-label="화면 검토 도구">
+<strong>화면 시안</strong><span>합성 데이터 · 실제 서비스 처리는 수행하지 않습니다</span>
+<label for="screen-picker">검토 화면</label><select id="screen-picker"></select>
+<label for="state-picker">화면 상태</label><select id="state-picker"><option value="normal">정상</option><option value="empty">비어 있음</option><option value="loading">조회·처리 중</option><option value="error">조회 오류</option><option value="partial">부분 완료</option><option value="unknown">결과 미확인</option><option value="denied">전체 접근 불가</option></select>
+<label for="condition-picker">업무 조건</label><select id="condition-picker"><option value="allowed">권한 확인 · 업무별 근거</option><option value="ready">전체 주문 조건 확인</option><option value="viewonly">주문 조회만 허용</option><option value="self">계약 등록자 본인</option><option value="missing">근거 미확인</option><option value="conflict">상충 근거</option></select>
+<label for="proposal-picker">제안 조건</label><select id="proposal-picker"><option value="current">현재 내용 확인</option><option value="changed">내용 변경됨</option><option value="unknown">조회 미확인</option></select>
+<button id="reset-demo" type="button">예시 초기화</button>
+</section>
+<div class="app-shell">
+<aside class="sidebar"><a class="brand" href="#C01"><span class="mark" aria-hidden="true">O</span>OMS</a><p id="nav-context" class="nav-context"></p><nav id="nav" aria-label="주요 탐색"></nav><div class="sidebar-bottom"><span class="avatar" aria-hidden="true">김</span><div id="user-context">김담당<br>새봄테크</div></div></aside>
+<div class="workspace"><header class="app-header"><span id="app-context"></span><a href="#A01">로그인·추가 인증</a></header>
+<main id="main" tabindex="-1"></main><footer>업무 시각: 한국 시간 · 금액: 원(KRW)</footer></div>
+</div>
+<dialog id="confirm-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+<div class="dialog-content"><p class="eyebrow">내용 확인</p><h2 id="dialog-title"></h2><p id="dialog-description"></p><div id="dialog-summary"></div><div class="actions"><button id="cancel-confirm" type="button">돌아가기</button><button id="commit-confirm" class="primary" type="button">확인하고 제출</button></div></div>
+</dialog>
+<div id="live" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+<script src="data.js"></script><script src="details.js"></script><script src="preview.js"></script>
+</body></html>

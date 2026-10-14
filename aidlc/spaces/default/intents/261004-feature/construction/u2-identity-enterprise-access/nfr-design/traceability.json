@@ -1,0 +1,267 @@
+{
+  "stage": "nfr-design",
+  "unit": "u2-identity-enterprise-access",
+  "upstream_ids": [
+    "NFR1.1",
+    "NFR1.2",
+    "NFR1.3",
+    "NFR1.4",
+    "NFR1.5",
+    "NFR1.6",
+    "NFR1.7",
+    "NFR1.8",
+    "NFR1.9",
+    "NFR1.10",
+    "NFR1.11",
+    "NFR1.12",
+    "NFR1.13",
+    "NFR1.14",
+    "NFR1.15",
+    "NFR1.16",
+    "NFR2.1",
+    "NFR3.1",
+    "NFR3.2",
+    "NFR4.1",
+    "NFR4.2",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR5.3",
+    "NFR6.1",
+    "NFR6.2",
+    "NFR7.1",
+    "NFR7.2",
+    "NFR8.1",
+    "NFR9.1",
+    "NFR9.2",
+    "NFR9.3",
+    "NFR10.1",
+    "NFR11.1",
+    "NFR11.2",
+    "NFR11.3",
+    "NFR12.1",
+    "NFR12.2",
+    "NFR13.1",
+    "NFR13.2",
+    "NFR13.3",
+    "NFR14.1",
+    "NFR14.2"
+  ],
+  "coverage": [
+    {
+      "id": "NFR1.1",
+      "status": "OK",
+      "target": "security-design.md#SD01 / security-design.md#SD06 / SV01,SV05"
+    },
+    {
+      "id": "NFR1.2",
+      "status": "OK",
+      "target": "security-design.md#SD01 / security-design.md#SD03 / SV01,SV02"
+    },
+    {
+      "id": "NFR1.3",
+      "status": "OK",
+      "target": "security-design.md#SD03 / security-design.md#SD08 / SV02,SV08"
+    },
+    {
+      "id": "NFR1.4",
+      "status": "OK",
+      "target": "security-design.md#SD02 / security-design.md#SD07 / SV01,SV06"
+    },
+    {
+      "id": "NFR1.5",
+      "status": "OK",
+      "target": "security-design.md#SD02 / security-design.md#SD05 / SV01,SV04"
+    },
+    {
+      "id": "NFR1.6",
+      "status": "OK",
+      "target": "security-design.md#SD02 / security-design.md#SD05 / SV01,SV04"
+    },
+    {
+      "id": "NFR1.7",
+      "status": "OK",
+      "target": "security-design.md#SD07 / SV02"
+    },
+    {
+      "id": "NFR1.8",
+      "status": "OK",
+      "target": "security-design.md#SD03 / security-design.md#SD04 / security-design.md#SD10 / SV02"
+    },
+    {
+      "id": "NFR1.9",
+      "status": "OK",
+      "target": "security-design.md#SD06 / security-design.md#SD10 / logical-components.md#LC03 / SV05,SV07"
+    },
+    {
+      "id": "NFR1.10",
+      "status": "OK",
+      "target": "security-design.md#SD05 / security-design.md#SD11 / SV04,SV08"
+    },
+    {
+      "id": "NFR1.11",
+      "status": "OK",
+      "target": "security-design.md#SD06 / security-design.md#SD07 / SV05,SV06"
+    },
+    {
+      "id": "NFR1.12",
+      "status": "OK",
+      "target": "security-design.md#SD05 / security-design.md#SD06 / SV04"
+    },
+    {
+      "id": "NFR1.13",
+      "status": "OK",
+      "target": "security-design.md#SD04 / SV03"
+    },
+    {
+      "id": "NFR1.14",
+      "status": "OK",
+      "target": "security-design.md#SD03 / security-design.md#SD07 / SV02,SV06"
+    },
+    {
+      "id": "NFR1.15",
+      "status": "OK",
+      "target": "security-design.md#SD03 / security-design.md#SD07 / security-design.md#SD09 / SV06,SV07"
+    },
+    {
+      "id": "NFR1.16",
+      "status": "OK",
+      "target": "security-design.md#SD01 / security-design.md#SD06 / security-design.md#SD07 / logical-components.md#LC10 / SV01,SV05,SV06"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "OK",
+      "target": "logical-components.md#LC05 / logical-components.md#LC06"
+    },
+    {
+      "id": "NFR3.1",
+      "status": "OK",
+      "target": "security-design.md#SD09 / logical-components.md#LC05 / SV07"
+    },
+    {
+      "id": "NFR3.2",
+      "status": "OK",
+      "target": "security-design.md#SD06 / security-design.md#SD07 / logical-components.md#LC03 / SV05,SV06"
+    },
+    {
+      "id": "NFR4.1",
+      "status": "OK",
+      "target": "security-design.md#SD09 / logical-components.md#LC05 / SV07"
+    },
+    {
+      "id": "NFR4.2",
+      "status": "OK",
+      "target": "security-design.md#SD06 / security-design.md#SD09 / security-design.md#SD10 / SV05,SV07"
+    },
+    {
+      "id": "NFR5.1",
+      "status": "OK",
+      "target": "security-design.md#SD03 / security-design.md#SD05 / security-design.md#SD06 / security-design.md#SD09 / logical-components.md#LC05 / SV02,SV04,SV05,SV07"
+    },
+    {
+      "id": "NFR5.2",
+      "status": "OK",
+      "target": "security-design.md#SD07 / SV06"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "OK",
+      "target": "security-design.md#SD07 / security-design.md#SD09 / security-design.md#SD10 / logical-components.md#LC03 / SV06,SV07"
+    },
+    {
+      "id": "NFR6.1",
+      "status": "OK",
+      "target": "logical-components.md#LC02 / logical-components.md#LC03 / logical-components.md#LC04"
+    },
+    {
+      "id": "NFR6.2",
+      "status": "OK",
+      "target": "security-design.md#SD06 / security-design.md#SD10 / logical-components.md#LC02 / logical-components.md#LC03"
+    },
+    {
+      "id": "NFR7.1",
+      "status": "OK",
+      "target": "logical-components.md#LC04 / logical-components.md#LC06"
+    },
+    {
+      "id": "NFR7.2",
+      "status": "OK",
+      "target": "logical-components.md#LC02 / logical-components.md#LC03 / SV04,SV08"
+    },
+    {
+      "id": "NFR8.1",
+      "status": "OK",
+      "target": "logical-components.md#LC07 / logical-components.md#LC08"
+    },
+    {
+      "id": "NFR9.1",
+      "status": "OK",
+      "target": "logical-components.md#LC07 / logical-components.md#LC05"
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "logical-components.md#LC01 / logical-components.md#LC02 / logical-components.md#LC08"
+    },
+    {
+      "id": "NFR9.3",
+      "status": "OK",
+      "target": "security-design.md#SD01 / security-design.md#SD07 / logical-components.md#LC07 / SV01,SV06"
+    },
+    {
+      "id": "NFR10.1",
+      "status": "OK",
+      "target": "security-design.md#SD10 / logical-components.md#LC05 / logical-components.md#LC06"
+    },
+    {
+      "id": "NFR11.1",
+      "status": "OK",
+      "target": "security-design.md#SD11 / logical-components.md#LC10 / SV08"
+    },
+    {
+      "id": "NFR11.2",
+      "status": "OK",
+      "target": "security-design.md#SD11 / security-design.md#SD09 / logical-components.md#LC05 / SV07,SV08"
+    },
+    {
+      "id": "NFR11.3",
+      "status": "OK",
+      "target": "security-design.md#SD10 / security-design.md#SD11 / logical-components.md#LC06 / SV08"
+    },
+    {
+      "id": "NFR12.1",
+      "status": "OK",
+      "target": "security-design.md#SD02 / logical-components.md#LC07"
+    },
+    {
+      "id": "NFR12.2",
+      "status": "OK",
+      "target": "logical-components.md#LC07 / SV01,SV03,SV04"
+    },
+    {
+      "id": "NFR13.1",
+      "status": "OK",
+      "target": "security-design.md#SD01 / security-design.md#SD12 / logical-components.md#LC08 / SV01,SV08"
+    },
+    {
+      "id": "NFR13.2",
+      "status": "OK",
+      "target": "security-design.md#SD03 / security-design.md#SD08 / logical-components.md#LC08 / SV02,SV08"
+    },
+    {
+      "id": "NFR13.3",
+      "status": "OK",
+      "target": "security-design.md#SD12 / logical-components.md#LC09 / SV01–SV08"
+    },
+    {
+      "id": "NFR14.1",
+      "status": "OK",
+      "target": "security-design.md#SD12 / SV08"
+    },
+    {
+      "id": "NFR14.2",
+      "status": "OK",
+      "target": "security-design.md#SD11 / security-design.md#SD12 / SV08"
+    }
+  ]
+}
+

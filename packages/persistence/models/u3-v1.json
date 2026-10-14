@@ -1,0 +1,1475 @@
+{
+  "version": 2,
+  "logicalEntities": 18,
+  "entities": [
+    {
+      "name": "Product",
+      "owner": "ProductCatalog",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "productId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "productType",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["HARDWARE", "SOFTWARE"]
+        },
+        {
+          "name": "softwareTermKind",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["PERPETUAL", "TERM"],
+          "nullable": true
+        },
+        {
+          "name": "label",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "salesDescription",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "currentOfferRef",
+          "type": "Ref",
+          "required": true,
+          "references": "CommonOfferRevision",
+          "nullable": true
+        },
+        {
+          "name": "saleState",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["INCOMPLETE", "OFFERABLE", "SUSPENDED"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "CommonOfferRevision",
+      "owner": "ProductCatalog",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "offerRevisionId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "productRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Product",
+          "nullable": false
+        },
+        {
+          "name": "visible",
+          "type": "Boolean",
+          "required": true
+        },
+        {
+          "name": "commonPrice",
+          "type": "U3Contract:Money",
+          "required": true
+        },
+        {
+          "name": "salesConditionRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "publishedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "effectiveWindow",
+          "type": "U3Contract:EffectiveWindow",
+          "required": true
+        },
+        {
+          "name": "conditionBindings",
+          "type": "U3Contract:ConditionBindings",
+          "required": true
+        },
+        {
+          "name": "revisionEvidenceRefs",
+          "type": "RefList",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "EnterpriseContract",
+      "owner": "CommercialAgreement",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "contractId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise",
+          "nullable": false
+        },
+        {
+          "name": "currentApprovedRevisionRef",
+          "type": "Ref",
+          "required": true,
+          "references": "AgreementRevision",
+          "nullable": true
+        },
+        {
+          "name": "contractEvidenceRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "AgreementRevision",
+      "owner": "CommercialAgreement",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "agreementRevisionId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "contractRef",
+          "type": "Ref",
+          "required": true,
+          "references": "EnterpriseContract",
+          "nullable": false
+        },
+        {
+          "name": "productRefs",
+          "type": "RefList",
+          "required": true,
+          "references": "Product"
+        },
+        {
+          "name": "commercialTermsRef",
+          "type": "U3Contract:TermsRef",
+          "required": true
+        },
+        {
+          "name": "provisionTermsRef",
+          "type": "U3Contract:TermsRef",
+          "required": true
+        },
+        {
+          "name": "renewalTermsRef",
+          "type": "U3Contract:TermsRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "registeredBy",
+          "type": "Ref",
+          "required": true,
+          "references": "Account",
+          "nullable": false
+        },
+        {
+          "name": "registeredPersonRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "approvalRef",
+          "type": "Ref",
+          "required": true,
+          "references": "AgreementApproval",
+          "nullable": true
+        },
+        {
+          "name": "agreementEvidenceRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "effectiveWindow",
+          "type": "U3Contract:EffectiveWindow",
+          "required": true
+        },
+        {
+          "name": "conditionBindings",
+          "type": "U3Contract:ConditionBindings",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": [
+            "REGISTERED",
+            "CONFIRMATION_REQUIRED",
+            "APPROVED",
+            "REJECTED",
+            "SUPERSEDED"
+          ]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "ContractChangeRequest",
+      "owner": "CommercialAgreement",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "contractChangeRequestId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise",
+          "nullable": false
+        },
+        {
+          "name": "contractRef",
+          "type": "Ref",
+          "required": true,
+          "references": "EnterpriseContract",
+          "nullable": false
+        },
+        {
+          "name": "requestedTerms",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "agreementEvidenceRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "requesterRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account",
+          "nullable": false
+        },
+        {
+          "name": "registeredRevisionRef",
+          "type": "Ref",
+          "required": true,
+          "references": "AgreementRevision",
+          "nullable": true
+        },
+        {
+          "name": "resultRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["RECEIVED", "UNDER_REVIEW", "RESULT_RECORDED"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "AgreementApproval",
+      "owner": "CommercialAgreement",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "approvalId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "revisionRef",
+          "type": "Ref",
+          "required": true,
+          "references": "AgreementRevision",
+          "nullable": false
+        },
+        {
+          "name": "registrantPersonRef",
+          "type": "Ref",
+          "required": true,
+          "references": "VerifiedPersonLink",
+          "nullable": false
+        },
+        {
+          "name": "approverAccountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account",
+          "nullable": false
+        },
+        {
+          "name": "approverPersonRef",
+          "type": "Ref",
+          "required": true,
+          "references": "VerifiedPersonLink",
+          "nullable": false
+        },
+        {
+          "name": "evidenceRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "decision",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["APPROVE", "DECLINE"]
+        },
+        {
+          "name": "occurredAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "EnterpriseOfferException",
+      "owner": "CommercialAgreement",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "offerExceptionId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise",
+          "nullable": false
+        },
+        {
+          "name": "productRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Product",
+          "nullable": false
+        },
+        {
+          "name": "agreementRevisionRef",
+          "type": "Ref",
+          "required": true,
+          "references": "AgreementRevision",
+          "nullable": false
+        },
+        {
+          "name": "visible",
+          "type": "Boolean",
+          "required": true
+        },
+        {
+          "name": "price",
+          "type": "U3Contract:Money",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "effectiveWindow",
+          "type": "U3Contract:EffectiveWindow",
+          "required": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "CommercialProposal",
+      "owner": "CommercialAgreement",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "proposalId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise",
+          "nullable": false
+        },
+        {
+          "name": "targetScope",
+          "type": "U3Contract:TargetScope",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "targetOrderRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Order",
+          "nullable": true
+        },
+        {
+          "name": "targetEntitlementRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "targetRenewalCycleRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "originalTermsRef",
+          "type": "ExternalRef",
+          "required": true
+        },
+        {
+          "name": "proposedTermsRef",
+          "type": "U3Contract:TermsRef",
+          "required": true
+        },
+        {
+          "name": "originalTerms",
+          "type": "U3Contract:ProposalTerms",
+          "required": true
+        },
+        {
+          "name": "originalPriceBreakdown",
+          "type": "U3Contract:OrderPriceBreakdown",
+          "required": false,
+          "nullable": true
+        },
+        {
+          "name": "termsFingerprint",
+          "type": "NonEmptyText",
+          "required": false,
+          "nullable": true
+        },
+        {
+          "name": "supersedesRef",
+          "type": "Ref",
+          "references": "CommercialProposal",
+          "required": false,
+          "nullable": true
+        },
+        {
+          "name": "proposedTerms",
+          "type": "U3Contract:ProposalTerms",
+          "required": true
+        },
+        {
+          "name": "priceBreakdown",
+          "type": "U3Contract:OrderPriceBreakdown",
+          "required": true
+        },
+        {
+          "name": "proposalRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "evidenceRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "result",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": [
+            "OPEN",
+            "CONSENTED",
+            "DECLINED",
+            "CONFIRMATION_REQUIRED",
+            "SUPERSEDED",
+            "APPLIED"
+          ]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "CustomerConsent",
+      "owner": "CommercialAgreement",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "consentId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "proposalRef",
+          "type": "Ref",
+          "required": true,
+          "references": "CommercialProposal",
+          "nullable": false
+        },
+        {
+          "name": "proposalRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "actorAccountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account",
+          "nullable": false
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise",
+          "nullable": false
+        },
+        {
+          "name": "decision",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["ACCEPT", "DECLINE"]
+        },
+        {
+          "name": "evidenceRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "occurredAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "Order",
+      "owner": "OrderAcceptance",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "orderId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "enterpriseRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Enterprise",
+          "nullable": false
+        },
+        {
+          "name": "requesterAccountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account",
+          "nullable": false
+        },
+        {
+          "name": "submissionRequestId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "targetScope",
+          "type": "U3Contract:TargetScope",
+          "required": true
+        },
+        {
+          "name": "submittedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "productType",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["HARDWARE", "SOFTWARE"]
+        },
+        {
+          "name": "lineRefs",
+          "type": "RefList",
+          "required": true,
+          "references": "OrderLine"
+        },
+        {
+          "name": "purchaseTermsRef",
+          "type": "Ref",
+          "required": true,
+          "references": "PurchaseTermsSnapshot",
+          "nullable": false
+        },
+        {
+          "name": "provisionChoiceRef",
+          "type": "Ref",
+          "required": true,
+          "references": "ProvisionChoice",
+          "nullable": false
+        },
+        {
+          "name": "acceptanceRef",
+          "type": "Ref",
+          "required": true,
+          "references": "AcceptanceDecision",
+          "nullable": true
+        },
+        {
+          "name": "changeApplicationRefs",
+          "type": "RefList",
+          "required": true,
+          "references": "OrderChangeApplication"
+        },
+        {
+          "name": "state",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["REVIEW", "ACCEPTED", "REJECTED"]
+        },
+        {
+          "name": "paymentKind",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["PREPAY", "POSTPAY"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "OrderLine",
+      "owner": "OrderAcceptance",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "lineId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "orderRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Order",
+          "nullable": false
+        },
+        {
+          "name": "productRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Product",
+          "nullable": false
+        },
+        {
+          "name": "commonOfferRevisionRef",
+          "type": "Ref",
+          "required": true,
+          "references": "CommonOfferRevision",
+          "nullable": false
+        },
+        {
+          "name": "quantity",
+          "type": "PositiveInteger",
+          "required": true
+        },
+        {
+          "name": "requestedPaymentMode",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["PREPAY", "POSTPAY"]
+        },
+        {
+          "name": "requestedActivationDate",
+          "type": "LocalDate",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "purchasePrice",
+          "type": "U3Contract:Money",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "priceKnowledge",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        },
+        {
+          "name": "paymentTermsRef",
+          "type": "U3Contract:TermsRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "agreedPeriod",
+          "type": "U3Contract:Period",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "completionBasisRef",
+          "type": "U3Contract:TermsRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "position",
+          "type": "PositiveInteger",
+          "required": true
+        },
+        {
+          "name": "agreementRevisionRefs",
+          "type": "U3Contract:AgreementRefs",
+          "required": true
+        },
+        {
+          "name": "conditionBindings",
+          "type": "U3Contract:ConditionBindings",
+          "required": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "PurchaseTermsSnapshot",
+      "owner": "OrderAcceptance",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "purchaseTermsId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "orderRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Order",
+          "nullable": false
+        },
+        {
+          "name": "catalogRevisionRefs",
+          "type": "RefList",
+          "required": true,
+          "references": "CommonOfferRevision"
+        },
+        {
+          "name": "agreementRevisionRefs",
+          "type": "U3Contract:AgreementRefs",
+          "required": true
+        },
+        {
+          "name": "conditionBindings",
+          "type": "U3Contract:SnapshotConditionBindings",
+          "required": true
+        },
+        {
+          "name": "capturedLines",
+          "type": "U3Contract:CapturedLines",
+          "required": true
+        },
+        {
+          "name": "priceBreakdown",
+          "type": "U3Contract:OrderPriceBreakdown",
+          "required": true
+        },
+        {
+          "name": "priceConfirmation",
+          "type": "U3Contract:PriceConfirmation",
+          "required": false,
+          "nullable": true
+        },
+        {
+          "name": "capturedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "ProvisionChoice",
+      "owner": "OrderAcceptance",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "provisionChoiceId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "orderRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Order",
+          "nullable": false
+        },
+        {
+          "name": "choice",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["FULL"]
+        },
+        {
+          "name": "consentRef",
+          "type": "Ref",
+          "required": true,
+          "references": "CustomerConsent",
+          "nullable": true
+        },
+        {
+          "name": "effectiveRevisionRef",
+          "type": "Ref",
+          "required": true,
+          "references": "PurchaseTermsSnapshot",
+          "nullable": false
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "AcceptanceDecision",
+      "owner": "OrderAcceptance",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "decisionId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "orderRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Order",
+          "nullable": false
+        },
+        {
+          "name": "acceptance",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["REVIEW_REQUIRED", "ACCEPTED", "DECLINED", "UNVERIFIED"]
+        },
+        {
+          "name": "lineAssessments",
+          "type": "LineAssessmentList",
+          "required": true
+        },
+        {
+          "name": "basisRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "evaluatedAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "assessedSourceRevisions",
+          "type": "SourceRevisionList",
+          "required": true
+        },
+        {
+          "name": "actorRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account",
+          "nullable": true
+        },
+        {
+          "name": "observedOrderRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "decision",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["ACCEPT", "REJECT", "HOLD"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "OrderChangeApplication",
+      "owner": "OrderAcceptance",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "orderChangeApplicationId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "orderRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Order",
+          "nullable": false
+        },
+        {
+          "name": "afterSalesDecisionRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "consentRef",
+          "type": "Ref",
+          "required": true,
+          "references": "CustomerConsent",
+          "nullable": false
+        },
+        {
+          "name": "previousTermsRef",
+          "type": "ExternalRef",
+          "required": true
+        },
+        {
+          "name": "changedTermsRef",
+          "type": "U3Contract:TermsRef",
+          "required": true
+        },
+        {
+          "name": "appliedTerms",
+          "type": "U3Contract:AppliedTerms",
+          "required": false,
+          "nullable": true
+        },
+        {
+          "name": "actualApplicationResult",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["APPLIED", "CONFLICT", "CONFIRMATION_REQUIRED"]
+        },
+        {
+          "name": "expectedOrderRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "proposalRef",
+          "type": "Ref",
+          "required": true,
+          "references": "CommercialProposal",
+          "nullable": false
+        },
+        {
+          "name": "changeKind",
+          "type": "Enum",
+          "required": true,
+          "allowed_values": ["REVIEW_PRICE_CHANGE", "ACCEPTED_AFTERSALES_CHANGE"]
+        },
+        {
+          "name": "revision",
+          "type": "Revision",
+          "required": true
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "CatalogHistory",
+      "owner": "ProductCatalog",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "historyId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "owner",
+          "type": "BusinessOwner",
+          "required": true
+        },
+        {
+          "name": "actorAccountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account",
+          "nullable": true
+        },
+        {
+          "name": "verifiedPersonRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "occurredAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "reason",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "beforeRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "afterRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "evidenceRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "requestId",
+          "type": "Identifier",
+          "required": true,
+          "references": "RequestReceipt"
+        },
+        {
+          "name": "resultRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "correctionOf",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "sourceRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "terms",
+          "type": "U3Contract:ProposalTerms",
+          "required": false
+        },
+        {
+          "name": "conditionBindings",
+          "type": "U3Contract:ConditionBindings",
+          "required": false
+        },
+        {
+          "name": "effectiveWindow",
+          "type": "U3Contract:EffectiveWindow",
+          "required": false
+        },
+        {
+          "name": "priceBreakdown",
+          "type": "U3Contract:OrderPriceBreakdown",
+          "required": false
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "AgreementHistory",
+      "owner": "CommercialAgreement",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "historyId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "owner",
+          "type": "BusinessOwner",
+          "required": true
+        },
+        {
+          "name": "actorAccountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account",
+          "nullable": true
+        },
+        {
+          "name": "verifiedPersonRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "occurredAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "reason",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "beforeRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "afterRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "evidenceRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "requestId",
+          "type": "Identifier",
+          "required": true,
+          "references": "RequestReceipt"
+        },
+        {
+          "name": "resultRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "correctionOf",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "sourceRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "terms",
+          "type": "U3Contract:ProposalTerms",
+          "required": false
+        },
+        {
+          "name": "conditionBindings",
+          "type": "U3Contract:ConditionBindings",
+          "required": false
+        },
+        {
+          "name": "effectiveWindow",
+          "type": "U3Contract:EffectiveWindow",
+          "required": false
+        },
+        {
+          "name": "priceBreakdown",
+          "type": "U3Contract:OrderPriceBreakdown",
+          "required": false
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "name": "OrderHistory",
+      "owner": "OrderAcceptance",
+      "attributes": [
+        {
+          "name": "modelVersion",
+          "type": "PositiveInteger",
+          "required": true,
+          "allowed_values": ["2"]
+        },
+        {
+          "name": "historyId",
+          "type": "Identifier",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "owner",
+          "type": "BusinessOwner",
+          "required": true
+        },
+        {
+          "name": "actorAccountRef",
+          "type": "Ref",
+          "required": true,
+          "references": "Account",
+          "nullable": true
+        },
+        {
+          "name": "verifiedPersonRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "occurredAt",
+          "type": "Instant",
+          "required": true
+        },
+        {
+          "name": "reason",
+          "type": "NonEmptyText",
+          "required": true
+        },
+        {
+          "name": "beforeRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "afterRef",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "evidenceRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "requestId",
+          "type": "Identifier",
+          "required": true,
+          "references": "RequestReceipt"
+        },
+        {
+          "name": "resultRefs",
+          "type": "RefList",
+          "required": true
+        },
+        {
+          "name": "correctionOf",
+          "type": "ExternalRef",
+          "required": true,
+          "nullable": true
+        },
+        {
+          "name": "sourceRevision",
+          "type": "Revision",
+          "required": true
+        },
+        {
+          "name": "terms",
+          "type": "U3Contract:ProposalTerms",
+          "required": false
+        },
+        {
+          "name": "conditionBindings",
+          "type": "U3Contract:ConditionBindings",
+          "required": false
+        },
+        {
+          "name": "effectiveWindow",
+          "type": "U3Contract:EffectiveWindow",
+          "required": false
+        },
+        {
+          "name": "priceBreakdown",
+          "type": "U3Contract:OrderPriceBreakdown",
+          "required": false
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

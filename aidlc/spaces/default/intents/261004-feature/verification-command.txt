@@ -1,0 +1,1 @@
+PATH=/tmp/oms-u1-runtime/node-v22.23.3-darwin-arm64/bin:$PATH PLAYWRIGHT_BROWSERS_PATH=.runtime/u1/playwright npm run test:u1:e2e

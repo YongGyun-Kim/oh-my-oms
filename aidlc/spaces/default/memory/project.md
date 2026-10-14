@@ -56,11 +56,23 @@
 <!-- Format: NEVER [behavior] (affirmed [date]) -->
 <!-- Example: NEVER throw exceptions across service layer boundaries (affirmed 2026-05-17) -->
 
+- NEVER 불안정 테스트를 반복 실행해 우연히 통과한 결과로 필수 검증을 대체하거나 테스트 하한을 낮춰 통과시킨다. (Q8) (affirmed 2026-10-05)
+
 ## Mandated
 
 <!-- Populated by practices-discovery affirmation gate. -->
 <!-- Format: ALWAYS [behavior] (affirmed [date]) -->
 <!-- Example: ALWAYS use Result<T,E> for fallible operations in service layer (affirmed 2026-05-17) -->
+
+- ALWAYS AWS·CDK를 사용한다. 언어·DB·AWS 서비스 구성은 이 결정만으로 확정하지 않는다. (승인 인계 D-07) (affirmed 2026-10-05)
+
+- ALWAYS 직접 작성한 테스트 가능한 제품 코드 전체에 라인 커버리지 80% 하한을 적용하고 미실행 제품 파일도 분모에 포함하며 생성물·외부 코드 등의 제외 사유를 기록한다. (Q4) (affirmed 2026-10-05)
+
+- ALWAYS 비밀 유입·코드 취약 패턴·의존성 취약점·CDK 및 생성 인프라 보안 설정·격리된 검증 환경의 실행 중 서비스 보안 검사를 필수 계획에 포함하고, 대상·도구·실행 시점·차단 기준은 후속 설계에서 정해 실제 적용 전에 확인한다. (Q7) (affirmed 2026-10-05)
+
+- ALWAYS 필수 검사 실패·미실행·보고서 누락 시 병합 또는 해당 배포를 보류하고 개발자 본인이 처리·검토 책임을 맡는다. (Q8) (affirmed 2026-10-05)
+
+- ALWAYS 보안 오탐·예외의 사유·담당·만료·재검토를 기록하고 실제 비밀 노출은 폐기·교체와 영향 확인으로 대응한다. (Q8) (affirmed 2026-10-05)
 
 ## Corrections
 

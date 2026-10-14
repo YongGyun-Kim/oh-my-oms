@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "unit": "u2-identity-enterprise-access",
+  "realActivationAllowed": false,
+  "actualPolicyRegistration": "UNREGISTERED",
+  "hosts": ["customer-web", "staff-web", "api", "worker"],
+  "steadyDesiredPerRole": 1,
+  "rollingMaximumPerRole": 2,
+  "primaryPools": {
+    "api": 10,
+    "worker": 5,
+    "administrativeSnapshotAndControlShared": 2,
+    "normalTotal": 17,
+    "rollingTotal": 32,
+    "budget": 32
+  },
+  "journalPools": {
+    "apiAppend": 4,
+    "apiVault": 1,
+    "workerAppend": 2,
+    "workerVault": 1,
+    "administrativeSnapshotAndControlShared": 2,
+    "normalTotal": 10,
+    "rollingTotal": 18,
+    "budget": 32
+  },
+  "boundsMilliseconds": {
+    "acquire": 500,
+    "lock": 500,
+    "statement": 2000,
+    "transaction": 3000,
+    "queueWait": 250,
+    "httpRead": 5000,
+    "httpChange": 10000,
+    "workAttempt": 30000
+  },
+  "browserBaseline": { "width": 1280, "height": 900, "language": "ko", "staffMobile": false },
+  "capabilities": {
+    "Cognito": "UNREGISTERED",
+    "companyIngress": "UNREGISTERED",
+    "domesticPath": "UNVERIFIED",
+    "receiver": "UNREGISTERED",
+    "legalRetention": "UNREGISTERED"
+  },
+  "measurementProfile": {
+    "id": "u2-pilot-v1",
+    "version": 1,
+    "planningTargets": { "customerEnterprises": 10, "dailyOrders": 1000 },
+    "requestsAreValidationAssumptions": true,
+    "enterprises": 10,
+    "customers": 100,
+    "staff": 10,
+    "products": 1000,
+    "orders": 10000,
+    "averageLines": 5,
+    "maximumLines": 50,
+    "activeSessions": 20,
+    "normalRequestsPerSecond": 5,
+    "normalSeconds": 300,
+    "peakRequestsPerSecond": 20,
+    "peakSeconds": 60,
+    "recoverySeconds": 120,
+    "maintainedSeconds": 120
+  },
+  "deferredExpansionProfile": {
+    "id": "u2-capacity-v1",
+    "status": "Deferred",
+    "owner": "개발자·품질/인프라 검증",
+    "trigger": "확장 출시 또는 실제 수요/연결/데이터가 pilot 가정을 넘으면 실행 전에 사람의 범위 결정과 환경 검토",
+    "enterprises": 100,
+    "customers": 1000,
+    "staff": 10,
+    "products": 10000,
+    "orders": 100000,
+    "averageLines": 5,
+    "maximumLines": 50,
+    "activeSessions": 100,
+    "normalRequestsPerSecond": 20,
+    "normalSeconds": 1800,
+    "peakRequestsPerSecond": 100,
+    "peakSeconds": 300,
+    "recoverySeconds": 300,
+    "maintainedSeconds": 600
+  },
+  "qualityFloors": {
+    "overallLineCoveragePercent": 80,
+    "readP95Milliseconds": 1000,
+    "changeP95Milliseconds": 2000,
+    "technicalErrorRate": 0.001,
+    "eligibleWorkFirstStartMilliseconds": 10000,
+    "localRtoMilliseconds": 1800000,
+    "accuracyViolations": 0
+  },
+  "limitations": [
+    "합성 template/profile은 실제 AWS·회사망·Cognito·국내 경로·수신자 증거가 아니다.",
+    "rolling 조정과 목표 충족은 실제 current-source 측정과 후속 검토가 필요하다."
+  ]
+}

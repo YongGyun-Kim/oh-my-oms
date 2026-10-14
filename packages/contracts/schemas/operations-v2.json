@@ -1,0 +1,1308 @@
+[
+  {
+    "owner": "IdentityRecovery",
+    "name": "registerAccount",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["CUSTOMER"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/RegistrationInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "startLogin",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/LoginInput",
+    "output": "urn:oms:contract:common:2#/$defs/IdentityView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "completeChallenge",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/ChallengeInput",
+    "output": "urn:oms:contract:common:2#/$defs/IdentityView",
+    "targetKind": "CHALLENGE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/ChallengeInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "enrolMfa",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/ChallengeInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/LimitedIdentityContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "requestRecovery",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/RecoveryInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "verifyRecovery",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/ChallengeInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+        },
+        {
+          "properties": {
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "IdentityRecovery"
+                    },
+                    "entity": {
+                      "const": "RecoveryCase"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "context": "urn:oms:contract:common:2#/$defs/LimitedIdentityContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "staffVerifyRecovery",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/DecisionInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+        },
+        {
+          "properties": {
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "IdentityRecovery"
+                    },
+                    "entity": {
+                      "const": "RecoveryCase"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "readIdentity",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/IdentityViewResult",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "verifiedPerson",
+    "contract": "C01",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "output": "urn:oms:contract:common:2#/$defs/IdentityViewResult",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "readOwnerDiagnostics",
+    "contract": "C01",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/DiagnosticInput",
+    "output": "urn:oms:contract:common:2#/$defs/DiagnosticView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "readOwnerHistory",
+    "contract": "C01",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "output": "urn:oms:contract:common:2#/$defs/HistoryView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "applyEnterprise",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["CUSTOMER"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/EnterpriseInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "approveEnterprise",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["STAFF"],
+    "action": "enterprise.approve",
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/DecisionInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+        },
+        {
+          "properties": {
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "EnterpriseAccess"
+                    },
+                    "entity": {
+                      "const": "EnterpriseApplication"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readEnterprise",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/EnterpriseViewResult",
+    "targetKind": "ENTERPRISE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "upsertOrganisation",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["CUSTOMER"],
+    "action": "organisation.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/OrganisationInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "ENTERPRISE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "upsertMembership",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["CUSTOMER"],
+    "action": "user.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/MembershipInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "ENTERPRISE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "defineCustomerRole",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/RoleInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "ENTERPRISE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "grantCustomerRole",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/RoleGrantInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "ENTERPRISE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "defineStaffRole",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/StaffRoleInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "grantStaffRole",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/RoleGrantInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "restoreAdministrator",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["STAFF"],
+    "action": "enterprise.initial-administrator.designate",
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/RoleGrantInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "ENTERPRISE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "inviteMembership",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["CUSTOMER"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/InvitationInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "ENTERPRISE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readStaffRoles",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/StaffRolePage",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "evaluateAccess",
+    "contract": "C02",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/AccessInput",
+    "output": "urn:oms:contract:common:2#/$defs/AccessView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readOwnerDiagnostics",
+    "contract": "C02",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/DiagnosticInput",
+    "output": "urn:oms:contract:common:2#/$defs/DiagnosticView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readOwnerHistory",
+    "contract": "C02",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "output": "urn:oms:contract:common:2#/$defs/HistoryView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "ProductCatalog",
+    "name": "registerProduct",
+    "contract": "C03",
+    "version": 2,
+    "audience": ["STAFF"],
+    "action": "product.register",
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/ProductInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "ProductCatalog",
+    "name": "reviseProduct",
+    "contract": "C03",
+    "version": 2,
+    "audience": ["STAFF"],
+    "action": "product.revise",
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/ProductInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+        },
+        {
+          "properties": {
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "ProductCatalog"
+                    },
+                    "entity": {
+                      "const": "Product"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "ProductCatalog",
+    "name": "readCommonOffer",
+    "contract": "C03",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "output": "urn:oms:contract:common:2#/$defs/ProductViewResult",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "ProductCatalog",
+    "name": "readOwnerDiagnostics",
+    "contract": "C03",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/DiagnosticInput",
+    "output": "urn:oms:contract:common:2#/$defs/DiagnosticView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "ProductCatalog",
+    "name": "readOwnerHistory",
+    "contract": "C03",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "output": "urn:oms:contract:common:2#/$defs/HistoryView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "submitOrder",
+    "contract": "C05",
+    "version": 2,
+    "audience": ["CUSTOMER"],
+    "action": "order.submit",
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/OrderInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "decideOrder",
+    "contract": "C05",
+    "version": 2,
+    "audience": ["STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/DecisionInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+        },
+        {
+          "properties": {
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "OrderAcceptance"
+                    },
+                    "entity": {
+                      "const": "Order"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "readAcceptedOrder",
+    "contract": "C05",
+    "version": 2,
+    "audience": [],
+    "action": "order.read",
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "output": "urn:oms:contract:common:2#/$defs/OrderViewResult",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "applyApprovedChange",
+    "contract": "C05",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/ApplyOrderChangeInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "readOwnerDiagnostics",
+    "contract": "C05",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/DiagnosticInput",
+    "output": "urn:oms:contract:common:2#/$defs/DiagnosticView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "readOwnerHistory",
+    "contract": "C05",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "output": "urn:oms:contract:common:2#/$defs/HistoryView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "WorkInquiry",
+    "name": "listVisibleProducts",
+    "contract": "C10",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": "product.read",
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/ProductViewResultPage",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "WorkInquiry",
+    "name": "readOrders",
+    "contract": "C10",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": "order.read",
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/InquiryViewResultPage",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "WorkInquiry",
+    "name": "readOrder",
+    "contract": "C10",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": "order.read",
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/InquiryViewResult",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+        },
+        {
+          "properties": {
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "OrderAcceptance"
+                    },
+                    "entity": {
+                      "const": "Order"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "WorkInquiry",
+    "name": "readReceipt",
+    "contract": "C10",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReceiptReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "REQUEST",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/ReceiptInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "WorkInquiry",
+    "name": "readFinancial",
+    "contract": "C10",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/FinancialViewResult",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+        },
+        {
+          "properties": {
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "OrderAcceptance"
+                    },
+                    "entity": {
+                      "const": "Order"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "WorkInquiry",
+    "name": "readHardware",
+    "contract": "C10",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/HardwareViewResult",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+        },
+        {
+          "properties": {
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "OrderAcceptance"
+                    },
+                    "entity": {
+                      "const": "Order"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "WorkInquiry",
+    "name": "readSoftware",
+    "contract": "C10",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/SoftwareViewResult",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+        },
+        {
+          "properties": {
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "OrderAcceptance"
+                    },
+                    "entity": {
+                      "const": "Order"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "WorkInquiry",
+    "name": "readHistory",
+    "contract": "C10",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/HistoryView",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+        },
+        {
+          "properties": {
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "OrderAcceptance"
+                    },
+                    "entity": {
+                      "const": "Order"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "WorkInquiry",
+    "name": "readRecordHistory",
+    "contract": "C10",
+    "version": 2,
+    "audience": ["STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/HistoryView",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "NotificationDelivery",
+    "name": "readNotices",
+    "contract": "C11",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:common:2#/$defs/NotificationViewResultPage",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "NotificationDelivery",
+    "name": "recordNoticeRead",
+    "contract": "C11",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/NoticeInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+        },
+        {
+          "properties": {
+            "recordRef": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "NotificationDelivery"
+                    },
+                    "entity": {
+                      "const": "NotificationIntent"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "NotificationDelivery",
+    "name": "ingestDeliveryObservation",
+    "contract": "C11",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/ExternalObservation",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "NotificationDelivery",
+    "name": "readOwnerDiagnostics",
+    "contract": "C11",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/DiagnosticInput",
+    "output": "urn:oms:contract:common:2#/$defs/DiagnosticView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "NotificationDelivery",
+    "name": "readOwnerHistory",
+    "contract": "C11",
+    "version": 2,
+    "audience": [],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "output": "urn:oms:contract:common:2#/$defs/HistoryView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "setOrderingContextPolicy",
+    "contract": "CE01",
+    "version": 2,
+    "audience": ["CUSTOMER"],
+    "action": "organisation.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:foundation:1#/$defs/SetOrderingContextPolicyInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "ENTERPRISE"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "designateInitialAdministrator",
+    "contract": "CE02",
+    "version": 2,
+    "audience": ["STAFF"],
+    "action": "enterprise.initial-administrator.designate",
+    "kind": "command",
+    "input": "urn:oms:contract:foundation:1#/$defs/DesignateInitialAdministratorInput",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "ENTERPRISE"
+  },
+  {
+    "owner": "OrderAcceptance",
+    "name": "readReviewAssessment",
+    "contract": "CE03",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": "order.read",
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "output": "urn:oms:contract:foundation:1#/$defs/ReviewAssessmentViewResult",
+    "targetKind": "RECORD"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readApplication",
+    "contract": "CE04",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": "application.read",
+    "kind": "query",
+    "input": "urn:oms:contract:common:2#/$defs/RecordQuery",
+    "output": "urn:oms:contract:foundation:1#/$defs/ApplicationViewResult",
+    "targetKind": "RECORD"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "listApplications",
+    "contract": "CE04",
+    "version": 2,
+    "audience": ["STAFF"],
+    "action": "application.read",
+    "kind": "query",
+    "input": "urn:oms:contract:foundation:1#/$defs/ApplicationFilter",
+    "output": "urn:oms:contract:foundation:1#/$defs/ApplicationPage",
+    "targetKind": "NONE"
+  },
+  {
+    "owner": "NotificationDelivery",
+    "name": "materialiseInApp",
+    "contract": "C18",
+    "version": 2,
+    "audience": ["SYSTEM"],
+    "action": "notification.materialise",
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/Work",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "prepareMfa",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:foundation:1#/$defs/ChallengeOnlyInput",
+    "output": "urn:oms:contract:foundation:1#/$defs/MfaSecretMaterial",
+    "targetKind": "CHALLENGE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/ChallengeInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "issueRecoveryCodes",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:foundation:1#/$defs/ChallengeOnlyInput",
+    "output": "urn:oms:contract:foundation:1#/$defs/RecoveryCodeMaterial",
+    "targetKind": "CHALLENGE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/ChallengeInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "acknowledgeRecoveryCodes",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:foundation:1#/$defs/RecoveryCodesAcknowledgement",
+    "output": "urn:oms:contract:common:2#/$defs/IdentityView",
+    "targetKind": "CHALLENGE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/ChallengeInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "verifyMfaEnrolment",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/ChallengeInput",
+    "output": "urn:oms:contract:common:2#/$defs/IdentityView",
+    "targetKind": "CHALLENGE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/ChallengeInvocationTarget"
+    },
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext"
+  },
+  {
+    "owner": "WorkInquiry",
+    "name": "lookupOriginalReceipt",
+    "contract": "C13",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:foundation:1#/$defs/OriginalReceiptLookup",
+    "output": "urn:oms:contract:common:2#/$defs/Receipt",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "endSession",
+    "contract": "C01",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/ReadRequest",
+    "output": "urn:oms:contract:foundation:1#/$defs/SessionEndingView",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "listOwnApplications",
+    "contract": "C02",
+    "version": 2,
+    "audience": ["CUSTOMER"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:foundation:1#/$defs/ApplicationFilter",
+    "output": "urn:oms:contract:foundation:1#/$defs/ApplicationPage",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    }
+  },
+  {
+    "owner": "WorkInquiry",
+    "name": "probeOriginalReceipt",
+    "contract": "C13",
+    "version": 2,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:foundation:1#/$defs/OriginalReceiptLookup",
+    "output": "urn:oms:contract:foundation:1#/$defs/OriginalReceiptProbe",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readCustomerContexts",
+    "contract": "CE01",
+    "version": 2,
+    "audience": ["CUSTOMER"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:foundation:1#/$defs/CustomerContextFilter",
+    "output": "urn:oms:contract:foundation:1#/$defs/CustomerContextPage",
+    "targetKind": "NONE",
+    "targetSchema": {
+      "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+    }
+  }
+]

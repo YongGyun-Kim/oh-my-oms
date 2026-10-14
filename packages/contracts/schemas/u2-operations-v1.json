@@ -1,0 +1,1418 @@
+[
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readStaffRoles",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "query",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/PageInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/StaffRolePage",
+    "targetKind": "NONE",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "inviteMembership",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER"],
+    "action": "user.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/InvitationInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "ENTERPRISE",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "acceptMembershipInvitation",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/AcceptInvitationInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "MembershipInvitation"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readOwnInvitation",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/ReadInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/StatusView",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "MembershipInvitation"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "revokeMembershipInvitation",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER"],
+    "action": "user.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/RecordCommandInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "MembershipInvitation"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readMemberships",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER"],
+    "action": "user.manage",
+    "kind": "query",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/PageInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/PageView",
+    "targetKind": "ENTERPRISE",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "readCustomerRoles",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "query",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/PageInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/PageView",
+    "targetKind": "ENTERPRISE",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "updateMembership",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER"],
+    "action": "user.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/MembershipInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "EnterpriseMembership"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "reviseCustomerRole",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/RoleRevisionInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "CustomerRole"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "deactivateCustomerRole",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER"],
+    "action": "role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/DeactivateRoleInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "CustomerRole"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "reviseStaffRole",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/StaffRoleRevisionInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "StaffRole"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "deactivateStaffRole",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["STAFF"],
+    "action": "staff.role.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/DeactivateRoleInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "StaffRole"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "restoreAdministrator",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["STAFF"],
+    "action": "enterprise.administrator.restore",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/RestoreInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "ENTERPRISE",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "createPartyContext",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/PartyContextInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/PartyContextView",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "verifyRecoveryParty",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["STAFF"],
+    "action": "identity.recovery.verify",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/VerifyRecoveryInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "issueHandoff",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["STAFF"],
+    "action": "identity.recovery.verify",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/IssueHandoffInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "claimHandoff",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/ClaimHandoffInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/LimitedOutcome",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryHandoffGrant"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "readOwnClaimResult",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/ReadInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/LimitedOutcome",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "ClaimReceipt"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "readRecoveryStatus",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/ReadInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/StatusView",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "completeRecovery",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/CompletionInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "replaceFirstFactor",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/PasswordReplacementInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "verifiedPersonEvidence",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["STAFF"],
+    "action": "identity.person.verify",
+    "kind": "query",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/ReadInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/VerifiedPersonView",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "VerifiedPersonLink"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "resumeRecovery",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["STAFF"],
+    "action": "identity.recovery.verify",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/HoldInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "closeRecovery",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["STAFF"],
+    "action": "identity.recovery.verify",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/HoldInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "applyVerifiedEmergencyResult",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["SYSTEM"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/CompletionInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PrivateOperatorContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "EmergencyRecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "resumeEmergencyRecovery",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["SYSTEM"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/HoldInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PrivateOperatorContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "EmergencyRecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "closeEmergencyRecovery",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["SYSTEM"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/HoldInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PrivateOperatorContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "EmergencyRecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "resumeAdministratorRestoration",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["STAFF"],
+    "action": "enterprise.administrator.restore",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/HoldInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "AdministratorRestoration"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "closeAdministratorRestoration",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["STAFF"],
+    "action": "enterprise.administrator.restore",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/HoldInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "AdministratorRestoration"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "EnterpriseAccess",
+    "name": "resendMembershipInvitation",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER"],
+    "action": "user.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/RecordCommandInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "MembershipInvitation"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "requestRecovery",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:common:2#/$defs/RecoveryInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "NONE",
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "prepareSavedRecovery",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/PrepareSavedInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/SavedRecoveryPreparation",
+    "targetKind": "NONE",
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext"
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "recoverSavedCode",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/SavedCodeInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/LimitedOutcome",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "beginRecoveryEnrollment",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/FactorBeginInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/FactorBeginView",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "verifyRecoveryEnrollment",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/FactorVerifyInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/FactorVerifyView",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "issueRecoveryPurposeCodes",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeCodesInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeCodesView",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "acknowledgeRecoveryPurposeCodes",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeCodesAckInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Ref",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "issueInvitationPurpose",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/InvitationPurposeInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/InvitationPurposeView",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:common:2#/$defs/ServiceContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "MembershipInvitation"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "prepareRecoveryProviderWork",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "command",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/PrepareRecoveryWorkInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "context": "urn:oms:contract:u2-access-additions:1#/$defs/PurposeContext",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "RECORD"
+        },
+        "recordRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "RecoveryCase"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "IdentityRecovery",
+    "name": "reobserveHandoff",
+    "contract": "u2-access-additions",
+    "version": 1,
+    "audience": ["CUSTOMER", "STAFF"],
+    "action": null,
+    "kind": "query",
+    "input": "urn:oms:contract:u2-access-additions:1#/$defs/ReobserveHandoffInput",
+    "output": "urn:oms:contract:u2-access-additions:1#/$defs/LimitedOutcome",
+    "targetKind": "NONE",
+    "context": "urn:oms:contract:common:2#/$defs/PreIdentityContext"
+  }
+]

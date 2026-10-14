@@ -1,0 +1,1815 @@
+{
+  "stage": "code-generation",
+  "unit": "u2-identity-enterprise-access",
+  "upstream_ids": [
+    "AC1.1.1",
+    "AC1.1.2",
+    "AC1.1.3",
+    "AC1.2.1",
+    "AC1.2.2",
+    "AC1.2.3",
+    "AC1.3.1",
+    "AC1.3.2",
+    "AC1.3.3",
+    "AC1.3.4",
+    "AC1.4.1",
+    "AC1.4.2",
+    "AC1.4.3",
+    "AC1.5.1",
+    "AC1.5.2",
+    "AC1.5.3",
+    "AC1.5.4",
+    "AC1.6.1",
+    "AC1.6.2",
+    "AC1.6.3",
+    "AC1.7.1",
+    "AC1.7.2",
+    "AC1.7.3",
+    "AC1.8.1",
+    "AC1.8.2",
+    "AC1.8.3",
+    "AC1.9.1",
+    "AC1.9.2",
+    "AC1.9.3",
+    "AC1.10.1",
+    "AC1.10.2",
+    "AC1.10.3",
+    "AC2.1.1",
+    "AC2.1.2",
+    "AC2.1.3",
+    "AC2.2.1",
+    "AC2.2.2",
+    "AC2.2.3",
+    "AC2.3.1",
+    "AC2.3.2",
+    "AC2.3.3",
+    "AC2.3.4",
+    "AC2.4.1",
+    "AC2.4.2",
+    "AC2.4.3",
+    "AC2.5.1",
+    "AC2.5.2",
+    "AC2.5.3",
+    "AC2.6.1",
+    "AC2.6.2",
+    "AC2.6.3",
+    "AC2.6.4",
+    "AC2.7.1",
+    "AC2.7.2",
+    "AC2.7.3",
+    "AC2.7.4",
+    "AC3.1.1",
+    "AC3.1.2",
+    "AC3.1.3",
+    "AC3.1.4",
+    "AC3.2.1",
+    "AC3.2.2",
+    "AC3.2.3",
+    "AC3.3.1",
+    "AC3.3.2",
+    "AC3.3.3",
+    "AC3.4.1",
+    "AC3.4.2",
+    "AC3.4.3",
+    "AC3.5.1",
+    "AC3.5.2",
+    "AC3.5.3",
+    "AC3.5.4",
+    "AC3.6.1",
+    "AC3.6.2",
+    "AC3.6.3",
+    "AC4.1.1",
+    "AC4.1.2",
+    "AC4.1.3",
+    "AC4.2.1",
+    "AC4.2.2",
+    "AC4.2.3",
+    "AC4.3.1",
+    "AC4.3.2",
+    "AC4.3.3",
+    "AC4.4.1",
+    "AC4.4.2",
+    "AC4.4.3",
+    "AC4.4.4",
+    "AC4.5.1",
+    "AC4.5.2",
+    "AC4.5.3",
+    "AC4.6.1",
+    "AC4.6.2",
+    "AC4.6.3",
+    "AC5.1.1",
+    "AC5.1.2",
+    "AC5.1.3",
+    "AC5.2.1",
+    "AC5.2.2",
+    "AC5.2.3",
+    "AC5.3.1",
+    "AC5.3.2",
+    "AC5.3.3",
+    "AC5.4.1",
+    "AC5.4.2",
+    "AC5.4.3",
+    "AC5.5.1",
+    "AC5.5.2",
+    "AC5.5.3",
+    "AC5.6.1",
+    "AC5.6.2",
+    "AC5.6.3",
+    "AC5.7.1",
+    "AC5.7.2",
+    "AC5.7.3",
+    "AC6.1.1",
+    "AC6.1.2",
+    "AC6.1.3",
+    "AC6.2.1",
+    "AC6.2.2",
+    "AC6.2.3",
+    "AC6.3.1",
+    "AC6.3.2",
+    "AC6.3.3",
+    "AC6.4.1",
+    "AC6.4.2",
+    "AC6.4.3",
+    "AC6.4.4",
+    "AC6.5.1",
+    "AC6.5.2",
+    "AC6.5.3",
+    "AC6.6.1",
+    "AC6.6.2",
+    "AC6.6.3",
+    "AC7.1.1",
+    "AC7.1.2",
+    "AC7.1.3",
+    "AC7.2.1",
+    "AC7.2.2",
+    "AC7.2.3",
+    "AC7.3.1",
+    "AC7.3.2",
+    "AC7.3.3",
+    "AC7.3.4",
+    "AC7.4.1",
+    "AC7.4.2",
+    "AC7.4.3",
+    "AC7.5.1",
+    "AC7.5.2",
+    "AC7.5.3",
+    "AC7.5.4",
+    "AC7.6.1",
+    "AC7.6.2",
+    "AC7.6.3",
+    "AC7.7.1",
+    "AC7.7.2",
+    "AC7.7.3",
+    "AC7.7.4",
+    "AC7.8.1",
+    "AC7.8.2",
+    "AC7.8.3",
+    "AC8.1.1",
+    "AC8.1.2",
+    "AC8.1.3",
+    "AC8.2.1",
+    "AC8.2.2",
+    "AC8.2.3",
+    "AC8.3.1",
+    "AC8.3.2",
+    "AC8.3.3",
+    "AC8.4.1",
+    "AC8.4.2",
+    "AC8.4.3",
+    "AC8.4.4",
+    "AC8.5.1",
+    "AC8.5.2",
+    "AC8.5.3",
+    "AC8.6.1",
+    "AC8.6.2",
+    "AC8.6.3",
+    "AC8.6.4",
+    "AC8.7.1",
+    "AC8.7.2",
+    "AC8.7.3",
+    "AC8.8.1",
+    "AC8.8.2",
+    "AC8.8.3",
+    "AC8.8.4",
+    "AC8.8.5",
+    "AC8.8.6",
+    "AC8.9.1",
+    "AC8.9.2",
+    "AC8.9.3",
+    "AC8.9.4",
+    "AC8.10.1",
+    "AC8.10.2",
+    "AC8.10.3",
+    "AC8.10.4",
+    "AC8.11.1",
+    "AC8.11.2",
+    "AC8.11.3",
+    "AC8.12.1",
+    "AC8.12.2",
+    "AC8.12.3",
+    "AC9.1.1",
+    "AC9.1.2",
+    "AC9.1.3",
+    "AC9.2.1",
+    "AC9.2.2",
+    "AC9.2.3",
+    "AC9.3.1",
+    "AC9.3.2",
+    "AC9.3.3",
+    "AC9.3.4",
+    "AC9.4.1",
+    "AC9.4.2",
+    "AC9.4.3",
+    "AC9.5.1",
+    "AC9.5.2",
+    "AC9.5.3",
+    "AC9.6.1",
+    "AC9.6.2",
+    "AC9.6.3",
+    "AC9.7.1",
+    "AC9.7.2",
+    "AC9.7.3",
+    "BR1.1",
+    "BR1.2",
+    "BR1.3",
+    "BR1.4",
+    "BR2.1",
+    "BR2.2",
+    "BR2.3",
+    "BR2.4",
+    "BR2.5",
+    "BR2.6",
+    "BR3.1",
+    "BR3.2",
+    "BR3.3",
+    "BR3.4",
+    "BR3.5",
+    "BR3.6",
+    "BR4.1",
+    "BR4.2",
+    "BR5.1",
+    "BR5.2",
+    "BR5.3",
+    "BR5.4",
+    "BR5.5",
+    "BR5.6",
+    "BR6.1",
+    "BR6.2",
+    "BR7.1",
+    "BR7.2",
+    "BR7.3",
+    "BR7.4",
+    "BR7.5",
+    "NFR1.1",
+    "NFR1.2",
+    "NFR1.3",
+    "NFR1.4",
+    "NFR1.5",
+    "NFR1.6",
+    "NFR1.7",
+    "NFR1.8",
+    "NFR1.9",
+    "NFR1.10",
+    "NFR1.11",
+    "NFR1.12",
+    "NFR1.13",
+    "NFR1.14",
+    "NFR1.15",
+    "NFR1.16",
+    "NFR4.1",
+    "NFR4.2",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR5.3",
+    "NFR11.1",
+    "NFR11.2",
+    "NFR11.3",
+    "NFR14.1",
+    "NFR14.2",
+    "NFR6.2",
+    "NFR13.2",
+    "NFR2.1",
+    "NFR3.1",
+    "NFR3.2",
+    "NFR6.1",
+    "NFR7.1",
+    "NFR7.2",
+    "NFR8.1",
+    "NFR9.1",
+    "NFR9.2",
+    "NFR9.3",
+    "NFR10.1",
+    "NFR12.1",
+    "NFR12.2",
+    "NFR13.1",
+    "NFR13.3"
+  ],
+  "coverage": [
+    {
+      "id": "AC1.1.1",
+      "status": "Deferred",
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC1.1.2",
+      "status": "Deferred",
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC1.1.3",
+      "status": "Deferred",
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC1.2.1",
+      "status": "Deferred",
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC1.2.2",
+      "status": "Deferred",
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC1.2.3",
+      "status": "Deferred",
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC1.3.1",
+      "status": "OK",
+      "target": "tests/u2/integration/invitation-race.spec.ts"
+    },
+    {
+      "id": "AC1.3.2",
+      "status": "OK",
+      "target": "tests/u2/integration/http-access.spec.ts"
+    },
+    {
+      "id": "AC1.3.3",
+      "status": "OK",
+      "target": "tests/u2/integration/authority-race.spec.ts"
+    },
+    {
+      "id": "AC1.3.4",
+      "status": "Deferred",
+      "target": "U2/U8/U9·품질: 최소 PC 초대/관리 경계는 tests/u2/e2e/invitation-flow.spec.ts에서 검증했다. 전체 지원 접점과 출시 브라우저 업무 관리를 후속 통합해야 한다. 새 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC1.4.1",
+      "status": "OK",
+      "target": "tests/u2/integration/membership-role-race.spec.ts"
+    },
+    {
+      "id": "AC1.4.2",
+      "status": "OK",
+      "target": "tests/u2/integration/information-projection.spec.ts"
+    },
+    {
+      "id": "AC1.4.3",
+      "status": "OK",
+      "target": "tests/u2/unit/role-revisions.spec.ts"
+    },
+    {
+      "id": "AC1.5.1",
+      "status": "OK",
+      "target": "tests/u2/unit/scopes.spec.ts"
+    },
+    {
+      "id": "AC1.5.2",
+      "status": "OK",
+      "target": "tests/u2/unit/scopes.spec.ts"
+    },
+    {
+      "id": "AC1.5.3",
+      "status": "OK",
+      "target": "tests/u2/integration/http-access.spec.ts"
+    },
+    {
+      "id": "AC1.5.4",
+      "status": "OK",
+      "target": "tests/u2/unit/scope-compatibility.spec.ts"
+    },
+    {
+      "id": "AC1.6.1",
+      "status": "OK",
+      "target": "tests/u2/integration/membership-role-race.spec.ts"
+    },
+    {
+      "id": "AC1.6.2",
+      "status": "Deferred",
+      "target": "U3 계약 owner/U2: tests/u2/unit/verified-person.spec.ts의 동일인 거절은 경계 증거다. 실제 인정 person policy와 계약 등록/승인 원본 commit의 전체 통합은 남았다."
+    },
+    {
+      "id": "AC1.6.3",
+      "status": "OK",
+      "target": "tests/u2/integration/authority-race.spec.ts"
+    },
+    {
+      "id": "AC1.7.1",
+      "status": "Deferred",
+      "target": "U2/업무 owner/U8/U9/Infra: tests/u2/integration/http-primary-ac.spec.ts의 MFA·허용 범위는 local 합성 증거다. 실제 Cognito/회사망과 전체 허용 업무 접근 실증은 UNVERIFIED/HOLD."
+    },
+    {
+      "id": "AC1.7.2",
+      "status": "OK",
+      "target": "tests/u2/integration/http-identity.spec.ts"
+    },
+    {
+      "id": "AC1.7.3",
+      "status": "Deferred",
+      "target": "Infra/U2/U9: tests/u2/e2e/staff-boundary.spec.ts의 private 접점 거절은 local fixture 증거다. 실제 회사망 검증은 false이며 회사망/private ingress 근거를 후속 확보하기 전 HOLD를 유지한다. MDM/NAC는 범위 밖이다."
+    },
+    {
+      "id": "AC1.8.1",
+      "status": "Deferred",
+      "target": "U2/U7/Infra: tests/u2/integration/recovery-completion.spec.ts의 conjunction·단회·새 코드 ACK를 검증했다. 실제 공급자 옛 effect 종료/새 MFA와 실제 당사자 수신은 미확인."
+    },
+    {
+      "id": "AC1.8.2",
+      "status": "OK",
+      "target": "tests/u2/integration/recovery-concurrency.spec.ts"
+    },
+    {
+      "id": "AC1.8.3",
+      "status": "OK",
+      "target": "tests/u2/integration/hold-transitions.spec.ts"
+    },
+    {
+      "id": "AC1.9.1",
+      "status": "Deferred",
+      "target": "U2/실제 확인 권위/U7: tests/u2/integration/handoff-race.spec.ts의 case/Party/claim 경계는 구현했다. 인정된 실제 신원 정책/담당 자격·실제 provider/수신 증거 전 HOLD."
+    },
+    {
+      "id": "AC1.9.2",
+      "status": "OK",
+      "target": "tests/u2/integration/hold-transitions.spec.ts"
+    },
+    {
+      "id": "AC1.9.3",
+      "status": "Deferred",
+      "target": "U2/실제 비상 운영 owner: tests/u2/integration/hold-transitions.spec.ts에서 비공개 권위와 UNKNOWN/HOLD 거절을 검증했다. 실제 비상 운영 정책/권위·재해 복구 실증은 Deferred."
+    },
+    {
+      "id": "AC1.10.1",
+      "status": "OK",
+      "target": "tests/u2/integration/administrator-restoration.spec.ts"
+    },
+    {
+      "id": "AC1.10.2",
+      "status": "Deferred",
+      "target": "U2/실제 기업 위임 owner: tests/u2/integration/administrator-restoration.spec.ts의 재지정/현재성 경계는 구현했다. 실제 위임/당사자 정책 증거 확보 전 HOLD."
+    },
+    {
+      "id": "AC1.10.3",
+      "status": "OK",
+      "target": "tests/u2/integration/administrator-restoration.spec.ts"
+    },
+    {
+      "id": "AC2.1.1",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.1.2",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.1.3",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.2.1",
+      "status": "Deferred",
+      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.2.2",
+      "status": "Deferred",
+      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.2.3",
+      "status": "Deferred",
+      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.3.1",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.3.2",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.3.3",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.3.4",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.4.1",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.4.2",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.4.3",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.5.1",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.5.2",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.5.3",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.6.1",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.6.2",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.6.3",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.6.4",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.7.1",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.7.2",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.7.3",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC2.7.4",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.1.1",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.1.2",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.1.3",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.1.4",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.2.1",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.2.2",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.2.3",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.3.1",
+      "status": "Deferred",
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.3.2",
+      "status": "Deferred",
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.3.3",
+      "status": "Deferred",
+      "target": "U1 (u1-integrated-foundation): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.4.1",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.4.2",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.4.3",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.5.1",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.5.2",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.5.3",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.5.4",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.6.1",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.6.2",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC3.6.3",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.1.1",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.1.2",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.1.3",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.2.1",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.2.2",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.2.3",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.3.1",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.3.2",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.3.3",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.4.1",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.4.2",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.4.3",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.4.4",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.5.1",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.5.2",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.5.3",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.6.1",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.6.2",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC4.6.3",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.1.1",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.1.2",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.1.3",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.2.1",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.2.2",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.2.3",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.3.1",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.3.2",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.3.3",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.4.1",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.4.2",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.4.3",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.5.1",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.5.2",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.5.3",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.6.1",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.6.2",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.6.3",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.7.1",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.7.2",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC5.7.3",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.1.1",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.1.2",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.1.3",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.2.1",
+      "status": "Deferred",
+      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.2.2",
+      "status": "Deferred",
+      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.2.3",
+      "status": "Deferred",
+      "target": "U8 (u8-customer-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.3.1",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.3.2",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.3.3",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.4.1",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.4.2",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.4.3",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.4.4",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.5.1",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.5.2",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.5.3",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.6.1",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.6.2",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC6.6.3",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.1.1",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.1.2",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.1.3",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.2.1",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.2.2",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.2.3",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.3.1",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.3.2",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.3.3",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.3.4",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.4.1",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.4.2",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.4.3",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.5.1",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.5.2",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.5.3",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.5.4",
+      "status": "Deferred",
+      "target": "U3 (u3-commercial-ordering): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.6.1",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.6.2",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.6.3",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.7.1",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.7.2",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.7.3",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.7.4",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.8.1",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.8.2",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC7.8.3",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.1.1",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.1.2",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.1.3",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.2.1",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.2.2",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.2.3",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.3.1",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.3.2",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.3.3",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.4.1",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.4.2",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.4.3",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.4.4",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.5.1",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.5.2",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.5.3",
+      "status": "Deferred",
+      "target": "U6 (u6-software-lifecycle): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.6.1",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.6.2",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.6.3",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.6.4",
+      "status": "Deferred",
+      "target": "U4 (u4-financial-settlement): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.7.1",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.7.2",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.7.3",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.8.1",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.8.2",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.8.3",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.8.4",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.8.5",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.8.6",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.9.1",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.9.2",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.9.3",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.9.4",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.10.1",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.10.2",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.10.3",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.10.4",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.11.1",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.11.2",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.11.3",
+      "status": "Deferred",
+      "target": "U5 (u5-hardware-fulfillment): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.12.1",
+      "status": "Deferred",
+      "target": "U9 (u9-staff-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.12.2",
+      "status": "Deferred",
+      "target": "U9 (u9-staff-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC8.12.3",
+      "status": "Deferred",
+      "target": "U9 (u9-staff-ui): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.1.1",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.1.2",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.1.3",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.2.1",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.2.2",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.2.3",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.3.1",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.3.2",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.3.3",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.3.4",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.4.1",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.4.2",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.4.3",
+      "status": "Deferred",
+      "target": "U7 (u7-after-sales-inquiry-notices): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.5.1",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.5.2",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.5.3",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.6.1",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.6.2",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.6.3",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.7.1",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.7.2",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "AC9.7.3",
+      "status": "Deferred",
+      "target": "U10 (u10-operational-assurance): U2 현재 신원/MFA·행위별 scope·동일인/정보 경계는 구현했다. 해당 스토리의 전체 업무/UI/운영 결과와 actual 근거는 원래 주 owner가 후속 검증한다. 첫 배포 범위 미승인."
+    },
+    {
+      "id": "BR1.1",
+      "status": "Deferred",
+      "target": "U2/Infra: identity-provider와 실제 MFA 경계는 구현했으나 실제 Cognito registration/새 MFA는 미검증. UNREGISTERED/HOLD 유지."
+    },
+    {
+      "id": "BR1.2",
+      "status": "OK",
+      "target": "tests/u2/integration/authority-race.spec.ts"
+    },
+    {
+      "id": "BR1.3",
+      "status": "Deferred",
+      "target": "U2/실제 person policy owner: verified-person의 UNCONFIRMED/CONFLICT 거절은 구현. 인정된 실제 사람 연결 증거와 각 업무 원본 통합은 남음."
+    },
+    {
+      "id": "BR1.4",
+      "status": "Deferred",
+      "target": "Infra/U9/U2: private/MFA/직원 권한 local 거절은 검증. 모든 실제 회사망 접점 확인 전 HOLD."
+    },
+    {
+      "id": "BR2.1",
+      "status": "OK",
+      "target": "tests/u2/unit/scope-compatibility.spec.ts"
+    },
+    {
+      "id": "BR2.2",
+      "status": "OK",
+      "target": "tests/u2/integration/membership-role-race.spec.ts"
+    },
+    {
+      "id": "BR2.3",
+      "status": "OK",
+      "target": "tests/u2/unit/role-revisions.spec.ts"
+    },
+    {
+      "id": "BR2.4",
+      "status": "OK",
+      "target": "tests/u2/integration/invitation-race.spec.ts"
+    },
+    {
+      "id": "BR2.5",
+      "status": "OK",
+      "target": "tests/u2/integration/invitation-race.spec.ts"
+    },
+    {
+      "id": "BR2.6",
+      "status": "OK",
+      "target": "tests/u2/integration/invitation-race.spec.ts"
+    },
+    {
+      "id": "BR3.1",
+      "status": "OK",
+      "target": "tests/u2/unit/scopes.spec.ts"
+    },
+    {
+      "id": "BR3.2",
+      "status": "OK",
+      "target": "tests/u2/integration/membership-role-race.spec.ts"
+    },
+    {
+      "id": "BR3.3",
+      "status": "OK",
+      "target": "tests/u2/unit/role-revisions.spec.ts"
+    },
+    {
+      "id": "BR3.4",
+      "status": "OK",
+      "target": "tests/u2/unit/scopes.spec.ts"
+    },
+    {
+      "id": "BR3.5",
+      "status": "OK",
+      "target": "tests/u2/integration/information-projection.spec.ts"
+    },
+    {
+      "id": "BR3.6",
+      "status": "OK",
+      "target": "tests/u2/integration/authority-race.spec.ts"
+    },
+    {
+      "id": "BR4.1",
+      "status": "OK",
+      "target": "tests/u2/integration/membership-role-race.spec.ts"
+    },
+    {
+      "id": "BR4.2",
+      "status": "Deferred",
+      "target": "U3/U6: U2 verified-person 판정은 경계 제공. 계약 실제 다른 사람 승인과 SW 별도 승인 전체 결과는 각 owner가 검증."
+    },
+    {
+      "id": "BR5.1",
+      "status": "OK",
+      "target": "tests/u2/integration/recovery-concurrency.spec.ts"
+    },
+    {
+      "id": "BR5.2",
+      "status": "OK",
+      "target": "tests/u2/integration/recovery-completion.spec.ts"
+    },
+    {
+      "id": "BR5.3",
+      "status": "Deferred",
+      "target": "U2/확인 권위 owner: recovery-verification/party binding은 검증. 실제 인정 신원 정책·확인자 자격/증거는 미확인."
+    },
+    {
+      "id": "BR5.4",
+      "status": "Deferred",
+      "target": "U2/실제 provider: provider-unknown의 원래 operation/Work/UNKNOWN 보존 검증. 실제 원래 외부 effect 종료/격리 증거는 미확인."
+    },
+    {
+      "id": "BR5.5",
+      "status": "Deferred",
+      "target": "U2/U7/실제 provider: local completion conjunction과 통지 의무는 검증. 실제 새 MFA·옛 factor 종료·당사자 수신은 미확인."
+    },
+    {
+      "id": "BR5.6",
+      "status": "Deferred",
+      "target": "U2/비상 운영 owner: local 비공개 권위 거절은 검증. 실제 비상 정책·권위와 DR 실행은 사용자 보류/미검증."
+    },
+    {
+      "id": "BR6.1",
+      "status": "OK",
+      "target": "tests/u2/integration/administrator-restoration.spec.ts"
+    },
+    {
+      "id": "BR6.2",
+      "status": "Deferred",
+      "target": "U2/기업 위임 owner: local 재지정은 검증. 실제 기업 위임·신원 정책/권위 확보 전 HOLD."
+    },
+    {
+      "id": "BR7.1",
+      "status": "OK",
+      "target": "tests/u2/integration/protected-state.spec.ts"
+    },
+    {
+      "id": "BR7.2",
+      "status": "OK",
+      "target": "tests/u2/integration/information-projection.spec.ts"
+    },
+    {
+      "id": "BR7.3",
+      "status": "OK",
+      "target": "tests/u2/unit/contracts.spec.ts"
+    },
+    {
+      "id": "BR7.4",
+      "status": "Deferred",
+      "target": "U8/U9·품질: 최소 한국어 PC U2 흐름은 검증. 전체 업무 화면/출시 브라우저·수동 접근성 실증은 후속 owner."
+    },
+    {
+      "id": "BR7.5",
+      "status": "Deferred",
+      "target": "U2/U7/운영 owner: local REQUESTED/전달/완료 구분은 구현. 실제 외부 관측·수신 권위 증거는 미확인."
+    },
+    {
+      "id": "NFR1.1",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 실제 provider MFA·모든 업무/BFF 접점 실증은 미확인. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR1.2",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 현재 권위/commit 경계는 검증했으나 각 거래 owner 전체 통합은 남음. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR1.3",
+      "status": "OK",
+      "target": "tests/u2/unit/scope-compatibility.spec.ts"
+    },
+    {
+      "id": "NFR1.4",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 실제 회사망·private ingress 근거가 없음. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR1.5",
+      "status": "OK",
+      "target": "tests/u2/integration/http-identity.spec.ts"
+    },
+    {
+      "id": "NFR1.6",
+      "status": "OK",
+      "target": "tests/u2/unit/bff-purpose.spec.ts"
+    },
+    {
+      "id": "NFR1.7",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 실제 person policy·U3 계약/U6 기간 승인 전체 통합이 남음. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR1.8",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: U7/U8/U9의 전체 투영/캐시/통지 통합이 남음. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR1.9",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: actual C21 provider/consumer capability·원래 외부 effect 실증이 없음. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR1.10",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 실제 key/vault/국내 전달과 법적 보관 정책은 미확인. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR1.11",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: local completion은 검증했으나 실제 새 MFA/옛 무효화·U7 수신은 미확인. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR1.12",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 인정된 실제 확인 당사자·안전 전달 권위가 미확인. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR1.13",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: local 초대는 검증했으나 실제 연락/수신 경로는 미확인. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR1.14",
+      "status": "OK",
+      "target": "tests/u2/integration/membership-role-race.spec.ts"
+    },
+    {
+      "id": "NFR1.15",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: local 현재 grant/재지정은 검증했으나 실제 위임/각 업무 commit 통합은 남음. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR1.16",
+      "status": "OK",
+      "target": "tests/u2/unit/provider-capabilities.spec.ts"
+    },
+    {
+      "id": "NFR4.1",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: ACK782는 수집했으나 재해 복원 독립 전수 대조/RPO0 실증 미실행. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR4.2",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: UNKNOWN 안전 거절은 검증했으나 실제 provider 원래 결과/종료 대조는 미확인. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR5.1",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 3900 요청의 기술/정확성 위반0은 local 혼합 경계 증거; 전체 거래8정확성·DR ACK 대조는 미완료. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR5.2",
+      "status": "OK",
+      "target": "tests/u2/integration/hold-transitions.spec.ts"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "OK",
+      "target": "tests/u2/integration/handoff-race.spec.ts"
+    },
+    {
+      "id": "NFR11.1",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 실제 국내 provider/key/DB/vault/log/backup/전달 경로는 미확인. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR11.2",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 인정 출처·법적 retention 정책 미확인; 실자료 활성화 차단. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR11.3",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: local telemetry 최소화는 검증; 실제 관측 권한/국내 저장 실증은 미확인. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR14.1",
+      "status": "OK",
+      "target": "scripts/u2/security.ts"
+    },
+    {
+      "id": "NFR14.2",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 도구/잠금·노출/예외 문서는 구현; 실제 개발자 운영 대응/재검토 실증과 두 원본 provenance gap OPEN. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR6.2",
+      "status": "OK",
+      "target": "scripts/u2/performance.ts"
+    },
+    {
+      "id": "NFR13.2",
+      "status": "OK",
+      "target": "tests/u2/integration/migration-compatibility.spec.ts"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: U10·Infra의 rolling30일99.9% 가용성 측정 미실행. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR3.1",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 사용자 결정으로 pilot DR/RTO30분 실증을 추후 진행; 확장 DR/AZ 실증도 미실행. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR3.2",
+      "status": "OK",
+      "target": "tests/u2/integration/provider-unknown.spec.ts"
+    },
+    {
+      "id": "NFR6.1",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: latency/기술오류 목표는 관측했으나 NORMAL/RECOVERY/HOLD 시간 하한 FAIL을 유지; 사용자 측정 종료 결정으로 후속. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR7.1",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: pilot 실제 준비/3900 요청은 실행; 시간 하한 미충족, 기존100k/50분 확장 검증은 Deferred. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR7.2",
+      "status": "OK",
+      "target": "tests/u2/unit/resource-budget.spec.ts"
+    },
+    {
+      "id": "NFR8.1",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 실제 점검/24시간 전 안내/가용성 집계는 미실행. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR9.1",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 실제 운영30분/일·배포15분/회·대표 복구30분 인적 실증 미실행. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "apps/api/src/application.ts"
+    },
+    {
+      "id": "NFR9.3",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: actual 비공개 초기/비상 운영 권위·정당한 확인자 근거는 미확인. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR10.1",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 실제 Slack/email 수신·명시 확인은 미실행. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR12.1",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 최소 한국어PC1280 흐름은 검증; U8/U9 전체 UI/시각 지원 결과는 남음. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR12.2",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: Chromium/axe/키보드 경계는 검증; 전체 WCAG2.2AA·출시 최신/직전 브라우저/수동 확대 미실행. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    },
+    {
+      "id": "NFR13.1",
+      "status": "OK",
+      "target": "tests/u2/unit/contracts.spec.ts"
+    },
+    {
+      "id": "NFR13.3",
+      "status": "Deferred",
+      "target": "U2·관련 업무/UI/Infra/U10 owner: 현재 whole9246/11518=80.274353%와 계층 시험은 통과; 실제 CI 실행/전체 필수 proof·독립 review는 미완료. 현재 local 경계 구현은 code-summary.md에 연결하며 전체 완료/위험 수용으로 표시하지 않는다."
+    }
+  ]
+}
+

@@ -1,0 +1,577 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:enterpriseaccess:2",
+  "title": "기업 승인·조직·소속·고객/직원 역할과 행위별 범위 — v2 explicit common dependency",
+  "x-contract-id": "C02",
+  "x-provider-component": "EnterpriseAccess",
+  "x-provider-unit": "U2",
+  "x-consumers": [
+    "AfterSalesDecision",
+    "CommercialAgreement",
+    "FinancialSettlement",
+    "HardwareFulfillment",
+    "NotificationDelivery",
+    "OperationalAssurance",
+    "OrderAcceptance",
+    "ProductCatalog",
+    "SoftwareLifecycle",
+    "WorkInquiry"
+  ],
+  "x-mechanism": "in-process typed port; API/worker 중 해당 실행 호스트에서 사용",
+  "x-errors": {
+    "$ref": "urn:oms:contract:common:2#/$defs/Problem"
+  },
+  "x-operations": [
+    {
+      "name": "applyEnterprise",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US1.1"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "approveEnterprise",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/DecisionInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US1.2"],
+      "target": {
+        "allOf": [
+          {
+            "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+          },
+          {
+            "properties": {
+              "recordRef": {
+                "allOf": [
+                  {
+                    "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                  },
+                  {
+                    "properties": {
+                      "owner": {
+                        "const": "EnterpriseAccess"
+                      },
+                      "entity": {
+                        "const": "EnterpriseApplication"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "readEnterprise",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/ReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseViewResult"
+      },
+      "stories": ["US1.3", "US1.5", "US1.10"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+      }
+    },
+    {
+      "name": "upsertOrganisation",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/OrganisationInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US1.3"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+      }
+    },
+    {
+      "name": "upsertMembership",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/MembershipInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US1.3", "US1.10"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+      }
+    },
+    {
+      "name": "defineCustomerRole",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/RoleInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US1.4"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+      }
+    },
+    {
+      "name": "grantCustomerRole",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/RoleGrantInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US1.4", "US1.5", "US1.10"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+      }
+    },
+    {
+      "name": "defineStaffRole",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/StaffRoleInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US1.6"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "grantStaffRole",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/RoleGrantInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US1.6"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "restoreAdministrator",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/RoleGrantInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US1.10"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+      }
+    },
+    {
+      "name": "inviteMembership",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/InvitationInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US1.3"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+      }
+    },
+    {
+      "name": "readStaffRoles",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/ReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/StaffRolePage"
+      },
+      "stories": ["US1.6"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "evaluateAccess",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/AccessInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/AccessView"
+      },
+      "stories": [],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "readOwnerDiagnostics",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/DiagnosticInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/DiagnosticView"
+      },
+      "stories": ["US9.2", "US9.4"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "readOwnerHistory",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/RecordQuery"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/HistoryView"
+      },
+      "stories": ["US9.4"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    }
+  ],
+  "$defs": {
+    "Call": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "applyEnterprise"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "approveEnterprise"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/DecisionInput"
+            },
+            "target": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+                },
+                {
+                  "properties": {
+                    "recordRef": {
+                      "allOf": [
+                        {
+                          "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                        },
+                        {
+                          "properties": {
+                            "owner": {
+                              "const": "EnterpriseAccess"
+                            },
+                            "entity": {
+                              "const": "EnterpriseApplication"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readEnterprise"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ReadRequest"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "upsertOrganisation"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/OrganisationInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "upsertMembership"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/MembershipInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "defineCustomerRole"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/RoleInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "grantCustomerRole"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/RoleGrantInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "defineStaffRole"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/StaffRoleInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "grantStaffRole"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/RoleGrantInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "restoreAdministrator"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/RoleGrantInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "inviteMembership"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/InvitationInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/EnterpriseInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readStaffRoles"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ReadRequest"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "evaluateAccess"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/AccessInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readOwnerDiagnostics"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/DiagnosticInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readOwnerHistory"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/RecordQuery"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

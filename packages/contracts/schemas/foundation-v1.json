@@ -1,0 +1,1308 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:foundation:1",
+  "$defs": {
+    "SetOrderingContextPolicyInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:common:2#/$defs/CommandMeta"
+        },
+        "departmentUsage": {
+          "type": "string",
+          "enum": ["USED", "NOT_USED"]
+        },
+        "siteUsage": {
+          "type": "string",
+          "enum": ["USED", "NOT_USED"]
+        }
+      },
+      "required": ["meta", "departmentUsage", "siteUsage"],
+      "additionalProperties": false
+    },
+    "DesignateInitialAdministratorInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:common:2#/$defs/CommandMeta"
+        },
+        "accountRef": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+        },
+        "basisRefs": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Refs"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "actionScopes": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:common:2#/$defs/ActionScope"
+          },
+          "minItems": 1,
+          "maxItems": 64
+        }
+      },
+      "required": ["meta", "accountRef", "basisRefs", "label", "actionScopes"],
+      "additionalProperties": false
+    },
+    "ApplicationView": {
+      "type": "object",
+      "properties": {
+        "applicationRef": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+        },
+        "applicantAccountRef": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+        },
+        "legalName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "designatedContact": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "state": {
+          "type": "string",
+          "enum": ["PENDING", "APPROVED", "DECLINED", "UNVERIFIED"]
+        },
+        "submittedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "decidedAt": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "initialAdministratorRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "confirmation": {
+          "type": "string",
+          "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        }
+      },
+      "required": [
+        "applicationRef",
+        "applicantAccountRef",
+        "legalName",
+        "designatedContact",
+        "state",
+        "submittedAt",
+        "decidedAt",
+        "initialAdministratorRef",
+        "confirmation"
+      ],
+      "additionalProperties": false
+    },
+    "ApplicationViewResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "knowledge": {
+              "const": "KNOWN"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:foundation:1#/$defs/ApplicationView"
+            },
+            "sourceRefs": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Refs"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            }
+          },
+          "required": ["knowledge", "data", "sourceRefs", "observedAt"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "knowledge": {
+              "type": "string",
+              "enum": ["UNKNOWN", "CONFLICT", "UNAVAILABLE"],
+              "maxLength": 4096
+            },
+            "sourceRefs": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Refs"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            },
+            "safeReasonCode": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            }
+          },
+          "required": ["knowledge", "sourceRefs", "observedAt", "safeReasonCode"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ApplicationFilter": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": ["PENDING", "APPROVED", "DECLINED", "UNVERIFIED"]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cursor": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pageSize": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": ["status", "cursor"],
+      "additionalProperties": false
+    },
+    "ApplicationPage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:foundation:1#/$defs/ApplicationViewResult"
+          },
+          "minItems": 0,
+          "maxItems": 100
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        }
+      },
+      "required": ["items", "nextCursor", "observedAt"],
+      "additionalProperties": false
+    },
+    "ReviewAssessmentView": {
+      "type": "object",
+      "properties": {
+        "orderRef": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:common:2#/$defs/TargetScope"
+        },
+        "productType": {
+          "type": "string",
+          "enum": ["HARDWARE", "SOFTWARE"]
+        },
+        "acceptance": {
+          "type": "string",
+          "enum": ["REVIEW_REQUIRED", "ACCEPTED", "DECLINED", "UNVERIFIED"]
+        },
+        "requestId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lineRef": {
+                "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+              },
+              "productRef": {
+                "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+              },
+              "commonOfferRevisionRef": {
+                "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+              },
+              "quantity": {
+                "$ref": "urn:oms:contract:common:2#/$defs/PositiveQuantity"
+              },
+              "requestedPaymentMode": {
+                "type": "string",
+                "enum": ["PREPAY", "POSTPAY"]
+              },
+              "requestedActivationDate": {
+                "anyOf": [
+                  {
+                    "$ref": "urn:oms:contract:common:2#/$defs/Date"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "assessments": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "sourceOwner": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4096
+                    },
+                    "knowledge": {
+                      "type": "string",
+                      "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+                    },
+                    "reasonKind": {
+                      "type": "string",
+                      "enum": ["UNVERIFIED", "SPECIAL_CONDITION", "CONFLICT", "TECHNICAL_FAILURE"]
+                    },
+                    "reasonCode": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4096
+                    },
+                    "observedAt": {
+                      "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+                    },
+                    "sourceRevision": {
+                      "anyOf": [
+                        {
+                          "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "sourceOwner",
+                    "knowledge",
+                    "reasonKind",
+                    "reasonCode",
+                    "observedAt",
+                    "sourceRevision"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1,
+                "maxItems": 16
+              }
+            },
+            "required": [
+              "lineRef",
+              "productRef",
+              "commonOfferRevisionRef",
+              "quantity",
+              "requestedPaymentMode",
+              "requestedActivationDate",
+              "assessments"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 100
+        },
+        "nextActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "minItems": 0,
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "orderRef",
+        "targetScope",
+        "productType",
+        "acceptance",
+        "requestId",
+        "lines",
+        "nextActions"
+      ],
+      "additionalProperties": false
+    },
+    "ReviewAssessmentViewResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "knowledge": {
+              "const": "KNOWN"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:foundation:1#/$defs/ReviewAssessmentView"
+            },
+            "sourceRefs": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Refs"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            }
+          },
+          "required": ["knowledge", "data", "sourceRefs", "observedAt"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "knowledge": {
+              "type": "string",
+              "enum": ["UNKNOWN", "CONFLICT", "UNAVAILABLE"],
+              "maxLength": 4096
+            },
+            "sourceRefs": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Refs"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            },
+            "safeReasonCode": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            }
+          },
+          "required": ["knowledge", "sourceRefs", "observedAt", "safeReasonCode"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "RecoveryPayload": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "epoch": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "commitOrder": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "requestId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "correlationId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "model": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4096
+              },
+              "schemaVersion": {
+                "const": 1
+              },
+              "id": {
+                "$ref": "urn:oms:contract:common:2#/$defs/Id"
+              },
+              "revision": {
+                "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+              },
+              "data": {
+                "type": "object"
+              },
+              "deleted": {
+                "type": "boolean"
+              }
+            },
+            "required": ["model", "schemaVersion", "id", "revision", "data", "deleted"],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 1024
+        },
+        "previousDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contentDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "epoch",
+        "commitOrder",
+        "requestId",
+        "correlationId",
+        "rows",
+        "previousDigest",
+        "contentDigest"
+      ],
+      "additionalProperties": false
+    },
+    "ChallengeOnlyInput": {
+      "type": "object",
+      "properties": {
+        "challengeId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        }
+      },
+      "required": ["challengeId"],
+      "additionalProperties": false
+    },
+    "RecoveryCodesAcknowledgement": {
+      "type": "object",
+      "properties": {
+        "challengeId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "setId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "stored": {
+          "const": true
+        }
+      },
+      "required": ["challengeId", "setId", "stored"],
+      "additionalProperties": false
+    },
+    "MfaSecretMaterial": {
+      "type": "object",
+      "properties": {
+        "challengeId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "secret": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "writeOnly": true
+        }
+      },
+      "required": ["challengeId", "secret"],
+      "additionalProperties": false
+    },
+    "RecoveryCodeMaterial": {
+      "type": "object",
+      "properties": {
+        "challengeId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "setId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "codes": {
+          "type": "array",
+          "minItems": 10,
+          "maxItems": 10,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "writeOnly": true
+          }
+        }
+      },
+      "required": ["challengeId", "setId", "codes"],
+      "additionalProperties": false
+    },
+    "OrderingContextPolicySnapshot": {
+      "type": "object",
+      "properties": {
+        "departmentUsage": {
+          "enum": ["UNSET", "USED", "NOT_USED"]
+        },
+        "siteUsage": {
+          "enum": ["UNSET", "USED", "NOT_USED"]
+        },
+        "setBy": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "setAt": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      },
+      "required": ["departmentUsage", "siteUsage", "setBy", "setAt", "reason"],
+      "additionalProperties": false
+    },
+    "OriginalReceiptLookup": {
+      "type": "object",
+      "properties": {
+        "owner": {
+          "enum": ["EnterpriseAccess", "ProductCatalog", "OrderAcceptance", "NotificationDelivery"]
+        },
+        "operation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "target": {
+          "$ref": "urn:oms:contract:common:2#/$defs/InvocationTarget"
+        },
+        "clientRequestId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        }
+      },
+      "required": ["owner", "operation", "target", "clientRequestId"],
+      "additionalProperties": false
+    },
+    "SessionEndingView": {
+      "type": "object",
+      "properties": {
+        "ended": {
+          "const": true
+        }
+      },
+      "required": ["ended"],
+      "additionalProperties": false
+    },
+    "OriginalReceiptProbe": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "disposition": {
+              "const": "RECEIPT"
+            },
+            "receipt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            }
+          },
+          "required": ["disposition", "receipt", "observedAt"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "disposition": {
+              "enum": ["NOT_ACCEPTED", "UNCONFIRMED"]
+            },
+            "clientRequestId": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Id"
+            },
+            "observedAt": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            },
+            "safeReason": {
+              "enum": ["REVIEW_INPUT_AND_AUTHORITY", "ORIGINAL_OUTCOME_RECONCILIATION_REQUIRED"]
+            }
+          },
+          "required": ["disposition", "clientRequestId", "observedAt", "safeReason"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "DecisionBasisSnapshot": {
+      "type": "object",
+      "properties": {
+        "actorAccountRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verifiedPersonRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidenceRefs": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Refs"
+        },
+        "targetRevision": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+        },
+        "decision": {
+          "type": "string",
+          "enum": ["APPROVE", "DECLINE", "DESIGNATE", "MEMBERSHIP_CHANGE"]
+        },
+        "knowledge": {
+          "type": "string",
+          "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        },
+        "reasonCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "decidedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      },
+      "required": [
+        "actorAccountRef",
+        "verifiedPersonRef",
+        "evidenceRefs",
+        "targetRevision",
+        "decision",
+        "knowledge",
+        "decidedAt",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "CapturedLineTermsSnapshot": {
+      "type": "object",
+      "properties": {
+        "sourceOfferRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+            },
+            {
+              "properties": {
+                "owner": {
+                  "const": "ProductCatalog"
+                },
+                "entity": {
+                  "const": "CommonOfferRevision"
+                }
+              }
+            }
+          ]
+        },
+        "displayedPrice": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Money"
+        },
+        "requestedPaymentMode": {
+          "type": "string",
+          "enum": ["PREPAY", "POSTPAY"]
+        },
+        "requestedActivationDate": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Date"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "agreedPeriod": {
+          "type": "null"
+        },
+        "paymentTermsRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completionBasisRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "agreementRevisionRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "knowledge": {
+          "type": "object",
+          "properties": {
+            "displayedPrice": {
+              "type": "string",
+              "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+            },
+            "enterprisePrice": {
+              "type": "string",
+              "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+            },
+            "agreedPeriod": {
+              "type": "string",
+              "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+            },
+            "paymentTerms": {
+              "type": "string",
+              "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+            },
+            "completionBasis": {
+              "type": "string",
+              "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+            },
+            "agreement": {
+              "type": "string",
+              "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+            }
+          },
+          "required": [
+            "displayedPrice",
+            "enterprisePrice",
+            "agreedPeriod",
+            "paymentTerms",
+            "completionBasis",
+            "agreement"
+          ],
+          "additionalProperties": false
+        },
+        "evidenceRefs": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Refs"
+        }
+      },
+      "required": [
+        "sourceOfferRef",
+        "displayedPrice",
+        "requestedPaymentMode",
+        "requestedActivationDate",
+        "agreedPeriod",
+        "paymentTermsRef",
+        "completionBasisRef",
+        "agreementRevisionRef",
+        "knowledge",
+        "evidenceRefs"
+      ],
+      "additionalProperties": false
+    },
+    "OwnerAssessmentSnapshot": {
+      "type": "object",
+      "properties": {
+        "sourceOwner": {
+          "type": "string",
+          "enum": [
+            "CommercialAgreement",
+            "FinancialSettlement",
+            "HardwareFulfillment",
+            "SoftwareLifecycle"
+          ]
+        },
+        "knowledge": {
+          "type": "string",
+          "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        },
+        "reasonKind": {
+          "type": "string",
+          "enum": ["UNVERIFIED", "SPECIAL_CONDITION", "CONFLICT", "TECHNICAL_FAILURE"]
+        },
+        "reasonCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "observedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "sourceRevision": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "basisRefs": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Refs"
+        }
+      },
+      "required": [
+        "sourceOwner",
+        "knowledge",
+        "reasonKind",
+        "reasonCode",
+        "observedAt",
+        "sourceRevision",
+        "basisRefs"
+      ],
+      "additionalProperties": false
+    },
+    "LineAssessmentListSnapshot": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "properties": {
+          "lineRef": {
+            "allOf": [
+              {
+                "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+              },
+              {
+                "properties": {
+                  "owner": {
+                    "const": "OrderAcceptance"
+                  },
+                  "entity": {
+                    "const": "OrderLine"
+                  }
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4,
+            "items": {
+              "$ref": "urn:oms:contract:foundation:1#/$defs/OwnerAssessmentSnapshot"
+            }
+          }
+        },
+        "required": ["lineRef", "assessments"],
+        "additionalProperties": false
+      }
+    },
+    "CapturedLineTermsListSnapshot": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "$ref": "urn:oms:contract:foundation:1#/$defs/CapturedLineTermsSnapshot"
+      }
+    },
+    "SourceRevisionListSnapshot": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "properties": {
+          "sourceOwner": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "sourceRevision": {
+            "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+          }
+        },
+        "required": ["sourceOwner", "sourceRevision"],
+        "additionalProperties": false
+      }
+    },
+    "CustomerContextPage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "properties": {
+              "knowledge": {
+                "const": "KNOWN"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "enterpriseRef": {
+                    "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                  },
+                  "legalName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4096
+                  },
+                  "orderingContextPolicy": {
+                    "$ref": "#/$defs/OrderingContextPolicySnapshot"
+                  },
+                  "departments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "recordRef": {
+                          "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                        },
+                        "label": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 4096
+                        },
+                        "active": {
+                          "const": true
+                        }
+                      },
+                      "required": ["recordRef", "label", "active"],
+                      "additionalProperties": false
+                    },
+                    "maxItems": 100
+                  },
+                  "sites": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "recordRef": {
+                          "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                        },
+                        "label": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 4096
+                        },
+                        "active": {
+                          "const": true
+                        }
+                      },
+                      "required": ["recordRef", "label", "active"],
+                      "additionalProperties": false
+                    },
+                    "maxItems": 100
+                  },
+                  "actionScopes": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "urn:oms:contract:common:2#/$defs/ActionScope"
+                    },
+                    "maxItems": 100
+                  },
+                  "managementAvailable": {
+                    "type": "boolean"
+                  },
+                  "scopeProjectionKnowledge": {
+                    "enum": ["KNOWN", "UNKNOWN", "UNAVAILABLE"]
+                  },
+                  "availableActions": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "organisation.manage",
+                        "user.manage",
+                        "role.manage",
+                        "product.read",
+                        "order.submit",
+                        "order.read"
+                      ]
+                    },
+                    "maxItems": 6,
+                    "uniqueItems": true
+                  },
+                  "sectionCursors": {
+                    "type": "object",
+                    "properties": {
+                      "departments": {
+                        "anyOf": [
+                          {
+                            "$ref": "urn:oms:contract:common:2#/$defs/Id"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "sites": {
+                        "anyOf": [
+                          {
+                            "$ref": "urn:oms:contract:common:2#/$defs/Id"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "scopes": {
+                        "anyOf": [
+                          {
+                            "$ref": "urn:oms:contract:common:2#/$defs/Id"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": ["departments", "sites", "scopes"],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "enterpriseRef",
+                  "legalName",
+                  "orderingContextPolicy",
+                  "departments",
+                  "sites",
+                  "actionScopes",
+                  "managementAvailable",
+                  "scopeProjectionKnowledge",
+                  "availableActions",
+                  "sectionCursors"
+                ],
+                "additionalProperties": false
+              },
+              "sourceRefs": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                "maxItems": 1
+              },
+              "observedAt": {
+                "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+              }
+            },
+            "required": ["knowledge", "data", "sourceRefs", "observedAt"],
+            "additionalProperties": false
+          }
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        }
+      },
+      "required": ["items", "nextCursor", "observedAt"],
+      "additionalProperties": false
+    },
+    "CustomerContextFilter": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pageSize": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "enterpriseRef": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "EnterpriseAccess"
+                    },
+                    "entity": {
+                      "const": "Enterprise"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "departmentCursor": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "siteCursor": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scopeCursor": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "cursor",
+        "pageSize",
+        "enterpriseRef",
+        "departmentCursor",
+        "siteCursor",
+        "scopeCursor"
+      ],
+      "additionalProperties": false
+    },
+    "RecoverySecurityObservation": {
+      "type": "object",
+      "properties": {
+        "checkId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "model": {
+          "enum": [
+            "Account",
+            "VerifiedPersonLink",
+            "ProviderBinding",
+            "MfaEnrollment",
+            "RecoveryCodeSet",
+            "Enterprise",
+            "EnterpriseMembership",
+            "CustomerRole",
+            "ActionScope",
+            "CustomerRoleGrant",
+            "StaffRole",
+            "StaffRoleGrant",
+            "Department",
+            "BusinessSite"
+          ]
+        },
+        "id": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "sourceOwner": {
+          "enum": ["IdentityRecovery", "EnterpriseAccess"]
+        },
+        "sourceRevision": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "currentData": {
+          "anyOf": [
+            {
+              "type": "object",
+              "maxProperties": 100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidenceId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "observedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "knowledge": {
+          "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        }
+      },
+      "required": [
+        "checkId",
+        "model",
+        "id",
+        "sourceOwner",
+        "sourceRevision",
+        "currentData",
+        "evidenceId",
+        "observedAt",
+        "knowledge"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

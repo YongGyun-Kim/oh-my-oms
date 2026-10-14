@@ -1,0 +1,282 @@
+{
+  "stage": "infrastructure-design",
+  "unit": "u3-commercial-ordering",
+  "scope": "first-release-pilot-library",
+  "meaning": "현재 library의 33개 파생 NFR 설계를 공유 호스트/저장/전달 설정·CI 검사·실제 배포 선행조건에 연결한다. OK는 전달/설정/검사 설계 연결이며 workflow/명령·모델/계약 구현·AWS 배포나 시험 성공이 아니다. Deferred는 원래 전체 실증/확장을 보존하며 첫 배포 정확성/권한·안전한 접수·기본 배포/알림 준비를 면제하지 않는다. 기존 full-proof 기준/과거 FAIL·U2 미해결은 변경하지 않는다.",
+  "upstream_ids": [
+    "NFR1.1",
+    "NFR1.2",
+    "NFR1.3",
+    "NFR1.4",
+    "NFR1.5",
+    "NFR2.1",
+    "NFR3.1",
+    "NFR4.1",
+    "NFR4.2",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR5.3",
+    "NFR5.4",
+    "NFR5.5",
+    "NFR5.6",
+    "NFR6.1",
+    "NFR7.1",
+    "NFR8.1",
+    "NFR9.1",
+    "NFR9.2",
+    "NFR9.3",
+    "NFR10.1",
+    "NFR11.1",
+    "NFR11.2",
+    "NFR11.3",
+    "NFR12.1",
+    "NFR12.2",
+    "NFR13.1",
+    "NFR13.2",
+    "NFR13.3",
+    "NFR13.4",
+    "NFR14.1",
+    "NFR14.2"
+  ],
+  "coverage": [
+    {
+      "id": "NFR1.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip04",
+      "upstream_target": "../nfr-design/security-design.md#sd01",
+      "solution": "현재 신원/MFA·공통 인증 원본과 모든 명령 진입 검증"
+    },
+    {
+      "id": "NFR1.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip04",
+      "upstream_target": "../nfr-design/security-design.md#sd01",
+      "solution": "기업/조직·행위·대상별 현재 권한과 조회/목록/이력 제한"
+    },
+    {
+      "id": "NFR1.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip04",
+      "upstream_target": "../nfr-design/security-design.md#sd01",
+      "solution": "불변 TargetScope와 현재 조직 정책·정확한 개정 대조"
+    },
+    {
+      "id": "NFR1.4",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip04",
+      "upstream_target": "../nfr-design/security-design.md#sd01",
+      "solution": "직원 audience·현재 권한·허용 내부망 근거의 공통 신뢰 경계"
+    },
+    {
+      "id": "NFR1.5",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "upstream_target": "../nfr-design/security-design.md#sd01",
+      "solution": "서로 다른 사람·정확한 승인 대상/근거·현재 목적/출처/권위 대조"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "Deferred",
+      "target": "cicd-pipeline.md#ip07",
+      "upstream_target": "../nfr-design/security-design.md#sd08",
+      "solution": "업무별 실패/가용성 관측 연결",
+      "reason": "30일 99.9%의 실제 관측은 U10 후속이며 달성 선언이 아니다."
+    },
+    {
+      "id": "NFR3.1",
+      "status": "Deferred",
+      "target": "cicd-pipeline.md#ip07",
+      "upstream_target": "../nfr-design/security-design.md#sd08",
+      "solution": "발생부터 복구 검증까지의 목표와 원래 요청/현재 원본 대조",
+      "reason": "전체 재해·야간 복구 30분 실증은 U10 후속이다."
+    },
+    {
+      "id": "NFR4.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip04",
+      "upstream_target": "../nfr-design/security-design.md#sd03",
+      "solution": "primary 원자 기록·별도 보호 확인 뒤 성공 응답 및 실패 단계 구분"
+    },
+    {
+      "id": "NFR4.2",
+      "status": "Deferred",
+      "target": "cicd-pipeline.md#ip07",
+      "upstream_target": "../nfr-design/security-design.md#sd03",
+      "solution": "접수 목록·원본/개정/결과/이력·보호 후보·전달 사실 대조",
+      "reason": "전체 장애 범위 RPO0 실증은 U1/U10 후속이며 안전한 성공 기록 의무는 첫 배포 필수다."
+    },
+    {
+      "id": "NFR5.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip05",
+      "upstream_target": "../nfr-design/security-design.md#sd03",
+      "solution": "권한 있는 원래 요청 결과 조회·같은 key/input 재사용과 다른 내용 충돌"
+    },
+    {
+      "id": "NFR5.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "upstream_target": "../nfr-design/security-design.md#sd02",
+      "solution": "정확한 원 단위 계산/범위 검증·확인 비용/할인·고객 동의"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "upstream_target": "../nfr-design/security-design.md#sd02",
+      "solution": "100입력행/byte 한도·타입/수량/FULL·불변 구매 당시 기간"
+    },
+    {
+      "id": "NFR5.4",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "upstream_target": "../nfr-design/security-design.md#sd04",
+      "solution": "commit 가능한 현재 전제/expectedRevision·정확한 제안/동의·v2 변경 분기"
+    },
+    {
+      "id": "NFR5.5",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "upstream_target": "../nfr-design/security-design.md#sd03",
+      "solution": "불변 최초 조건·모든 계약 개정·행위/전후/정정 이력과 원자 기록"
+    },
+    {
+      "id": "NFR5.6",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "upstream_target": "../nfr-design/security-design.md#sd04",
+      "solution": "접수/수락/동의와 U4/U5/U6/U7 실제 결과 구분·FULL 전체 HOLD"
+    },
+    {
+      "id": "NFR6.1",
+      "status": "Deferred",
+      "target": "cicd-pipeline.md#ip07",
+      "upstream_target": "../nfr-design/security-design.md#sd07",
+      "solution": "유한 입력/페이지·기존 슬롯/실행/잠금 예산과 관측 의미",
+      "reason": "원래 정상 부하 p95/오류율·실측 용량은 해당 시험에서 확인하며 현재 제한값을 달성 증거로 쓰지 않는다."
+    },
+    {
+      "id": "NFR7.1",
+      "status": "Deferred",
+      "target": "cicd-pipeline.md#ip07",
+      "upstream_target": "../nfr-design/security-design.md#sd07",
+      "solution": "공유 전역 직렬화/실행 자원 한계·무제한 재시도 방지",
+      "reason": "대량100k/50분·원래 집중/회복 검증은 사용자 보류/후속이며 새로 실행하지 않는다."
+    },
+    {
+      "id": "NFR8.1",
+      "status": "Deferred",
+      "target": "cicd-pipeline.md#ip07",
+      "upstream_target": "../nfr-design/security-design.md#sd08",
+      "solution": "기존 점검/중단/안내 기준과 접수 미확정 관측",
+      "reason": "U10/U7의 실제 배포/중단 집계·무중단 실증은 별도다. 기본 절차 준비는 첫 배포 전이다."
+    },
+    {
+      "id": "NFR9.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip01",
+      "upstream_target": "../nfr-design/logical-components.md#lc05",
+      "solution": "공유 배포/호스트/DB/큐/관측 재사용과 기술 운영 시간 목표 구분"
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip04",
+      "upstream_target": "../nfr-design/logical-components.md#lc05",
+      "solution": "기술 인력과 등록/다른 승인자 역할 분리·부재 시 적용 보류"
+    },
+    {
+      "id": "NFR9.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip04",
+      "upstream_target": "../nfr-design/logical-components.md#lc02",
+      "solution": "단일 원본 쓰기 소유자·C03/C04/C05 포트·외부 사실/역의존 경계"
+    },
+    {
+      "id": "NFR10.1",
+      "status": "Deferred",
+      "target": "cicd-pipeline.md#ip07",
+      "upstream_target": "../nfr-design/security-design.md#sd08",
+      "solution": "최소 operation/request/correlation·개정/실패 출처 및 복구 시도부터 통지 연결",
+      "reason": "실제 두 알림 경로 발송/수신은 U10/U7 미실증이며 기본 준비는 첫 배포 전이다."
+    },
+    {
+      "id": "NFR11.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip06",
+      "upstream_target": "../nfr-design/security-design.md#sd06",
+      "solution": "원본/로그/백업/외부 처리의 국내 경로 목록·실데이터 전 확인 조건"
+    },
+    {
+      "id": "NFR11.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip06",
+      "upstream_target": "../nfr-design/security-design.md#sd05",
+      "solution": "목적별 접근·전송/저장 보호·캐시 방지·최소 로그와 근거 참조"
+    },
+    {
+      "id": "NFR11.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip06",
+      "upstream_target": "../nfr-design/security-design.md#sd06",
+      "solution": "실제 목적/보관/삭제/정정/외부 처리 근거와 승인 정책·임의 법정 기간 금지"
+    },
+    {
+      "id": "NFR12.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip07",
+      "upstream_target": "../nfr-design/security-design.md#sd10",
+      "solution": "한국어/KRW/한국 시간 및 미확인/없음/0원·구매/실제 기간 의미"
+    },
+    {
+      "id": "NFR12.2",
+      "status": "Deferred",
+      "target": "cicd-pipeline.md#ip07",
+      "upstream_target": "../nfr-design/security-design.md#sd10",
+      "solution": "모바일/미국 영어 후속과 계약 의미 보존",
+      "reason": "모바일·영어 확장/실제 UI 검증은 U8/U9 후속이며 해외 처리 허용을 뜻하지 않는다."
+    },
+    {
+      "id": "NFR13.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "upstream_target": "../nfr-design/security-design.md#sd09",
+      "solution": "HTTP/worker·실패/경계/중복/동시성·원본/권한·v2 계약 독립 검증"
+    },
+    {
+      "id": "NFR13.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "upstream_target": "../nfr-design/security-design.md#sd09",
+      "solution": "전체 작성 제품 코드 분모의80%·필수 검사·실패/미실행/제외 공개"
+    },
+    {
+      "id": "NFR13.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip05",
+      "upstream_target": "../nfr-design/security-design.md#sd09",
+      "solution": "C00/C05 v2 실제 스키마/명령/조회/응답/소비자 일치·닫힌 Ref"
+    },
+    {
+      "id": "NFR13.4",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip02",
+      "upstream_target": "../nfr-design/security-design.md#sd09",
+      "solution": "기존 버전/lockfile·test-after/Standard·현재 코드와 검사 보고서 연결"
+    },
+    {
+      "id": "NFR14.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "upstream_target": "../nfr-design/security-design.md#sd09",
+      "solution": "변경 영향별 필수 비밀/SAST/의존성/인프라/실행 보안 검사 연결"
+    },
+    {
+      "id": "NFR14.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md#ip03",
+      "upstream_target": "../nfr-design/security-design.md#sd09",
+      "solution": "발견/예외의 담당·만료·재검토·해소 근거 및 실제 비밀 폐기/교체"
+    }
+  ]
+}

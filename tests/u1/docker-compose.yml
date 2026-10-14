@@ -1,0 +1,37 @@
+name: oms-u1
+services:
+  primary:
+    image: postgres:17.11-bookworm@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826
+    environment:
+      POSTGRES_USER: u1_primary_admin
+      POSTGRES_PASSWORD: ${U1_PRIMARY_ADMIN_PASSWORD:?required}
+      POSTGRES_DB: oms_u1
+    ports: ['127.0.0.1:15432:5432']
+    command:
+      ['postgres', '-c', 'max_connections=100', '-c', 'fsync=on', '-c', 'synchronous_commit=on']
+    volumes: ['primary:/var/lib/postgresql/data']
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U u1_primary_admin -d oms_u1']
+      interval: 1s
+      timeout: 2s
+      retries: 30
+    labels: { oms.unit: u1-integrated-foundation, oms.data: synthetic }
+  journal:
+    image: postgres:17.11-bookworm@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826
+    environment:
+      POSTGRES_USER: u1_journal_admin
+      POSTGRES_PASSWORD: ${U1_JOURNAL_ADMIN_PASSWORD:?required}
+      POSTGRES_DB: oms_u1_journal
+    ports: ['127.0.0.1:25432:5432']
+    command:
+      ['postgres', '-c', 'max_connections=100', '-c', 'fsync=on', '-c', 'synchronous_commit=on']
+    volumes: ['journal:/var/lib/postgresql/data']
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U u1_journal_admin -d oms_u1_journal']
+      interval: 1s
+      timeout: 2s
+      retries: 30
+    labels: { oms.unit: u1-integrated-foundation, oms.data: synthetic }
+volumes:
+  primary:
+  journal:

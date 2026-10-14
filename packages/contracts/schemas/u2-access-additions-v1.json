@@ -1,0 +1,2189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:u2-access-additions:1",
+  "title": "U2 목적·원래 대상에 결합한 신원/접근 추가 계약",
+  "$defs": {
+    "AxisSelector": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "EXACT"
+            },
+            "ref": {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            }
+          },
+          "required": ["kind", "ref"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "NOT_USED"
+            }
+          },
+          "required": ["kind"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "ALL"
+            }
+          },
+          "required": ["kind"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ScopeV2": {
+      "type": "object",
+      "properties": {
+        "enterpriseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Enterprise"
+        },
+        "action": {
+          "enum": [
+            "product.read",
+            "order.read",
+            "order.submit",
+            "payment.read",
+            "entitlement.read",
+            "renewal.request",
+            "autoRenewal.request",
+            "autoRenewal.cancel",
+            "order.change.request",
+            "order.cancel.request",
+            "order.return.request",
+            "organisation.manage",
+            "user.manage",
+            "role.manage",
+            "contract.change.request"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "DEPARTMENT_SITE",
+            "SITE_ALL_DEPARTMENTS",
+            "DEPARTMENT_ALL_SITES",
+            "ENTERPRISE_ALL"
+          ]
+        },
+        "departmentSelector": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/DepartmentSelector"
+        },
+        "siteSelector": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/SiteSelector"
+        },
+        "sourcePolicyRevision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "enterpriseRef",
+        "action",
+        "kind",
+        "departmentSelector",
+        "siteSelector",
+        "sourcePolicyRevision"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "DEPARTMENT_SITE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "departmentSelector": {
+                "properties": {
+                  "kind": {
+                    "enum": ["EXACT", "NOT_USED"]
+                  }
+                }
+              },
+              "siteSelector": {
+                "properties": {
+                  "kind": {
+                    "enum": ["EXACT", "NOT_USED"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "SITE_ALL_DEPARTMENTS"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "departmentSelector": {
+                "properties": {
+                  "kind": {
+                    "const": "ALL"
+                  }
+                }
+              },
+              "siteSelector": {
+                "properties": {
+                  "kind": {
+                    "const": "EXACT"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "DEPARTMENT_ALL_SITES"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "departmentSelector": {
+                "properties": {
+                  "kind": {
+                    "const": "EXACT"
+                  }
+                }
+              },
+              "siteSelector": {
+                "properties": {
+                  "kind": {
+                    "const": "ALL"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "ENTERPRISE_ALL"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "departmentSelector": {
+                "properties": {
+                  "kind": {
+                    "const": "ALL"
+                  }
+                }
+              },
+              "siteSelector": {
+                "properties": {
+                  "kind": {
+                    "const": "ALL"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "PurposeContext": {
+      "type": "object",
+      "properties": {
+        "audience": {
+          "enum": ["CUSTOMER", "STAFF"]
+        },
+        "subjectAccountRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Account"
+        },
+        "bindingRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/ProviderBinding"
+        },
+        "bindingGeneration": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "securityGeneration": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "recoveryEpoch": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "purpose": {
+          "enum": [
+            "INITIAL_MFA",
+            "INVITATION_ACCEPTANCE",
+            "RECOVERY_VERIFICATION",
+            "MFA_REENROLMENT"
+          ]
+        },
+        "sourceRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "enrollmentTarget": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "challengeId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "authorityRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/EnrollmentAuthority"
+        },
+        "verificationRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryVerification"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "partyContextRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/PartyClaimContext"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "correlationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "deadlineAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "audience",
+        "subjectAccountRef",
+        "bindingRef",
+        "bindingGeneration",
+        "securityGeneration",
+        "recoveryEpoch",
+        "purpose",
+        "sourceRef",
+        "enrollmentTarget",
+        "challengeId",
+        "authorityRef",
+        "verificationRef",
+        "partyContextRef",
+        "expiresAt",
+        "correlationId",
+        "deadlineAt"
+      ],
+      "additionalProperties": false
+    },
+    "PrivateOperatorContext": {
+      "type": "object",
+      "properties": {
+        "audience": {
+          "const": "SYSTEM"
+        },
+        "operatorAuthorityRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/EmergencyOperatorAuthority"
+        },
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "purpose": {
+          "const": "EMERGENCY_PRIVATE"
+        },
+        "correlationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "deadlineAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "audience",
+        "operatorAuthorityRef",
+        "caseRef",
+        "purpose",
+        "correlationId",
+        "deadlineAt"
+      ],
+      "additionalProperties": false
+    },
+    "ReadInput": {
+      "type": "object",
+      "properties": {
+        "sourceRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        }
+      },
+      "required": ["sourceRef"],
+      "additionalProperties": false
+    },
+    "PageInput": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pageSize": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "filter": {
+          "enum": ["ALL", "ACTIVE", "INACTIVE", "PENDING", "HOLD"]
+        }
+      },
+      "required": ["cursor", "pageSize", "filter"],
+      "additionalProperties": false
+    },
+    "RoleRevisionInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "roleRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "CustomerRole"
+                }
+              }
+            }
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "predicates": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/ScopeV2"
+          }
+        }
+      },
+      "required": ["meta", "roleRef", "label", "predicates"],
+      "additionalProperties": false
+    },
+    "DeactivateRoleInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "roleRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        }
+      },
+      "required": ["meta", "roleRef"],
+      "additionalProperties": false
+    },
+    "StaffRoleRevisionInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "roleRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "StaffRole"
+                }
+              }
+            }
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "application.read",
+              "enterprise.approve",
+              "enterprise.initial-administrator.designate",
+              "product.register",
+              "product.revise",
+              "product.read",
+              "order.read",
+              "order.review.read",
+              "staff.role.manage",
+              "identity.recovery.verify",
+              "identity.person.verify",
+              "enterprise.administrator.restore"
+            ]
+          }
+        }
+      },
+      "required": ["meta", "roleRef", "label", "actions"],
+      "additionalProperties": false
+    },
+    "InvitationInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "enterpriseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Enterprise"
+        },
+        "contactRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RegisteredContact"
+        },
+        "contactVersion": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "departmentRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Department"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "siteRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/BusinessSite"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "roleRefs": {
+          "type": "array",
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+          }
+        },
+        "expectedMembershipRevision": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reactivate": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "meta",
+        "enterpriseRef",
+        "contactRef",
+        "contactVersion",
+        "departmentRef",
+        "siteRef",
+        "roleRefs",
+        "expectedMembershipRevision",
+        "reactivate"
+      ],
+      "additionalProperties": false
+    },
+    "AcceptInvitationInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "invitationRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/MembershipInvitation"
+        },
+        "response": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 43,
+          "writeOnly": true
+        },
+        "contactVerificationRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        }
+      },
+      "required": ["meta", "invitationRef", "response", "contactVerificationRef"],
+      "additionalProperties": false
+    },
+    "RecordCommandInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "sourceRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        }
+      },
+      "required": ["meta", "sourceRef"],
+      "additionalProperties": false
+    },
+    "MembershipInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "membershipRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Membership"
+        },
+        "departmentRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Department"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "siteRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/BusinessSite"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "administrator": {
+          "type": "boolean"
+        }
+      },
+      "required": ["meta", "membershipRef", "departmentRef", "siteRef", "active", "administrator"],
+      "additionalProperties": false
+    },
+    "PartyContextInput": {
+      "type": "object",
+      "properties": {
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "challengeId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      },
+      "required": ["caseRef", "challengeId"],
+      "additionalProperties": false
+    },
+    "VerifyRecoveryInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "partyContextRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/PartyClaimContext"
+        },
+        "policyRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/VerificationPolicy"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+          }
+        },
+        "decision": {
+          "enum": ["CONFIRM", "HOLD", "REJECT"]
+        }
+      },
+      "required": ["meta", "caseRef", "partyContextRef", "policyRef", "evidenceRefs", "decision"],
+      "additionalProperties": false
+    },
+    "IssueHandoffInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "verificationRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryVerification"
+        },
+        "partyContextRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/PartyClaimContext"
+        },
+        "deliveryRouteRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        }
+      },
+      "required": ["meta", "caseRef", "verificationRef", "partyContextRef", "deliveryRouteRef"],
+      "additionalProperties": false
+    },
+    "ClaimHandoffInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "grantRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryHandoffGrant"
+        },
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "challengeId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{16}$",
+          "writeOnly": true
+        },
+        "partySecret": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$",
+          "writeOnly": true
+        }
+      },
+      "required": ["meta", "grantRef", "caseRef", "challengeId", "code", "partySecret"],
+      "additionalProperties": false
+    },
+    "HoldInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "sourceRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "basisRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      },
+      "required": ["meta", "sourceRef", "basisRef", "reason"],
+      "additionalProperties": false
+    },
+    "RestoreInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "enterpriseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Enterprise"
+        },
+        "membershipRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Membership"
+        },
+        "delegationRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "personVerificationRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/PersonVerification"
+        },
+        "roleRefs": {
+          "type": "array",
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+          }
+        }
+      },
+      "required": [
+        "meta",
+        "enterpriseRef",
+        "membershipRef",
+        "delegationRef",
+        "personVerificationRef",
+        "roleRefs"
+      ],
+      "additionalProperties": false
+    },
+    "CompletionInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "enrollmentRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "codeSetRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "providerResultRefs": {
+          "type": "array",
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+          }
+        }
+      },
+      "required": ["meta", "caseRef", "enrollmentRef", "codeSetRef", "providerResultRefs"],
+      "additionalProperties": false
+    },
+    "PasswordReplacementInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "password": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "writeOnly": true
+        }
+      },
+      "required": ["meta", "caseRef", "password"],
+      "additionalProperties": false
+    },
+    "StatusView": {
+      "type": "object",
+      "properties": {
+        "sourceRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "knowledge": {
+          "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        },
+        "remainingAction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "expiresAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actualEffect": {
+          "enum": ["UNCONFIRMED", "CONFIRMED"]
+        },
+        "noticeDelivery": {
+          "enum": ["UNKNOWN", "NOT_REQUESTED", "REQUESTED", "DELIVERED"]
+        },
+        "providerResultRefs": {
+          "type": "array",
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+          }
+        },
+        "originalEffectKnowledge": {
+          "enum": ["KNOWN", "UNKNOWN"]
+        }
+      },
+      "required": [
+        "sourceRef",
+        "state",
+        "knowledge",
+        "remainingAction",
+        "expiresAt",
+        "actualEffect",
+        "noticeDelivery"
+      ],
+      "additionalProperties": false
+    },
+    "PageView": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/StatusView"
+          }
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["items", "nextCursor", "observedAt"],
+      "additionalProperties": false
+    },
+    "LimitedOutcome": {
+      "type": "object",
+      "properties": {
+        "claimReceiptRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/ClaimReceipt"
+        },
+        "authorityRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/EnrollmentAuthority"
+        },
+        "purpose": {
+          "const": "MFA_REENROLMENT"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "phase": {
+          "const": "ENROLMENT_ONLY"
+        },
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        }
+      },
+      "required": ["claimReceiptRef", "authorityRef", "purpose", "expiresAt", "phase"],
+      "additionalProperties": false
+    },
+    "PartyContextView": {
+      "type": "object",
+      "properties": {
+        "partyContextRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/PartyClaimContext"
+        },
+        "challengeId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "partySecret": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$",
+          "writeOnly": true
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["partyContextRef", "challengeId", "partySecret", "expiresAt"],
+      "additionalProperties": false
+    },
+    "VerifiedPersonView": {
+      "type": "object",
+      "properties": {
+        "accountRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Account"
+        },
+        "personLinkRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/VerifiedPersonLink"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "knowledge": {
+          "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        },
+        "policyRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/VerificationPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["accountRef", "personLinkRef", "knowledge", "policyRef", "observedAt"],
+      "additionalProperties": false
+    },
+    "StaffRolePage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "properties": {
+              "roleRef": { "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref" },
+              "label": { "type": "string", "minLength": 1, "maxLength": 4096 },
+              "actions": {
+                "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/StaffRoleRevisionInput/properties/actions"
+              },
+              "active": { "type": "boolean" }
+            },
+            "required": ["roleRef", "label", "actions", "active"],
+            "additionalProperties": false
+          }
+        },
+        "nextCursor": { "type": ["string", "null"], "maxLength": 4096 },
+        "observedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["items", "nextCursor", "observedAt"],
+      "additionalProperties": false
+    },
+    "Ref": {
+      "anyOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "enum": [
+                "AccountSecurityState",
+                "RegisteredContact",
+                "VerificationPolicy",
+                "VerificationEvidence",
+                "PersonVerification",
+                "RecoveryCodeSecurityState",
+                "RecoveryCase",
+                "RecoveryVerification",
+                "PartyClaimContext",
+                "RecoveryHandoffGrant",
+                "ClaimReceipt",
+                "EnrollmentAuthority",
+                "EmergencyRecoveryCase",
+                "EmergencyOperatorAuthority",
+                "IdentityHistory",
+                "IdentityExecutionSlot",
+                "IdentityOperationResult",
+                "SecurityTombstone"
+              ]
+            },
+            "id": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Id"
+            },
+            "revision": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+            }
+          },
+          "required": ["owner", "entity", "id", "revision"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "EnterpriseAccess"
+            },
+            "entity": {
+              "enum": [
+                "EnterpriseAccessFence",
+                "StaffAuthorityFence",
+                "ScopeV2",
+                "RoleRevisionState",
+                "MembershipInvitation",
+                "AdministratorRestoration"
+              ]
+            },
+            "id": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Id"
+            },
+            "revision": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+            }
+          },
+          "required": ["owner", "entity", "id", "revision"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Account": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "Account"
+            }
+          }
+        }
+      ]
+    },
+    "ProviderBinding": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "ProviderBinding"
+            }
+          }
+        }
+      ]
+    },
+    "Enterprise": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "EnterpriseAccess"
+            },
+            "entity": {
+              "const": "Enterprise"
+            }
+          }
+        }
+      ]
+    },
+    "Membership": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "EnterpriseAccess"
+            },
+            "entity": {
+              "const": "EnterpriseMembership"
+            }
+          }
+        }
+      ]
+    },
+    "RecoveryCase": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "RecoveryCase"
+            }
+          }
+        }
+      ]
+    },
+    "RecoveryHandoffGrant": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "RecoveryHandoffGrant"
+            }
+          }
+        }
+      ]
+    },
+    "PartyClaimContext": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "PartyClaimContext"
+            }
+          }
+        }
+      ]
+    },
+    "RecoveryVerification": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "RecoveryVerification"
+            }
+          }
+        }
+      ]
+    },
+    "ClaimReceipt": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "ClaimReceipt"
+            }
+          }
+        }
+      ]
+    },
+    "EnrollmentAuthority": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "EnrollmentAuthority"
+            }
+          }
+        }
+      ]
+    },
+    "EmergencyOperatorAuthority": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "EmergencyOperatorAuthority"
+            }
+          }
+        }
+      ]
+    },
+    "MembershipInvitation": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "EnterpriseAccess"
+            },
+            "entity": {
+              "const": "MembershipInvitation"
+            }
+          }
+        }
+      ]
+    },
+    "AdministratorRestoration": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "EnterpriseAccess"
+            },
+            "entity": {
+              "const": "AdministratorRestoration"
+            }
+          }
+        }
+      ]
+    },
+    "VerifiedPersonLink": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "VerifiedPersonLink"
+            }
+          }
+        }
+      ]
+    },
+    "PersonVerification": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "PersonVerification"
+            }
+          }
+        }
+      ]
+    },
+    "VerificationPolicy": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "VerificationPolicy"
+            }
+          }
+        }
+      ]
+    },
+    "Department": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "EnterpriseAccess"
+            },
+            "entity": {
+              "const": "Department"
+            }
+          }
+        }
+      ]
+    },
+    "BusinessSite": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "EnterpriseAccess"
+            },
+            "entity": {
+              "const": "BusinessSite"
+            }
+          }
+        }
+      ]
+    },
+    "RegisteredContact": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "IdentityRecovery"
+            },
+            "entity": {
+              "const": "RegisteredContact"
+            }
+          }
+        }
+      ]
+    },
+    "CommandMeta": {
+      "type": "object",
+      "properties": {
+        "clientRequestId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "expectedRevision": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+          }
+        }
+      },
+      "required": ["clientRequestId", "expectedRevision", "reason", "evidenceRefs"],
+      "additionalProperties": false
+    },
+    "Receipt": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "requestState": {
+          "type": "string",
+          "enum": [
+            "ACCEPTED",
+            "PROCESSING",
+            "RESULT_RECORDED",
+            "REVIEW_REQUIRED",
+            "TECHNICAL_FAILED"
+          ],
+          "maxLength": 4096
+        },
+        "owner": {
+          "type": "string",
+          "enum": [
+            "IdentityRecovery",
+            "EnterpriseAccess",
+            "ProductCatalog",
+            "CommercialAgreement",
+            "OrderAcceptance",
+            "FinancialSettlement",
+            "HardwareFulfillment",
+            "SoftwareLifecycle",
+            "AfterSalesDecision",
+            "NotificationDelivery",
+            "OperationalAssurance"
+          ],
+          "maxLength": 4096
+        },
+        "targetRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resultRefs": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+          }
+        },
+        "acceptedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "updatedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "statusRevision": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+        },
+        "retryAfterMilliseconds": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "requestId",
+        "requestState",
+        "owner",
+        "targetRef",
+        "resultRefs",
+        "acceptedAt",
+        "updatedAt",
+        "statusRevision",
+        "retryAfterMilliseconds"
+      ],
+      "additionalProperties": false
+    },
+    "InvocationTarget": {
+      "anyOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/InvocationTarget"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "RECORD"
+            },
+            "recordRef": {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            }
+          },
+          "required": ["kind", "recordRef"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "DepartmentSelector": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/AxisSelector"
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "EXACT"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "ref": {
+                "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Department"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "SiteSelector": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/AxisSelector"
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "EXACT"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "ref": {
+                "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/BusinessSite"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "DecisionBasis": {
+      "type": "object",
+      "properties": {
+        "actorAccountRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verifiedPersonRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+          }
+        },
+        "targetRevision": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+        },
+        "decision": {
+          "type": "string",
+          "enum": ["APPROVE", "DECLINE", "DESIGNATE", "MEMBERSHIP_CHANGE"]
+        },
+        "knowledge": {
+          "type": "string",
+          "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        },
+        "reasonCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "decidedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      },
+      "required": [
+        "actorAccountRef",
+        "verifiedPersonRef",
+        "evidenceRefs",
+        "targetRevision",
+        "decision",
+        "knowledge",
+        "decidedAt",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "U2Work": {
+      "type": "object",
+      "properties": {
+        "workId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "requestId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "owner": {
+          "enum": ["IdentityRecovery", "EnterpriseAccess"]
+        },
+        "operationId": {
+          "enum": [
+            "EnterpriseAccess.deliverInvitation",
+            "IdentityRecovery.deliverHandoff",
+            "IdentityRecovery.removeOriginalFactor",
+            "IdentityRecovery.signOutOriginalSessions",
+            "IdentityRecovery.replaceFirstFactor"
+          ]
+        },
+        "targetRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "sourceFactRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "U1Host"
+                },
+                "entity": {
+                  "const": "FactEnvelope"
+                }
+              }
+            }
+          ]
+        },
+        "executionPermitRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "ExecutionPermit"
+                }
+              }
+            }
+          ]
+        },
+        "expectedRevision": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Revision"
+        },
+        "notBefore": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "deadlineAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "attempt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Quantity"
+        },
+        "correlationId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        }
+      },
+      "required": [
+        "workId",
+        "requestId",
+        "owner",
+        "operationId",
+        "targetRef",
+        "sourceFactRef",
+        "executionPermitRef",
+        "expectedRevision",
+        "notBefore",
+        "deadlineAt",
+        "attempt",
+        "correlationId"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "operationId": {
+                "const": "EnterpriseAccess.deliverInvitation"
+              }
+            },
+            "required": ["operationId"]
+          },
+          "then": {
+            "properties": {
+              "owner": {
+                "const": "EnterpriseAccess"
+              },
+              "targetRef": {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "const": "EnterpriseAccess"
+                  },
+                  "entity": {
+                    "const": "MembershipInvitation"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operationId": {
+                "const": "IdentityRecovery.deliverHandoff"
+              }
+            },
+            "required": ["operationId"]
+          },
+          "then": {
+            "properties": {
+              "owner": {
+                "const": "IdentityRecovery"
+              },
+              "targetRef": {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "const": "IdentityRecovery"
+                  },
+                  "entity": {
+                    "const": "RecoveryHandoffGrant"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operationId": {
+                "const": "IdentityRecovery.removeOriginalFactor"
+              }
+            },
+            "required": ["operationId"]
+          },
+          "then": {
+            "properties": {
+              "owner": {
+                "const": "IdentityRecovery"
+              },
+              "targetRef": {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "const": "IdentityRecovery"
+                  },
+                  "entity": {
+                    "const": "RecoveryCase"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operationId": {
+                "const": "IdentityRecovery.signOutOriginalSessions"
+              }
+            },
+            "required": ["operationId"]
+          },
+          "then": {
+            "properties": {
+              "owner": {
+                "const": "IdentityRecovery"
+              },
+              "targetRef": {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "const": "IdentityRecovery"
+                  },
+                  "entity": {
+                    "const": "RecoveryCase"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operationId": {
+                "const": "IdentityRecovery.replaceFirstFactor"
+              }
+            },
+            "required": ["operationId"]
+          },
+          "then": {
+            "properties": {
+              "owner": {
+                "const": "IdentityRecovery"
+              },
+              "targetRef": {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "const": "IdentityRecovery"
+                  },
+                  "entity": {
+                    "const": "RecoveryCase"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "PrepareSavedInput": {
+      "type": "object",
+      "properties": {
+        "challengeId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        }
+      },
+      "required": ["challengeId"],
+      "additionalProperties": false
+    },
+    "SavedCodeInput": {
+      "type": "object",
+      "properties": {
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "challengeId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "setId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "code": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{32}$",
+          "writeOnly": true
+        }
+      },
+      "required": ["caseRef", "challengeId", "setId", "code"],
+      "additionalProperties": false
+    },
+    "FactorBeginInput": {
+      "type": "object",
+      "properties": {
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "passwordChallengeId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        }
+      },
+      "required": ["caseRef", "passwordChallengeId"],
+      "additionalProperties": false
+    },
+    "FactorBeginView": {
+      "type": "object",
+      "properties": {
+        "enrollmentRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "secret": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "writeOnly": true
+        }
+      },
+      "required": ["enrollmentRef", "secret"],
+      "additionalProperties": false
+    },
+    "FactorVerifyInput": {
+      "type": "object",
+      "properties": {
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "enrollmentRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "response": {
+          "type": "string",
+          "pattern": "^[0-9]{6}$",
+          "writeOnly": true
+        }
+      },
+      "required": ["caseRef", "enrollmentRef", "response"],
+      "additionalProperties": false
+    },
+    "FactorVerifyView": {
+      "type": "object",
+      "properties": {
+        "enrollmentRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "providerResultRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        }
+      },
+      "required": ["enrollmentRef", "providerResultRef"],
+      "additionalProperties": false
+    },
+    "PurposeCodesInput": {
+      "type": "object",
+      "properties": {
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "enrollmentRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        }
+      },
+      "required": ["caseRef", "enrollmentRef"],
+      "additionalProperties": false
+    },
+    "PurposeCodesView": {
+      "type": "object",
+      "properties": {
+        "codeSetRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "codes": {
+          "type": "array",
+          "minItems": 10,
+          "maxItems": 10,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{32}$",
+            "writeOnly": true
+          }
+        }
+      },
+      "required": ["codeSetRef", "codes"],
+      "additionalProperties": false
+    },
+    "PurposeCodesAckInput": {
+      "type": "object",
+      "properties": {
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "enrollmentRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "codeSetRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        },
+        "stored": {
+          "const": true
+        }
+      },
+      "required": ["caseRef", "enrollmentRef", "codeSetRef", "stored"],
+      "additionalProperties": false
+    },
+    "InvitationPurposeInput": {
+      "type": "object",
+      "properties": {
+        "invitationRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/MembershipInvitation"
+        },
+        "response": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43}$",
+          "writeOnly": true
+        },
+        "contactVerificationRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+        }
+      },
+      "required": ["invitationRef", "response", "contactVerificationRef"],
+      "additionalProperties": false
+    },
+    "InvitationPurposeView": {
+      "type": "object",
+      "properties": {
+        "authorityRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/EnrollmentAuthority"
+        },
+        "purpose": {
+          "const": "INVITATION_ACCEPTANCE"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "phase": {
+          "const": "ENROLMENT_ONLY"
+        }
+      },
+      "required": ["authorityRef", "purpose", "expiresAt", "phase"],
+      "additionalProperties": false
+    },
+    "PrepareRecoveryWorkInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/CommandMeta"
+        },
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        }
+      },
+      "required": ["meta", "caseRef"],
+      "additionalProperties": false
+    },
+    "ReobserveHandoffInput": {
+      "type": "object",
+      "properties": {
+        "partyContextRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/PartyClaimContext"
+        },
+        "challengeId": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Id"
+        },
+        "partySecret": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43}$",
+          "writeOnly": true
+        }
+      },
+      "required": ["partyContextRef", "challengeId", "partySecret"],
+      "additionalProperties": false
+    },
+    "SavedRecoveryPreparation": {
+      "type": "object",
+      "properties": {
+        "caseRef": {
+          "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/RecoveryCase"
+        },
+        "codeSetRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u2-access-additions:1#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["caseRef", "codeSetRef"],
+      "additionalProperties": false
+    }
+  }
+}

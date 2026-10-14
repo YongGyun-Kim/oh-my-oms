@@ -1,0 +1,1123 @@
+{
+  "stage": "code-generation",
+  "unit": "u1-integrated-foundation",
+  "version": 1,
+  "writes": [
+    {
+      "path": ".dockerignore"
+    },
+    {
+      "path": ".github/workflows/u1-validation.yml"
+    },
+    {
+      "path": ".gitignore"
+    },
+    {
+      "path": ".node-version"
+    },
+    {
+      "path": ".npmrc"
+    },
+    {
+      "path": ".prettierignore"
+    },
+    {
+      "path": ".prettierrc.json"
+    },
+    {
+      "path": "Dockerfile"
+    },
+    {
+      "path": "apps/api/package.json"
+    },
+    {
+      "path": "apps/api/src/admission.ts"
+    },
+    {
+      "path": "apps/api/src/application.ts"
+    },
+    {
+      "path": "apps/api/src/authentication.ts"
+    },
+    {
+      "path": "apps/api/src/index.ts"
+    },
+    {
+      "path": "apps/api/src/main.ts"
+    },
+    {
+      "path": "apps/api/src/observation.ts"
+    },
+    {
+      "path": "apps/api/src/operations.ts"
+    },
+    {
+      "path": "apps/api/src/request-budget.ts"
+    },
+    {
+      "path": "apps/api/src/routes.ts"
+    },
+    {
+      "path": "apps/api/src/security.ts"
+    },
+    {
+      "path": "apps/api/src/transport-input.ts"
+    },
+    {
+      "path": "apps/customer-web/app/api/"
+    },
+    {
+      "path": "apps/customer-web/app/layout.tsx"
+    },
+    {
+      "path": "apps/customer-web/app/page.tsx"
+    },
+    {
+      "path": "apps/customer-web/next-env.d.ts"
+    },
+    {
+      "path": "apps/customer-web/next.config.mjs"
+    },
+    {
+      "path": "apps/customer-web/next.config.ts"
+    },
+    {
+      "path": "apps/customer-web/package.json"
+    },
+    {
+      "path": "apps/customer-web/proxy.ts"
+    },
+    {
+      "path": "apps/customer-web/server.ts"
+    },
+    {
+      "path": "apps/customer-web/tsconfig.json"
+    },
+    {
+      "path": "apps/staff-web/app/api/"
+    },
+    {
+      "path": "apps/staff-web/app/layout.tsx"
+    },
+    {
+      "path": "apps/staff-web/app/page.tsx"
+    },
+    {
+      "path": "apps/staff-web/next-env.d.ts"
+    },
+    {
+      "path": "apps/staff-web/next.config.mjs"
+    },
+    {
+      "path": "apps/staff-web/next.config.ts"
+    },
+    {
+      "path": "apps/staff-web/package.json"
+    },
+    {
+      "path": "apps/staff-web/proxy.ts"
+    },
+    {
+      "path": "apps/staff-web/server.ts"
+    },
+    {
+      "path": "apps/staff-web/tsconfig.json"
+    },
+    {
+      "path": "apps/worker/package.json"
+    },
+    {
+      "path": "apps/worker/src/index.ts"
+    },
+    {
+      "path": "apps/worker/src/main.ts"
+    },
+    {
+      "path": "docs/u1/cdk-bundle-remediation.md"
+    },
+    {
+      "path": "docs/u1/ci.md"
+    },
+    {
+      "path": "docs/u1/customer-context.md"
+    },
+    {
+      "path": "docs/u1/performance-profile.md"
+    },
+    {
+      "path": "docs/u1/readiness.md"
+    },
+    {
+      "path": "docs/u1/runtime.md"
+    },
+    {
+      "path": "docs/u1/secret-exposures.json"
+    },
+    {
+      "path": "docs/u1/security-exceptions.json"
+    },
+    {
+      "path": "docs/u1/security-response.md"
+    },
+    {
+      "path": "eslint.config.mjs"
+    },
+    {
+      "path": "infra/cdk/assets/rds-ca-ap-northeast-2.pem"
+    },
+    {
+      "path": "infra/cdk/package.json"
+    },
+    {
+      "path": "infra/cdk/src/compute.ts"
+    },
+    {
+      "path": "infra/cdk/src/index.ts"
+    },
+    {
+      "path": "infra/cdk/src/network.ts"
+    },
+    {
+      "path": "infra/cdk/src/profile.ts"
+    },
+    {
+      "path": "infra/cdk/src/runtime-binding.ts"
+    },
+    {
+      "path": "infra/cdk/src/stack.ts"
+    },
+    {
+      "path": "infra/cdk/src/storage.ts"
+    },
+    {
+      "path": "package-lock.json"
+    },
+    {
+      "path": "package.json"
+    },
+    {
+      "path": "packages/contracts/package.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c00-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c00-v2.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c01-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c01-v2.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c02-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c02-v2.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c03-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c03-v2.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c05-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c05-v2.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c10-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c10-v2.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c11-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c11-v2.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c13-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c14-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c15-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c16-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c17-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c18-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c19-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c20-e01-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c21-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c25-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/c26-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/foundation-v1.json"
+    },
+    {
+      "path": "packages/contracts/schemas/operations-v2.json"
+    },
+    {
+      "path": "packages/contracts/schemas/provenance.json"
+    },
+    {
+      "path": "packages/contracts/src/canonical.ts"
+    },
+    {
+      "path": "packages/contracts/src/declarations.ts"
+    },
+    {
+      "path": "packages/contracts/src/errors.ts"
+    },
+    {
+      "path": "packages/contracts/src/execution-budget.ts"
+    },
+    {
+      "path": "packages/contracts/src/index.ts"
+    },
+    {
+      "path": "packages/contracts/src/observation.ts"
+    },
+    {
+      "path": "packages/contracts/src/registry.ts"
+    },
+    {
+      "path": "packages/contracts/src/schema.ts"
+    },
+    {
+      "path": "packages/contracts/src/types.ts"
+    },
+    {
+      "path": "packages/core/package.json"
+    },
+    {
+      "path": "packages/core/src/authorization.ts"
+    },
+    {
+      "path": "packages/core/src/catalog-query.ts"
+    },
+    {
+      "path": "packages/core/src/catalog.ts"
+    },
+    {
+      "path": "packages/core/src/commands.ts"
+    },
+    {
+      "path": "packages/core/src/current-customer-scopes.ts"
+    },
+    {
+      "path": "packages/core/src/customer-contexts.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-access-state.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-access.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-application.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-designation.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-organisation.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-policy.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-query.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-roles.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-scopes.ts"
+    },
+    {
+      "path": "packages/core/src/enterprise-verification.ts"
+    },
+    {
+      "path": "packages/core/src/external-policy.ts"
+    },
+    {
+      "path": "packages/core/src/history-query.ts"
+    },
+    {
+      "path": "packages/core/src/identity-browser.ts"
+    },
+    {
+      "path": "packages/core/src/identity-challenges.ts"
+    },
+    {
+      "path": "packages/core/src/identity-codes.ts"
+    },
+    {
+      "path": "packages/core/src/identity-factor.ts"
+    },
+    {
+      "path": "packages/core/src/identity-password.ts"
+    },
+    {
+      "path": "packages/core/src/identity-proofs.ts"
+    },
+    {
+      "path": "packages/core/src/identity-provider.ts"
+    },
+    {
+      "path": "packages/core/src/identity-security-events.ts"
+    },
+    {
+      "path": "packages/core/src/identity-session.ts"
+    },
+    {
+      "path": "packages/core/src/identity-state.ts"
+    },
+    {
+      "path": "packages/core/src/identity.ts"
+    },
+    {
+      "path": "packages/core/src/index.ts"
+    },
+    {
+      "path": "packages/core/src/notice-source.ts"
+    },
+    {
+      "path": "packages/core/src/notification.ts"
+    },
+    {
+      "path": "packages/core/src/order-acceptance.ts"
+    },
+    {
+      "path": "packages/core/src/order-assessment.ts"
+    },
+    {
+      "path": "packages/core/src/order-review.ts"
+    },
+    {
+      "path": "packages/core/src/pending-notification.ts"
+    },
+    {
+      "path": "packages/core/src/queue.ts"
+    },
+    {
+      "path": "packages/core/src/recovery-codes.ts"
+    },
+    {
+      "path": "packages/core/src/references.ts"
+    },
+    {
+      "path": "packages/core/src/scopes.ts"
+    },
+    {
+      "path": "packages/core/src/staff-access.ts"
+    },
+    {
+      "path": "packages/core/src/work-inquiry.ts"
+    },
+    {
+      "path": "packages/core/src/worker-authority.ts"
+    },
+    {
+      "path": "packages/core/src/worker-consumer.ts"
+    },
+    {
+      "path": "packages/core/src/worker-effect.ts"
+    },
+    {
+      "path": "packages/core/src/worker-observation.ts"
+    },
+    {
+      "path": "packages/core/src/worker-processing.ts"
+    },
+    {
+      "path": "packages/core/src/worker-relay.ts"
+    },
+    {
+      "path": "packages/core/src/worker-state.ts"
+    },
+    {
+      "path": "packages/core/src/worker-traversal.ts"
+    },
+    {
+      "path": "packages/core/src/worker.ts"
+    },
+    {
+      "path": "packages/integrations/package.json"
+    },
+    {
+      "path": "packages/integrations/src/availability.ts"
+    },
+    {
+      "path": "packages/integrations/src/cognito.ts"
+    },
+    {
+      "path": "packages/integrations/src/deployment-compatibility.ts"
+    },
+    {
+      "path": "packages/integrations/src/deployment-control.ts"
+    },
+    {
+      "path": "packages/integrations/src/deployment-store.ts"
+    },
+    {
+      "path": "packages/integrations/src/incident-store.ts"
+    },
+    {
+      "path": "packages/integrations/src/incident-types.ts"
+    },
+    {
+      "path": "packages/integrations/src/incidents.ts"
+    },
+    {
+      "path": "packages/integrations/src/index.ts"
+    },
+    {
+      "path": "packages/integrations/src/operational-connection.ts"
+    },
+    {
+      "path": "packages/integrations/src/operational-sender.ts"
+    },
+    {
+      "path": "packages/integrations/src/runtime-configuration.ts"
+    },
+    {
+      "path": "packages/integrations/src/runtime-loop.ts"
+    },
+    {
+      "path": "packages/integrations/src/runtime-store.ts"
+    },
+    {
+      "path": "packages/integrations/src/sqs.ts"
+    },
+    {
+      "path": "packages/integrations/src/telemetry-policy.ts"
+    },
+    {
+      "path": "packages/integrations/src/telemetry.ts"
+    },
+    {
+      "path": "packages/integrations/src/tls-configuration.ts"
+    },
+    {
+      "path": "packages/integrations/src/unregistered-verification.ts"
+    },
+    {
+      "path": "packages/integrations/src/worker-batch.ts"
+    },
+    {
+      "path": "packages/persistence/models/u1-v2.json"
+    },
+    {
+      "path": "packages/persistence/package.json"
+    },
+    {
+      "path": "packages/persistence/src/data-source.ts"
+    },
+    {
+      "path": "packages/persistence/src/diagnostic-migration.ts"
+    },
+    {
+      "path": "packages/persistence/src/diagnostics.ts"
+    },
+    {
+      "path": "packages/persistence/src/encrypted-challenges.ts"
+    },
+    {
+      "path": "packages/persistence/src/http-attempts.ts"
+    },
+    {
+      "path": "packages/persistence/src/http-auth-intents.ts"
+    },
+    {
+      "path": "packages/persistence/src/index.ts"
+    },
+    {
+      "path": "packages/persistence/src/migration.ts"
+    },
+    {
+      "path": "packages/persistence/src/model-attribute.ts"
+    },
+    {
+      "path": "packages/persistence/src/model-catalog.ts"
+    },
+    {
+      "path": "packages/persistence/src/protected-store.ts"
+    },
+    {
+      "path": "packages/persistence/src/protected-transaction.ts"
+    },
+    {
+      "path": "packages/persistence/src/protected-write.ts"
+    },
+    {
+      "path": "packages/persistence/src/read-index-migration.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-migration.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-replay.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-security-policy.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-security-write.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-security.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery-types.ts"
+    },
+    {
+      "path": "packages/persistence/src/recovery.ts"
+    },
+    {
+      "path": "packages/persistence/src/security-state.ts"
+    },
+    {
+      "path": "packages/ui/package.json"
+    },
+    {
+      "path": "packages/ui/src/application-panel.tsx"
+    },
+    {
+      "path": "packages/ui/src/bff.ts"
+    },
+    {
+      "path": "packages/ui/src/business-command.tsx"
+    },
+    {
+      "path": "packages/ui/src/catalog-panel.tsx"
+    },
+    {
+      "path": "packages/ui/src/client.ts"
+    },
+    {
+      "path": "packages/ui/src/context-picker.tsx"
+    },
+    {
+      "path": "packages/ui/src/enterprise-panel.tsx"
+    },
+    {
+      "path": "packages/ui/src/forms.tsx"
+    },
+    {
+      "path": "packages/ui/src/index.ts"
+    },
+    {
+      "path": "packages/ui/src/limited-stream.ts"
+    },
+    {
+      "path": "packages/ui/src/login.tsx"
+    },
+    {
+      "path": "packages/ui/src/member-panel.tsx"
+    },
+    {
+      "path": "packages/ui/src/notice-panel.tsx"
+    },
+    {
+      "path": "packages/ui/src/order-panel.tsx"
+    },
+    {
+      "path": "packages/ui/src/original-intents.ts"
+    },
+    {
+      "path": "packages/ui/src/polling.ts"
+    },
+    {
+      "path": "packages/ui/src/portal.css"
+    },
+    {
+      "path": "packages/ui/src/portal.tsx"
+    },
+    {
+      "path": "packages/ui/src/security-proxy.ts"
+    },
+    {
+      "path": "packages/ui/src/server.ts"
+    },
+    {
+      "path": "packages/ui/src/staff-role-panel.tsx"
+    },
+    {
+      "path": "packages/ui/src/ui-types.ts"
+    },
+    {
+      "path": "scripts/u1/bootstrap-tools.ts"
+    },
+    {
+      "path": "scripts/u1/cdk-bundle.ts"
+    },
+    {
+      "path": "scripts/u1/check.ts"
+    },
+    {
+      "path": "scripts/u1/ci-bootstrap.ts"
+    },
+    {
+      "path": "scripts/u1/ci-full-proof.ts"
+    },
+    {
+      "path": "scripts/u1/ci-local-health.ts"
+    },
+    {
+      "path": "scripts/u1/container-client.ts"
+    },
+    {
+      "path": "scripts/u1/container-flow.ts"
+    },
+    {
+      "path": "scripts/u1/container-positive.ts"
+    },
+    {
+      "path": "scripts/u1/iac-findings.ts"
+    },
+    {
+      "path": "scripts/u1/large-recovery.ts"
+    },
+    {
+      "path": "scripts/u1/large-restore-runner.ts"
+    },
+    {
+      "path": "scripts/u1/local-databases.ts"
+    },
+    {
+      "path": "scripts/u1/measurement-provenance.ts"
+    },
+    {
+      "path": "scripts/u1/performance-statistics.ts"
+    },
+    {
+      "path": "scripts/u1/performance.ts"
+    },
+    {
+      "path": "scripts/u1/prepare-test-databases.ts"
+    },
+    {
+      "path": "scripts/u1/process.ts"
+    },
+    {
+      "path": "scripts/u1/profile-observations.ts"
+    },
+    {
+      "path": "scripts/u1/profile-ui.ts"
+    },
+    {
+      "path": "scripts/u1/report-validation.ts"
+    },
+    {
+      "path": "scripts/u1/requalify-performance.ts"
+    },
+    {
+      "path": "scripts/u1/runtime-security-report.ts"
+    },
+    {
+      "path": "scripts/u1/runtime-source.ts"
+    },
+    {
+      "path": "scripts/u1/security-policy.ts"
+    },
+    {
+      "path": "scripts/u1/security-rules/nodejs.yaml"
+    },
+    {
+      "path": "scripts/u1/security-rules/typescript.yaml"
+    },
+    {
+      "path": "scripts/u1/security.ts"
+    },
+    {
+      "path": "scripts/u1/synth.ts"
+    },
+    {
+      "path": "scripts/u1/verify-acks.ts"
+    },
+    {
+      "path": "scripts/u1/verify-skeleton.ts"
+    },
+    {
+      "path": "scripts/u1/worker-recovery-evidence.ts"
+    },
+    {
+      "path": "tests/u1/.reports/u1/e2e.json"
+    },
+    {
+      "path": "tests/u1/docker-compose.yml"
+    },
+    {
+      "path": "tests/u1/e2e/foundation-flow.spec.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/container-service.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/container-web.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/databases.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/empty-performance-stores.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/enterprise.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/http-client.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/identity.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/journal-entries.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/large-restore.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/local-service.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/migrate.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/performance-orders.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/performance-preparation.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/performance-resume.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/performance-service.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/performance-staff.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/queue.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/recovery-preservation.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/recovery-resources.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/recovery-security-oracle.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/reset.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/staff-bootstrap.ts"
+    },
+    {
+      "path": "tests/u1/fixtures/telemetry.ts"
+    },
+    {
+      "path": "tests/u1/integration/auth-access.spec.ts"
+    },
+    {
+      "path": "tests/u1/integration/bulk-profile.spec.ts"
+    },
+    {
+      "path": "tests/u1/integration/business-flow.spec.ts"
+    },
+    {
+      "path": "tests/u1/integration/contract-bindings.spec.ts"
+    },
+    {
+      "path": "tests/u1/integration/deployment-compatibility.spec.ts"
+    },
+    {
+      "path": "tests/u1/integration/diagnostics.spec.ts"
+    },
+    {
+      "path": "tests/u1/integration/http-auth-intents.spec.ts"
+    },
+    {
+      "path": "tests/u1/integration/http-boundaries.spec.ts"
+    },
+    {
+      "path": "tests/u1/integration/http-primary-ac.spec.ts"
+    },
+    {
+      "path": "tests/u1/integration/postgres-models.spec.ts"
+    },
+    {
+      "path": "tests/u1/integration/recovery-replay.spec.ts"
+    },
+    {
+      "path": "tests/u1/integration/recovery-security.spec.ts"
+    },
+    {
+      "path": "tests/u1/integration/recovery.spec.ts"
+    },
+    {
+      "path": "tests/u1/playwright.config.ts"
+    },
+    {
+      "path": "tests/u1/profile/session-profile.spec.ts"
+    },
+    {
+      "path": "tests/u1/profile/worker-profile.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/adapters.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/admission.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/api-start.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/availability.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/bff.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/bootstrap-tools.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/business-command.spec.tsx"
+    },
+    {
+      "path": "tests/u1/unit/cdk-bundle.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/challenge-cryptography.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/check-runner.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/ci-local-health.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/container-client.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/container-flow.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/context-picker.spec.tsx"
+    },
+    {
+      "path": "tests/u1/unit/contracts.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/customer-ui.spec.tsx"
+    },
+    {
+      "path": "tests/u1/unit/deployment-compatibility.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/deployment-control.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/deployment-store.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/enterprise-access.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/enterprise-panel.spec.tsx"
+    },
+    {
+      "path": "tests/u1/unit/execution-budget.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/forms.spec.tsx"
+    },
+    {
+      "path": "tests/u1/unit/http-observation.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/http.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/iac-findings.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/identity-browser.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/identity.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/incident-store.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/incidents.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/infrastructure.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/inline-schema.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/large-restore-runner.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/measurement-provenance.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/model-snapshots.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/models.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/next-configuration.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/notice-source.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/operational-connection.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/operational-sender.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/order-panel.spec.tsx"
+    },
+    {
+      "path": "tests/u1/unit/original-intents.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/performance-statistics.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/portal-session.spec.tsx"
+    },
+    {
+      "path": "tests/u1/unit/process.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/profile-observations.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/profile-resources.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/profile-ui.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/recovery-payload.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/recovery-security-policy.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/report-validation.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/requalify-performance.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/runtime-configuration.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/runtime-loop.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/runtime-security-report.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/runtime-source.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/security-policy.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/security-proxy.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/security-runner.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/security-state.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/skeleton.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/synthetic-visibility.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/telemetry.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/verify-acks.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/web-start.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/worker-batch.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/worker-observation.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/worker-recovery-evidence.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/worker-start.spec.ts"
+    },
+    {
+      "path": "tests/u1/unit/worker.spec.ts"
+    },
+    {
+      "path": "tests/u1/vitest.coverage.config.ts"
+    },
+    {
+      "path": "tests/u1/vitest.integration.config.ts"
+    },
+    {
+      "path": "tests/u1/vitest.profile.config.ts"
+    },
+    {
+      "path": "tests/u1/vitest.unit.config.ts"
+    },
+    {
+      "path": "tsconfig.build.json"
+    },
+    {
+      "path": "tsconfig.json"
+    }
+  ]
+}

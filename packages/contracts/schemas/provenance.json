@@ -1,0 +1,37 @@
+{
+  "source": "aidlc/spaces/default/intents/261004-feature/inception/contract-design/contract-summary.md",
+  "sha256": "6132a2b53a832db100ea1af4d591cdba26fc7ae3b63e2732f301472723ff1a61",
+  "generated": [
+    "c00-v1.json",
+    "c00-v2.json",
+    "c01-v1.json",
+    "c01-v2.json",
+    "c02-v1.json",
+    "c02-v2.json",
+    "c03-v1.json",
+    "c03-v2.json",
+    "c05-v1.json",
+    "c05-v2.json",
+    "c10-v1.json",
+    "c10-v2.json",
+    "c11-v1.json",
+    "c11-v2.json",
+    "c13-v1.json",
+    "c14-v1.json",
+    "c15-v1.json",
+    "c16-v1.json",
+    "c17-v1.json",
+    "c18-v1.json",
+    "c19-v1.json",
+    "c20-e01-v1.json",
+    "c21-v1.json",
+    "c25-v1.json",
+    "c26-v1.json"
+  ],
+  "v2Changes": [
+    "explicit common:2 refs",
+    "Id maxLength128",
+    "string transport maxLength4096",
+    "OrderInput.lines maxItems100"
+  ]
+}

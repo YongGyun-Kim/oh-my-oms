@@ -1,0 +1,1194 @@
+{
+  "exporter": "Vitest5.0.3/V8 5.0.3 실제 JSON",
+  "measurementRole": "변환 golden fixture; current-source/overall PASS 근거가 아님",
+  "file": {
+    "path": "/Users/gyun/Project/oh-my-oms/packages/core/src/purpose-verifier.ts",
+    "statementMap": {
+      "0": {
+        "start": {
+          "line": 27,
+          "column": 17
+        },
+        "end": {
+          "line": 34,
+          "column": null
+        }
+      },
+      "1": {
+        "start": {
+          "line": 35,
+          "column": 15
+        },
+        "end": {
+          "line": 35,
+          "column": null
+        }
+      },
+      "2": {
+        "start": {
+          "line": 37,
+          "column": 2
+        },
+        "end": {
+          "line": 42,
+          "column": null
+        }
+      },
+      "3": {
+        "start": {
+          "line": 43,
+          "column": 15
+        },
+        "end": {
+          "line": 43,
+          "column": null
+        }
+      },
+      "4": {
+        "start": {
+          "line": 44,
+          "column": 2
+        },
+        "end": {
+          "line": 49,
+          "column": null
+        }
+      },
+      "5": {
+        "start": {
+          "line": 50,
+          "column": 16
+        },
+        "end": {
+          "line": 50,
+          "column": null
+        }
+      },
+      "6": {
+        "start": {
+          "line": 51,
+          "column": 2
+        },
+        "end": {
+          "line": 56,
+          "column": null
+        }
+      },
+      "7": {
+        "start": {
+          "line": 57,
+          "column": 2
+        },
+        "end": {
+          "line": 57,
+          "column": null
+        }
+      },
+      "8": {
+        "start": {
+          "line": 60,
+          "column": 2
+        },
+        "end": {
+          "line": 65,
+          "column": null
+        }
+      },
+      "9": {
+        "start": {
+          "line": 66,
+          "column": 2
+        },
+        "end": {
+          "line": 66,
+          "column": null
+        }
+      },
+      "10": {
+        "start": {
+          "line": 69,
+          "column": 2
+        },
+        "end": {
+          "line": 75,
+          "column": null
+        }
+      },
+      "11": {
+        "start": {
+          "line": 70,
+          "column": 4
+        },
+        "end": {
+          "line": 70,
+          "column": null
+        }
+      },
+      "12": {
+        "start": {
+          "line": 71,
+          "column": 4
+        },
+        "end": {
+          "line": 71,
+          "column": null
+        }
+      },
+      "13": {
+        "start": {
+          "line": 72,
+          "column": 4
+        },
+        "end": {
+          "line": 72,
+          "column": null
+        }
+      },
+      "14": {
+        "start": {
+          "line": 73,
+          "column": 4
+        },
+        "end": {
+          "line": 73,
+          "column": 56
+        }
+      },
+      "15": {
+        "start": {
+          "line": 73,
+          "column": 56
+        },
+        "end": {
+          "line": 73,
+          "column": 92
+        }
+      },
+      "16": {
+        "start": {
+          "line": 73,
+          "column": 92
+        },
+        "end": {
+          "line": 73,
+          "column": null
+        }
+      },
+      "17": {
+        "start": {
+          "line": 74,
+          "column": 4
+        },
+        "end": {
+          "line": 74,
+          "column": null
+        }
+      },
+      "18": {
+        "start": {
+          "line": 76,
+          "column": 2
+        },
+        "end": {
+          "line": 83,
+          "column": null
+        }
+      },
+      "19": {
+        "start": {
+          "line": 84,
+          "column": 2
+        },
+        "end": {
+          "line": 89,
+          "column": null
+        }
+      },
+      "20": {
+        "start": {
+          "line": 89,
+          "column": 4
+        },
+        "end": {
+          "line": 89,
+          "column": null
+        }
+      },
+      "21": {
+        "start": {
+          "line": 90,
+          "column": 2
+        },
+        "end": {
+          "line": 91,
+          "column": null
+        }
+      },
+      "22": {
+        "start": {
+          "line": 91,
+          "column": 4
+        },
+        "end": {
+          "line": 91,
+          "column": null
+        }
+      },
+      "23": {
+        "start": {
+          "line": 92,
+          "column": 2
+        },
+        "end": {
+          "line": 92,
+          "column": null
+        }
+      },
+      "24": {
+        "start": {
+          "line": 93,
+          "column": 2
+        },
+        "end": {
+          "line": 94,
+          "column": null
+        }
+      },
+      "25": {
+        "start": {
+          "line": 94,
+          "column": 4
+        },
+        "end": {
+          "line": 94,
+          "column": null
+        }
+      },
+      "26": {
+        "start": {
+          "line": 95,
+          "column": 2
+        },
+        "end": {
+          "line": 99,
+          "column": null
+        }
+      },
+      "27": {
+        "start": {
+          "line": 96,
+          "column": 4
+        },
+        "end": {
+          "line": 99,
+          "column": null
+        }
+      },
+      "28": {
+        "start": {
+          "line": 100,
+          "column": 2
+        },
+        "end": {
+          "line": 100,
+          "column": null
+        }
+      },
+      "29": {
+        "start": {
+          "line": 106,
+          "column": 13
+        },
+        "end": {
+          "line": 106,
+          "column": null
+        }
+      },
+      "30": {
+        "start": {
+          "line": 108,
+          "column": 4
+        },
+        "end": {
+          "line": 108,
+          "column": null
+        }
+      },
+      "31": {
+        "start": {
+          "line": 109,
+          "column": 4
+        },
+        "end": {
+          "line": 109,
+          "column": null
+        }
+      },
+      "32": {
+        "start": {
+          "line": 110,
+          "column": 4
+        },
+        "end": {
+          "line": 110,
+          "column": null
+        }
+      },
+      "33": {
+        "start": {
+          "line": 113,
+          "column": 4
+        },
+        "end": {
+          "line": 118,
+          "column": null
+        }
+      },
+      "34": {
+        "start": {
+          "line": 119,
+          "column": 21
+        },
+        "end": {
+          "line": 119,
+          "column": null
+        }
+      },
+      "35": {
+        "start": {
+          "line": 120,
+          "column": 18
+        },
+        "end": {
+          "line": 120,
+          "column": null
+        }
+      },
+      "36": {
+        "start": {
+          "line": 121,
+          "column": 20
+        },
+        "end": {
+          "line": 121,
+          "column": null
+        }
+      },
+      "37": {
+        "start": {
+          "line": 122,
+          "column": 4
+        },
+        "end": {
+          "line": 122,
+          "column": null
+        }
+      },
+      "38": {
+        "start": {
+          "line": 123,
+          "column": 4
+        },
+        "end": {
+          "line": 123,
+          "column": null
+        }
+      },
+      "39": {
+        "start": {
+          "line": 125,
+          "column": 4
+        },
+        "end": {
+          "line": 130,
+          "column": null
+        }
+      },
+      "40": {
+        "start": {
+          "line": 133,
+          "column": 4
+        },
+        "end": {
+          "line": 133,
+          "column": null
+        }
+      },
+      "41": {
+        "start": {
+          "line": 133,
+          "column": 42
+        },
+        "end": {
+          "line": 133,
+          "column": null
+        }
+      },
+      "42": {
+        "start": {
+          "line": 134,
+          "column": 19
+        },
+        "end": {
+          "line": 134,
+          "column": null
+        }
+      },
+      "43": {
+        "start": {
+          "line": 135,
+          "column": 4
+        },
+        "end": {
+          "line": 135,
+          "column": null
+        }
+      },
+      "44": {
+        "start": {
+          "line": 138,
+          "column": 4
+        },
+        "end": {
+          "line": 138,
+          "column": null
+        }
+      },
+      "45": {
+        "start": {
+          "line": 139,
+          "column": 18
+        },
+        "end": {
+          "line": 139,
+          "column": 92
+        }
+      },
+      "46": {
+        "start": {
+          "line": 139,
+          "column": 100
+        },
+        "end": {
+          "line": 139,
+          "column": 116
+        }
+      },
+      "47": {
+        "start": {
+          "line": 139,
+          "column": 116
+        },
+        "end": {
+          "line": 139,
+          "column": 203
+        }
+      },
+      "48": {
+        "start": {
+          "line": 139,
+          "column": 203
+        },
+        "end": {
+          "line": 139,
+          "column": 243
+        }
+      },
+      "49": {
+        "start": {
+          "line": 139,
+          "column": 243
+        },
+        "end": {
+          "line": 139,
+          "column": null
+        }
+      },
+      "50": {
+        "start": {
+          "line": 140,
+          "column": 4
+        },
+        "end": {
+          "line": 140,
+          "column": null
+        }
+      }
+    },
+    "fnMap": {
+      "0": {
+        "name": "canonicalSecretBytes",
+        "decl": {
+          "start": {
+            "line": 36,
+            "column": 16
+          },
+          "end": {
+            "line": 36,
+            "column": 37
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 36,
+            "column": 85
+          },
+          "end": {
+            "line": 58,
+            "column": null
+          }
+        },
+        "line": 36
+      },
+      "1": {
+        "name": "generatePurposeSecret",
+        "decl": {
+          "start": {
+            "line": 59,
+            "column": 16
+          },
+          "end": {
+            "line": 59,
+            "column": 38
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 59,
+            "column": 70
+          },
+          "end": {
+            "line": 67,
+            "column": null
+          }
+        },
+        "line": 59
+      },
+      "2": {
+        "name": "bindingBytes",
+        "decl": {
+          "start": {
+            "line": 68,
+            "column": 9
+          },
+          "end": {
+            "line": 68,
+            "column": 22
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 68,
+            "column": 78
+          },
+          "end": {
+            "line": 101,
+            "column": null
+          }
+        },
+        "line": 68
+      },
+      "3": {
+        "name": "constructor",
+        "decl": {
+          "start": {
+            "line": 104,
+            "column": 2
+          },
+          "end": {
+            "line": 104,
+            "column": null
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 107,
+            "column": 4
+          },
+          "end": {
+            "line": 111,
+            "column": null
+          }
+        },
+        "line": 107
+      },
+      "4": {
+        "name": "digest",
+        "decl": {
+          "start": {
+            "line": 112,
+            "column": 2
+          },
+          "end": {
+            "line": 112,
+            "column": 9
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 112,
+            "column": 81
+          },
+          "end": {
+            "line": 131,
+            "column": null
+          }
+        },
+        "line": 112
+      },
+      "5": {
+        "name": "matches",
+        "decl": {
+          "start": {
+            "line": 132,
+            "column": 2
+          },
+          "end": {
+            "line": 132,
+            "column": 10
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 132,
+            "column": 101
+          },
+          "end": {
+            "line": 136,
+            "column": null
+          }
+        },
+        "line": 132
+      },
+      "6": {
+        "name": "inputDigest",
+        "decl": {
+          "start": {
+            "line": 137,
+            "column": 2
+          },
+          "end": {
+            "line": 137,
+            "column": 14
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 137,
+            "column": 111
+          },
+          "end": {
+            "line": 141,
+            "column": null
+          }
+        },
+        "line": 137
+      }
+    },
+    "branchMap": {
+      "0": {
+        "loc": {
+          "start": {
+            "line": 43,
+            "column": 15
+          },
+          "end": {
+            "line": 43,
+            "column": null
+          }
+        },
+        "type": "cond-expr",
+        "locations": [
+          {
+            "start": {
+              "line": 43,
+              "column": 39
+            },
+            "end": {
+              "line": 43,
+              "column": 44
+            }
+          },
+          {
+            "start": {
+              "line": 43,
+              "column": 44
+            },
+            "end": {
+              "line": 43,
+              "column": null
+            }
+          }
+        ],
+        "line": 43
+      },
+      "1": {
+        "loc": {
+          "start": {
+            "line": 45,
+            "column": 4
+          },
+          "end": {
+            "line": 45,
+            "column": null
+          }
+        },
+        "type": "binary-expr",
+        "locations": [
+          {
+            "start": {
+              "line": 45,
+              "column": 4
+            },
+            "end": {
+              "line": 45,
+              "column": 34
+            }
+          },
+          {
+            "start": {
+              "line": 45,
+              "column": 34
+            },
+            "end": {
+              "line": 45,
+              "column": null
+            }
+          }
+        ],
+        "line": 45
+      },
+      "2": {
+        "loc": {
+          "start": {
+            "line": 52,
+            "column": 4
+          },
+          "end": {
+            "line": 52,
+            "column": null
+          }
+        },
+        "type": "binary-expr",
+        "locations": [
+          {
+            "start": {
+              "line": 52,
+              "column": 4
+            },
+            "end": {
+              "line": 52,
+              "column": 29
+            }
+          },
+          {
+            "start": {
+              "line": 52,
+              "column": 29
+            },
+            "end": {
+              "line": 52,
+              "column": null
+            }
+          }
+        ],
+        "line": 52
+      },
+      "3": {
+        "loc": {
+          "start": {
+            "line": 66,
+            "column": 21
+          },
+          "end": {
+            "line": 66,
+            "column": 52
+          }
+        },
+        "type": "cond-expr",
+        "locations": [
+          {
+            "start": {
+              "line": 66,
+              "column": 45
+            },
+            "end": {
+              "line": 66,
+              "column": 50
+            }
+          },
+          {
+            "start": {
+              "line": 66,
+              "column": 50
+            },
+            "end": {
+              "line": 66,
+              "column": 52
+            }
+          }
+        ],
+        "line": 66
+      },
+      "4": {
+        "loc": {
+          "start": {
+            "line": 69,
+            "column": 2
+          },
+          "end": {
+            "line": 75,
+            "column": null
+          }
+        },
+        "type": "if",
+        "locations": [
+          {
+            "start": {
+              "line": 69,
+              "column": 2
+            },
+            "end": {
+              "line": 75,
+              "column": null
+            }
+          },
+          {
+            "start": {},
+            "end": {}
+          }
+        ],
+        "line": 69
+      },
+      "5": {
+        "loc": {
+          "start": {
+            "line": 77,
+            "column": 4
+          },
+          "end": {
+            "line": 79,
+            "column": null
+          }
+        },
+        "type": "binary-expr",
+        "locations": [
+          {
+            "start": {
+              "line": 77,
+              "column": 4
+            },
+            "end": {
+              "line": 78,
+              "column": null
+            }
+          },
+          {
+            "start": {
+              "line": 79,
+              "column": 6
+            },
+            "end": {
+              "line": 79,
+              "column": null
+            }
+          }
+        ],
+        "line": 77
+      },
+      "6": {
+        "loc": {
+          "start": {
+            "line": 93,
+            "column": 2
+          },
+          "end": {
+            "line": 94,
+            "column": null
+          }
+        },
+        "type": "if",
+        "locations": [
+          {
+            "start": {
+              "line": 93,
+              "column": 2
+            },
+            "end": {
+              "line": 94,
+              "column": null
+            }
+          },
+          {
+            "start": {},
+            "end": {}
+          }
+        ],
+        "line": 93
+      },
+      "7": {
+        "loc": {
+          "start": {
+            "line": 95,
+            "column": 2
+          },
+          "end": {
+            "line": 99,
+            "column": null
+          }
+        },
+        "type": "if",
+        "locations": [
+          {
+            "start": {
+              "line": 95,
+              "column": 2
+            },
+            "end": {
+              "line": 99,
+              "column": null
+            }
+          },
+          {
+            "start": {},
+            "end": {}
+          }
+        ],
+        "line": 95
+      },
+      "8": {
+        "loc": {
+          "start": {
+            "line": 133,
+            "column": 4
+          },
+          "end": {
+            "line": 133,
+            "column": null
+          }
+        },
+        "type": "if",
+        "locations": [
+          {
+            "start": {
+              "line": 133,
+              "column": 4
+            },
+            "end": {
+              "line": 133,
+              "column": null
+            }
+          },
+          {
+            "start": {},
+            "end": {}
+          }
+        ],
+        "line": 133
+      },
+      "9": {
+        "loc": {
+          "start": {
+            "line": 138,
+            "column": 21
+          },
+          "end": {
+            "line": 138,
+            "column": 132
+          }
+        },
+        "type": "binary-expr",
+        "locations": [
+          {
+            "start": {
+              "line": 138,
+              "column": 21
+            },
+            "end": {
+              "line": 138,
+              "column": 89
+            }
+          },
+          {
+            "start": {
+              "line": 138,
+              "column": 89
+            },
+            "end": {
+              "line": 138,
+              "column": 109
+            }
+          },
+          {
+            "start": {
+              "line": 138,
+              "column": 109
+            },
+            "end": {
+              "line": 138,
+              "column": 132
+            }
+          }
+        ],
+        "line": 138
+      }
+    },
+    "s": {
+      "0": 1,
+      "1": 1,
+      "2": 37,
+      "3": 37,
+      "4": 37,
+      "5": 37,
+      "6": 37,
+      "7": 37,
+      "8": 4,
+      "9": 4,
+      "10": 32,
+      "11": 13,
+      "12": 13,
+      "13": 13,
+      "14": 13,
+      "15": 13,
+      "16": 13,
+      "17": 13,
+      "18": 19,
+      "19": 32,
+      "20": 51,
+      "21": 17,
+      "22": 51,
+      "23": 17,
+      "24": 17,
+      "25": 17,
+      "26": 16,
+      "27": 16,
+      "28": 16,
+      "29": 6,
+      "30": 6,
+      "31": 6,
+      "32": 6,
+      "33": 34,
+      "34": 34,
+      "35": 34,
+      "36": 34,
+      "37": 34,
+      "38": 34,
+      "39": 34,
+      "40": 20,
+      "41": 1,
+      "42": 19,
+      "43": 19,
+      "44": 9,
+      "45": 9,
+      "46": 9,
+      "47": 9,
+      "48": 9,
+      "49": 9,
+      "50": 9
+    },
+    "f": {
+      "0": 37,
+      "1": 4,
+      "2": 32,
+      "3": 6,
+      "4": 34,
+      "5": 20,
+      "6": 9
+    },
+    "b": {
+      "0": [21, 16],
+      "1": [37, 37],
+      "2": [37, 32],
+      "3": [1, 3],
+      "4": [13, 19],
+      "5": [19, 17],
+      "6": [17, 0],
+      "7": [16, 0],
+      "8": [1, 19],
+      "9": [9, 8, 7]
+    },
+    "meta": {
+      "lastBranch": 10,
+      "lastFunction": 7,
+      "lastStatement": 51,
+      "seen": {
+        "s:27:17:34:Infinity": 0,
+        "s:35:15:35:Infinity": 1,
+        "f:36:16:36:37": 0,
+        "s:37:2:42:Infinity": 2,
+        "s:43:15:43:Infinity": 3,
+        "b:43:39:43:44:43:44:43:Infinity": 0,
+        "s:44:2:49:Infinity": 4,
+        "b:45:4:45:34:45:34:45:Infinity": 1,
+        "s:50:16:50:Infinity": 5,
+        "s:51:2:56:Infinity": 6,
+        "b:52:4:52:29:52:29:52:Infinity": 2,
+        "s:57:2:57:Infinity": 7,
+        "f:59:16:59:38": 1,
+        "s:60:2:65:Infinity": 8,
+        "s:66:2:66:Infinity": 9,
+        "b:66:45:66:50:66:50:66:52": 3,
+        "f:68:9:68:22": 2,
+        "b:69:2:75:Infinity:undefined:undefined:undefined:undefined": 4,
+        "s:69:2:75:Infinity": 10,
+        "s:70:4:70:Infinity": 11,
+        "s:71:4:71:Infinity": 12,
+        "s:72:4:72:Infinity": 13,
+        "s:73:4:73:56": 14,
+        "s:73:56:73:92": 15,
+        "s:73:92:73:Infinity": 16,
+        "s:74:4:74:Infinity": 17,
+        "s:76:2:83:Infinity": 18,
+        "b:77:4:78:Infinity:79:6:79:Infinity": 5,
+        "s:84:2:89:Infinity": 19,
+        "s:89:4:89:Infinity": 20,
+        "s:90:2:91:Infinity": 21,
+        "s:91:4:91:Infinity": 22,
+        "s:92:2:92:Infinity": 23,
+        "b:93:2:94:Infinity:undefined:undefined:undefined:undefined": 6,
+        "s:93:2:94:Infinity": 24,
+        "s:94:4:94:Infinity": 25,
+        "b:95:2:99:Infinity:undefined:undefined:undefined:undefined": 7,
+        "s:95:2:99:Infinity": 26,
+        "s:96:4:99:Infinity": 27,
+        "s:100:2:100:Infinity": 28,
+        "f:104:2:104:Infinity": 3,
+        "s:106:13:106:Infinity": 29,
+        "s:108:4:108:Infinity": 30,
+        "s:109:4:109:Infinity": 31,
+        "s:110:4:110:Infinity": 32,
+        "f:112:2:112:9": 4,
+        "s:113:4:118:Infinity": 33,
+        "s:119:21:119:Infinity": 34,
+        "s:120:18:120:Infinity": 35,
+        "s:121:20:121:Infinity": 36,
+        "s:122:4:122:Infinity": 37,
+        "s:123:4:123:Infinity": 38,
+        "s:125:4:130:Infinity": 39,
+        "f:132:2:132:10": 5,
+        "b:133:4:133:Infinity:undefined:undefined:undefined:undefined": 8,
+        "s:133:4:133:Infinity": 40,
+        "s:133:42:133:Infinity": 41,
+        "s:134:19:134:Infinity": 42,
+        "s:135:4:135:Infinity": 43,
+        "f:137:2:137:14": 6,
+        "s:138:4:138:Infinity": 44,
+        "b:138:21:138:89:138:89:138:109:138:109:138:132": 9,
+        "s:139:18:139:92": 45,
+        "s:139:100:139:116": 46,
+        "s:139:116:139:203": 47,
+        "s:139:203:139:243": 48,
+        "s:139:243:139:Infinity": 49,
+        "s:140:4:140:Infinity": 50
+      },
+      "fnNames": {}
+    }
+  },
+  "source": "import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';\nimport { canonicalJson, requireCondition, SchemaValidator } from '@oms/contracts';\nimport type { Ref } from '@oms/contracts';\n\nexport type SecretPurpose =\n  'HANDOFF' | 'PARTY_CONTEXT' | 'PARTY_BROWSER' | 'INVITATION_TOKEN' | 'ENROLLMENT_HANDLE' | 'EMERGENCY_OPERATOR';\nexport interface SecretBinding {\n  purpose: Exclude<SecretPurpose,'INVITATION_TOKEN'>;\n  targetRef: Ref;\n  accountRef: Ref | null;\n  bindingRef: Ref | null;\n  bindingGeneration: number;\n  securityGeneration: number;\n  sourceRevision: number;\n  epoch: string;\n  challengeId: string;\n  keyVersion: string;\n}\nexport interface InvitationSecretBinding {\n  purpose:'INVITATION_TOKEN';\n  targetRef:Ref;\n  contactRef:Ref;\n  tokenGeneration:number;\n  epoch:string;\n  keyVersion:string;\n}\nconst PURPOSES = [\n  'HANDOFF',\n  'PARTY_CONTEXT',\n  'PARTY_BROWSER',\n  'INVITATION_TOKEN',\n  'ENROLLMENT_HANDLE',\n  'EMERGENCY_OPERATOR',\n];\nconst schema = new SchemaValidator();\nexport function canonicalSecretBytes(secret: string, purpose: SecretPurpose): Buffer {\n  requireCondition(\n    PURPOSES.includes(purpose),\n    503,\n    'SECRET_PURPOSE',\n    '등록된 비밀 목적이 필요합니다.',\n  );\n  const size = purpose === 'HANDOFF' ? 12 : 32;\n  requireCondition(\n    typeof secret === 'string' && /^[A-Za-z0-9_-]+$/.test(secret),\n    400,\n    'SECRET_FORMAT',\n    '비밀 입력 형식이 다릅니다.',\n  );\n  const bytes = Buffer.from(secret, 'base64url');\n  requireCondition(\n    bytes.length === size && bytes.toString('base64url') === secret,\n    400,\n    'SECRET_FORMAT',\n    '비밀 입력 형식이 다릅니다.',\n  );\n  return bytes;\n}\nexport function generatePurposeSecret(purpose: SecretPurpose): string {\n  requireCondition(\n    PURPOSES.includes(purpose),\n    503,\n    'SECRET_PURPOSE',\n    '등록된 비밀 목적이 필요합니다.',\n  );\n  return randomBytes(purpose === 'HANDOFF' ? 12 : 32).toString('base64url');\n}\nfunction bindingBytes(binding: SecretBinding|InvitationSecretBinding): Buffer {\n  if(binding.purpose==='INVITATION_TOKEN'){\n    requireCondition(Object.keys(binding).sort().join(',')==='contactRef,epoch,keyVersion,purpose,targetRef,tokenGeneration',503,'SECRET_BINDING','초대 검증 자료 결합이 다릅니다.');\n    schema.validateUri('urn:oms:contract:u2-access-additions:1#/$defs/MembershipInvitation',binding.targetRef);\n    schema.validateUri('urn:oms:contract:u2-access-additions:1#/$defs/RegisteredContact',binding.contactRef);\n    schema.validate('Revision',binding.tokenGeneration);schema.validate('Id',binding.epoch);schema.validate('Id',binding.keyVersion);\n    return Buffer.from(canonicalJson(binding),'utf8');\n  }\n  requireCondition(\n    Object.keys(binding).sort().join(',') ===\n      'accountRef,bindingGeneration,bindingRef,challengeId,epoch,keyVersion,purpose,securityGeneration,sourceRevision,targetRef' &&\n      PURPOSES.includes(binding.purpose),\n    503,\n    'SECRET_BINDING',\n    '검증 자료 결합이 다릅니다.',\n  );\n  for (const value of [\n    binding.bindingGeneration,\n    binding.securityGeneration,\n    binding.sourceRevision,\n  ])\n    schema.validate('Revision', value);\n  for (const value of [binding.epoch, binding.challengeId, binding.keyVersion])\n    schema.validate('Id', value);\n  schema.validateUri('urn:oms:contract:u2-access-additions:1#/$defs/Ref', binding.targetRef);\n  if (binding.accountRef !== null)\n    schema.validateUri('urn:oms:contract:u2-access-additions:1#/$defs/Account', binding.accountRef);\n  if (binding.bindingRef !== null)\n    schema.validateUri(\n      'urn:oms:contract:u2-access-additions:1#/$defs/ProviderBinding',\n      binding.bindingRef,\n    );\n  return Buffer.from(canonicalJson(binding), 'utf8');\n}\nexport class PurposeVerifier {\n  private readonly key: Buffer;\n  constructor(\n    key: Buffer,\n    readonly keyVersion: string,\n  ) {\n    requireCondition(key.length === 32, 503, 'VERIFIER_KEY', '목적 검증 키가 필요합니다.');\n    schema.validate('Id', keyVersion);\n    this.key = Buffer.from(key);\n  }\n  digest(secret: string, binding: SecretBinding|InvitationSecretBinding): string {\n    requireCondition(\n      binding.keyVersion === this.keyVersion,\n      503,\n      'VERIFIER_KEY_VERSION',\n      '검증 키 버전이 다릅니다.',\n    );\n    const metadata = bindingBytes(binding),\n      candidate = canonicalSecretBytes(secret, binding.purpose);\n    const lengths = Buffer.alloc(8);\n    lengths.writeUInt32BE(metadata.length, 0);\n    lengths.writeUInt32BE(candidate.length, 4);\n    // Length framing binds BOTH the canonical metadata and the candidate bytes.\n    return createHmac('sha256', this.key)\n      .update('oms-u2-purpose-secret:1\\0', 'utf8')\n      .update(lengths)\n      .update(metadata)\n      .update(candidate)\n      .digest('hex');\n  }\n  matches(secret: string, binding: SecretBinding|InvitationSecretBinding, expected: string): boolean {\n    if (!/^[a-f0-9]{64}$/.test(expected)) return false;\n    const actual = this.digest(secret, binding);\n    return timingSafeEqual(Buffer.from(actual, 'hex'), Buffer.from(expected, 'hex'));\n  }\n  inputDigest(purpose:'C21_VERIFY_FACTOR'|'C21_REPLACE_FIRST_FACTOR',metadata:unknown,candidate:Buffer):string {\n    requireCondition(['C21_VERIFY_FACTOR','C21_REPLACE_FIRST_FACTOR'].includes(purpose)&&candidate.length>0&&candidate.length<=4096,400,'C21_INPUT_FORMAT','등록된 원래 변경 입력이 필요합니다.');\n    const binding=Buffer.from(canonicalJson({purpose,keyVersion:this.keyVersion,metadata})),lengths=Buffer.alloc(8);requireCondition(binding.length<=65536,400,'C21_INPUT_FORMAT','원래 변경 metadata 상한입니다.');lengths.writeUInt32BE(binding.length,0);lengths.writeUInt32BE(candidate.length,4);\n    return createHmac('sha256',this.key).update('oms-u2-c21-input:1\\0').update(lengths).update(binding).update(candidate).digest('hex');\n  }\n}\n",
+  "expected": {
+    "total": 44,
+    "covered": 44,
+    "skipped": 0,
+    "pct": 100
+  }
+}

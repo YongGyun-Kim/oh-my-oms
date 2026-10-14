@@ -1,0 +1,93 @@
+{
+  "stage": "nfr-requirements",
+  "unit": "u1-integrated-foundation",
+  "upstream_ids": [
+    "NFR1",
+    "NFR2",
+    "NFR3",
+    "NFR4",
+    "NFR5",
+    "NFR6",
+    "NFR7",
+    "NFR8",
+    "NFR9",
+    "NFR10",
+    "NFR11",
+    "NFR12",
+    "NFR13",
+    "NFR14"
+  ],
+  "coverage": [
+    {
+      "id": "NFR1",
+      "status": "OK",
+      "target": "NFR1.1, NFR1.2, NFR1.3, NFR1.4, NFR1.5, NFR1.6, NFR1.7, NFR1.8, NFR1.9, NFR1.10, NFR1.11"
+    },
+    {
+      "id": "NFR2",
+      "status": "OK",
+      "target": "NFR2.1, NFR2.2, NFR2.3"
+    },
+    {
+      "id": "NFR3",
+      "status": "OK",
+      "target": "NFR3.1, NFR3.2, NFR3.3, NFR3.4"
+    },
+    {
+      "id": "NFR4",
+      "status": "OK",
+      "target": "NFR4.1, NFR4.2, NFR4.3, NFR4.4, NFR4.5"
+    },
+    {
+      "id": "NFR5",
+      "status": "OK",
+      "target": "NFR5.1, NFR5.2, NFR5.3, NFR5.4"
+    },
+    {
+      "id": "NFR6",
+      "status": "OK",
+      "target": "NFR6.1, NFR6.2, NFR6.3, NFR6.4, NFR6.5"
+    },
+    {
+      "id": "NFR7",
+      "status": "OK",
+      "target": "NFR7.1, NFR7.2, NFR7.3, NFR7.4, NFR7.5"
+    },
+    {
+      "id": "NFR8",
+      "status": "OK",
+      "target": "NFR8.1, NFR8.2"
+    },
+    {
+      "id": "NFR9",
+      "status": "OK",
+      "target": "NFR9.1, NFR9.2, NFR9.3, NFR9.4"
+    },
+    {
+      "id": "NFR10",
+      "status": "OK",
+      "target": "NFR10.1, NFR10.2, NFR10.3, NFR10.4"
+    },
+    {
+      "id": "NFR11",
+      "status": "OK",
+      "target": "NFR11.1, NFR11.2, NFR11.3"
+    },
+    {
+      "id": "NFR12",
+      "status": "OK",
+      "target": "NFR12.1, NFR12.2, NFR12.3, NFR12.4"
+    },
+    {
+      "id": "NFR13",
+      "status": "OK",
+      "target": "NFR13.1, NFR13.2, NFR13.3, NFR13.4, NFR13.5"
+    },
+    {
+      "id": "NFR14",
+      "status": "OK",
+      "target": "NFR14.1, NFR14.2, NFR14.3"
+    }
+  ]
+}
+

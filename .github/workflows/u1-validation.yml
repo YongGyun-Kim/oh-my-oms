@@ -1,0 +1,126 @@
+name: OMS pilot-current 필수 검증
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: oms-pilot-current-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  units:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        unit: [u1, u2, u3]
+    env:
+      NODE_ENV: test
+      OMS_U2_SYNTHETIC_PROFILE: approved-local-only
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 22.23.3
+          package-manager-cache: false
+      - run: npm ci
+      - run: npm run bootstrap:u2:ci
+      - if: matrix.unit == 'u3'
+        run: node --import tsx scripts/u3/prepare-test-databases.ts
+      - if: matrix.unit == 'u2'
+        run: npx playwright install --with-deps chromium
+      - name: 현재 유닛·전체 격리 통합·동일 전체 제품 분모
+        run: node --import tsx scripts/u3/ci-pilot-proof.ts ${{ matrix.unit }}
+      - name: 성공한 현재 원문과 source proof 보존
+        if: success()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: pilot-${{ matrix.unit }}-current-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 7
+          include-hidden-files: true
+          path: |
+            .reports/u3/pilot/validation-${{ matrix.unit }}.json
+            .reports/u3/pilot/${{ matrix.unit }}-unit.json
+            .reports/u3/pilot/${{ matrix.unit }}-integration.json
+            .reports/u3/pilot/${{ matrix.unit }}-coverage-tests.json
+            .reports/u3/pilot/${{ matrix.unit }}-coverage/coverage-final.json
+            .reports/u3/pilot/${{ matrix.unit }}-coverage/evidence.json
+      - name: 기존 U2 PC 성공 원문 보존
+        if: success() && matrix.unit == 'u2'
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: pilot-u2-pc-current-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 7
+          include-hidden-files: true
+          path: .reports/u2/e2e.json
+      - name: 비민감 종료 요약 보존
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: pilot-${{ matrix.unit }}-summary-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 7
+          include-hidden-files: true
+          path: .reports/u3/pilot/${{ matrix.unit }}-job-summary.json
+  project:
+    needs: [units]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      NODE_ENV: test
+      OMS_U2_SYNTHETIC_PROFILE: approved-local-only
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - name: 세 유닛의 실제 성공 확인
+        run: test '${{ needs.units.result }}' = success
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 22.23.3
+          package-manager-cache: false
+      - run: npm ci
+      - run: npm run bootstrap:u1:tools
+      - run: npm run bootstrap:u2:ci
+      - run: npx playwright install --with-deps chromium
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          pattern: 'pilot-u?-current-${{ github.sha }}'
+          merge-multiple: true
+          path: .reports/u3/pilot
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: pilot-u2-pc-current-${{ github.sha }}
+          path: .reports/u2
+      - name: 전체 source·3기여80%·필수 보안·동일 image 격리 실행
+        run: node --import tsx scripts/u3/ci-pilot-proof.ts project
+      - name: 최소 최종 결과 보존
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: pilot-project-validation-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 7
+          include-hidden-files: true
+          path: |
+            .reports/u3/pilot/project-job-summary.json
+            .reports/u3/pilot/release-validation.json
+            .reports/u3/pilot/image.json
+            .reports/u3/pilot/check.json
+            .reports/u3/pilot/coverage-aggregate.json
+            .reports/u2/security.json
+            .reports/u2/security-policy.json
+            .reports/u2/runtime-security.json
+
+# 실패/취소/skip/누락/source·lock·image 불일치는 병합 gate를 차단한다.
+# 원문 scanner/log/trace/자격은 업로드하지 않는다. 대량 부하·전체 DR는 full-proof만 명시 실행한다.

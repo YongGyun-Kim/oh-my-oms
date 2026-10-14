@@ -7,21 +7,24 @@
 
 ## Way of Working
 
-<!-- Affirmed during practices-discovery. Example: -->
-<!-- We use GitHub Flow with feature branches. Branches live 3-5 days max. -->
-<!-- Hotfixes branch from main and merge back via expedited review. -->
+- 우리는 `main`에서 짧은 작업 브랜치를 만들고, 개발자 본인이 검사 결과와 변경 내용을 검토한 뒤 `main`으로 squash 병합한다. 작업 시작 기준과 병합 대상은 모두 `main`이다. 별도 리뷰 인력을 가정하지 않는다. [Q1]
+- 개발자 본인이 검사 실패와 보안 발견 사항의 처리·검토 책임을 맡는다. 필수 검사 실패·미실행·보고서 누락 시 병합 또는 해당 배포를 보류한다. 불안정 테스트를 반복 실행해 우연히 통과한 결과로 대체하거나 테스트 하한을 낮추지 않는다. [Q8]
+- 보안 오탐·예외는 사유·담당·만료·재검토 기록을 남긴다. 실제 비밀 노출은 폐기·교체와 영향 확인으로 대응한다. 의존성·외부 빌드 도구의 변경 검토와 정기 검사·예외 재검토 주기는 운영 설계에서 확정한다. [Q8]
+- 개발자 1명은 현재 인력 현황이다. 필요한 기능을 자동 축소하지 않으며 1명이 개발·운영 가능한 구조와 부담을 후속 단계에서 검증한다. 기존 프로젝트 원칙을 유지한다.
 
 ## Walking Skeleton
 
-<!-- Affirmed during practices-discovery. Example: -->
-<!-- We don't run a walking skeleton — our deployment pipeline is mature -->
-<!-- and the slice cost outweighs the value at our maturity stage. -->
+- 우리는 전체 경로가 연결되는 최소 동작 버전을 먼저 구현·실행·검증하고 나머지 기능을 확장한다. 이는 구현 순서이며 승인된 전체 기능 범위는 유지한다. [Q2]
+- 첫 업무 흐름은 후속 요구사항·설계와 의존관계에 따라 정한다. 사용자가 승인한 검증 명령으로 실제 연결 결과를 확인하고 최초 동작에 대한 사용자 확인을 받는다. 설계 문서나 커버리지 수치만으로 실제 동작 확인을 대체하지 않는다.
 
 ## Testing Posture
 
-<!-- Affirmed during practices-discovery. Example: -->
-<!-- We use BDD. Specifications drive scenarios; scenarios drive code. -->
-<!-- Each Unit ships with feature files in /features/. -->
+- **Methodology**: test-after
+- **Ordering**: 테스트 가능한 각 계층을 구현한 뒤 그 계층의 테스트를 작성하고 실행한다. [Q3]
+- 단위·통합 테스트를 포함하는 `Standard` 전략을 유지하고 병합 전 CI에서 검사한다. [Q3; 현재 실행 설정]
+- 직접 작성한 테스트 가능한 제품 코드 전체에 라인 커버리지 80% 하한을 적용한다. 미실행 제품 파일도 분모에 포함하고 생성물·외부 코드 등의 제외 사유를 기록한다. 수락 기준별 정상·실패·경계 검증을 별도로 추적한다. [Q4]
+- 비밀 유입, 코드 취약 패턴(SAST), 의존성 취약점, CDK·생성 인프라 보안 설정, 격리된 검증 환경과 합성 데이터를 사용하는 실행 중 서비스 보안 검사를 필수 계획에 포함한다. [Q7]
+- 언어·구조가 정해진 뒤 도구·대상·실행 시점·차단 기준을 구체화하고 실제 적용 전에 확인한다. 검사 실패·누락은 Way of Working의 차단 원칙을 따른다. 아직 검사가 구현되거나 통과한 상태로 표시하지 않는다. [Q7–Q8]
 
 ## Guard Policy
 
@@ -29,13 +32,14 @@
 
 ## Deployment
 
-<!-- Affirmed during practices-discovery. -->
+- 우리는 `main` 병합 후 검증 환경(staging)에 자동 배포하고, 운영 환경(production)은 개발자 본인이 검사·핵심 동작 결과를 확인해 승인한 후 배포한다. [Q5]
+- 개발자 본인이 긴급 수정·복구 판단을 책임지고 실행 이력을 남긴다. 운영 배포 전후 핵심 동작을 확인하며 환경 구성·검증·복구 방법은 후속 설계에서 정한다. 필수 검사 실패·누락 시 해당 배포를 보류한다. [Q5·Q8]
+- AWS·CDK를 사용한다. CI/CD 제품·언어·DB·서비스 구성·배포 전환 방식은 아직 선택하지 않았다. 실제 고객·연동·실데이터·운영 검증 조건 HB-01–HB-08은 계속 열린 상태다.
 
 ## Code Style
 
-<!-- Team-specific conventions beyond the linter. Example: -->
-<!-- - Prefer named exports over default exports -->
-<!-- - All async functions return Result<T, E>, never throw -->
+- 기존 코드 표준은 없다. 우리는 선정할 언어의 관례를 따르고 포매터·린터 설정을 저장소에서 버전 관리해 로컬과 CI에서 동일하게 검사한다. 필수 검사 실패 시 병합을 보류한다. [Q6·Q8]
+- 오류 처리·파일 배치·모듈 의존 규칙과 구체적인 도구는 후속 설계에서 정한다. 검토자의 특정 구조·오류 표현 방식 제안을 이미 선택된 표준으로 취급하지 않는다. [Q6]
 
 ## Forbidden
 

@@ -1,0 +1,650 @@
+{
+  "stage": "code-generation",
+  "unit": "u3-commercial-ordering",
+  "meaning": "OK는 실제 존재하는 구현/시험 파일 연결이며 최종 동일 source 실행·CI·80%·운영목표 달성 인증이 아니다. 원래 AC7개 Deferred와 NFR 후속 실증을 유지하고 실운영 원본 확인은 별도 선행조건으로 표시한다.",
+  "upstream_ids": [
+    "AC2.1.1",
+    "AC2.1.2",
+    "AC2.1.3",
+    "AC2.3.1",
+    "AC2.3.2",
+    "AC2.3.3",
+    "AC2.3.4",
+    "AC2.4.1",
+    "AC2.4.2",
+    "AC2.4.3",
+    "AC2.5.1",
+    "AC2.5.2",
+    "AC2.5.3",
+    "AC2.6.1",
+    "AC2.6.2",
+    "AC2.6.3",
+    "AC2.6.4",
+    "AC2.7.1",
+    "AC2.7.2",
+    "AC2.7.3",
+    "AC2.7.4",
+    "AC3.1.1",
+    "AC3.1.2",
+    "AC3.1.3",
+    "AC3.1.4",
+    "AC3.2.1",
+    "AC3.2.2",
+    "AC3.2.3",
+    "AC3.4.1",
+    "AC3.4.2",
+    "AC3.4.3",
+    "AC3.5.1",
+    "AC3.5.2",
+    "AC3.5.3",
+    "AC3.5.4",
+    "AC3.6.1",
+    "AC3.6.2",
+    "AC3.6.3",
+    "AC7.5.1",
+    "AC7.5.2",
+    "AC7.5.3",
+    "AC7.5.4",
+    "BR1.1",
+    "BR1.2",
+    "BR1.3",
+    "BR1.4",
+    "BR2.1",
+    "BR2.2",
+    "BR2.3",
+    "BR2.4",
+    "BR2.5",
+    "BR2.6",
+    "BR2.7",
+    "BR3.1",
+    "BR3.2",
+    "BR3.3",
+    "BR3.4",
+    "BR3.5",
+    "BR3.6",
+    "BR3.7",
+    "BR3.8",
+    "BR4.1",
+    "BR4.2",
+    "BR4.3",
+    "BR4.4",
+    "BR4.5",
+    "BR4.6",
+    "BR5.1",
+    "BR5.2",
+    "BR5.3",
+    "BR5.4",
+    "NFR1.1",
+    "NFR1.2",
+    "NFR1.3",
+    "NFR1.4",
+    "NFR1.5",
+    "NFR2.1",
+    "NFR3.1",
+    "NFR4.1",
+    "NFR4.2",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR5.3",
+    "NFR5.4",
+    "NFR5.5",
+    "NFR5.6",
+    "NFR6.1",
+    "NFR7.1",
+    "NFR8.1",
+    "NFR9.1",
+    "NFR9.2",
+    "NFR9.3",
+    "NFR10.1",
+    "NFR11.1",
+    "NFR11.2",
+    "NFR11.3",
+    "NFR12.1",
+    "NFR12.2",
+    "NFR13.1",
+    "NFR13.2",
+    "NFR13.3",
+    "NFR13.4",
+    "NFR14.1",
+    "NFR14.2"
+  ],
+  "coverage": [
+    {
+      "id": "AC2.1.1",
+      "status": "OK",
+      "target": "tests/u3/integration/catalog.spec.ts"
+    },
+    {
+      "id": "AC2.1.2",
+      "status": "OK",
+      "target": "tests/u3/integration/catalog.spec.ts"
+    },
+    {
+      "id": "AC2.1.3",
+      "status": "OK",
+      "target": "tests/u3/integration/catalog.spec.ts"
+    },
+    {
+      "id": "AC2.3.1",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-change-request.spec.ts"
+    },
+    {
+      "id": "AC2.3.2",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-change-request.spec.ts"
+    },
+    {
+      "id": "AC2.3.3",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-change-request.spec.ts"
+    },
+    {
+      "id": "AC2.3.4",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-change-request.spec.ts"
+    },
+    {
+      "id": "AC2.4.1",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-agreement.spec.ts"
+    },
+    {
+      "id": "AC2.4.2",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-agreement.spec.ts"
+    },
+    {
+      "id": "AC2.4.3",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-agreement.spec.ts"
+    },
+    {
+      "id": "AC2.5.1",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-change-request.spec.ts"
+    },
+    {
+      "id": "AC2.5.2",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-change-request.spec.ts"
+    },
+    {
+      "id": "AC2.5.3",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-change-request.spec.ts"
+    },
+    {
+      "id": "AC2.6.1",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-owner-port.spec.ts"
+    },
+    {
+      "id": "AC2.6.2",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-owner-port.spec.ts"
+    },
+    {
+      "id": "AC2.6.3",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-owner-port.spec.ts"
+    },
+    {
+      "id": "AC2.6.4",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-owner-port.spec.ts"
+    },
+    {
+      "id": "AC2.7.1",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-agreement.spec.ts"
+    },
+    {
+      "id": "AC2.7.2",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-agreement.spec.ts"
+    },
+    {
+      "id": "AC2.7.3",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-agreement.spec.ts"
+    },
+    {
+      "id": "AC2.7.4",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-agreement.spec.ts"
+    },
+    {
+      "id": "AC3.1.1",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "SW 영구/기간제 동시 입력과 동일 타입은 첫 배포 설계에 포함하지만 선후불 혼합까지 포함한 원래 AC 전체는 후속이다."
+    },
+    {
+      "id": "AC3.1.2",
+      "status": "OK",
+      "target": "tests/u3/integration/order-submission.spec.ts"
+    },
+    {
+      "id": "AC3.1.3",
+      "status": "OK",
+      "target": "tests/u3/integration/order-submission.spec.ts"
+    },
+    {
+      "id": "AC3.1.4",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "첫 배포는 고객/직원 PC1280 이상이며 모바일은 추후 지원 결정 대상이다. PC와 모바일 양쪽 완료라는 원래 AC 전체는 후속이다."
+    },
+    {
+      "id": "AC3.2.1",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "첫 배포는 직원 전체 수락이며 자동 확정은 후속이다."
+    },
+    {
+      "id": "AC3.2.2",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "일부 선확정 금지/전체 검토는 유지하지만 자동 판단 수행을 포함한 원래 AC 전체는 후속이다."
+    },
+    {
+      "id": "AC3.2.3",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "기술 실패 구분/미확인 HOLD는 유지하지만 자동 판단 수행을 포함한 원래 AC 전체는 후속이다."
+    },
+    {
+      "id": "AC3.4.1",
+      "status": "OK",
+      "target": "tests/u3/integration/order-decision.spec.ts"
+    },
+    {
+      "id": "AC3.4.2",
+      "status": "OK",
+      "target": "tests/u3/integration/order-decision.spec.ts"
+    },
+    {
+      "id": "AC3.4.3",
+      "status": "OK",
+      "target": "tests/u3/integration/order-decision.spec.ts"
+    },
+    {
+      "id": "AC3.5.1",
+      "status": "OK",
+      "target": "tests/u3/integration/order-change.spec.ts"
+    },
+    {
+      "id": "AC3.5.2",
+      "status": "OK",
+      "target": "tests/u3/integration/order-change.spec.ts"
+    },
+    {
+      "id": "AC3.5.3",
+      "status": "OK",
+      "target": "tests/u3/integration/order-change.spec.ts"
+    },
+    {
+      "id": "AC3.5.4",
+      "status": "OK",
+      "target": "tests/u3/integration/order-change.spec.ts"
+    },
+    {
+      "id": "AC3.6.1",
+      "status": "OK",
+      "target": "tests/u3/integration/order-decision.spec.ts"
+    },
+    {
+      "id": "AC3.6.2",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "일괄 제공만 첫 배포 실행하며 명시 부분 제공과 품목별 실제 제공 조건은 U4/U5/U6 연계 후속이다."
+    },
+    {
+      "id": "AC3.6.3",
+      "status": "OK",
+      "target": "tests/u3/integration/order-decision.spec.ts"
+    },
+    {
+      "id": "AC7.5.1",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "기업 계약 범위 평가 원칙은 보존하지만 자동 갱신의 추가 동의 면제 실행은 후속이다."
+    },
+    {
+      "id": "AC7.5.2",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-proposal.spec.ts"
+    },
+    {
+      "id": "AC7.5.3",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-proposal.spec.ts"
+    },
+    {
+      "id": "AC7.5.4",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-proposal.spec.ts"
+    },
+    {
+      "id": "BR1.1",
+      "status": "OK",
+      "target": "tests/u3/integration/catalog.spec.ts"
+    },
+    {
+      "id": "BR1.2",
+      "status": "OK",
+      "target": "tests/u3/unit/contracts.spec.ts"
+    },
+    {
+      "id": "BR1.3",
+      "status": "OK",
+      "target": "tests/u3/integration/catalog.spec.ts"
+    },
+    {
+      "id": "BR1.4",
+      "status": "OK",
+      "target": "tests/u3/unit/order-price.spec.ts"
+    },
+    {
+      "id": "BR2.1",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-agreement.spec.ts"
+    },
+    {
+      "id": "BR2.2",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-change-request.spec.ts"
+    },
+    {
+      "id": "BR2.3",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-owner-port.spec.ts"
+    },
+    {
+      "id": "BR2.4",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-agreement.spec.ts"
+    },
+    {
+      "id": "BR2.5",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-agreement.spec.ts"
+    },
+    {
+      "id": "BR2.6",
+      "status": "OK",
+      "target": "tests/u3/integration/order-submission.spec.ts"
+    },
+    {
+      "id": "BR2.7",
+      "status": "OK",
+      "target": "tests/u3/integration/owner-query.spec.ts"
+    },
+    {
+      "id": "BR3.1",
+      "status": "OK",
+      "target": "tests/u3/integration/order-submission.spec.ts"
+    },
+    {
+      "id": "BR3.2",
+      "status": "OK",
+      "target": "tests/u3/integration/order-change.spec.ts"
+    },
+    {
+      "id": "BR3.3",
+      "status": "OK",
+      "target": "tests/u3/integration/repository-boundaries.spec.ts"
+    },
+    {
+      "id": "BR3.4",
+      "status": "OK",
+      "target": "tests/u3/integration/order-submission.spec.ts"
+    },
+    {
+      "id": "BR3.5",
+      "status": "OK",
+      "target": "tests/u3/integration/order-submission.spec.ts"
+    },
+    {
+      "id": "BR3.6",
+      "status": "OK",
+      "target": "tests/u3/integration/order-decision.spec.ts"
+    },
+    {
+      "id": "BR3.7",
+      "status": "OK",
+      "target": "tests/u3/integration/order-decision.spec.ts"
+    },
+    {
+      "id": "BR3.8",
+      "status": "OK",
+      "target": "tests/u3/integration/order-change.spec.ts"
+    },
+    {
+      "id": "BR4.1",
+      "status": "OK",
+      "target": "tests/u3/unit/order-price.spec.ts"
+    },
+    {
+      "id": "BR4.2",
+      "status": "OK",
+      "target": "tests/u3/unit/order-price.spec.ts"
+    },
+    {
+      "id": "BR4.3",
+      "status": "OK",
+      "target": "tests/u3/integration/order-submission.spec.ts"
+    },
+    {
+      "id": "BR4.4",
+      "status": "OK",
+      "target": "tests/u3/integration/order-change.spec.ts"
+    },
+    {
+      "id": "BR4.5",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-proposal.spec.ts"
+    },
+    {
+      "id": "BR4.6",
+      "status": "OK",
+      "target": "tests/u3/integration/order-change.spec.ts"
+    },
+    {
+      "id": "BR5.1",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-proposal.spec.ts"
+    },
+    {
+      "id": "BR5.2",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-proposal.spec.ts"
+    },
+    {
+      "id": "BR5.3",
+      "status": "OK",
+      "target": "tests/u3/unit/renewal-source.spec.ts"
+    },
+    {
+      "id": "BR5.4",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-proposal.spec.ts"
+    },
+    {
+      "id": "NFR1.1",
+      "status": "OK",
+      "target": "tests/u3/integration/http-host.spec.ts"
+    },
+    {
+      "id": "NFR1.2",
+      "status": "OK",
+      "target": "tests/u3/integration/owner-query.spec.ts"
+    },
+    {
+      "id": "NFR1.3",
+      "status": "OK",
+      "target": "tests/u3/integration/repository-boundaries.spec.ts"
+    },
+    {
+      "id": "NFR1.4",
+      "status": "OK",
+      "target": "tests/u3/integration/http-host.spec.ts"
+    },
+    {
+      "id": "NFR1.5",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-owner-port.spec.ts"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "30일 99.9%의 실제 관측은 U10 후속이며 달성 선언이 아니다."
+    },
+    {
+      "id": "NFR3.1",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "전체 재해·야간 복구 30분 실증은 U10 후속이다."
+    },
+    {
+      "id": "NFR4.1",
+      "status": "OK",
+      "target": "tests/u3/integration/repository-boundaries.spec.ts"
+    },
+    {
+      "id": "NFR4.2",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "전체 장애 범위 RPO0 실증은 U1/U10 후속이며 안전한 성공 기록 의무는 첫 배포 필수다."
+    },
+    {
+      "id": "NFR5.1",
+      "status": "OK",
+      "target": "tests/u3/integration/repository-boundaries.spec.ts"
+    },
+    {
+      "id": "NFR5.2",
+      "status": "OK",
+      "target": "tests/u3/unit/order-price.spec.ts"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "OK",
+      "target": "tests/u3/integration/order-submission.spec.ts"
+    },
+    {
+      "id": "NFR5.4",
+      "status": "OK",
+      "target": "tests/u3/integration/order-change.spec.ts"
+    },
+    {
+      "id": "NFR5.5",
+      "status": "OK",
+      "target": "tests/u3/integration/order-change.spec.ts"
+    },
+    {
+      "id": "NFR5.6",
+      "status": "OK",
+      "target": "tests/u3/integration/order-decision.spec.ts"
+    },
+    {
+      "id": "NFR6.1",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "원래 정상 부하 p95/오류율·실측 용량은 해당 시험에서 확인하며 현재 제한값을 달성 증거로 쓰지 않는다."
+    },
+    {
+      "id": "NFR7.1",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "대량100k/50분·원래 집중/회복 검증은 사용자 보류/후속이며 새로 실행하지 않는다."
+    },
+    {
+      "id": "NFR8.1",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "U10/U7의 실제 배포/중단 집계·무중단 실증은 별도다. 기본 절차 준비는 첫 배포 전이다."
+    },
+    {
+      "id": "NFR9.1",
+      "status": "OK",
+      "target": "apps/api/src/operations.ts"
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "tests/u3/integration/commercial-owner-port.spec.ts"
+    },
+    {
+      "id": "NFR9.3",
+      "status": "OK",
+      "target": "packages/core/src/u3-after-sales-source.ts"
+    },
+    {
+      "id": "NFR10.1",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "실제 두 알림 경로 발송/수신은 U10/U7 미실증이며 기본 준비는 첫 배포 전이다."
+    },
+    {
+      "id": "NFR11.1",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "로컬 합성 admission/미등록 소유자 차단은 구현되었지만 실제 국내 provider·저장/로그/백업·외부 처리 경로 원본 확인은 실데이터 전 선행조건으로 미완료다."
+    },
+    {
+      "id": "NFR11.2",
+      "status": "OK",
+      "target": "tests/u3/integration/http-host.spec.ts"
+    },
+    {
+      "id": "NFR11.3",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "현재 목적/근거 검증은 구현되었지만 실제 보관/삭제/정정·외부 처리 정책/원본 소유자의 운영 등록 확인은 실데이터 전 선행조건으로 미완료다."
+    },
+    {
+      "id": "NFR12.1",
+      "status": "OK",
+      "target": "tests/u3/unit/contracts.spec.ts"
+    },
+    {
+      "id": "NFR12.2",
+      "status": "Deferred",
+      "target": "docs/u3/README.md",
+      "reason": "모바일·영어 확장/실제 UI 검증은 U8/U9 후속이며 해외 처리 허용을 뜻하지 않는다."
+    },
+    {
+      "id": "NFR13.1",
+      "status": "OK",
+      "target": "tests/u3/integration/order-change.spec.ts"
+    },
+    {
+      "id": "NFR13.2",
+      "status": "OK",
+      "target": "scripts/u3/coverage-aggregate.ts"
+    },
+    {
+      "id": "NFR13.3",
+      "status": "OK",
+      "target": "tests/u3/unit/contracts.spec.ts"
+    },
+    {
+      "id": "NFR13.4",
+      "status": "OK",
+      "target": "scripts/u3/pilot-validation.ts"
+    },
+    {
+      "id": "NFR14.1",
+      "status": "OK",
+      "target": "scripts/u2/security.ts"
+    },
+    {
+      "id": "NFR14.2",
+      "status": "OK",
+      "target": "scripts/u3/pilot-validation.ts"
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:notificationdelivery:2",
+  "title": "업무·복구·점검 통지의 대상 검증과 전달 추적 — v2 explicit common dependency",
+  "x-contract-id": "C11",
+  "x-provider-component": "NotificationDelivery",
+  "x-provider-unit": "U7",
+  "x-consumers": ["OperationalAssurance"],
+  "x-mechanism": "in-process typed port; API/worker 중 해당 실행 호스트에서 사용",
+  "x-errors": {
+    "$ref": "urn:oms:contract:common:2#/$defs/Problem"
+  },
+  "x-operations": [
+    {
+      "name": "readNotices",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/ReadRequest"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NotificationViewResultPage"
+      },
+      "stories": ["US8.9"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "recordNoticeRead",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoticeInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": ["US8.9"],
+      "target": {
+        "allOf": [
+          {
+            "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+          },
+          {
+            "properties": {
+              "recordRef": {
+                "allOf": [
+                  {
+                    "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                  },
+                  {
+                    "properties": {
+                      "owner": {
+                        "const": "NotificationDelivery"
+                      },
+                      "entity": {
+                        "const": "NotificationIntent"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "ingestDeliveryObservation",
+      "kind": "command",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/ExternalObservation"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/Receipt"
+      },
+      "stories": [],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "readOwnerDiagnostics",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/DiagnosticInput"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/DiagnosticView"
+      },
+      "stories": ["US9.2", "US9.4"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    },
+    {
+      "name": "readOwnerHistory",
+      "kind": "query",
+      "input": {
+        "$ref": "urn:oms:contract:common:2#/$defs/RecordQuery"
+      },
+      "output": {
+        "$ref": "urn:oms:contract:common:2#/$defs/HistoryView"
+      },
+      "stories": ["US9.4"],
+      "target": {
+        "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+      }
+    }
+  ],
+  "$defs": {
+    "Call": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readNotices"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ReadRequest"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "recordNoticeRead"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoticeInput"
+            },
+            "target": {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:common:2#/$defs/RecordInvocationTarget"
+                },
+                {
+                  "properties": {
+                    "recordRef": {
+                      "allOf": [
+                        {
+                          "$ref": "urn:oms:contract:common:2#/$defs/Ref"
+                        },
+                        {
+                          "properties": {
+                            "owner": {
+                              "const": "NotificationDelivery"
+                            },
+                            "entity": {
+                              "const": "NotificationIntent"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "ingestDeliveryObservation"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ExternalObservation"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readOwnerDiagnostics"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/DiagnosticInput"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:oms:contract:common:2#/$defs/ServiceContext"
+            },
+            "operation": {
+              "const": "readOwnerHistory"
+            },
+            "data": {
+              "$ref": "urn:oms:contract:common:2#/$defs/RecordQuery"
+            },
+            "target": {
+              "$ref": "urn:oms:contract:common:2#/$defs/NoInvocationTarget"
+            }
+          },
+          "required": ["context", "operation", "data", "target"],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}
