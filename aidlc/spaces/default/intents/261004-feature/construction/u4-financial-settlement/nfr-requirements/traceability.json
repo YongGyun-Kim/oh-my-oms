@@ -1,0 +1,300 @@
+{
+  "stage": "nfr-requirements",
+  "unit": "u4-financial-settlement",
+  "scope": "first-release-pilot-library",
+  "meaning": "OK는 요구사항 정의의 연결이다. 구현·시험·운영 목표 달성 판정이 아니다. Deferred는 원래 전체 실증의 후속 상태이며 첫 배포의 기본 보호 의무를 면제하지 않는다. 기능 설계 R-03은 미해결이고 관련 환불 재시도 검증을 통과로 선언하지 않는다.",
+  "upstream_ids": [
+    "NFR1",
+    "NFR2",
+    "NFR3",
+    "NFR4",
+    "NFR5",
+    "NFR6",
+    "NFR7",
+    "NFR8",
+    "NFR9",
+    "NFR10",
+    "NFR11",
+    "NFR12",
+    "NFR13",
+    "NFR14"
+  ],
+  "coverage": [
+    {
+      "id": "NFR1",
+      "status": "OK",
+      "target": "NFR1.1, NFR1.2, NFR1.3, NFR1.4, NFR1.5"
+    },
+    {
+      "id": "NFR2",
+      "status": "Deferred",
+      "target": "NFR2.1",
+      "reason": "99.9% 목표와 U4 업무 실패 기록은 유지한다. 연속30일 가용성 실증은 U10 후속이며 현재 달성 사실이 아니다."
+    },
+    {
+      "id": "NFR3",
+      "status": "Deferred",
+      "target": "NFR3.1",
+      "reason": "원본/이력/예약·확정 대조 의무는 유지한다. 재해/야간 장애의30분 복구 실증은 사용자 보류 상태다."
+    },
+    {
+      "id": "NFR4",
+      "status": "Deferred",
+      "target": "NFR4.1, NFR4.2, NFR4.3",
+      "reason": "안전한 접수·원자 기록·보호 저장 확인·두 종류 중복 보호는 첫 배포 의무다. 정의한 전체 장애 범위 RPO0 전수 실증은 U10 후속이다."
+    },
+    {
+      "id": "NFR5",
+      "status": "OK",
+      "target": "NFR5.1, NFR5.2, NFR5.3, NFR5.4, NFR5.5, NFR5.6",
+      "reason": "원금/한도·대금 판단·기한/정정의 요구를 정의한다. NFR5.4의 부분 실패 재시도는 기능 설계 R-03 미해결에 의존하며 구현·검증 완료가 아니다."
+    },
+    {
+      "id": "NFR6",
+      "status": "Deferred",
+      "target": "NFR6.1, NFR6.2",
+      "reason": "조회1초/변경2초 p95·오류0.1%와 처리/조회 경계 요구를 정의한다. 실제 용량·U4 부하 비율과 짧은 시험의 정확 구성/기간은 미확정이며 대량 시험은 후속이다."
+    },
+    {
+      "id": "NFR7",
+      "status": "Deferred",
+      "target": "NFR7.1, NFR7.2",
+      "reason": "100k/50분·집중 부하/회복의 원래 실증은 후속이다. Q2의64KiB·자수·배분100건은 별도의 첫 배포 입력 보호 의무이며 실제 처리 용량이 아니다."
+    },
+    {
+      "id": "NFR8",
+      "status": "OK",
+      "target": "NFR8.1"
+    },
+    {
+      "id": "NFR9",
+      "status": "Deferred",
+      "target": "NFR9.1, NFR9.2",
+      "reason": "공통 구조 재사용과 기술 인력/업무 승인 분리는 첫 배포 요구다. 실제 정상일/배포/장애 사람 작업량의 장기 실증은 후속이다."
+    },
+    {
+      "id": "NFR10",
+      "status": "OK",
+      "target": "NFR10.1, NFR10.2"
+    },
+    {
+      "id": "NFR11",
+      "status": "OK",
+      "target": "NFR11.1, NFR11.2, NFR11.3, NFR11.4"
+    },
+    {
+      "id": "NFR12",
+      "status": "OK",
+      "target": "NFR12.1, NFR12.2"
+    },
+    {
+      "id": "NFR13",
+      "status": "OK",
+      "target": "NFR13.1, NFR13.2, NFR13.3"
+    },
+    {
+      "id": "NFR14",
+      "status": "OK",
+      "target": "NFR14.1, NFR14.2"
+    }
+  ],
+  "reverse": [
+    {
+      "id": "NFR1.1",
+      "status": "OK",
+      "target": "NFR1"
+    },
+    {
+      "id": "NFR1.2",
+      "status": "OK",
+      "target": "NFR1"
+    },
+    {
+      "id": "NFR1.3",
+      "status": "OK",
+      "target": "NFR1"
+    },
+    {
+      "id": "NFR1.4",
+      "status": "OK",
+      "target": "NFR1"
+    },
+    {
+      "id": "NFR1.5",
+      "status": "OK",
+      "target": "NFR1"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "OK",
+      "target": "NFR2"
+    },
+    {
+      "id": "NFR3.1",
+      "status": "OK",
+      "target": "NFR3"
+    },
+    {
+      "id": "NFR4.1",
+      "status": "OK",
+      "target": "NFR4"
+    },
+    {
+      "id": "NFR4.2",
+      "status": "OK",
+      "target": "NFR4"
+    },
+    {
+      "id": "NFR4.3",
+      "status": "OK",
+      "target": "NFR4"
+    },
+    {
+      "id": "NFR5.1",
+      "status": "OK",
+      "target": "NFR5"
+    },
+    {
+      "id": "NFR5.2",
+      "status": "OK",
+      "target": "NFR5"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "OK",
+      "target": "NFR5"
+    },
+    {
+      "id": "NFR5.4",
+      "status": "OK",
+      "target": "NFR5"
+    },
+    {
+      "id": "NFR5.5",
+      "status": "OK",
+      "target": "NFR5"
+    },
+    {
+      "id": "NFR5.6",
+      "status": "OK",
+      "target": "NFR5"
+    },
+    {
+      "id": "NFR6.1",
+      "status": "OK",
+      "target": "NFR6"
+    },
+    {
+      "id": "NFR6.2",
+      "status": "OK",
+      "target": "NFR6"
+    },
+    {
+      "id": "NFR7.1",
+      "status": "OK",
+      "target": "NFR7"
+    },
+    {
+      "id": "NFR7.2",
+      "status": "OK",
+      "target": "NFR7"
+    },
+    {
+      "id": "NFR8.1",
+      "status": "OK",
+      "target": "NFR8"
+    },
+    {
+      "id": "NFR9.1",
+      "status": "OK",
+      "target": "NFR9"
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "NFR9"
+    },
+    {
+      "id": "NFR10.1",
+      "status": "OK",
+      "target": "NFR10"
+    },
+    {
+      "id": "NFR10.2",
+      "status": "OK",
+      "target": "NFR10"
+    },
+    {
+      "id": "NFR11.1",
+      "status": "OK",
+      "target": "NFR11"
+    },
+    {
+      "id": "NFR11.2",
+      "status": "OK",
+      "target": "NFR11"
+    },
+    {
+      "id": "NFR11.3",
+      "status": "OK",
+      "target": "NFR11"
+    },
+    {
+      "id": "NFR11.4",
+      "status": "OK",
+      "target": "NFR11"
+    },
+    {
+      "id": "NFR12.1",
+      "status": "OK",
+      "target": "NFR12"
+    },
+    {
+      "id": "NFR12.2",
+      "status": "OK",
+      "target": "NFR12"
+    },
+    {
+      "id": "NFR13.1",
+      "status": "OK",
+      "target": "NFR13"
+    },
+    {
+      "id": "NFR13.2",
+      "status": "OK",
+      "target": "NFR13"
+    },
+    {
+      "id": "NFR13.3",
+      "status": "OK",
+      "target": "NFR13"
+    },
+    {
+      "id": "NFR14.1",
+      "status": "OK",
+      "target": "NFR14"
+    },
+    {
+      "id": "NFR14.2",
+      "status": "OK",
+      "target": "NFR14"
+    }
+  ],
+  "verification_dependencies": [
+    {
+      "id": "UPSTREAM-U4-FD-R-03",
+      "requirement": "NFR5.4",
+      "source": "../functional-design/reviews/review-02.md",
+      "status": "unresolved",
+      "effect": "60성공·40실패 후40만 재예약하는 상태 집계/전이의 모순. 사용자가 미해결 NFR 진행을 선택했으며 이번 문서로 해결/시험 통과 처리하지 않는다."
+    }
+  ],
+  "sources": [
+    "../../../inception/requirements-analysis/requirements.md",
+    "../functional-design/functional-spec.md",
+    "../functional-design/rules.md",
+    "../../../inception/contract-design/contract-summary.md",
+    "../../../release-planning/first-release-delivery-plan.md",
+    "nfr-requirements-questions.md"
+  ]
+}

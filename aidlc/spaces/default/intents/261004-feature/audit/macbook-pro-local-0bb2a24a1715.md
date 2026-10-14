@@ -73467,3 +73467,244 @@
 **Context**: construction > u4-financial-settlement > nfr-requirements > nfr-requirements-questions.md
 
 ---
+
+## Decision Recorded
+**Timestamp**: 2026-10-14T14:57:43Z
+**Event**: DECISION_RECORDED
+**Stage**: nfr-requirements
+**Decision**: Q1 첫 배포 입금·환불 증빙: A 기존 보관처 참조만 등록 권장 또는 B OMS 원문 파일 업로드 포함. Q2 U4 입력 상한: A 청구 명칭100자·설명/정정 사유2000자·문서/거래 참조256자·한 번의 같은 주문 청구별 배분100건 및 전체 JSON64KiB 권장 또는 B 상한 직접 지정. 자수는 Unicode code point. 초과 전체 거절·절삭/자동 분할/부분 반영 없음. 주문당 청구 총수 제한 아님. Q1/Q2 추천 이유와 실제 원본·보존/국내 저장의 미확인 경계를 질문 파일과 함께 제시한다.
+**Options**: Q1 A 기존 보관처 참조만 등록,Q1 B OMS 원문 파일 업로드 포함,Q1 Other,Q2 A 제안 상한 적용,Q2 B 상한 직접 지정,Q2 Other
+**Unit**: u4-financial-settlement
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-14T14:58:43Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T14:59:13Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/nfr-requirements/nfr-requirements-questions.md
+**Context**: construction > u4-financial-settlement > nfr-requirements > nfr-requirements-questions.md
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-14T14:59:14Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/.aidlc-engine/answer-text/answer.txt
+**Context**: .aidlc-engine > answer-text > answer.txt
+
+---
+
+## Question Answered
+**Timestamp**: 2026-10-14T14:59:19Z
+**Event**: QUESTION_ANSWERED
+**Stage**: nfr-requirements
+**Details**: 1 A,\n2 A
+**Unit**: u4-financial-settlement
+
+---
+
+## Decision Recorded
+**Timestamp**: 2026-10-14T14:59:36Z
+**Event**: DECISION_RECORDED
+**Stage**: nfr-requirements
+**Decision**: Does this all look correct before I generate the artifact?
+**Options**: Looks correct,Request changes
+**Checkpoint**: Consolidated Summary Confirmation
+**Questions File**: aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/nfr-requirements/nfr-requirements-questions.md
+**Unit**: u4-financial-settlement
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-14T15:09:34Z
+**Event**: HUMAN_TURN
+**Session**: 01a105f9-85cc-7b02-9e52-dba1a24de68f
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T15:10:20Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/nfr-requirements/nfr-requirements-questions.md
+**Context**: construction > u4-financial-settlement > nfr-requirements > nfr-requirements-questions.md
+
+---
+
+## Summary Confirmation Recorded
+**Timestamp**: 2026-10-14T15:10:20Z
+**Event**: SUMMARY_CONFIRMATION_RECORDED
+**Stage**: nfr-requirements
+**Details**: Looks correct
+**Checkpoint**: Consolidated Summary Confirmation
+**Questions File**: aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/nfr-requirements/nfr-requirements-questions.md
+**Questions SHA-256**: 296ca61e02311b9f911086b65a0c36c1031e31fe05e2684c8f4039ee6e235403
+**Hash Scope**: confirmed-content-v2
+**Unit**: u4-financial-settlement
+**Person Reply**: 1
+**Summary Authorization Id**: bbc25d633b0dd1a74a75845ab35a2047a3714c8f4fc4a92046b733df037b3372
+
+---
+
+## Unit Started
+**Timestamp**: 2026-10-14T15:11:01Z
+**Event**: UNIT_STARTED
+**Stage**: nfr-requirements
+**Unit**: u4-financial-settlement
+**Run floor**: STAGE_JUMPED:2026-10-04T17:59:13Z#1
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-14T15:14:44Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/nfr-requirements/security-requirements.md
+**Context**: construction > u4-financial-settlement > nfr-requirements > security-requirements.md
+**Summary Authorization Id**: bbc25d633b0dd1a74a75845ab35a2047a3714c8f4fc4a92046b733df037b3372
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-14T15:14:45Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/nfr-requirements/tech-stack-decisions.md
+**Context**: construction > u4-financial-settlement > nfr-requirements > tech-stack-decisions.md
+**Summary Authorization Id**: bbc25d633b0dd1a74a75845ab35a2047a3714c8f4fc4a92046b733df037b3372
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T15:15:00Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/nfr-requirements/security-requirements.md
+**Context**: construction > u4-financial-settlement > nfr-requirements > security-requirements.md
+**Summary Authorization Id**: bbc25d633b0dd1a74a75845ab35a2047a3714c8f4fc4a92046b733df037b3372
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T15:15:00Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/nfr-requirements/tech-stack-decisions.md
+**Context**: construction > u4-financial-settlement > nfr-requirements > tech-stack-decisions.md
+**Summary Authorization Id**: bbc25d633b0dd1a74a75845ab35a2047a3714c8f4fc4a92046b733df037b3372
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-14T15:15:31Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/nfr-requirements/traceability.json
+**Context**: construction > u4-financial-settlement > nfr-requirements > traceability.json
+**Summary Authorization Id**: bbc25d633b0dd1a74a75845ab35a2047a3714c8f4fc4a92046b733df037b3372
+
+---
+
+## Sensor Fired
+**Timestamp**: 2026-10-14T15:15:31Z
+**Event**: SENSOR_FIRED
+**Fire id**: 446d2127
+**Sensor ID**: traceability
+**Stage slug**: nfr-requirements
+**Output path**: aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/nfr-requirements/traceability.json
+
+---
+
+## Sensor Passed
+**Timestamp**: 2026-10-14T15:15:31Z
+**Event**: SENSOR_PASSED
+**Fire id**: 446d2127
+**Sensor ID**: traceability
+**Stage slug**: nfr-requirements
+**Output path**: aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/nfr-requirements/traceability.json
+**Duration ms**: 75
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T15:16:52Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: 수정 이후 문서 검증을 다시 실행했고, traceability·required-sections 센서와 `git diff --check` 모두 통과했습니다. JSON 파싱, 상대 링크, UTF-8 및 문자 이스케이프 검사도 통과했습니다. 파일 수정이나 제품 시험은 하지 않았습니다.
+
+---
+
+## Review Requested
+**Timestamp**: 2026-10-14T15:17:04Z
+**Event**: REVIEW_REQUESTED
+**Stage**: nfr-requirements
+**Reviewer**: aidlc-architecture-reviewer-agent
+**Unit**: u4-financial-settlement
+**Iteration**: 1
+**Artifact Fingerprint**: sha256:e727cb376d537fb2e663918ce8dadad1269083cc3f07c9214a1ab05107e455e2
+**Request Id**: review:9f4c85bce5756ecbd21631592c64217d
+**Review File**: .aidlc-engine/reviews/nfr-requirements/units/u4-financial-settlement/f047ef2c1a8e4a4e/1.9f4c85bce5756ecbd21631592c64217d.review.md
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-14T15:17:18Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/.aidlc-engine/reviewer-dispatch.json
+**Context**: .aidlc-engine > reviewer-dispatch.json
+
+---
+
+## Artifact Created
+**Timestamp**: 2026-10-14T15:21:34Z
+**Event**: ARTIFACT_CREATED
+**Tool**: Write
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/.aidlc-engine/reviews/nfr-requirements/units/u4-financial-settlement/f047ef2c1a8e4a4e/1.9f4c85bce5756ecbd21631592c64217d.review.md
+**Context**: .aidlc-engine > reviews > nfr-requirements > units > u4-financial-settlement > f047ef2c1a8e4a4e > 1.9f4c85bce5756ecbd21631592c64217d.review.md
+
+---
+
+## Review Completed
+**Timestamp**: 2026-10-14T15:21:49Z
+**Event**: REVIEW_COMPLETED
+**Stage**: nfr-requirements
+**Reviewer**: aidlc-architecture-reviewer-agent
+**Unit**: u4-financial-settlement
+**Iteration**: 1
+**Verdict**: READY
+**Request Fingerprint**: sha256:e727cb376d537fb2e663918ce8dadad1269083cc3f07c9214a1ab05107e455e2
+**Artifact Fingerprint**: sha256:e727cb376d537fb2e663918ce8dadad1269083cc3f07c9214a1ab05107e455e2
+**Request Id**: review:9f4c85bce5756ecbd21631592c64217d
+**Review Record**: .aidlc-engine/reviews/nfr-requirements/units/u4-financial-settlement/f047ef2c1a8e4a4e/1.json
+**Review Record Digest**: sha256:5aed357db5d23eaaa3e4a4ac3eb41c60786069c51d2eae9a8695d8f5e0b65386
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T15:21:52Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: aidlc-architecture-reviewer-agent
+**Agent ID**: 01a13afd-d864-7750-9c47-d951ff934e8d
+**Message**: **Reviewer:** aidlc-architecture-reviewer-agent\n\n**Verdict:** READY\n\n새 발견 사항 0건. R-03과 기존 U2/U3 위험은 미해결로 유지됩니다. 필수 센서 실행 결과와 린터 제외 경고를 기록했으며, 제품 검증·배포 승인을 의미하지 않습니다.\n\n[리뷰 파일](/Users/gyun/Project/oh-my
+
+---
+
+## Unit Completed
+**Timestamp**: 2026-10-14T15:22:03Z
+**Event**: UNIT_COMPLETED
+**Stage**: nfr-requirements
+**Unit**: u4-financial-settlement
+**Run floor**: STAGE_JUMPED:2026-10-04T17:59:13Z#1
+
+---
