@@ -10,3 +10,6 @@ export * from './u2-types.js';
 export * from './u2-declarations.js';
 export * from './u3-types.js';
 export * from './u3-declarations.js';
+export * from './u4-types.js';
+export * from './u4-declarations.js';
+export * from './u4-validation.js';

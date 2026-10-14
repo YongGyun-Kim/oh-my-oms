@@ -10,6 +10,7 @@ import { OmsError, requireCondition } from './errors.js';
 import { SchemaValidator } from './schema.js';
 import type { U2PurposeContext, U2PrivateOperatorContext } from './u2-types.js';
 import { U3_PROFILE, U3_REGISTRY_VERSION } from './u3-declarations.js';
+import { U4_PROFILE, U4_REGISTRY_VERSION } from './u4-declarations.js';
 
 export interface Operation {
   owner: string;
@@ -41,6 +42,17 @@ export class OperationRegistry {
   private readonly handlers = new Map<string, Handler>();
   constructor(private readonly validator: SchemaValidator) {}
   declare(operation: Operation): void {
+    if (
+      operation.contract === 'u4-financial' ||
+      operation.input.startsWith(U4_PROFILE) ||
+      operation.output.startsWith(U4_PROFILE)
+    )
+      requireCondition(
+        operation.contract === 'u4-financial' && operation.version === U4_REGISTRY_VERSION,
+        503,
+        'CONTRACT_VERSION_MISMATCH',
+        'U4 profile 개정1은 별도 registry version4로 등록해야 합니다.',
+      );
     if (
       operation.contract === 'u3-commercial' ||
       operation.input.startsWith(U3_PROFILE) ||

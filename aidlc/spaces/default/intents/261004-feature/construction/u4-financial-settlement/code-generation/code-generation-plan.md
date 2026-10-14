@@ -23,13 +23,13 @@
 체크박스 18개가 구현 작업 단위다. 테스트 가능한 계층은 구현 후 해당 시험을 작성·실행하고 다음 계층으로 진행한다. 단순 시험 실행은 별도 Luna, 코드 작성과 실패 원인 판단은 개발 담당이 맡는다. 자동 진행도 아래 R-03 및 공식 명령 선택의 사람 판단을 대신하지 않는다.
 
 ### Step 1
-- [ ] 실행 준비·U4 시험 설정을 추가한다. `tests/u4/vitest.unit.config.ts`, `vitest.integration.config.ts`, `vitest.coverage.config.ts`, `fixtures/profile.ts`, `fixtures/databases.ts`, `fixtures/safe-json-reporter.ts`, `scripts/u4/prepare-test-databases.ts`를 만들고 package.json/tsconfig.json에 U4의 정확한 범위를 등록한다. 기존 Vitest/Node/TypeORM/lock을 재사용하며 별도 U4 합성 primary·보호 DB/역할만 준비한다. 첫 실행 시험은 Step3의 실제 계약 시험이며 무시험 성공 설정을 넣지 않는다. 대응: 전체 U4 스토리의 실행 기반, NFR13.1–13.2·IP05.
+- [x] 실행 준비·U4 시험 설정을 추가한다. `tests/u4/vitest.unit.config.ts`, `vitest.integration.config.ts`, `vitest.coverage.config.ts`, `fixtures/profile.ts`, `fixtures/databases.ts`, `fixtures/safe-json-reporter.ts`, `scripts/u4/prepare-test-databases.ts`를 만들고 package.json/tsconfig.json에 U4의 정확한 범위를 등록한다. 기존 Vitest/Node/TypeORM/lock을 재사용하며 별도 U4 합성 primary·보호 DB/역할만 준비한다. 첫 실행 시험은 Step3의 실제 계약 시험이며 무시험 성공 설정을 넣지 않는다. 대응: 전체 U4 스토리의 실행 기반, NFR13.1–13.2·IP05.
 
 ### Step 2
-- [ ] 변경 계약/런타임 입력을 구현한다. 신규 `packages/contracts/schemas/u4-financial-v1.json`, `u4-operations-v1.json`, `src/u4-types.ts`, `u4-validation.ts`, `u4-declarations.ts`와 기존 schema/exports/registry 연결을 추가한다. 새 profile `urn:oms:contract:u4-financial:1`과 기존 등록 버전3과 구별한 버전4를 사용한다. AgreedPaymentPlan·DueBasis·거래 식별/별칭·배분 묶음·목적/개정·원래 환불 작업/부분/시도·허용 조회를 닫힌 형식으로 정의한다. C00 Money/Ref/Receipt/Problem을 재사용하고 문서/거래 참조를 가짜 업무 Ref로 만들지 않는다. 기존 U3 profile/version3 입력에 새 필드를 허용하지 않는다. 대응: US4.1/4.4/4.5/4.6/8.6, 협력 US2.4/2.6/3.1/3.4/7.1·BR4.2/4.22.
+- [x] 변경 계약/런타임 입력을 구현한다. 신규 `packages/contracts/schemas/u4-financial-v1.json`, `u4-operations-v1.json`, `src/u4-types.ts`, `u4-validation.ts`, `u4-declarations.ts`와 기존 schema/exports/registry 연결을 추가한다. 새 profile `urn:oms:contract:u4-financial:1`과 기존 등록 버전3과 구별한 버전4를 사용한다. AgreedPaymentPlan·DueBasis·거래 식별/별칭·배분 묶음·목적/개정·원래 환불 작업/부분/시도·허용 조회를 닫힌 형식으로 정의한다. C00 Money/Ref/Receipt/Problem을 재사용하고 문서/거래 참조를 가짜 업무 Ref로 만들지 않는다. 기존 U3 profile/version3 입력에 새 필드를 허용하지 않는다. 대응: US4.1/4.4/4.5/4.6/8.6, 협력 US2.4/2.6/3.1/3.4/7.1·BR4.2/4.22.
 
 ### Step 3
-- [ ] 계약 계층 구현 후 `tests/u4/unit/contracts.spec.ts`, `input-boundaries.spec.ts`를 작성·실행한다. 각 구성 5–8개 의미 있는 정상/실패/경계 시험을 기본으로 exact integer/범위 초과·알 수 없는 필드/Ref·1/100/0/101개와 중복 항목·한글/비BMP code point·상한+1·구버전 거절을 포함한다. HTTP byte 상한은 Step15 실제 parser에서 별도 확인한다. 대응: Step2와 NFR5.2/7.1/7.2/13.3.
+- [x] 계약 계층 구현 후 `tests/u4/unit/contracts.spec.ts`, `input-boundaries.spec.ts`를 작성·실행한다. 각 구성 5–8개 의미 있는 정상/실패/경계 시험을 기본으로 exact integer/범위 초과·알 수 없는 필드/Ref·1/100/0/101개와 중복 항목·한글/비BMP code point·상한+1·구버전 거절을 포함한다. HTTP byte 상한은 Step15 실제 parser에서 별도 확인한다. 대응: Step2와 NFR5.2/7.1/7.2/13.3.
 
 ### Step 4
 - [ ] 저장·복구 기반과 repository를 구현한다. 신규 `packages/persistence/models/u4-v1.json`, `src/u4-model-catalog.ts`, `u4-model-decoder.ts`, `u4-support-models.ts`, `u4-migration.ts`, `u4-recovery-payload.ts`, `u4-repository.ts`를 추가한다. 기존 model-catalog/model-attribute/data-source/migration 등록, protected-store/transaction/write, recovery-types/replay 및 버전 검증을 확장한다. U4 업무/기술 모델은 version1, 승인 약정/주문에 필요한 U3 소유 원본의 새 표현은 명시 version3으로 구분하고 legacy/version2 decoder·bytes를 보존한다. 새 profile의 공통 receipt/fact/work 검증을 연결하며 구형 validator를 느슨하게 해 우회하지 않는다.

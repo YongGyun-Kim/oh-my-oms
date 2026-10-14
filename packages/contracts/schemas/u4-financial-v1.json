@@ -1,0 +1,1560 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oms:contract:u4-financial:1",
+  "title": "U4 financial revision1 — operation registry4; closed manual financial contracts",
+  "$defs": {
+    "Id": {
+      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Id"
+    },
+    "Revision": {
+      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Revision"
+    },
+    "Ref": {
+      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+    },
+    "Refs": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+      },
+      "minItems": 0
+    },
+    "Money": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:common:2#/$defs/Money"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "currency": {
+              "const": "KRW"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$",
+              "maxLength": 4096
+            }
+          },
+          "required": ["currency", "value"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "PositiveMoney": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        {
+          "properties": {
+            "value": {
+              "pattern": "^[1-9][0-9]*$"
+            }
+          }
+        }
+      ]
+    },
+    "Label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "\\S"
+    },
+    "Description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000,
+      "pattern": "\\S"
+    },
+    "ExternalReference": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "\\S"
+    },
+    "CommandMeta": {
+      "type": "object",
+      "properties": {
+        "clientRequestId": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "expectedRevision": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Description"
+        },
+        "evidenceRefs": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Refs"
+        }
+      },
+      "required": ["clientRequestId", "expectedRevision", "reason", "evidenceRefs"],
+      "additionalProperties": false
+    },
+    "TargetScope": {
+      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/TargetScope"
+    },
+    "OrderRef": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "OrderAcceptance"
+            },
+            "entity": {
+              "const": "Order"
+            }
+          }
+        }
+      ]
+    },
+    "InvoiceRef": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "FinancialSettlement"
+            },
+            "entity": {
+              "const": "Invoice"
+            }
+          }
+        }
+      ]
+    },
+    "PaymentRef": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "FinancialSettlement"
+            },
+            "entity": {
+              "const": "PaymentEvidence"
+            }
+          }
+        }
+      ]
+    },
+    "AllocationRef": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "FinancialSettlement"
+            },
+            "entity": {
+              "const": "PaymentAllocation"
+            }
+          }
+        }
+      ]
+    },
+    "RefundRef": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "FinancialSettlement"
+            },
+            "entity": {
+              "const": "RefundCase"
+            }
+          }
+        }
+      ]
+    },
+    "AgreementRef": {
+      "allOf": [
+        {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "CommercialAgreement"
+            },
+            "entity": {
+              "const": "AgreementRevision"
+            }
+          }
+        }
+      ]
+    },
+    "Evidence": {
+      "type": "object",
+      "properties": {
+        "documentReference": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/ExternalReference"
+        },
+        "verifiedByRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "IdentityRecovery"
+                },
+                "entity": {
+                  "const": "Account"
+                }
+              }
+            }
+          ]
+        },
+        "verifiedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "summary": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Description"
+        }
+      },
+      "required": ["documentReference", "verifiedByRef", "verifiedAt", "summary"],
+      "additionalProperties": false
+    },
+    "DueBasis": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "FIXED_DATE"
+            },
+            "date": {
+              "$ref": "urn:oms:contract:common:2#/$defs/Date"
+            }
+          },
+          "required": ["kind", "date"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "CONFIRMED_FACT_PLUS_DAYS"
+            },
+            "sourceOwner": {
+              "enum": ["HardwareFulfillment", "SoftwareLifecycle"]
+            },
+            "event": {
+              "enum": ["ACTUAL_PROVISION_COMPLETION", "AGREED_CONFIRMED_FACT"]
+            },
+            "ruleRef": {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+            },
+            "calendar": {
+              "const": "KST_CALENDAR_DAYS"
+            },
+            "days": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": ["kind", "sourceOwner", "event", "ruleRef", "calendar", "days"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "PaymentObligation": {
+      "type": "object",
+      "properties": {
+        "obligationKey": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "label": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Label"
+        },
+        "amount": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PositiveMoney"
+        },
+        "description": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Description"
+        },
+        "dueBasis": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/DueBasis"
+        },
+        "requiredBeforeProvision": {
+          "type": "boolean"
+        },
+        "agreementEvidenceRefs": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Refs"
+        }
+      },
+      "required": [
+        "obligationKey",
+        "label",
+        "amount",
+        "description",
+        "dueBasis",
+        "requiredBeforeProvision",
+        "agreementEvidenceRefs"
+      ],
+      "additionalProperties": false
+    },
+    "AgreedPaymentPlan": {
+      "type": "object",
+      "properties": {
+        "planRevision": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision"
+        },
+        "total": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "obligations": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentObligation"
+          },
+          "minItems": 0
+        },
+        "agreementRevisionRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/AgreementRef"
+        },
+        "agreementApprovalRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "CommercialAgreement"
+                },
+                "entity": {
+                  "const": "AgreementApproval"
+                }
+              }
+            }
+          ]
+        },
+        "customerConsentRef": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "CommercialAgreement"
+                    },
+                    "entity": {
+                      "const": "CustomerConsent"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "knowledge": {
+          "const": "KNOWN"
+        }
+      },
+      "required": [
+        "planRevision",
+        "total",
+        "obligations",
+        "agreementRevisionRef",
+        "agreementApprovalRef",
+        "customerConsentRef",
+        "knowledge"
+      ],
+      "additionalProperties": false
+    },
+    "PaymentIdentity": {
+      "type": "object",
+      "properties": {
+        "sourceProfileId": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "sourceProfileRevision": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision"
+        },
+        "sourceNamespace": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/ExternalReference"
+        },
+        "canonicalIdentity": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/ExternalReference"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u4-financial:1#/$defs/ExternalReference"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "sourceProfileId",
+        "sourceProfileRevision",
+        "sourceNamespace",
+        "canonicalIdentity",
+        "aliases"
+      ],
+      "additionalProperties": false
+    },
+    "AllocationItem": {
+      "type": "object",
+      "properties": {
+        "invoiceRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/InvoiceRef"
+        },
+        "amount": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PositiveMoney"
+        }
+      },
+      "required": ["invoiceRef", "amount"],
+      "additionalProperties": false
+    },
+    "AllocationItems": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oms:contract:u4-financial:1#/$defs/AllocationItem"
+      },
+      "minItems": 1,
+      "maxItems": 100
+    },
+    "AssessmentPurpose": {
+      "enum": ["SALE_ACCEPTANCE", "PROVISION"]
+    },
+    "SourceContract": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "const": "urn:oms:contract:u4-financial:1"
+        },
+        "registryVersion": {
+          "const": 4
+        }
+      },
+      "required": ["profile", "registryVersion"],
+      "additionalProperties": false
+    },
+    "FinancialQuery": {
+      "type": "object",
+      "properties": {
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "orderRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef"
+        }
+      },
+      "required": ["targetScope", "orderRef"],
+      "additionalProperties": false
+    },
+    "FinancialPageQuery": {
+      "type": "object",
+      "properties": {
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "cursor": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": ["targetScope", "cursor", "limit"],
+      "additionalProperties": false
+    },
+    "PaymentPlanInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "orderRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef"
+        },
+        "plan": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/AgreedPaymentPlan"
+        },
+        "purchaseTermsSnapshotRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "OrderAcceptance"
+                },
+                "entity": {
+                  "const": "PurchaseTermsSnapshot"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["meta", "targetScope", "orderRef", "plan", "purchaseTermsSnapshotRef"],
+      "additionalProperties": false
+    },
+    "InvoiceInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "orderRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef"
+        },
+        "chargeTermsRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "OrderAcceptance"
+                },
+                "entity": {
+                  "const": "PurchaseTermsSnapshot"
+                }
+              }
+            }
+          ]
+        },
+        "planRevision": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision"
+        },
+        "obligationKey": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "label": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Label"
+        },
+        "amount": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PositiveMoney"
+        },
+        "dueBasis": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/DueBasis"
+        },
+        "renewalCycleRefs": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "const": "SoftwareLifecycle"
+                  },
+                  "entity": {
+                    "const": "RenewalCycle"
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 0
+        },
+        "sourceEvidence": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence"
+        },
+        "correctionOf": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/InvoiceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "orderRef",
+        "chargeTermsRef",
+        "planRevision",
+        "obligationKey",
+        "label",
+        "amount",
+        "dueBasis",
+        "renewalCycleRefs",
+        "sourceEvidence",
+        "correctionOf"
+      ],
+      "additionalProperties": false
+    },
+    "PaymentEvidenceInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "enterpriseRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "EnterpriseAccess"
+                },
+                "entity": {
+                  "const": "Enterprise"
+                }
+              }
+            }
+          ]
+        },
+        "sourceEvidence": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/PositiveMoney"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actualPaidAt": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "identity": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "orderRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "correctionOf": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "enterpriseRef",
+        "sourceEvidence",
+        "amount",
+        "actualPaidAt",
+        "identity",
+        "orderRef",
+        "correctionOf"
+      ],
+      "additionalProperties": false
+    },
+    "ConfirmPaymentInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "paymentEvidenceRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentRef"
+        },
+        "amount": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PositiveMoney"
+        },
+        "actualPaidAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        },
+        "identity": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentIdentity"
+        },
+        "sourceEvidence": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "paymentEvidenceRef",
+        "amount",
+        "actualPaidAt",
+        "identity",
+        "sourceEvidence"
+      ],
+      "additionalProperties": false
+    },
+    "PaymentCorrectionInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "paymentEvidenceRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentRef"
+        },
+        "correctionKind": {
+          "enum": ["DISPUTE", "REVERSE", "CONFIRM"]
+        },
+        "sourceEvidence": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence"
+        },
+        "identity": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/PositiveMoney"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actualPaidAt": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "paymentEvidenceRef",
+        "correctionKind",
+        "sourceEvidence",
+        "identity",
+        "amount",
+        "actualPaidAt"
+      ],
+      "additionalProperties": false
+    },
+    "AllocationBatchInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "orderRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef"
+        },
+        "paymentEvidenceRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentRef"
+        },
+        "items": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/AllocationItems"
+        },
+        "renewalCycleRefs": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "const": "SoftwareLifecycle"
+                  },
+                  "entity": {
+                    "const": "RenewalCycle"
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 0
+        },
+        "sourceEvidence": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "orderRef",
+        "paymentEvidenceRef",
+        "items",
+        "renewalCycleRefs",
+        "sourceEvidence"
+      ],
+      "additionalProperties": false
+    },
+    "AllocationCorrectionInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "orderRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef"
+        },
+        "allocationRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/AllocationRef"
+        },
+        "sourceEvidence": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence"
+        }
+      },
+      "required": ["meta", "targetScope", "orderRef", "allocationRef", "sourceEvidence"],
+      "additionalProperties": false
+    },
+    "EligibilityInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "orderRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef"
+        },
+        "assessmentPurpose": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/AssessmentPurpose"
+        },
+        "agreementRevisionRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/AgreementRef"
+        },
+        "planRevision": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision"
+        },
+        "orderLineRefs": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "const": "OrderAcceptance"
+                  },
+                  "entity": {
+                    "const": "OrderLine"
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 1
+        },
+        "renewalCycleRefs": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "const": "SoftwareLifecycle"
+                  },
+                  "entity": {
+                    "const": "RenewalCycle"
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "orderRef",
+        "assessmentPurpose",
+        "agreementRevisionRef",
+        "planRevision",
+        "orderLineRefs",
+        "renewalCycleRefs"
+      ],
+      "additionalProperties": false
+    },
+    "RestrictionInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "orderRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef"
+        },
+        "restrictionKey": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "assessmentPurpose": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/AssessmentPurpose"
+        },
+        "effect": {
+          "enum": ["RESTRICT", "RELEASE"]
+        },
+        "agreementRevisionRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/AgreementRef"
+        },
+        "sourceEvidence": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "orderRef",
+        "restrictionKey",
+        "assessmentPurpose",
+        "effect",
+        "agreementRevisionRef",
+        "sourceEvidence"
+      ],
+      "additionalProperties": false
+    },
+    "RefundPortion": {
+      "type": "object",
+      "properties": {
+        "portionKey": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "paymentEvidenceRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentRef"
+        },
+        "allocationRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/AllocationRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "invoiceRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/InvoiceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "amount": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PositiveMoney"
+        },
+        "operationId": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "attemptId": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        }
+      },
+      "required": [
+        "portionKey",
+        "paymentEvidenceRef",
+        "allocationRef",
+        "invoiceRef",
+        "amount",
+        "operationId",
+        "attemptId"
+      ],
+      "additionalProperties": false
+    },
+    "RefundInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "orderRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef"
+        },
+        "approvalRootId": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "afterSalesDecisionRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "AfterSalesDecision"
+                },
+                "entity": {
+                  "const": "AfterSalesDecisionRecord"
+                }
+              }
+            }
+          ]
+        },
+        "requestedAmount": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/PositiveMoney"
+        },
+        "portions": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u4-financial:1#/$defs/RefundPortion"
+          },
+          "minItems": 1
+        },
+        "sourceEvidence": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "orderRef",
+        "approvalRootId",
+        "afterSalesDecisionRef",
+        "requestedAmount",
+        "portions",
+        "sourceEvidence"
+      ],
+      "additionalProperties": false
+    },
+    "RefundResultPortion": {
+      "type": "object",
+      "properties": {
+        "portionKey": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "operationId": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "attemptId": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+        },
+        "succeeded": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "failed": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "unknown": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "pending": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "resultRevision": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision"
+        },
+        "actualResultIdentity": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "portionKey",
+        "operationId",
+        "attemptId",
+        "succeeded",
+        "failed",
+        "unknown",
+        "pending",
+        "resultRevision",
+        "actualResultIdentity"
+      ],
+      "additionalProperties": false
+    },
+    "RefundResultInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "orderRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef"
+        },
+        "refundCaseRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/RefundRef"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u4-financial:1#/$defs/RefundResultPortion"
+          },
+          "minItems": 1
+        },
+        "sourceEvidence": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence"
+        },
+        "correctionOf": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "owner": {
+                      "const": "FinancialSettlement"
+                    },
+                    "entity": {
+                      "const": "FinancialExchange"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "orderRef",
+        "refundCaseRef",
+        "results",
+        "sourceEvidence",
+        "correctionOf"
+      ],
+      "additionalProperties": false
+    },
+    "UnsupportedAdjustmentInput": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "renewalCycleRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "SoftwareLifecycle"
+                },
+                "entity": {
+                  "const": "RenewalCycle"
+                }
+              }
+            }
+          ]
+        },
+        "periodAdjustmentRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "SoftwareLifecycle"
+                },
+                "entity": {
+                  "const": "PeriodAdjustment"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["meta", "targetScope", "renewalCycleRef", "periodAdjustmentRef"],
+      "additionalProperties": false
+    },
+    "EligibilityView": {
+      "type": "object",
+      "properties": {
+        "orderRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef"
+        },
+        "assessmentPurpose": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/AssessmentPurpose"
+        },
+        "planRevision": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision"
+        },
+        "agreementRevisionRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/AgreementRef"
+        },
+        "decision": {
+          "enum": ["ALLOW", "HOLD", "UNVERIFIED"]
+        },
+        "basisRefs": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Refs"
+        },
+        "sourceRevision": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision"
+        },
+        "renewalCycleRefs": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "const": "SoftwareLifecycle"
+                  },
+                  "entity": {
+                    "const": "RenewalCycle"
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "orderRef",
+        "assessmentPurpose",
+        "planRevision",
+        "agreementRevisionRef",
+        "decision",
+        "basisRefs",
+        "sourceRevision",
+        "renewalCycleRefs"
+      ],
+      "additionalProperties": false
+    },
+    "PublicInvoice": {
+      "type": "object",
+      "properties": {
+        "invoiceRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/InvoiceRef"
+        },
+        "label": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Label"
+        },
+        "amount": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "netPaid": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "remaining": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "dueDate": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:common:2#/$defs/Date"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "knowledge": {
+          "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        },
+        "lifecycle": {
+          "enum": ["DRAFT", "ISSUED", "SUPERSEDED", "CANCELLED"]
+        }
+      },
+      "required": [
+        "invoiceRef",
+        "label",
+        "amount",
+        "netPaid",
+        "remaining",
+        "dueDate",
+        "knowledge",
+        "lifecycle"
+      ],
+      "additionalProperties": false
+    },
+    "FinancialView": {
+      "type": "object",
+      "properties": {
+        "orderRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef"
+        },
+        "targetScope": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope"
+        },
+        "invoices": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u4-financial:1#/$defs/PublicInvoice"
+          },
+          "minItems": 0
+        },
+        "actualPayment": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "allocated": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "unallocated": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "refunded": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "reserved": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Money"
+        },
+        "knowledge": {
+          "enum": ["KNOWN", "UNKNOWN", "CONFLICT", "UNAVAILABLE"]
+        },
+        "sourceRefs": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Refs"
+        },
+        "observedAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        }
+      },
+      "required": [
+        "orderRef",
+        "targetScope",
+        "invoices",
+        "actualPayment",
+        "allocated",
+        "unallocated",
+        "refunded",
+        "reserved",
+        "knowledge",
+        "sourceRefs",
+        "observedAt"
+      ],
+      "additionalProperties": false
+    },
+    "FinancialPage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u4-financial:1#/$defs/FinancialView"
+          },
+          "minItems": 0
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["items", "nextCursor"],
+      "additionalProperties": false
+    },
+    "FinancialHistoryItem": {
+      "type": "object",
+      "properties": {
+        "historyRef": {
+          "allOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "const": "FinancialSettlement"
+                },
+                "entity": {
+                  "const": "FinancialHistory"
+                }
+              }
+            }
+          ]
+        },
+        "beforeRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "afterRef": {
+          "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref"
+        },
+        "occurredAt": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Instant"
+        }
+      },
+      "required": ["historyRef", "beforeRef", "afterRef", "occurredAt"],
+      "additionalProperties": false
+    },
+    "FinancialHistoryPage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:oms:contract:u4-financial:1#/$defs/FinancialHistoryItem"
+          },
+          "minItems": 0
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "$ref": "urn:oms:contract:u4-financial:1#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["items", "nextCursor"],
+      "additionalProperties": false
+    },
+    "Receipt": {
+      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Receipt"
+    },
+    "Problem": {
+      "$ref": "urn:oms:contract:common:2#/$defs/Problem"
+    }
+  }
+}

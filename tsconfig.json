@@ -31,7 +31,10 @@
     "scripts/u2/**/*.ts",
     "tests/u3/**/*.ts",
     "tests/u3/**/*.tsx",
-    "scripts/u3/**/*.ts"
+    "scripts/u3/**/*.ts",
+    "tests/u4/**/*.ts",
+    "tests/u4/**/*.tsx",
+    "scripts/u4/**/*.ts"
   ],
   "exclude": ["node_modules", "**/.next/**"]
 }

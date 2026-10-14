@@ -6,6 +6,7 @@ import type { AnySchema, ValidateFunction } from 'ajv';
 import { OmsError } from './errors.js';
 import { canonicalJson } from './canonical.js';
 import { validateU3Semantics } from './u3-validation.js';
+import { validateU4Semantics } from './u4-validation.js';
 
 const BASE = 'urn:oms:contract:common:2';
 // ajv-formats ships CommonJS; use the documented plugin interface across NodeNext interop.
@@ -25,6 +26,11 @@ export class SchemaValidator {
   private readonly inlineCompiled = new Map<string, ValidateFunction>();
   constructor() {
     addFormats(this.ajv);
+    this.ajv.addSchema(
+      JSON.parse(
+        readFileSync(new URL('../schemas/u4-financial-v1.json', import.meta.url), 'utf8'),
+      ) as AnySchema,
+    );
     for (const version of [1, 2]) {
       const file = new URL(`../schemas/c00-v${version}.json`, import.meta.url);
       this.ajv.addSchema(JSON.parse(readFileSync(file, 'utf8')) as AnySchema);
@@ -79,6 +85,8 @@ export class SchemaValidator {
       throw new OmsError(400, 'INVALID_INPUT', '등록된 계약과 다른 입력입니다.');
     if (uri.startsWith('urn:oms:contract:u3-commercial:2#/$defs/'))
       validateU3Semantics(uri.slice(uri.lastIndexOf('/') + 1), data);
+    if (uri.startsWith('urn:oms:contract:u4-financial:1#/$defs/'))
+      validateU4Semantics(uri.slice(uri.lastIndexOf('/') + 1), data);
     return data as T;
   }
 }
