@@ -200,6 +200,20 @@ export function validateModel(name: string, data: ModelData, schema: SchemaValid
   const attributeContext = {
     schema,
     columnType,
+    u4AllocationResult:
+      name === 'RequestReceipt' &&
+      data.owner === 'FinancialSettlement' &&
+      data.operation === 'allocatePaymentBatch' &&
+      sharedSource.knowledge === 'KNOWN' &&
+      sharedSource.profile === 'urn:oms:contract:u4-financial:1' &&
+      sharedSource.registryVersion === 4,
+    u4FinancialFactEvidence:
+      name === 'FactEnvelope' &&
+      data.sourceOwner === 'FinancialSettlement' &&
+      data.schemaVersion === 'urn:oms:contract:u4-financial:1' &&
+      sharedSource.knowledge === 'KNOWN' &&
+      sharedSource.profile === 'urn:oms:contract:u4-financial:1' &&
+      sharedSource.registryVersion === 4,
     findModel: (name: string) => modelByName.get(name),
     u3: data.modelVersion === 2 && u3ByName.has(name),
     u4:

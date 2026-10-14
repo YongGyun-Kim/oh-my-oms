@@ -11,10 +11,21 @@ export function validateAttribute(
     u2?: boolean;
     u3?: boolean;
     u4?: boolean;
+    u4AllocationResult?: boolean;
+    u4FinancialFactEvidence?: boolean;
     u2DecisionBasis?: boolean;
   },
 ): void {
   const { schema } = context;
+  // 입력이나 다른 공유 원본의100 한도와 별개인 정확 source4의 두 결과 필드만 연결한다.
+  if (attribute.name === 'resultRefs' && context.u4AllocationResult) {
+    schema.validateUri('urn:oms:contract:u4-financial:1#/$defs/AllocationResultRefs', value);
+    return;
+  }
+  if (attribute.name === 'evidenceRefs' && context.u4FinancialFactEvidence) {
+    schema.validateUri('urn:oms:contract:u4-financial:1#/$defs/Refs', value);
+    return;
+  }
   if (attribute.type === 'SharedContract:SourceContract') {
     const profile = (value as { profile?: unknown }).profile;
     schema.validateUri(

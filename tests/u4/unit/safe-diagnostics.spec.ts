@@ -64,4 +64,16 @@ describe('U4 허용 오류 진단', () => {
     ).join('\n');
     expect(safeU4Error({ stack }).locations).toHaveLength(5);
   });
+  it('설치된 Vitest의 정확한120초 timeout만 분류하고 변형 원문은 버린다', () => {
+    const message =
+      'Test timed out in 120000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".';
+    expect(safeU4Error({ name: 'Error', message }).code).toBe('VITEST_TEST_TIMEOUT');
+    for (const value of [message + 'synthetic-secret', message.replace('120000', '120001')]) {
+      const result = safeU4Error({ name: 'Error', message: value });
+      expect(result.code).toBe('UNCLASSIFIED_ERROR');
+      expect(JSON.stringify(result).includes('timed out')).toBe(false);
+      expect(JSON.stringify(result).includes('synthetic-secret')).toBe(false);
+    }
+    expect(safeU4Error({ name: 'OmsError', message }).code).toBe('UNCLASSIFIED_ERROR');
+  });
 });

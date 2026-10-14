@@ -377,7 +377,7 @@ export class U4FinancialAccess {
         '원래 금융 접수의 별도 보호 확인이 필요합니다.',
       );
       const references = receipt.resultRefs as Ref[];
-      return store.schema.validateUri<Receipt>(U4_PROFILE + '#/$defs/Receipt', {
+      return store.schema.validateUri<Receipt>(operation.output, {
         requestId: receipt.requestId,
         requestState: receipt.requestState,
         owner: receipt.owner,

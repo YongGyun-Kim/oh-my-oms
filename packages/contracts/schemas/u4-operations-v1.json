@@ -503,7 +503,7 @@
     "action": "financial.manage",
     "kind": "command",
     "input": "urn:oms:contract:u4-financial:1#/$defs/AllocationBatchInput",
-    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/AllocationReceipt",
     "targetKind": "RECORD",
     "targetSchema": {
       "type": "object",

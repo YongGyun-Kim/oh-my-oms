@@ -2128,6 +2128,37 @@
       "required": ["items", "nextCursor"],
       "additionalProperties": false
     },
+    "AllocationResultRefs": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 102,
+      "uniqueItems": true,
+      "items": {
+        "allOf": [
+          { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref" },
+          {
+            "type": "object",
+            "properties": {
+              "owner": { "const": "FinancialSettlement" },
+              "entity": { "enum": ["PaymentEvidence", "PaymentAllocation", "FinancialHistory"] }
+            }
+          }
+        ]
+      }
+    },
+    "AllocationReceipt": {
+      "allOf": [
+        { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Receipt" },
+        {
+          "type": "object",
+          "properties": {
+            "owner": { "const": "FinancialSettlement" },
+            "targetRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/PaymentRef" },
+            "resultRefs": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/AllocationResultRefs" }
+          }
+        }
+      ]
+    },
     "Receipt": {
       "type": "object",
       "properties": {

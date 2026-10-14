@@ -387,3 +387,25 @@
 - 최소 보완은 정확 source4/registry4·FinancialSettlement의 특정 필드 연결이다. allocatePaymentBatch의 닫힌 결과3..102 전용 schema/응답 검증을 RequestReceipt.resultRefs에 적용하고, 정확 U4 FactEnvelope.evidenceRefs에는 기존 U4 Refs 표현을 연결한다. 다른 operation/모델·입력·구형100 제한과 현행4MiB 보호 payload/실행 예산의 commit 전 자원 검사는 유지한다. 새로운 digest/보조 원상은 만들지 않는다.
 - 정상 생산자에서는 발생하지 않지만 빈 basis.historyRefs의 undefined 비교가 명시 근거 누락 대신 INVALID_JSON이 되는 음성 경계도 확인했다. 누락 비교값은 불일치로 닫고 기존 U4_DUE_BASIS_MISSING/복구 차단을 유지하는 좁은 보완이 필요하다.
 - 위 발견은 현재 실행 중인 소스에 아직 반영하지 않았다. DB 연속 실행 종료 후 최소 수정·단위/실제 명령 회귀를 추가하고, 그 전후 소스의 결과를 분리한다. 기존 승인한100입력/완전 근거 보존을 충족하는 수정이며 계획/Testing Contract를 변경하지 않는다.
+
+## 중간 커밋과 전체 DB 검증 종료
+
+- 구현·시험·열린 경계와 검증 기록을 중간 커밋6771f02로 저장하고 origin/feat/u4-financial-settlement에 push했다. 완료 체크는9/18로 유지했다. 제품 바이트를 변경하지 않고 진행 중인 실제 DB 실행을 보존했다.
+- 목록 표현 보완 발견 후 검증 순서를 조정했다. 실행 중인 전체U4는 완료까지 기다리고 구형U1/U2/U3 DB 준비/회귀는 보완 후 소스에서 수행한다. 같은 소스 재시도나 DB 병렬 실행은 하지 않았다.
+- 전체U4 실제 DB111건은110통과·1실패·14파일, exit1·success=false·runReason=failed·미실행/수집/전역 오류0이다. persistence.spec.ts의 두 번째 사례가 AssertionError(47:57)로 실패했고, owner-facts16/16·completion-migration5/5를 포함한 나머지13파일은 통과했다. 전체 성공으로 표시하지 않는다.
+- 소스 동결을 해제하고 해당 저장 시험의 정확 기대, source4 목록 필드 연결, 빈 이력 비교 가드와 실제100항목/100품목·101누적 배분 경계를 함께 보완한다. 정상 생산자를 우회하지 않으며 현재 권한·완전 근거·원금 보존·구형 제한을 유지한다. Step10/11은 계속 미완료다.
+- persistence의 실패는 옛 업무9+보조8=17의 고정 기대였다. 기존17개에 FinancialCompletionBasis가 추가된18개를 검증해야 한다. 기존17 보존/신규1/중복 없음과 각 실제 테이블 존재를 분리 확인하도록 시험을 보완하며 제품 저장 구조를 되돌리지 않는다.
+
+## 승인된 입력 범위를 보존하는 결과·근거 연결
+
+- allocatePaymentBatch의 실제 응답을 operation.output의 닫힌 AllocationReceipt로 검증하고 결과3..102를 허용했다. 저장에서는 정확 source4/registry4·RequestReceipt·FinancialSettlement·allocatePaymentBatch·resultRefs에만 같은 닫힌 AllocationResultRefs를 연결한다. 허용 entity는 PaymentEvidence/PaymentAllocation/FinancialHistory이며 중복은 거절한다. 입력1..100과 다른operation/구형100은 유지한다.
+- FactEnvelope는 정확 source4/registry4·FinancialSettlement·schemaVersion 일치의 evidenceRefs만 기존 U4 Refs로 연결한다. 전체 근거/실제 사람 연결·원장 cursor 전체 대조·기존4MiB 보호 payload/예산 사전 검증은 유지한다. 저장량이 많다는 이유로 Ref를 생략하거나 새 업무 개수 상한을 만들지 않는다.
+- 누락된 basis 이력 비교값은 불일치로 닫아 기존 근거 누락/복구 보류 경로로 보내며, 정상 금액/권한 분기는 변경하지 않았다. persistence 시험은 기존17 보존+신규1·중복 없음·실제 테이블 존재로 보완했다.
+- 관련 단위5파일43/43, 실제 persistence7/7이 Luna 실행에서 각각 exit0·success=true·runReason=passed·미실행/수집/전역 오류0으로 통과했다. 이전 전체111의 모델 수 고정 기대 실패가 해소됐다. 보완 후 전체111을 재실행한 결과라고 주장하지 않는다.
+- 정상100항목/102결과·마지막 오류의 전체rollback·누적101배분의 근거/현재성·100품목 실제 판단·복구·기존 payload/기한 사전 차단을 새 실제 명령 회귀로 확인한다. 정상 producer100회 준비가 필요한 새 시험 사례만 fixture120초이며 제품10초/DB2초/lock500ms 예산은 유지했다. 아직 해당 실행 결과는 없다.
+- 보완 후 전체U4 단위167/167이 exit0·success=true·runReason=passed·미실행/수집/전역 오류0으로 통과했다. 별도 Luna의 같은 소스 구형 선택 단위도 U1 30/30·U2 24/24·U3 46/46으로 다시 통과했다. 공통 model attribute/catalog가 바뀌어 구형 표현 보존을 재확인한 것이며 DB 없는 단위/DB 실행 보고서를 분리했다.
+- 새 선택100항목 실제 명령은 case1의 AssertionError(financial-result-boundaries.spec.ts:80:51)로 실패했다. exit1·success=false·runReason=failed·실패1/3필터·수집/전역 오류0이며 뒤100품목/기한/서버근거 선택3건은 미실행이다. 실패 단언과 실제 경계를 조사하고 동일 소스 재시도·허용 오류 확대는 하지 않는다.
+- 실패 지점은 정상100개 배분/102결과와 같은키 재조회 이후의 전체 PaymentAllocation 개수 검사다. ProtectedStore.list의 기본25개 페이지를 전체100개로 오해한 시험 문제였다. 제품은 유지하고 안정cursor100/deadline의 store.scan으로 끝까지 읽는 helper를 사용해 배분 개수와100개 FinancialInvoiceBalance의 오류 전후를 확인한다. 지급 판단까지 도달한 결과는 아니며 이후100/101 현재성·복구 성공을 선행 주장하지 않는다.
+- 시험 한 파일의 전체읽기만 수정한 재실행은 Error/UNCLASSIFIED_ERROR(사례 선언22:3)로 실패했다. exit1·success=false·실패1/3필터·수집/전역 오류0이며 뒤3건은 여전히 미실행이다. 선언 위치만으로 원인을 확정하지 않고120초 fixture 초과 가능성과 준비·전체읽기·복구 구간을 대조한다. timeout/품질 목표를 단순 확대하거나 실제100생산자·전체효과 검사를 삭제해 통과시키지 않는다.
+- 설치된 Vitest의 정확한120000ms timeout 전체문구만 VITEST_TEST_TIMEOUT으로 분류하고 해당 신규 DB 파일의 허용stage/청구완료개수0..100/유한 경과·duration만 진단에 투영하도록 시험 도구를 보완했다. 변형문구·다른파일·임의meta/stage·범위 밖 개수/시간은 폐기한다. 제품/120초/요청·DB 예산은 바꾸지 않았다.
+- 이 진단의 양성·음성 단위16/16·2파일이 Luna 실행에서 exit0·success=true·runReason=passed·미실행/수집/전역 오류0으로 통과했다. 같은 실제 선택 사례를 한 번 관찰해 실패 종류/단계를 확인하며, 원인은 아직 확정하지 않는다.

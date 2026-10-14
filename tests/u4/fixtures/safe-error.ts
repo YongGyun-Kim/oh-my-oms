@@ -18,6 +18,7 @@ const CODES = new Set([
   'U4_RECOVERY_CONSTRAINTS',
   'U4_RECOVERY_RESERVATION',
   'RECOVERY_DIGEST',
+  'RECOVERY_SIZE',
   'WRITER_FENCED',
   'CURRENT_U4_NOT_PROTECTED',
   'IDEMPOTENCY_CONFLICT',
@@ -58,9 +59,9 @@ const NAMES = new Set([
   'RangeError',
 ]);
 const LOCATION =
-  /((?:packages\/persistence\/src\/(?:protected-write|protected-store|protected-transaction|u4-repository|recovery-types|model-catalog|u4-model-decoder|u4-completion-link|u4-recovery-verification|recovery-security-observation|recovery-security-write|recovery-security)|packages\/core\/src\/(?:u4-commercial-adapter|u4-payment-plan|u4-commercial-order|u4-order-terms|u4-plan-proposal|u4-proposal-proof|u4-staff-access|u4-financial-access|u4-financial-source|u4-financial-commands|u4-financial-ledger|u4-due-basis|u4-owner-sources|u4-invoice-due|u4-eligibility|u3-current-basis|authorization)|tests\/u4\/fixtures\/(?:commercial-plan|financial-flow|security-oracle|owner-facts)|tests\/u4\/unit\/(?:due-basis|owner-sources|eligibility|completion-basis|completion-link)\.spec|tests\/u4\/integration\/(?:persistence|concurrency|protection-replay|commercial-plan|renewal-plan|staff-access|financial-flow|financial-ledger|financial-races|financial-corrections|financial-cancellation|financial-binding|owner-facts|completion-migration)\.spec)\.ts):(\d+):(\d+)/g;
+  /((?:packages\/persistence\/src\/(?:protected-write|protected-store|protected-transaction|u4-repository|recovery-types|model-catalog|u4-model-decoder|u4-completion-link|u4-recovery-verification|recovery-security-observation|recovery-security-write|recovery-security)|packages\/core\/src\/(?:u4-commercial-adapter|u4-payment-plan|u4-commercial-order|u4-order-terms|u4-plan-proposal|u4-proposal-proof|u4-staff-access|u4-financial-access|u4-financial-source|u4-financial-commands|u4-financial-ledger|u4-due-basis|u4-owner-sources|u4-invoice-due|u4-eligibility|u3-current-basis|authorization)|tests\/u4\/fixtures\/(?:commercial-plan|financial-flow|security-oracle|owner-facts)|tests\/u4\/unit\/(?:due-basis|owner-sources|eligibility|completion-basis|completion-link|result-boundaries)\.spec|tests\/u4\/integration\/(?:persistence|concurrency|protection-replay|commercial-plan|renewal-plan|staff-access|financial-flow|financial-ledger|financial-races|financial-corrections|financial-cancellation|financial-binding|owner-facts|completion-migration|financial-result-boundaries)\.spec)\.ts):(\d+):(\d+)/g;
 
-// 메시지·SQL·매개변수·환경·임의 속성은 읽거나 직렬화하지 않는다.
+// 설치된 Vitest의 고정 timeout 문구만 분류한다. 원문·SQL·매개변수·환경은 보존하지 않는다.
 export function safeU4Error(value: unknown): {
   code: string;
   name: string;
@@ -74,6 +75,10 @@ export function safeU4Error(value: unknown): {
   const code = [row.code, driver.code].find(
     (candidate) => typeof candidate === 'string' && CODES.has(candidate),
   );
+  const testTimeout =
+    row.name === 'Error' &&
+    row.message ===
+      'Test timed out in 120000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".';
   const stack =
     typeof row.stackStr === 'string'
       ? row.stackStr
@@ -81,7 +86,8 @@ export function safeU4Error(value: unknown): {
         ? row.stack
         : '';
   return {
-    code: typeof code === 'string' ? code : 'UNCLASSIFIED_ERROR',
+    code:
+      typeof code === 'string' ? code : testTimeout ? 'VITEST_TEST_TIMEOUT' : 'UNCLASSIFIED_ERROR',
     name: typeof row.name === 'string' && NAMES.has(row.name) ? row.name : 'Error',
     locations: [...stack.matchAll(LOCATION)]
       .slice(0, 5)

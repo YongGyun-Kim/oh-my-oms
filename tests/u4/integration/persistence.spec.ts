@@ -6,6 +6,7 @@ import {
   U4_SUPPORT_MODELS,
   migrateU4Models,
   physicalData,
+  tableName,
 } from '@oms/persistence';
 import { persistenceFixture, financialRequest } from '../fixtures/persistence.js';
 import { u4ModelFixture } from '../fixtures/models.js';
@@ -44,7 +45,18 @@ describe('U4 real PostgreSQL registration and physical safeguards', () => {
       "SELECT tablename FROM pg_tables WHERE schemaname='public'",
     );
     expect(tables.length).toBeGreaterThanOrEqual(ALL_MODELS.length);
-    expect(U4_MODELS.length + U4_SUPPORT_MODELS.length).toBe(17);
+    expect(U4_MODELS).toHaveLength(9);
+    expect(
+      U4_SUPPORT_MODELS.filter((model) => model.name !== 'FinancialCompletionBasis'),
+    ).toHaveLength(8);
+    expect(
+      U4_SUPPORT_MODELS.filter((model) => model.name === 'FinancialCompletionBasis'),
+    ).toHaveLength(1);
+    const names = [...U4_MODELS, ...U4_SUPPORT_MODELS].map((model) => tableName(model.name));
+    expect(new Set(names).size).toBe(18);
+    expect(tables.map((value: { tablename: string }) => value.tablename)).toEqual(
+      expect.arrayContaining(names),
+    );
   });
   it('enforces NOT NULL on identity material in actual PostgreSQL', async () => {
     const claim = u4ModelFixture('FinancialIdentityClaim');

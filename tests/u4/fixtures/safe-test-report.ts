@@ -7,10 +7,55 @@ interface ReportModule {
   children: {
     allTests(): Iterable<{
       result(): { state: string; errors?: readonly unknown[] };
+      meta?(): unknown;
+      diagnostic?(): { duration: number } | undefined;
     }>;
   };
 }
 type RunReason = 'passed' | 'failed' | 'interrupted';
+
+const BOUNDARY_STAGES = new Set([
+  'PREPARE',
+  'INVOICES',
+  'PAYMENT',
+  'ROLLBACK',
+  'ALLOCATE_100',
+  'ASSESS_100',
+  'ALLOCATE_101',
+  'ASSESS_101',
+  'LEDGER',
+  'RESTORE',
+  'DONE',
+]);
+function boundaryProgress(test: {
+  meta?(): unknown;
+  diagnostic?(): { duration: number } | undefined;
+}) {
+  const meta = test.meta?.();
+  const progress =
+    meta && typeof meta === 'object' && 'u4Boundary' in meta ? meta.u4Boundary : null;
+  if (!progress || typeof progress !== 'object') return undefined;
+  const { stage, enteredAtMs, completedInvoices } = progress as Record<string, unknown>;
+  const duration = test.diagnostic?.()?.duration;
+  if (
+    typeof stage !== 'string' ||
+    !BOUNDARY_STAGES.has(stage) ||
+    typeof enteredAtMs !== 'number' ||
+    !Number.isInteger(enteredAtMs) ||
+    enteredAtMs < 0 ||
+    enteredAtMs > 180000 ||
+    typeof completedInvoices !== 'number' ||
+    !Number.isInteger(completedInvoices) ||
+    completedInvoices < 0 ||
+    completedInvoices > 100 ||
+    typeof duration !== 'number' ||
+    !Number.isFinite(duration) ||
+    duration < 0 ||
+    duration > 180000
+  )
+    return undefined;
+  return { stage, enteredAtMs, completedInvoices, durationMs: Math.round(duration) };
+}
 
 // Vitest 전체 종료 결과를 원문 없이 투영한다. 선택 실행의 필터도 전체 성공으로 표시하지 않는다.
 export function safeU4TestReport(
@@ -36,6 +81,9 @@ export function safeU4TestReport(
         failureMessages: status === 'failed' ? ['U4_TEST_FAILED'] : [],
         errorCount: result.errors?.length ?? 0,
         errors: (result.errors ?? []).slice(0, 3).map(safeU4Error),
+        ...(module.relativeModuleId === 'tests/u4/integration/financial-result-boundaries.spec.ts'
+          ? { boundaryProgress: boundaryProgress(test) }
+          : {}),
       };
     }),
   }));

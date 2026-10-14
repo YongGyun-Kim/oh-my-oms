@@ -88,4 +88,75 @@ describe('U4 전체 종료 결과의 안전한 보고', () => {
     );
     expect(report).toMatchObject({ success: false, numPassedTests: 1, numAssertionErrors: 1 });
   });
+  it('지정한 합성 경계 파일의 단계·개수·경과만 투영한다', () => {
+    const module = {
+      ...moduleResult(),
+      relativeModuleId: 'tests/u4/integration/financial-result-boundaries.spec.ts',
+      children: {
+        allTests: () => [
+          {
+            result: () => ({ state: 'failed' }),
+            meta: () => ({
+              u4Boundary: {
+                stage: 'INVOICES',
+                enteredAtMs: 1234,
+                completedInvoices: 90,
+                secret: 'synthetic-secret',
+              },
+              secret: 'synthetic-secret',
+            }),
+            diagnostic: () => ({ duration: 120001.4 }),
+          },
+        ],
+      },
+    };
+    const report = safeU4TestReport([module], [], 'failed');
+    expect(report.testResults[0]!.assertionResults[0]!.boundaryProgress).toEqual({
+      stage: 'INVOICES',
+      enteredAtMs: 1234,
+      completedInvoices: 90,
+      durationMs: 120001,
+    });
+    expect(JSON.stringify(report).includes('synthetic-secret')).toBe(false);
+    expect(
+      JSON.stringify(
+        safeU4TestReport(
+          [{ ...module, relativeModuleId: 'tests/u4/unit/synthetic.spec.ts' }],
+          [],
+          'failed',
+        ),
+      ).includes('INVOICES'),
+    ).toBe(false);
+  });
+  it('임의 단계·범위 밖 개수·비유한 경과·다른 metadata는 폐기한다', () => {
+    for (const [progress, duration] of [
+      [{ stage: 'synthetic-secret', enteredAtMs: 0, completedInvoices: 0 }, 120000],
+      [{ stage: 'PREPARE', enteredAtMs: 0, completedInvoices: 101 }, 120000],
+      [{ stage: 'PREPARE', enteredAtMs: Infinity, completedInvoices: 0 }, 120000],
+      [{ stage: 'PREPARE', enteredAtMs: -1, completedInvoices: 0 }, 120000],
+      [{ stage: 'PREPARE', enteredAtMs: 0, completedInvoices: 100 }, Infinity],
+    ] as const) {
+      const report = safeU4TestReport(
+        [
+          {
+            ...moduleResult(),
+            relativeModuleId: 'tests/u4/integration/financial-result-boundaries.spec.ts',
+            children: {
+              allTests: () => [
+                {
+                  result: () => ({ state: 'failed' }),
+                  meta: () => ({ u4Boundary: progress, arbitrary: 'synthetic-secret' }),
+                  diagnostic: () => ({ duration }),
+                },
+              ],
+            },
+          },
+        ],
+        [],
+        'failed',
+      );
+      expect(report.testResults[0]!.assertionResults[0]!.boundaryProgress).toBeUndefined();
+      expect(JSON.stringify(report).includes('synthetic-secret')).toBe(false);
+    }
+  });
 });

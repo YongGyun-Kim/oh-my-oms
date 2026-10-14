@@ -1,7 +1,8 @@
 import { canonicalJson, ExecutionBudget, requireCondition, type Ref } from '@oms/contracts';
 import type { ModelData } from './model-catalog.js';
 
-const exact = (left: unknown, right: unknown) => canonicalJson(left) === canonicalJson(right);
+const exact = (left: unknown, right: unknown) =>
+  left !== undefined && right !== undefined && canonicalJson(left) === canonicalJson(right);
 const source = { profile: 'urn:oms:contract:u4-financial:1', registryVersion: 4 };
 const hold = (condition: unknown) =>
   requireCondition(

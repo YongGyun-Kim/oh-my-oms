@@ -33,11 +33,18 @@ import { resolveConditionBindings } from '../../../packages/core/src/commercial-
 import { u4Plan } from './contracts.js';
 
 // U1/U2 실권한·MFA와 U3 소유자 등록 경로를 재사용한다. 운영 은행/이행 생산자의 등록 증거가 아니다.
+export interface U4FixtureShape {
+  lineCount?: 1 | 100;
+  obligationCount?: 2 | 100;
+}
 export async function seedU4CommercialPlan(
   store: ProtectedStore,
   software = false,
   agreedEndAt: string | null = null,
+  shape: U4FixtureShape = {},
 ) {
+  const lineCount = shape.lineCount ?? 1;
+  const total = (1000n * BigInt(lineCount)).toString();
   const f = await seedAgreementAuthority(store);
   const ingress = 'synthetic-private-ingress';
   const meta = (revision: number | null = null) => ({
@@ -127,11 +134,26 @@ export async function seedU4CommercialPlan(
   const plans = new U4PaymentPlan(adapter);
   function planDraft(): U4PaymentPlanDraft {
     const p = u4Plan();
+    const obligations =
+      shape.obligationCount === 100
+        ? Array.from({ length: 100 }, (_, index) => ({
+            ...p.obligations[0]!,
+            obligationKey: 'synthetic-obligation-' + index,
+            label: '합의 지급 의무 ' + (index + 1),
+            amount: { currency: 'KRW' as const, value: (BigInt(total) / 100n).toString() },
+          }))
+        : p.obligations.map((value) => ({
+            ...value,
+            amount: {
+              currency: 'KRW' as const,
+              value: (BigInt(value.amount.value) * BigInt(lineCount)).toString(),
+            },
+          }));
     return {
       planRevision: 1,
-      total: p.total,
+      total: { currency: 'KRW', value: total },
       knowledge: 'KNOWN',
-      obligations: p.obligations.map((obligation) => ({
+      obligations: obligations.map((obligation) => ({
         ...obligation,
         agreementEvidenceRefs: input.agreementEvidenceRefs,
         dueBasis:
@@ -208,25 +230,26 @@ export async function seedU4CommercialPlan(
       partialConsentRef: null,
       paymentPlanRef: planRef,
       renewal: null,
-      lines: [
-        {
-          productRef,
-          commonOfferRevisionRef: offerRef,
-          quantity: 1,
-          conditionBindings: bindings,
-          agreementRevisionRefs: [planRef],
-          requestedActivationDate: null,
-        },
-      ],
+      lines: Array.from({ length: lineCount }, () => ({
+        productRef,
+        commonOfferRevisionRef: offerRef,
+        quantity: 1,
+        conditionBindings: bindings,
+        agreementRevisionRefs: [planRef],
+        requestedActivationDate: null,
+      })),
       priceConfirmation: {
         confirmedByRef: f.registrant.actorAccountRef!,
         evidenceRefs: input.agreementEvidenceRefs,
         priceBreakdown: {
           knowledge: 'KNOWN',
-          lineAmounts: [{ currency: 'KRW', value: '1000' }],
-          productAmount: { currency: 'KRW', value: '1000' },
+          lineAmounts: Array.from({ length: lineCount }, () => ({
+            currency: 'KRW',
+            value: '1000',
+          })),
+          productAmount: { currency: 'KRW', value: total },
           adjustments: [],
-          total: { currency: 'KRW', value: '1000' },
+          total: { currency: 'KRW', value: total },
         },
       },
     };

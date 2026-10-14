@@ -104,6 +104,11 @@ describe('기한 원래 근거와 후속 정상 청구 정정의 정확한 연�
         code: 'U4_DUE_BASIS_MISSING',
       });
     }
+    const empty = fixture();
+    empty.basis.historyRefs = [];
+    await expect(
+      verifyU4CompletionLink(empty.corrected, empty.basis, empty.read),
+    ).rejects.toMatchObject({ code: 'U4_DUE_BASIS_MISSING', status: 503 });
   });
   it('위조 작업명·다른 source 버전·접수 결과 누락은 정상 정정이 아니다', async () => {
     for (const patch of [

@@ -18,13 +18,15 @@ import {
 import type { U4PaymentSourceProfile, U4FinancialImpactRegistration } from '@oms/core';
 import type { ProtectedStore } from '@oms/persistence';
 import { seedU4CommercialPlan } from './commercial-plan.js';
+import type { U4FixtureShape } from './commercial-plan.js';
 
 // 격리 합성 원본이다. 입력을 그대로 확인으로 반사하지 않고 별도로 등록한 실제값과 대조한다.
 export async function seedU4FinancialFlow(
   store: ProtectedStore,
   agreedEndAt: string | null = null,
+  shape: U4FixtureShape = {},
 ) {
-  const f = await seedU4CommercialPlan(store, false, agreedEndAt);
+  const f = await seedU4CommercialPlan(store, false, agreedEndAt, shape);
   const roles = new U4StaffAccess(store, f.seller.now, async (proof) => proof === f.ingress);
   const role = await roles.defineRole(
     await f.requestContext(f.seller.staff),

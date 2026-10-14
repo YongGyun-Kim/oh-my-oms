@@ -13,10 +13,11 @@ import type {
 } from '@oms/core';
 import type { ModelData, ProtectedStore } from '@oms/persistence';
 import { seedU4FinancialFlow } from './financial-flow.js';
+import type { U4FixtureShape } from './commercial-plan.js';
 
 // 실제 U5 생산자 등록을 뜻하지 않는다. 정상 금융/사람/보호 원본 위에 격리 소유자 truth를 결합한다.
-export async function seedU4OwnerFacts(store: ProtectedStore) {
-  const f = await seedU4FinancialFlow(store);
+export async function seedU4OwnerFacts(store: ProtectedStore, shape: U4FixtureShape = {}) {
+  const f = await seedU4FinancialFlow(store, null, shape);
   const order = (await store.currentProtected('Order', f.orderRef.id))!;
   const lines: ModelData[] = [];
   for (const reference of order.lineRefs as Ref[])
