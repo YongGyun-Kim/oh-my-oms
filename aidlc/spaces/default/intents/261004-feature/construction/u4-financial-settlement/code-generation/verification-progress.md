@@ -305,3 +305,85 @@
 - 각 DB 준비는 기존 Unit의 격리 검증 경로만 사용해 보존 원본을 초기화하지 않았다. 단위/DB를 Luna 두 명으로 분리했지만 DB 실행은 직렬로 유지했다. 수정된 구형 단위 파일을 U4 전체의 제품 변경으로 취급해 의미 없이 동일116/90 실행을 반복하지 않았다.
 - 승인 계획 Step8/9의 금융 명령과 그 시험을 완료로 기록한다. 총9/18 완료이며 다음은 Step10/11 제공 자격·기한·수동 제한이다. 정상 SYSTEM 지속 기록·실제 환불 명령/U7운영·API/worker·전체 coverage/CI·공식 검증·R-03은 이 마일스톤의 완료 범위가 아니다.
 - 현재 제품/시험/작업기록의 diff-check는 audit 경로를 제외하고 exit0이다. 도구 소유 audit의 기존 trailing whitespace는 직접 편집하지 않았으며 전체 diff가 깨끗하다고 주장하지 않는다. 이 마일스톤을 명시 경로로 커밋·push하고 다음 계층을 진행한다.
+
+## 금융 마일스톤 저장과 Step10/11 착수
+
+- 위 검증과 실제 구현을 대조해 Step8/9의 완료 체크 두 개만 반영하고 `fa6e0f1`로 커밋·origin/feat/u4-financial-settlement에 push했다. 총9/18 완료이며 U4 전체/배포 완료가 아니다.
+- 다음 계층은 승인된 세 경로를 구분한다. 현재 원본의 순수 지급 자격 조회, 현재 U2 사람 확인을 통과한 STAFF의 판단/제한 기록, 미등록 SYSTEM 지속 기록 요청의 UNREGISTERED/HOLD다. SYSTEM을 실제 사람으로 가장하거나 입력에 없는 입금 증빙을 만들지 않는다.
+- 근거는 공통 계약의 assessEligibility query→EligibilityView, 권한 있는 직원 또는 검증된 SYSTEM 원본 읽기의 대안, 첫 배포의 직원 수동 지원이다. SYSTEM 새 지속 기록의 정상 권위/감사 주체 정책은 확인되지 않아 지원 성공으로 표시하지 않는다. 직원 계산의 닫힌 분기에서도 현재 사람 확인·계획/원장·근거Ref와 감사 연결은 유지한다.
+- 실제 완료 사건의 기한 재대조는 계약 의무 정정과 구분한 STAFF 전용 reconcileInvoiceDue 입력/명령으로 연결한다. 정확 주문/청구·HW/SW/FULL 대상과 완료 원본/aggregate/tranche 개정을 확인하고 같은 invoiceId의 기한·완료근거·이력만 바꾼다. 현금·배분·계약액은 바꾸지 않는다.
+- 청구 Ref.revision·aggregateVersion·실제 tranche sourceRevision은 서로 다를 수 있어 섞지 않는다. invoiceId에 결합한 명시 model1 보조 원상 FinancialCompletionBasis로 닫힌 완료 view/사건 개정을 보존하는 기술 접점을 추가한다. 저장 snapshot 자체를 실제 제공/현재 권위로 승격하지 않고, basis누락은HOLD다.
+- 신규 보조 원상은 같은 트랜잭션/보호/복구·owner권한·구형payload위장거절에 포함한다. 기존U4 저장소에서도 additive 적용되고 과거 원본을 보존하는 실제 회귀가 필요하다. 구형43개/기존합집합 보존은 유지하고 별도 물리이름 기대는 이번18번째 추가를 정확 반영한다. 계획/Testing Contract 문구는 수정하지 않는다. 아직 Step10/11의 구현/시험 완료가 아니다.
+
+## Step10 날짜·원본 포트 첫 하위 단위 검증
+
+- 날짜/FULL 완료 계산 모듈과 서버 등록 owner 포트를 먼저 구현하고 시험을 작성했다. 지급 자격/제한·기한 지속 기록과 보조 원상은 아직 미구현이며 하위 계층 성공으로 전체 지원을 주장하지 않는다.
+- 고정 소스에서 Luna가 due-basis.spec.ts·owner-sources.spec.ts를 한 번 실행해16건 중14통과·2실패·미실행/수집/전역 오류0·exit1·success=false·runReason=failed였다. 날짜8/8은 통과, owner-sources6/8이며6/7번은 INVALID_INPUT/OmsError다.
+- 안전 위치가 없으므로 새 고정 상대경로의 진단 등록과 해당 포트의 닫힌 입력/참조/응답 계약을 소스로 조사한다. 프레임상한5·원문/SQL/금융자료 미출력은 유지하며 스키마 완화나 같은 소스 반복 실행으로 결과를 맞추지 않는다. Step10/11은 미완료다.
+
+## 날짜·원본 포트 fixture 수정과 하위 계층 통과
+
+- 두 실패는 fixture의 decisionRef.entity가 미등록 AfterSalesDecision이고 정확 등록 이름은 AfterSalesDecisionRecord였기 때문이다. fixture만 바로잡고 제품 schema/검증은 유지했다. 새 core/unit 고정 상대경로와 실제 정적 코드만 안전 진단에 등록했으며 프레임상한5를 보존했다.
+- Luna가 선택2건을 실행해2통과/6필터·exit0·실패/수집/assertion/전역 오류0·runReason=passed였다. success=false는 필터 실행이며 전체 suite 성공으로 적지 않았다.
+- 이어 안전 진단6+기한8+owner포트8의 관련 전체22/22가 exit0·success=true·미실행/수집/assertion/전역 오류0·runReason=passed로 통과했다. 실제 DB는 실행하지 않았다.
+- 이 결과는 순수 계산/등록 포트의 하위 계층이다. 보조 원상·기한 지속 기록·목적별 자격/수동 제한·실제 STAFF 감사는 다음 구현/시험에 남아 있다. Step10/11 완료 체크는 아직 바꾸지 않는다.
+
+## 판단 조회와 실제 원본 개정의 분리
+
+- EligibilityView.sourceRevision은 FinancialEligibility 자체 개정이다. 주문 개정을 대신 넣을 근거가 없어 그 제안을 철회했고, 구형 View/개정 의미는 보존했다. 순수 query만 별도 닫힌 CurrentEligibilityView로 주문/목적/계획/계약/판단/근거Refs/계산시각을 반환한다. 저장되지 않은 원본Ref/임의개정을 만들지 않는다.
+- STAFF evaluate는 실제 FinancialEligibility와 그 실제 개정·감사를 기록한다. 기존 readiness/C04 소비자에 순수 View를 구형 원본처럼 전달하지 않으며 현재 목적/전체근거·원본 부재·권위 미등록은 구별한다. 지급/제한이 바뀌어도 주문 개정이 같을 수 있어 주문 개정만으로 현재성을 판단하지 않는다.
+- 완료 보조 원상·순수 READ ONLY 판단·STAFF 계산/제한·기한 재대조 연결을 구현하고 eligibility8·completion-basis8 및 계약/모델/복구·기존 증빙 분기 회귀를 작성했다. 고정 소스에서 Luna의 관련10파일82/82가 exit0·success=true·runReason=passed·미실행/수집/assertion/전역 오류0으로 통과했다.
+- 실제 DB의 수락 전 SALE_ACCEPTANCE·미발행 필수 지급·지급/제한 변경 후 stale 거절·기한 정정/복구·기존U4 DB의 추가 적용 시험은 아직 준비 중이다. 신규18번째 물리 모델을 반영한 U2 선택 단위를 별도 확인하며 Step10/11은 계속 미완료다.
+
+## 신규 모델의 구형 회귀와 실제 DB 첫 선택 검증
+
+- 새18번째 물리 모델 기대를 반영한 U2 모델/권한/payload34/34가 exit0·success=true·실패/미실행/수집 오류0으로 통과했다. 기존 보고서에는 runReason이 없으며 중첩 suite 수를 파일 수로 바꾸지 않았다.
+- 실제 owner-facts14건과 completion-migration3건을 작성했다. 기존U4의 원본/보호prefix·고정일/미산출 청구를 보존하고 새 빈 basis 테이블만 없는 상태에서 명시 migration/역할 준비를 재실행하는 경계다. reset을 수행하지 않는다.
+- 복구의 basis 필수 조건은 실제 source4 reconcileInvoiceDue 접수와 불변 이력이 현재 Invoice 개정에 결합한 표식으로 판단한다. 과거 dueDate만으로 새basis를 일괄 요구하지 않으며, 계산된 실제 완료 근거의 누락은 writer/append 재개 전에 차단하도록 연결했다.
+- 고정 소스에서 전체 U4 단위150/150·19파일이 exit0·success=true·미실행/수집/assertion/전역 오류0·runReason=passed로 통과했고 U4 격리 DB 준비도 성공했다.
+- 이어 핵심 선택2건은 수락 전 SALE 정상1통과·실제 FULL 완료 기한 case8의 U4_PAYMENT_LIMIT1실패·12필터, exit1·success=false·수집/전역 오류0·runReason=failed였다. 전체17건은 실행하지 않았고 재시도도 하지 않았다.
+- 기한 사례의 준비 배분에서 실제 확인 원금·가용액/기존 소비와 요청의 정합성을 조사한다. 제품 원금 검증을 완화하거나 준비 현금을 임의 증가시키지 않는다. Step10/11은 미완료다.
+
+## 기한 통합 fixture 원금 수정 후 다음 검증 실패
+
+- provisionPaid가 기존 f.payment의 첫 인수(문서 식별자)를 금액으로 오해했다. 도우미는 실제 확인/기록/확정 원금을100으로 만들었는데200 배분을 요청해 정상 U4_PAYMENT_LIMIT였다. 제품과 공유 helper를 유지하고, 해당 시험만 명시 truth200→record200→confirm 경로 및 배분 전후 P/L assertion으로 고쳤다.
+- 같은 제품 소스의 단위150건을 반복하지 않고 Luna가 핵심 선택2건을 재검증했다. 수락 전 SALE1통과, 기한 case8은 다음 입력 경계 INVALID_INPUT/OmsError(access.ts:380 → 시험:268)로 실패했다.12필터·exit1·success=false·수집/전역 오류0·runReason=failed이며 전체17은 미실행이다.
+- 추가 정적 대조에서 기존 correctInvoice가 기한/제공 refs를 비워 새 Invoice 개정을 만들면 이전 FinancialCompletionBasis의 정확 invoiceRef가 과거 개정에 남는 경계를 발견했다. 정상 계약/청구 정정→실제 완료 재대조와 정정 직후 복구를 원래 basis·불변 정정 이력으로 연결하는 좁은 보완이 필요하다.
+- 과거 basis를 일괄 허용하거나 원본/이력을 삭제하지 않는다. 현재 입력 검증 실패와 정상 정정 호환을 함께 조사·수정한 뒤 관련 단위와 핵심 실제 DB부터 확인한다. 아직 Step10/11은 미완료다.
+
+## 접수 참조와 정상 청구 정정 연결의 첫 검증
+
+- U4 Receipt만 등록된 U4 target/result Ref를 검증하도록 연결했다. 구형 공통/U3 계약은 보존하고 미등록·다른 owner·위장 source Ref와 추가 필드는 계속 거절한다. 같은 트랜잭션의 RequestReceipt/FinancialHistory 저장 검증이 성공 응답 전에 수행된다.
+- FinancialCompletionBasis의 원래 기한 접수/불변 이력과 정상 correctInvoice 개정 사슬을 검증하는 보조 연결을 기한 재대조·청구 정정/취소·복구에서 재사용한다. 기한이 비워진 정상 정정 중간 상태도 실제 과거 접수에서 추적하며, 과거 고정일·미산출 원상에 새 basis를 일괄 요구하지 않는다. 금액·업무 상태를 추가하지 않고 이력을 삭제하지 않는다.
+- 고정 소스의 관련 단위7파일58/58이 Luna 실행에서 exit0·success=true·runReason=passed·미실행/수집/전역 오류0으로 통과했다.
+- 이어 실제 owner-facts 선택4건은3통과·1실패·12필터, exit1·success=false·runReason=failed·수집/전역 오류0이었다. 실패는 위조 결과 참조의 원자 rollback 시험 case11, owner-facts.spec.ts:393:8의 AssertionError다. 후속 owner-facts/completion-migration 전체20건은 실행하지 않았다.
+- 해당 단언과 실제 트랜잭션 결과를 조사한다. 허용 오류를 넓히거나 rollback 검사를 약화하지 않으며, 수정 후 영향 검증부터 재개한다. Step10/11 완료 체크는 아직 바꾸지 않는다.
+
+- 정적 원인은 access의 실제 기록 행 검사가 Receipt 스키마보다 앞서 수행되는 점이다. 미등록 entity/다른 owner는 정확히 U4_RESULT_NOT_WRITTEN이며 INVALID_INPUT을 기대한 시험이 잘못됐다. 두 경우는 정확한 기존 코드를 기대하도록 수정하고, 위장 source 사례는 실제 같은 트랜잭션에 기록한 새 Invoice 개정을 참조시켜 행 존재 검사를 통과한 뒤 닫힌 Receipt 저장에서 INVALID_INPUT을 검증한다. 각 사례의 원본/이력/접수/fact 전체 rollback 단언은 유지한다. 제품 소스는 바꾸지 않았다.
+- 수정 후 같은 제품의 위조 결과 선택1건이 통과했다. exit0·실패/수집/assertion/전역 오류0·runReason=passed이며15건은 필터 pending이라 success=false를 전체 통과로 해석하지 않았다. 미실행이던 전체20건을 이어 실행한다.
+- 분리한 Luna가 현재 소스의 구형 선택 단위를 실행해 U1 모델/payload/복구 보안30/30·3파일, U2 모델/payload24/24·2파일, U3 모델/payload/접수46/46·3파일 모두 exit0·success=true·실패/미실행/수집/전역 오류0으로 통과했다. 구형 보고서의 runReason 부재와 중첩 suite 수를 실제 파일/단언 수와 구별했다. DB 병렬 실행은 하지 않았다.
+
+## 새 완료 근거의 실제 DB 전체 첫 결과
+
+- owner-facts16/16은 통과했다. completion-migration4건 중2통과·2실패로 합계18/20·2파일, exit1·success=false·runReason=failed·미실행/수집/전역 오류0이다.
+- 복구 재생 case2는 INVALID_INPUT/OmsError(model-catalog.ts:253 → u4-recovery-verification.ts:64 → 시험:109), 계산 근거 누락 차단 case3은 AssertionError(시험:159)다. 정상 정정 중간 상태의 누락 차단과 구형U4 additive migration 사례는 통과했다. 동일 소스로 재시도하지 않았고 후속 전체U4 시험은 아직 실행하지 않았다.
+- 복구 전 검증에서 새 완료 근거/기한 원상의 참조 형식을 대조한다. 구형 payload를 완화하거나 누락 차단 기대를 제거하지 않으며, 실제 원인 수정 후 복구 사례부터 다시 확인한다. Step10/11은 미완료다.
+
+- 추가 정적 조사에서 Ref 허용 문제가 아니라 SQL date/LocalDate 판독 형식 차이를 원인 후보로 좁혔다. 정상 TypeORM 조회는 YYYY-MM-DD로 hydration하지만 복구 verifier의 직접 조회는 pg Date 객체를 그대로 닫힌 Date 문자열 검증에 전달할 수 있다. 제품 수정 전 합성 DATE 조회의 raw 형·정상 driver hydration·닫힌 schema 거절을 검사하는 회귀를 추가했다.
+- Luna의 해당 진단 선택1건이 exit0·실패/수집/assertion/전역 오류0·runReason=passed로 통과했다.4필터 pending이므로 success=false이며 전체 복구 성공을 뜻하지 않는다. 제품 바이트는 이 재현까지 불변이다. 기존 Date schema를 유지하고 LocalDate 필드에 정상 driver의 hydration을 적용하는 최소 수정 후 실패했던 실제 복구를 확인한다.
+- 최소 수정은 raw 조회의 LocalDate 필드가 Date 객체일 때만 같은 EntityMetadata/driver.prepareHydratedValue를 적용한 뒤 기존 validateModel을 수행하는 것이다. Instant·bigint·Ref/profile·payload와 닫힌 Date schema는 바꾸지 않았다. 모델 단위는 null/정확 날짜 허용과 Date 객체·불가능한 날짜·잘못된 월·형식 거절을 검사한다.
+- 수정 후 관련 모델11+복구payload8의 단위19/19·2파일이 Luna 실행에서 exit0·success=true·runReason=passed·미실행/수집/전역 오류0으로 통과했다. 실제 복구5건과 전체U4 단위를 보고서 경로를 분리해 검증한다.
+
+## 날짜 판독 수정 후 복구·전체 단위 통과
+
+- completion-migration 전체5/5가 exit0·success=true·runReason=passed·미실행/수집/assertion/전역 오류0으로 통과했다. 이전 case2의 복원과 case3의 실제 근거 누락 차단이 함께 통과해 잘못된 날짜 표현이 선행 오류를 만든 공통 원인이었음을 확인했다. 정상 정정 중간 상태의 누락 차단과 기존U4 원본/prefix 보존 추가 적용도 포함한다.
+- 분리 실행한 현재 U4 전체 단위159/159가 exit0·success=true·runReason=passed·미실행/수집/전역 오류0으로 통과했다. 주 실행자도 실제 보고서의159 및 기존 영향 선택 단위30/24/46을 직접 대조했다.
+- 제품 소스는 동결하고 전체U4 실제 DB와 기존U1 재생/복구 보안, U2 추가 migration, U3 추가 migration/복구 권위 선택을 직렬 실행한다. 기존 Unit은 각 격리 DB 준비 후 실행하며 보존 원본 초기화/DB 병렬 실행/대량 DR로 범위를 넓히지 않는다. Step10/11의 최종 완료와 커밋은 이 영향 회귀 후 판단한다.
+
+## 동결 중 추가로 확인한 목록 표현 경계
+
+- 정상100항목 배분은 PaymentEvidence1+PaymentAllocation100+FinancialHistory1의102개 결과 Ref를 보존해야 한다. U4 응답은 개수 상한이 없지만 저장 RequestReceipt의 공통 RefList100이 이를 거절할 수 있다. 누적101개 repository 시험은 실제100항목 명령 성공의 증거가 아니므로 구분한다.
+- 100품목 및 수명 동안100개를 넘는 배분의 현재성 판단도 전체 근거를 FactEnvelope에 보존하면서 공통 evidenceRefs100에 걸릴 수 있다. 전체 청구/누적 배분 수를100·512·1000 등 새 정책으로 제한하거나 근거Ref를 버리지 않는다. 전체 원장은 기존 cursor100의 완전 대조를 유지한다.
+- 최소 보완은 정확 source4/registry4·FinancialSettlement의 특정 필드 연결이다. allocatePaymentBatch의 닫힌 결과3..102 전용 schema/응답 검증을 RequestReceipt.resultRefs에 적용하고, 정확 U4 FactEnvelope.evidenceRefs에는 기존 U4 Refs 표현을 연결한다. 다른 operation/모델·입력·구형100 제한과 현행4MiB 보호 payload/실행 예산의 commit 전 자원 검사는 유지한다. 새로운 digest/보조 원상은 만들지 않는다.
+- 정상 생산자에서는 발생하지 않지만 빈 basis.historyRefs의 undefined 비교가 명시 근거 누락 대신 INVALID_JSON이 되는 음성 경계도 확인했다. 누락 비교값은 불일치로 닫고 기존 U4_DUE_BASIS_MISSING/복구 차단을 유지하는 좁은 보완이 필요하다.
+- 위 발견은 현재 실행 중인 소스에 아직 반영하지 않았다. DB 연속 실행 종료 후 최소 수정·단위/실제 명령 회귀를 추가하고, 그 전후 소스의 결과를 분리한다. 기존 승인한100입력/완전 근거 보존을 충족하는 수정이며 계획/Testing Contract를 변경하지 않는다.

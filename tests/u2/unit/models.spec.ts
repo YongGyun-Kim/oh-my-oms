@@ -84,6 +84,7 @@ describe('U2 additive 모델과 원래 ID/decoder', () => {
       'FinancialApprovalBalance',
       'FinancialRefundIdentityClaim',
       'FinancialRestriction',
+      'FinancialCompletionBasis',
     ].sort();
     const actualNames = ALL_MODELS.map((model) => model.name).sort();
     expect(actualNames.filter((name) => legacyNames.includes(name))).toEqual(legacyNames);

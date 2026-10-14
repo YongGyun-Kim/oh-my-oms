@@ -71,6 +71,54 @@ export function u4ModelFixture(name: string, id = name + '-synthetic'): ModelDat
     effect: 'APPLIED',
     boundOrderRef: null,
   };
+  if (name === 'FinancialCompletionBasis')
+    Object.assign(values, {
+      invoiceRef: u4Ref('FinancialSettlement', 'Invoice', id),
+      termsSnapshotRef: u4Ref('OrderAcceptance', 'PurchaseTermsSnapshot'),
+      sourceOwner: 'HardwareFulfillment',
+      dueBasis: {
+        kind: 'CONFIRMED_FACT_PLUS_DAYS',
+        sourceOwner: 'HardwareFulfillment',
+        event: 'ACTUAL_PROVISION_COMPLETION',
+        ruleRef: u4Ref('ProductCatalog', 'CommonOfferRevision'),
+        calendar: 'KST_CALENDAR_DAYS',
+        days: 30,
+      },
+      completionView: {
+        requestedSourceFactRef: u4Ref('HardwareFulfillment', 'HardwareHistory'),
+        latestSourceFactRef: u4Ref('HardwareFulfillment', 'HardwareHistory'),
+        aggregateRef: u4Ref('HardwareFulfillment', 'HardwareFulfillmentCase'),
+        latestSourceRevision: 1,
+        providedTranches: [
+          {
+            trancheId: 'synthetic-full-tranche',
+            trancheRef: u4Ref('HardwareFulfillment', 'ShipmentTranche'),
+            orderRef: u4Ref('OrderAcceptance', 'Order'),
+            orderLineRef: u4Ref('OrderAcceptance', 'OrderLine'),
+            termsSnapshotRef: u4Ref('OrderAcceptance', 'PurchaseTermsSnapshot'),
+            completionBasis: 'HW_DELIVERY',
+            completionState: 'COMPLETED',
+            completedQuantity: 1,
+            completedAt: '2026-12-01T00:00:00.000Z',
+            hardwareDeliveredAt: '2026-12-01T00:00:00.000Z',
+            customerAcceptedAt: null,
+            softwareIssuedAt: null,
+            resultAvailableAt: null,
+            contractualStartAt: null,
+            sourceRevision: 1,
+            correctionOf: null,
+            correctedAt: null,
+            evidenceRefs: [u4Ref('HardwareFulfillment', 'HardwareHistory')],
+          },
+        ],
+        correctionRefs: [],
+        coverage: 'CURRENT',
+        observedAt: '2026-12-01T00:00:00.000Z',
+      },
+      confirmedFact: null,
+      epoch: 'initial',
+      sourceContract: { profile: 'urn:oms:contract:u4-financial:1', registryVersion: 4 },
+    });
   const data: ModelData = {};
   for (const attribute of model.attributes) {
     if (attribute.name in values) data[attribute.name] = structuredClone(values[attribute.name]);

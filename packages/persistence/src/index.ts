@@ -35,3 +35,4 @@ export * from './u4-migration.js';
 export * from './u4-recovery-payload.js';
 export * from './u4-repository.js';
 export * from './u4-recovery-verification.js';
+export * from './u4-completion-link.js';

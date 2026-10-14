@@ -1,6 +1,48 @@
 [
   {
     "owner": "FinancialSettlement",
+    "name": "reconcileInvoiceDue",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "financial.manage",
+    "kind": "command",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/InvoiceDueInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/Receipt",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/InvoiceRef" }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "FinancialSettlement",
+    "name": "assessEligibility",
+    "contract": "u4-financial",
+    "version": 4,
+    "audience": ["STAFF"],
+    "action": "financial.read",
+    "kind": "query",
+    "input": "urn:oms:contract:u4-financial:1#/$defs/EligibilityInput",
+    "output": "urn:oms:contract:u4-financial:1#/$defs/CurrentEligibilityView",
+    "targetKind": "RECORD",
+    "targetSchema": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "RECORD" },
+        "recordRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef" }
+      },
+      "required": ["kind", "recordRef"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "owner": "FinancialSettlement",
     "name": "correctPaymentBinding",
     "contract": "u4-financial",
     "version": 4,

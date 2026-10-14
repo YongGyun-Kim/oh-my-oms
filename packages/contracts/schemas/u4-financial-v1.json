@@ -3,6 +3,61 @@
   "$id": "urn:oms:contract:u4-financial:1",
   "title": "U4 financial revision1 — operation registry4; closed manual financial contracts",
   "$defs": {
+    "CurrentEligibilityView": {
+      "type": "object",
+      "properties": {
+        "orderRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef" },
+        "assessmentPurpose": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/AssessmentPurpose" },
+        "planRevision": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Revision" },
+        "agreementRevisionRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/AgreementRef" },
+        "decision": { "enum": ["ALLOW", "HOLD", "UNVERIFIED"] },
+        "basisRefs": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Refs" },
+        "evaluatedAt": { "$ref": "urn:oms:contract:common:2#/$defs/Instant" }
+      },
+      "required": [
+        "orderRef",
+        "assessmentPurpose",
+        "planRevision",
+        "agreementRevisionRef",
+        "decision",
+        "basisRefs",
+        "evaluatedAt"
+      ],
+      "additionalProperties": false
+    },
+    "CompletionFactView": {
+      "$ref": "urn:oms:contract:common:2#/$defs/CompletionFactView"
+    },
+    "ConfirmedDueFact": {
+      "type": "object",
+      "properties": {
+        "sourceRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref" },
+        "ruleRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref" },
+        "confirmedAt": { "$ref": "urn:oms:contract:common:2#/$defs/Instant" }
+      },
+      "required": ["sourceRef", "ruleRef", "confirmedAt"],
+      "additionalProperties": false
+    },
+    "InvoiceDueInput": {
+      "type": "object",
+      "properties": {
+        "meta": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/CommandMeta" },
+        "targetScope": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/TargetScope" },
+        "orderRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/OrderRef" },
+        "invoiceRef": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/InvoiceRef" },
+        "completionQuery": { "$ref": "urn:oms:contract:common:2#/$defs/CompletionFactQuery" },
+        "sourceEvidence": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Evidence" }
+      },
+      "required": [
+        "meta",
+        "targetScope",
+        "orderRef",
+        "invoiceRef",
+        "completionQuery",
+        "sourceEvidence"
+      ],
+      "additionalProperties": false
+    },
     "PaymentBindingCorrectionInput": {
       "type": "object",
       "properties": {
@@ -194,7 +249,20 @@
       "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Revision"
     },
     "Ref": {
-      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref"
+      "anyOf": [
+        { "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Ref" },
+        {
+          "type": "object",
+          "properties": {
+            "owner": { "const": "FinancialSettlement" },
+            "entity": { "enum": ["FinancialCompletionBasis", "FinancialRestriction"] },
+            "id": { "$ref": "urn:oms:contract:common:2#/$defs/Id" },
+            "revision": { "$ref": "urn:oms:contract:common:2#/$defs/Revision" }
+          },
+          "required": ["owner", "entity", "id", "revision"],
+          "additionalProperties": false
+        }
+      ]
     },
     "Refs": {
       "type": "array",
@@ -2061,7 +2129,42 @@
       "additionalProperties": false
     },
     "Receipt": {
-      "$ref": "urn:oms:contract:u3-commercial:2#/$defs/Receipt"
+      "type": "object",
+      "properties": {
+        "requestId": { "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/requestId" },
+        "requestState": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/requestState"
+        },
+        "owner": { "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/owner" },
+        "targetRef": {
+          "anyOf": [{ "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref" }, { "type": "null" }]
+        },
+        "resultRefs": {
+          "type": "array",
+          "minItems": 0,
+          "items": { "$ref": "urn:oms:contract:u4-financial:1#/$defs/Ref" }
+        },
+        "acceptedAt": { "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/acceptedAt" },
+        "updatedAt": { "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/updatedAt" },
+        "statusRevision": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/statusRevision"
+        },
+        "retryAfterMilliseconds": {
+          "$ref": "urn:oms:contract:common:2#/$defs/Receipt/properties/retryAfterMilliseconds"
+        }
+      },
+      "required": [
+        "requestId",
+        "requestState",
+        "owner",
+        "targetRef",
+        "resultRefs",
+        "acceptedAt",
+        "updatedAt",
+        "statusRevision",
+        "retryAfterMilliseconds"
+      ],
+      "additionalProperties": false
     },
     "Problem": {
       "$ref": "urn:oms:contract:common:2#/$defs/Problem"

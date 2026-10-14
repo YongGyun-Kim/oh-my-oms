@@ -75128,3 +75128,262 @@
 **Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
 
 ---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T20:33:11Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T20:33:25Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T20:35:02Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: 두 하위 단위 테스트는 총 16건 중 14건 통과, 2건 실패했습니다. 대기·수집 오류는 0이며 보고서 `success=false`, `reason=failed`입니다.\n\n`due-basis.spec.ts`는 8/8 통과했습니다. `owner-sources.spec.ts` cases 6·7은 `INVALID_INPUT` (`OmsError`)로 실패했으며 
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T20:36:09Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T20:37:01Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: 선택된 `owner-sources` 테스트 2건은 통과했고 6건은 필터링 pending이었습니다. 이어 실행한 관련 단위 테스트 전체는 22/22 통과했습니다. 실패·collection 오류는 없었습니다. DB 테스트는 실행하지 않았습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T20:37:32Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T20:51:20Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: Step 10 단위 테스트 묶음은 종료 코드 0으로 완료됐습니다. 82/82 통과했고 실패·pending·collection 오류는 0입니다. 보고서 `success=true`, `reason=passed`였습니다. DB나 추가 테스트는 실행하지 않았습니다.
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T20:52:06Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: U2 단위 회귀는 종료 코드 0으로 완료됐습니다. 3개 파일에서 34/34 테스트가 통과했고 실패·pending·collection 오류는 0입니다. 보고서 `success=true`였으며 `runReason` 필드는 없었습니다. DB와 다른 테스트는 실행하지 않았습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T20:52:09Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T21:04:22Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: 전체 U4 단위 테스트 150/150은 통과했고, U4 격리 DB 준비도 성공했습니다. 이어 실행한 `owner-facts` 선택 테스트는 종료 코드 1로 실패했습니다. 선택된 두 건 중 1건 통과, 1건 실패, 나머지 12건은 필터링 pending이며 collection 오류는 없습니다.\n\n실패는 case 8의 `U4_PAYMENT_LIMIT` (`Oms
+
+---
+
+## Session Compacted
+**Timestamp**: 2026-10-14T21:04:46Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T21:05:01Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T21:09:06Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: `owner-facts` 선택 실행은 종료 코드 1로 실패했습니다. 선택된 2건 중 1건 통과, 1건 실패, 12건은 필터링 pending이며 collection 오류는 없습니다. 실패는 case 8의 `INVALID_INPUT` (`OmsError`)이고 위치는 `u4-financial-access.ts:380`, `owner-facts.spec.ts:2
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T21:09:43Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Session Compacted
+**Timestamp**: 2026-10-14T21:18:45Z
+**Event**: SESSION_COMPACTED
+**Current Stage**: functional-design
+**State Validity**: valid
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T21:20:03Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: U4 단위 검증은 58/58 통과했습니다. `owner-facts` 선택 통합 검사는 종료 코드 1로 실패했습니다. 총 16건 중 3건 통과, 1건 실패, 12건은 필터링 pending이며 collection 오류는 없습니다.\n\n실패는 case 11의 `AssertionError`이고 위치는 `owner-facts.spec.ts:393`입니다. 지시에 따라
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T21:21:38Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T21:22:32Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T21:23:49Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13c14-ac42-7762-8119-d94528b0c4d0
+**Message**: U1: exit 0, CLI 3/3 files·30/30 통과. JSON `success=true`, 7/7 suites, assertion 30 pass·0 fail·0 pending, collection/global/unhandled 0, `runReason` 없음.\n\nU2: exit 0, CLI 2/2 files·24/24 통과. JSON `succe
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T21:25:00Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T21:26:50Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: `owner-facts` 선택 케이스 1건은 통과했고, 나머지 15건은 필터링 pending이었습니다. 전체 검증은 20건 중 18건 통과, 2건 실패로 종료 코드 1이었습니다. `owner-facts.spec.ts`는 16/16 통과했고 collection 오류는 없습니다.\n\n실패는 `completion-migration.spec.ts` case 2의 `
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T21:27:29Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T21:29:18Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: `raw PostgreSQL date` 선택 회귀는 종료 코드 0으로 통과했습니다. 5건 중 선택된 1건 통과, 나머지 4건은 필터링 pending입니다. 실패와 collection 오류는 없으며 보고서 `success=false`는 필터 실행에 따른 상태입니다. 추가 실행은 하지 않았습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T21:29:43Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T21:31:22Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13c14-ac42-7762-8119-d94528b0c4d0
+**Message**: U4 전체 단위 실행은 exit 0으로 159/159 통과했습니다. `.reports/u4/unit.json`도 `success=true`, `runReason=passed`, assertion 159 pass·0 fail·0 pending, collection/global/unhandled 0입니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T21:31:29Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Subagent Completed
+**Timestamp**: 2026-10-14T21:31:52Z
+**Event**: SUBAGENT_COMPLETED
+**Agent Type**: worker
+**Agent ID**: 01a13ae8-b3a2-71a3-86d5-7e7c3d205f0b
+**Message**: 두 단계 모두 통과했습니다. 지정 단위 테스트는 19/19, `completion-migration` 통합 테스트는 5/5 통과했습니다. 실패·대기·collection 오류는 없었고 두 보고서 모두 `success=true`였습니다. 파일은 수정하지 않았습니다.
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T21:33:03Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---
+
+## Artifact Updated
+**Timestamp**: 2026-10-14T21:40:29Z
+**Event**: ARTIFACT_UPDATED
+**Tool**: Edit
+**File**: <project-dir>/aidlc/spaces/default/intents/261004-feature/construction/u4-financial-settlement/code-generation/verification-progress.md
+**Context**: construction > u4-financial-settlement > code-generation > verification-progress.md
+
+---

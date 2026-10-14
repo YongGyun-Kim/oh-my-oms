@@ -3,6 +3,49 @@ import type { Model } from './model-catalog.js';
 // Protected auxiliary originals; indexes are derived and never an independent authority.
 export const U4_SUPPORT_MODELS: readonly Model[] = Object.freeze([
   {
+    name: 'FinancialCompletionBasis',
+    owner: 'FinancialSettlement',
+    attributes: [
+      { name: 'invoiceId', type: 'Identifier', required: true, unique: true },
+      {
+        name: 'invoiceRef',
+        type: 'U4Contract:InvoiceRef',
+        required: true,
+        references: 'Invoice',
+        nullable: false,
+      },
+      {
+        name: 'orderRef',
+        type: 'U4Contract:OrderRef',
+        required: true,
+        references: 'Order',
+        nullable: false,
+      },
+      { name: 'termsSnapshotRef', type: 'U4Contract:Ref', required: true },
+      {
+        name: 'sourceOwner',
+        type: 'Enum',
+        required: true,
+        allowed_values: ['HardwareFulfillment', 'SoftwareLifecycle'],
+      },
+      { name: 'dueBasis', type: 'U4Contract:DueBasis', required: true },
+      { name: 'completionView', type: 'U4Contract:CompletionFactView', required: true },
+      {
+        name: 'confirmedFact',
+        type: 'U4Contract:ConfirmedDueFact',
+        required: true,
+        nullable: true,
+      },
+      { name: 'epoch', type: 'Identifier', required: true },
+      { name: 'sourceContract', type: 'U4Contract:SourceContract', required: true },
+      { name: 'targetScope', type: 'U4Contract:TargetScope', required: true },
+      { name: 'historyRefs', type: 'U4Contract:Refs', required: true },
+      { name: 'modelVersion', type: 'PositiveInteger', required: true, allowed_values: ['1'] },
+      { name: 'revision', type: 'Revision', required: true },
+    ],
+    constraints: [],
+  },
+  {
     name: 'FinancialIdentityClaim',
     owner: 'FinancialSettlement',
     attributes: [

@@ -55,7 +55,7 @@ export class U4FinancialAccess {
     this.registry = new OperationRegistry(adapter.store.schema);
     declareU4Operations(this.registry);
   }
-  async run<T extends { meta: CommandMeta; targetScope: TargetScope; sourceEvidence: U4Evidence }>(
+  async run<T extends { meta: CommandMeta; targetScope: TargetScope; sourceEvidence?: U4Evidence }>(
     context: ServiceContext,
     name: string,
     target: InvocationTarget,
@@ -98,6 +98,9 @@ export class U4FinancialAccess {
           correctPaymentBinding: 'paymentEvidenceRef',
           allocatePaymentBatch: 'paymentEvidenceRef',
           reverseAllocation: 'allocationRef',
+          evaluateFinancialEligibility: 'orderRef',
+          recordRestriction: 'orderRef',
+          reconcileInvoiceDue: 'invoiceRef',
         } as Record<string, string>
       )[name];
       requireCondition(
@@ -110,9 +113,11 @@ export class U4FinancialAccess {
       );
     }
     requireCondition(
-      canonicalJson(input.sourceEvidence.verifiedByRef) ===
-        canonicalJson(context.actorAccountRef) &&
-        Date.parse(input.sourceEvidence.verifiedAt) <= now().getTime(),
+      name === 'evaluateFinancialEligibility' ||
+        (input.sourceEvidence &&
+          canonicalJson(input.sourceEvidence.verifiedByRef) ===
+            canonicalJson(context.actorAccountRef) &&
+          Date.parse(input.sourceEvidence.verifiedAt) <= now().getTime()),
       400,
       'U4_EVIDENCE_ACTOR',
       '현재 확인 직원과 실제 근거 확인 시각이 필요합니다.',
@@ -249,6 +254,22 @@ export class U4FinancialAccess {
             const at = now().toISOString();
             // 승인 entities/model은 Account FK다. VerifiedPersonLink를 이 필드에 임의 치환하지 않는다.
             let correctionOf: Ref | null = null;
+            if (result.before && name === 'recordRestriction') {
+              const rows = await scope.financialCollection(
+                'FinancialHistory',
+                { afterRef: result.before },
+                new Date(
+                  Date.now() + Math.min(5000, ExecutionBudget.current()?.remaining() ?? 5000),
+                ).toISOString(),
+              );
+              requireCondition(
+                rows.length === 1,
+                503,
+                'U4_HISTORY_REF',
+                '원래 제한 개정의 단일 불변 이력이 필요합니다.',
+              );
+              correctionOf = u4Ref('FinancialHistory', rows[0]!, store.schema);
+            }
             if (
               result.before &&
               [
@@ -257,6 +278,7 @@ export class U4FinancialAccess {
                 'correctPaymentEvidence',
                 'correctPaymentBinding',
                 'reverseAllocation',
+                'reconcileInvoiceDue',
               ].includes(name)
             ) {
               const original = await scope
@@ -281,7 +303,7 @@ export class U4FinancialAccess {
               reason: input.meta.reason,
               beforeRef: result.before,
               afterRef: result.target,
-              evidenceRefs: [input.sourceEvidence],
+              evidenceRefs: input.sourceEvidence ? [input.sourceEvidence] : [],
               requestRef: requestId,
               correctionOf,
               revision: 1,

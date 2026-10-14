@@ -35,6 +35,19 @@ const CODES = new Set([
   'U4_PREMISE_CHANGED',
   'U4_LEDGER_UNCONFIRMED',
   'U4_FINANCIAL_BUSY',
+  'U4_OWNER_UNREGISTERED',
+  'U4_DUE_UNVERIFIED',
+  'U4_DUE_CONFLICT',
+  'U4_DUE_SEQUENCE',
+  'U4_DUE_ALREADY_CURRENT',
+  'U4_DUE_BASIS_MISSING',
+  'U4_ELIGIBILITY_BASIS',
+  'U4_ELIGIBILITY_STALE',
+  'U4_ELIGIBILITY_ACCESS',
+  'U4_RESTRICTION_BASIS',
+  'U4_READ_ONLY',
+  'U4_RECOVERY_COMPLETION',
+  'U4_FEE_ADJUSTMENT_UNSUPPORTED',
 ]);
 const NAMES = new Set([
   'Error',
@@ -45,7 +58,7 @@ const NAMES = new Set([
   'RangeError',
 ]);
 const LOCATION =
-  /((?:packages\/persistence\/src\/(?:protected-write|protected-store|protected-transaction|u4-repository|recovery-types|model-catalog|u4-model-decoder|recovery-security-observation|recovery-security-write|recovery-security)|packages\/core\/src\/(?:u4-commercial-adapter|u4-payment-plan|u4-commercial-order|u4-order-terms|u4-plan-proposal|u4-proposal-proof|u4-staff-access|u4-financial-access|u4-financial-source|u4-financial-commands|u4-financial-ledger|u3-current-basis|authorization)|tests\/u4\/fixtures\/(?:commercial-plan|financial-flow|security-oracle)|tests\/u4\/integration\/(?:persistence|concurrency|protection-replay|commercial-plan|renewal-plan|staff-access|financial-flow|financial-ledger|financial-races|financial-corrections|financial-cancellation|financial-binding)\.spec)\.ts):(\d+):(\d+)/g;
+  /((?:packages\/persistence\/src\/(?:protected-write|protected-store|protected-transaction|u4-repository|recovery-types|model-catalog|u4-model-decoder|u4-completion-link|u4-recovery-verification|recovery-security-observation|recovery-security-write|recovery-security)|packages\/core\/src\/(?:u4-commercial-adapter|u4-payment-plan|u4-commercial-order|u4-order-terms|u4-plan-proposal|u4-proposal-proof|u4-staff-access|u4-financial-access|u4-financial-source|u4-financial-commands|u4-financial-ledger|u4-due-basis|u4-owner-sources|u4-invoice-due|u4-eligibility|u3-current-basis|authorization)|tests\/u4\/fixtures\/(?:commercial-plan|financial-flow|security-oracle|owner-facts)|tests\/u4\/unit\/(?:due-basis|owner-sources|eligibility|completion-basis|completion-link)\.spec|tests\/u4\/integration\/(?:persistence|concurrency|protection-replay|commercial-plan|renewal-plan|staff-access|financial-flow|financial-ledger|financial-races|financial-corrections|financial-cancellation|financial-binding|owner-facts|completion-migration)\.spec)\.ts):(\d+):(\d+)/g;
 
 // 메시지·SQL·매개변수·환경·임의 속성은 읽거나 직렬화하지 않는다.
 export function safeU4Error(value: unknown): {

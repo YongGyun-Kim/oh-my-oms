@@ -56,6 +56,58 @@ export function validateU4ModelConstraints(
     check(
       data.bindingId === u4ObligationBindingId(String(data.orderId), String(data.obligationKey)),
     );
+  if (name === 'FinancialCompletionBasis') {
+    schema.validateUri(
+      'urn:oms:contract:u4-financial:1#/$defs/SourceContract',
+      data.sourceContract,
+    );
+    const view = data.completionView as {
+      coverage: string;
+      aggregateRef: import('@oms/contracts').Ref;
+      latestSourceRevision: number;
+      latestSourceFactRef: import('@oms/contracts').Ref;
+      providedTranches: {
+        orderRef: import('@oms/contracts').Ref;
+        trancheRef: import('@oms/contracts').Ref;
+        completionState: string;
+      }[];
+    };
+    const basis = data.dueBasis as import('@oms/contracts').U4DueBasis;
+    check((data.invoiceRef as import('@oms/contracts').Ref).id === data.invoiceId);
+    check(basis.kind === 'CONFIRMED_FACT_PLUS_DAYS' && basis.sourceOwner === data.sourceOwner);
+    check(
+      view.coverage === 'CURRENT' &&
+        view.aggregateRef.owner === data.sourceOwner &&
+        view.aggregateRef.revision === view.latestSourceRevision &&
+        view.latestSourceFactRef.owner === data.sourceOwner,
+    );
+    if (basis.kind === 'CONFIRMED_FACT_PLUS_DAYS' && basis.event === 'ACTUAL_PROVISION_COMPLETION')
+      check(
+        view.providedTranches.length > 0 &&
+          view.providedTranches.every((tranche) => tranche.completionState === 'COMPLETED'),
+      );
+    for (const tranche of view.providedTranches)
+      check(
+        tranche.orderRef.id === (data.orderRef as import('@oms/contracts').Ref).id &&
+          tranche.trancheRef.owner === data.sourceOwner,
+      );
+    check(
+      basis.kind !== 'CONFIRMED_FACT_PLUS_DAYS' ||
+        (basis.event === 'ACTUAL_PROVISION_COMPLETION'
+          ? data.confirmedFact === null
+          : data.confirmedFact !== null),
+    );
+    if (basis.kind === 'CONFIRMED_FACT_PLUS_DAYS' && basis.event === 'AGREED_CONFIRMED_FACT') {
+      const fact = data.confirmedFact as {
+        sourceRef: import('@oms/contracts').Ref;
+        ruleRef: import('@oms/contracts').Ref;
+      };
+      check(
+        fact.sourceRef.owner === data.sourceOwner &&
+          canonicalJson(fact.ruleRef) === canonicalJson(basis.ruleRef),
+      );
+    }
+  }
   if (name === 'PaymentEvidence' && data.lifecycle === 'CONFIRMED')
     check(
       data.identity !== null &&

@@ -54,9 +54,12 @@ describe('U4 model originals and version boundaries', () => {
     const legacy = { ...fact, evidenceRefs: [], sourceContract: null };
     expect(validateModel('FactEnvelope', legacy, schema)).toBe(legacy);
   });
-  it('validates all nine business originals and eight protected auxiliary models', () => {
+  it('업무 원본9개와 기존 보조8개·새 완료 근거 원상1개를 검증한다', () => {
     expect(U4_MODELS).toHaveLength(9);
-    expect(U4_SUPPORT_MODELS).toHaveLength(8);
+    expect(U4_SUPPORT_MODELS).toHaveLength(9);
+    expect(
+      U4_SUPPORT_MODELS.filter((model) => model.name === 'FinancialCompletionBasis'),
+    ).toHaveLength(1);
     for (const model of [...U4_MODELS, ...U4_SUPPORT_MODELS])
       expect(validateModel(model.name, u4ModelFixture(model.name), schema)).toBeDefined();
   });
@@ -187,5 +190,17 @@ describe('U4 model originals and version boundaries', () => {
       { ...U4_SOURCE_CONTRACT, arbitrary: true },
     ])
       expect(() => recordedSourceContract({ sourceContract }, schema)).toThrow();
+  });
+  it('기한은 정확한 달력 문자열 또는 미산출 null이며 Date 객체/잘못된 날짜를 받지 않는다', () => {
+    const invoice = u4ModelFixture('Invoice');
+    for (const dueDate of [null, '2026-12-01'])
+      expect(validateModel('Invoice', { ...invoice, dueDate }, schema)).toBeDefined();
+    for (const dueDate of [
+      new Date('2026-12-01T00:00:00.000Z'),
+      '2026-02-30',
+      '2026-13-01',
+      'not-a-date',
+    ])
+      expect(() => validateModel('Invoice', { ...invoice, dueDate }, schema)).toThrow();
   });
 });

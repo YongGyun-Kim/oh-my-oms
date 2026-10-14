@@ -185,12 +185,23 @@ export interface U4EligibilityInput extends U4OrderCommandInput {
   orderLineRefs: Ref[];
   renewalCycleRefs: Ref[];
 }
+export interface U4InvoiceDueInput extends U4OrderCommandInput {
+  invoiceRef: Ref;
+  completionQuery: { sourceFactRef: Ref; aggregateRef: Ref; minimumSourceRevision: number | null };
+  sourceEvidence: U4Evidence;
+}
 export interface U4RestrictionInput extends U4OrderCommandInput {
   restrictionKey: string;
   assessmentPurpose: U4AssessmentPurpose;
   effect: 'RESTRICT' | 'RELEASE';
   agreementRevisionRef: Ref;
   sourceEvidence: U4Evidence;
+}
+export interface U4UnsupportedAdjustmentInput {
+  meta: CommandMeta;
+  targetScope: TargetScope;
+  renewalCycleRef: Ref;
+  periodAdjustmentRef: Ref;
 }
 export interface U4RefundPortion {
   portionKey: string;
@@ -238,6 +249,12 @@ export interface U4EligibilityView {
   basisRefs: Ref[];
   sourceRevision: number;
   renewalCycleRefs: Ref[];
+}
+export interface U4CurrentEligibilityView extends Omit<
+  U4EligibilityView,
+  'sourceRevision' | 'renewalCycleRefs'
+> {
+  evaluatedAt: string;
 }
 export interface U4FinancialQuery {
   targetScope: TargetScope;

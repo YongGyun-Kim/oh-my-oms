@@ -15,7 +15,7 @@ import type {
   ModelQuery,
   ProtectedReadSource,
 } from './protected-store.js';
-import type { ProtectedTransaction } from './protected-transaction.js';
+import { ProtectedTransaction } from './protected-transaction.js';
 import {
   modelDefinition,
   modelForData,
@@ -318,6 +318,49 @@ export class U4Transaction {
 
 export class U4Repository {
   constructor(readonly store: ProtectedStore) {}
+  async read<T>(read: (scope: U4Transaction) => Promise<T>): Promise<T> {
+    const epoch = await this.store.currentEpoch();
+    return this.store.primary.transaction('READ COMMITTED', async (manager) => {
+      await manager.query('SET TRANSACTION READ ONLY');
+      const budget = ExecutionBudget.current();
+      budget?.check();
+      if (budget)
+        await manager.query(
+          "SELECT set_config('statement_timeout',$1,true),set_config('lock_timeout',$2,true)",
+          [
+            String(Math.max(1, Math.min(2000, budget.remaining()))),
+            String(Math.max(1, Math.min(500, budget.remaining()))),
+          ],
+        );
+      const rows = await manager.query(
+        'SELECT epoch,commit_order FROM u1_protected_prefix ORDER BY epoch',
+      );
+      const transaction = new ProtectedTransaction(manager, this.store.schema);
+      const scope = new U4Transaction(
+        transaction,
+        {
+          epoch,
+          prefixes: rows.map((row: { epoch: string; commit_order: string }) => ({
+            epoch: row.epoch,
+            commitOrder: Number(row.commit_order),
+          })),
+        },
+        this.store.schema,
+      );
+      await transaction.financialSecurityEpoch(epoch);
+      const result = await read(scope);
+      await scope.assertPremises();
+      await transaction.financialSecurityEpoch(epoch);
+      requireCondition(
+        transaction.rows().length === 0,
+        503,
+        'U4_READ_ONLY',
+        '판단 조회는 업무 원본을 변경하지 않습니다.',
+      );
+      budget?.check();
+      return result;
+    });
+  }
   private prepare(request: WriteRequest): WriteRequest {
     this.store.schema.validateUri(U4_PROFILE + '#/$defs/SourceContract', request.sourceContract);
     requireCondition(

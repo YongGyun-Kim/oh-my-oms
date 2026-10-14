@@ -129,4 +129,80 @@ describe('U4 closed contracts', () => {
     ).toThrow();
     expect(() => validate('DueBasis', { kind: 'CONFIRMED_FACT_PLUS_DAYS', days: 30 })).toThrow();
   });
+  it('직원 기한 재대조·순수 현재 조회는 정확한 별도 닫힌 선언으로 등록한다', () => {
+    const registry = new OperationRegistry(validator);
+    declareU4Operations(registry);
+    const operation = registry.lookup('FinancialSettlement', 'reconcileInvoiceDue', 4);
+    expect(operation).toMatchObject({
+      audience: ['STAFF'],
+      action: 'financial.manage',
+      kind: 'command',
+    });
+    const input = {
+      meta: u4Allocation().meta,
+      targetScope: u4Allocation().targetScope,
+      orderRef: u4Ref('OrderAcceptance', 'Order'),
+      invoiceRef: u4Ref('FinancialSettlement', 'Invoice'),
+      completionQuery: {
+        sourceFactRef: u4Ref('HardwareFulfillment', 'HardwareHistory'),
+        aggregateRef: u4Ref('HardwareFulfillment', 'HardwareFulfillmentCase'),
+        minimumSourceRevision: 1,
+      },
+      sourceEvidence: u4Evidence(),
+    };
+    expect(validator.validateUri(operation.input, input)).toBe(input);
+    for (const changed of [
+      { ...input, invented: true },
+      { ...input, invoiceRef: input.orderRef },
+      { ...input, completionQuery: { ...input.completionQuery, invented: true } },
+    ])
+      expect(() => validator.validateUri(operation.input, changed)).toThrow();
+    expect(registry.lookup('FinancialSettlement', 'assessEligibility', 4)).toMatchObject({
+      audience: ['STAFF'],
+      kind: 'query',
+      output: U4_PROFILE + '#/$defs/CurrentEligibilityView',
+    });
+    expect(() =>
+      validator.validateUri(
+        'urn:oms:contract:u3-commercial:2#/$defs/Ref',
+        u4Ref('FinancialSettlement', 'FinancialCompletionBasis'),
+      ),
+    ).toThrow();
+  });
+  it('U4 접수는 정확한 새 보조 Ref만 확장하고 구형 접수와 공통 scalar를 보존한다', () => {
+    const receipt = {
+      requestId: 'synthetic-receipt',
+      requestState: 'RESULT_RECORDED',
+      owner: 'FinancialSettlement',
+      targetRef: u4Ref('FinancialSettlement', 'Invoice'),
+      resultRefs: [u4Ref('FinancialSettlement', 'Invoice')],
+      acceptedAt: '2026-12-01T00:00:00.000Z',
+      updatedAt: '2026-12-01T00:00:00.000Z',
+      statusRevision: 1,
+      retryAfterMilliseconds: null,
+    };
+    expect(validate('Receipt', receipt)).toBe(receipt);
+    for (const entity of ['FinancialCompletionBasis', 'FinancialRestriction']) {
+      const added = { ...receipt, resultRefs: [u4Ref('FinancialSettlement', entity)] };
+      expect(validate('Receipt', added)).toBe(added);
+      expect(() =>
+        validator.validateUri('urn:oms:contract:u3-commercial:2#/$defs/Receipt', added),
+      ).toThrow();
+      expect(() => validator.validate('Receipt', added)).toThrow();
+    }
+    for (const changed of [
+      { ...receipt, targetRef: u4Ref('HardwareFulfillment', 'FinancialCompletionBasis') },
+      { ...receipt, resultRefs: [u4Ref('FinancialSettlement', 'UnknownBasis')] },
+      {
+        ...receipt,
+        resultRefs: [
+          { ...receipt.targetRef, sourceContract: { profile: U4_PROFILE, registryVersion: 3 } },
+        ],
+      },
+      { ...receipt, extra: true },
+      { ...receipt, statusRevision: 0 },
+      { ...receipt, requestState: 'UNKNOWN' },
+    ])
+      expect(() => validate('Receipt', changed)).toThrow();
+  });
 });

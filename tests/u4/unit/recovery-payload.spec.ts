@@ -30,6 +30,38 @@ describe('U4 recovery payload compatibility', () => {
     const value = envelope([row()]);
     expect(decodePayload(canonicalJson(value), schema)).toEqual(value);
   });
+  it('새 완료 근거 원상을 보호하고 구형 payload1/2 위장을 거절한다', () => {
+    const data = u4ModelFixture('FinancialCompletionBasis');
+    const value = envelope([
+      {
+        model: 'FinancialCompletionBasis',
+        schemaVersion: 1,
+        id: String(data.invoiceId),
+        revision: 1,
+        data,
+        deleted: false,
+      },
+    ]);
+    expect(decodePayload(canonicalJson(value), schema).rows[0]!.data).toEqual(data);
+    const { contentDigest: _digest, sourceContract: _source, ...body } = value;
+    expect(_digest).toBeDefined();
+    expect(_source).toEqual(U4_SOURCE_CONTRACT);
+    expect(() =>
+      decodePayload(canonicalJson(sealPayload({ ...body, schemaVersion: 1 })), schema),
+    ).toThrow();
+    expect(() =>
+      decodePayload(
+        canonicalJson(
+          sealPayload({
+            ...body,
+            schemaVersion: 2,
+            sourceContract: { profile: 'urn:oms:contract:u3-commercial:2', registryVersion: 3 },
+          }),
+        ),
+        schema,
+      ),
+    ).toThrow();
+  });
   it('식별 claim을 aliases 목록을 가진 PaymentIdentity 값 객체로 오인하지 않는다', () => {
     const data = u4ModelFixture('FinancialIdentityClaim');
     const value = envelope([

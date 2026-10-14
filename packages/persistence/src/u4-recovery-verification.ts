@@ -1,4 +1,4 @@
-import { SchemaValidator, requireCondition } from '@oms/contracts';
+import { OmsError, SchemaValidator, requireCondition } from '@oms/contracts';
 import type { EntityManager } from 'typeorm';
 import { U4_PERSISTENCE_MODELS } from './u4-model-catalog.js';
 import {
@@ -9,6 +9,7 @@ import {
   type ModelData,
 } from './model-catalog.js';
 import { u4IdentityClaimId } from './u4-model-decoder.js';
+import { verifyU4InvoiceCompletionState } from './u4-completion-link.js';
 
 const indexes = [
   'u4_payment_identity',
@@ -30,6 +31,13 @@ export async function verifyU4RecoveryState(manager: EntityManager): Promise<voi
     '금융 복구의 모든 유일 제약을 확인해야 합니다.',
   );
   const schema = new SchemaValidator();
+  async function readRevision(model: string, id: string, revision: number) {
+    const values = await manager.query(
+      'SELECT v.data,v.deleted FROM u1_entity_version v JOIN u1_epoch_sequence e ON e.epoch=v.epoch WHERE v.model=$1 AND v.id=$2 AND v.revision=$3 ORDER BY e.generation DESC,v.commit_order DESC LIMIT 1',
+      [model, id, revision],
+    );
+    return values[0] && !values[0].deleted ? validateModel(model, values[0].data, schema) : null;
+  }
   for (const model of U4_PERSISTENCE_MODELS) {
     const key = primaryAttribute(model).name;
     let cursor: string | null = null;
@@ -51,9 +59,34 @@ export async function verifyU4RecoveryState(manager: EntityManager): Promise<voi
           const value = raw[attribute.name];
           if (attribute.type === 'Instant' && value instanceof Date)
             raw[attribute.name] = value.toISOString();
+          if (attribute.type === 'LocalDate' && value instanceof Date) {
+            // raw PG date의 Date 객체를 정상 ORM 판독과 같은 달력 날짜로 돌린 뒤 닫힌 schema를 검증한다.
+            const column = manager.connection
+              .getMetadata(model.name)
+              .findColumnWithPropertyName(attribute.name)!;
+            raw[attribute.name] = manager.connection.driver.prepareHydratedValue(value, column);
+          }
         }
         const data = storedModelData(model.name, raw);
         validateModel(model.name, data, schema);
+        if (model.name === 'Invoice') {
+          const basis = await manager
+            .getRepository<ModelData>('FinancialCompletionBasis')
+            .findOneBy({ invoiceId: String(data.invoiceId) });
+          // 청구 정정으로 기한을 비운 정상 중간 상태도 원래 계산 근거를 잃으면 재개하지 않는다.
+          const original = basis ? storedModelData('FinancialCompletionBasis', basis) : null;
+          if (original) validateModel('FinancialCompletionBasis', original, schema);
+          try {
+            await verifyU4InvoiceCompletionState(data, original, readRevision);
+          } catch (error) {
+            if (!(error instanceof OmsError) || error.code !== 'U4_DUE_BASIS_MISSING') throw error;
+            throw new OmsError(
+              503,
+              'U4_RECOVERY_COMPLETION',
+              '기한 원래 근거와 청구 정정의 불변 연결을 복원해야 합니다.',
+            );
+          }
+        }
         if (model.name === 'PaymentEvidence' && data.identity !== null) {
           const identity = data.identity as {
             sourceNamespace: string;

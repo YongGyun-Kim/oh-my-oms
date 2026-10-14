@@ -14,7 +14,7 @@ import type {
   U4CancelInvoiceInput,
   U4PaymentBindingCorrectionInput,
 } from '@oms/contracts';
-import { u4ObligationBindingId } from '@oms/persistence';
+import { u4ObligationBindingId, verifyU4InvoiceCompletionState } from '@oms/persistence';
 import type { ModelData, U4Transaction } from '@oms/persistence';
 import { u4Ref } from './references.js';
 import { U4CommercialOrder } from './u4-commercial-order.js';
@@ -127,6 +127,11 @@ export class U4FinancialCommands {
           original.lifecycle === 'ISSUED' && (original.orderRef as Ref).id === input.orderRef.id,
           'U4_INVOICE_NOT_CURRENT',
         );
+        await verifyU4InvoiceCompletionState(
+          original,
+          await scope.optional('FinancialCompletionBasis', input.invoiceRef.id),
+          scope.readSource().readRevision,
+        );
         // 독립 직원 면제가 아니다. 승인·동의하여 적용된 현재 계획에서 제거된 옛 의무만 취소한다.
         enforce(
           current.application &&
@@ -210,6 +215,11 @@ export class U4FinancialCommands {
     if (correction) {
       original = await scope.current(input.correctionOf!);
       this.scope(original, input.targetScope);
+      await verifyU4InvoiceCompletionState(
+        original,
+        await scope.optional('FinancialCompletionBasis', input.correctionOf!.id),
+        scope.readSource().readRevision,
+      );
       enforce(
         (original.orderRef as Ref).id === input.orderRef.id &&
           original.obligationKey === input.obligationKey &&
