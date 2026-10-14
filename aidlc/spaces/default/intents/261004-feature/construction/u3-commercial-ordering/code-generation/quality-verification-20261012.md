@@ -353,6 +353,8 @@ Step19의 최신 같은 제품 source 품질/보안/80%·CI 확인을 마쳤다.
 
 ## 기업별 공개 예외의 미충족과 수정 재개
 
+사용자는 R-02 Critical과 미해결 발견 수용 효과를 명시한 U3 확인 질문에 원문 Approve를 선택했다. 같은 검증 proof와 session으로 checkpoint approve를 실행해approved=true를 확인했다. R-02는 수정 완료가 아니라 사용자가 수용한 미해결 위험으로 유지한다. R-01의 실제 원문 판정은Resolved이며 요약 표의New 표시와 혼동하지 않는다. 이전 병합 보류 기록은 당시 판정의 역사로 보존한다. 이번 승인에 따라 U3 기록 push·main squash 병합 및 U4 새 브랜치 분리를 진행하되 실배포·실데이터 활성화는 하지 않는다.
+
 이번 공식 PC 완료 검증 명령도exit0·4/4 PASS(38.0초)다. 검증ID430c2dd7-6447-41ce-bac3-c207271b31c2, command SHA256 c55e775d9822f4f9c21a7b5d9394ad8fe97ad5998faee9c755ad280427f55890, fingerprint4bec83877dca0d609404fc2ced11f014fcd4be29e473a1a2c8b812d8588cd0ab·evidence_unchanged=true다. 이는 기존1280 PC 통합4경로에 대한 관측이며 R-02의 새 목록 경로를 검증하지 않는다. Critical이 남아 있으므로 U3 인수 승인·main 병합은 보류한다.
 
 2026-10-14 최종 독립 검토는NOT-READY다. R-01은Resolved이나 고객 GET /products와 등록된 in-process 목록이 기존 CatalogQuery.list로 남아 기업 승인 비공개·실제 판매 중지를 확인하지 않는 R-02 Critical/New를 확인했다. 완성된 비공개 상품이 페이지에 있으면 기업 승인 공개와 무관하게 전체503을 만들 수 있다. 실제 route→registry→query→response schema를 연결한 정적 근거이며 새 HTTP 재현 시험을 실행했다고 주장하지 않는다. 기존 HTTP 회귀는 상세 offer와 주문을 다뤘다. 전체 CI83.0497% 통과가 누락된 목록 권한 경계를 면제하지 않는다. 이번 review-02.md를 그대로 보존하고 main 병합·U4 전환·실배포를 진행하지 않는다. 제품/검토 산출물은 동결하며 수정 재개에는 기록된 변경 요청 절차를 따른다.
