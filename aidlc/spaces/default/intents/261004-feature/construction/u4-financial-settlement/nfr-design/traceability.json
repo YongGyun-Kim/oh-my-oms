@@ -2,7 +2,7 @@
   "stage": "nfr-design",
   "unit": "u4-financial-settlement",
   "scope": "first-release-pilot-library",
-  "meaning": "OK는 상세 요구와 구체 설계의 연결이며 구현·제품 검사·운영 달성 증거가 아니다. Deferred는 전체 실증의 후속 상태이고 첫 배포 보호 의무 면제가 아니다. NFR5.4의 환불 상태 모순 R-03은 미해결로 인계하며 설계가 이를 해결하지 않는다.",
+  "meaning": "OK는 상세 요구와 구체 설계의 연결이며 구현·제품 검사·운영 달성 증거가 아니다. Deferred는 전체 실증의 후속 상태이고 첫 배포 보호 의무 면제가 아니다. R-03은 기능 설계 보완/추가 검토에서 해소됐으며 NFR5.4의 재시도 상태·부분시도·금액 원자 기록과 보호 확인을 구체화한다. 실제 환불 구현·실행 검증은 미완료다.",
   "upstream_ids": [
     "NFR1.1",
     "NFR1.2",
@@ -127,7 +127,7 @@
       "id": "NFR5.4",
       "status": "OK",
       "target": "security-design.md#sd06",
-      "solution": "같은 승인 root의 부분 확정/예약 소비 보호; 상태 모순 R-03 별도 인계"
+      "solution": "같은 승인 root의 부분 확정/예약 소비 보호와 보완된 실패분 재시도 상태·부분/현재 시도·과거 이력의 원자 검증/기록; 실제 실행 검증은 별도"
     },
     {
       "id": "NFR5.5",
@@ -331,9 +331,10 @@
         "SD06",
         "SD11"
       ],
-      "source": "../functional-design/reviews/review-02.md",
-      "status": "unresolved",
-      "effect": "60성공·40확정 실패 뒤40만 재예약할 때의 PARTIAL/IN_PROGRESS 모순은 기능 결함으로 남는다. 원금/한도 보호 설계 또는 진행 승인을 해소/시험 통과로 해석하지 않는다."
+      "source": "../functional-design/reviews/review-03.md",
+      "status": "implementation-pending",
+      "design_status": "resolved",
+      "effect": "보완된 기능 설계의 PARTIAL 유지·성공0 FAILED 재예약의 IN_PROGRESS를 SD06/SD07/SD11에 연결한다. 상태·확정액·예약액·원금·공통 한도·원래 부분/과거 시도를 같은 primary 변경/보호 확인에 포함하며 실제 저장·접수·복구 검증은 미완료다."
     }
   ],
   "sources": [

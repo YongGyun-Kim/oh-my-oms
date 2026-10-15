@@ -39,6 +39,8 @@ U4 업무 원본은 기존 카탈로그에 등록한 모델·원본 개정/이�
 
 LC04의 primary 변경은 SD06의 READ COMMITTED·현재 counter/epoch 잠금 이후 읽기·고정 순서의 대상 잠금과 같은 EntityManager를 사용한다. U4 한 명령에 포함한 배분은 전체 적용/전체 거절이며, 별개의 직원 명령 여러 건을 하나의 원자 묶음이라고 보장하지 않는다. 기술 제약은 원본 저장 시점에 적용하고 사전 lookup만으로 대체하지 않는다.
 
+실패분 환불 재시도에서도 LC03의 전체 상태 집계와 LC04/LC05의 원래 부분·새 현재 시도·옛 이력·확정액·예약액·원금/공통 승인 소비를 같은 primary 변경으로 기록한다. 기존 성공액이 있으면 재예약 뒤에도 PARTIAL, 성공0인 FAILED 재예약만 IN_PROGRESS다. 성공/불명분 재실행과 목표액 재가산은 금지한다. 실패하면 전체 변경을 되돌리고 LC06 확인 전 성공을 반환하지 않으며, commit 이후 결과 불명은 원래 요청으로 대조한다. 실제 상태·금액 보존/경합·접수/보호 복구 검증은 별도 구현 의무다.
+
 원래 request key 재전송과 다른 key의 실제 거래 중복을 구분한다. 실거래 중복 원본은 LC05에서 검출하더라도 LC10 응답은 현재 기업 권한 안에서만 구성한다. 원래 거래 식별이 다른 기업을 가리킨다는 사실을 고객에게 반환하지 않는다.
 
 LC06 확인 전에는 성공을 반환하지 않으며 primary commit 가능성을 유지한 원래 request 재대조를 사용한다. restore/replay는 fence 아래 원본/별칭/연결/예약·집계와 제약을 재구성하고 준비 검증을 마친 후 쓰기를 연다. 어느 한 자료가 누락되면 자동 예약 해제·신규 거래 생성·부분 준비로 진행하지 않는다.
@@ -63,7 +65,7 @@ SD11의 단위/통합·실제 DB 동시성·closed contract·복구 자료 호�
 
 원래99.9%/30분/RPO0·p95 조회1초/변경2초·점검 한도·1인 사람 작업 목표는 U1/U10의 실제 관측과 연결한다. 기본 배포·국내 저장·백업·알림 준비는 첫 배포 의무다. 대량100k/50분·재해 복구·무중단·장기간 실증은 후속이며 새로 실행하지 않는다. 고객사10곳/일 주문1000건은 계획이며 처리 용량이 아니다.
 
-R-03의 환불 부분 실패 재시도 전체 상태 모순은 LC03/LC04에 남은 기능 의존이다. 공통 원금/한도 보호 설계와 해당 상태 전이의 해소를 구별한다. 기존 U2/U3 위험·실제 source profile·보관/접근/국내 경로·적용 의무의 미확인도 각각 유지한다. 해당 경로의 구현/실데이터 준비 완료에는 별도 해소/검증 근거가 필요하다.
+R-03의 환불 재시도 상태 모순은 기능 설계 보완과 추가 검토에서 해소됐다. LC03/LC04는 보완된 상태·부분시도·금액의 원자 기록을 연결하며 실제 구현·실행 검증은 미완료다. 기존 U2/U3 위험·실제 source profile·보관/접근/국내 경로·적용 의무의 미확인은 각각 유지한다. 문서 보완을 해당 경로의 구현/실데이터 준비 완료로 확대하지 않는다.
 
 ## Assumptions & Open Questions
 
@@ -73,7 +75,7 @@ R-03의 환불 부분 실패 재시도 전체 상태 모순은 LC03/LC04에 남�
 ## Sources
 
 - [상세 설계 확인](nfr-design-questions.md), [보안 설계](security-design.md), [NFR 요구](../nfr-requirements/security-requirements.md), [기술 적용](../nfr-requirements/tech-stack-decisions.md): 범위/수치·패턴·상세36개 NFR.
-- [기능 명세](../functional-design/functional-spec.md), [규칙](../functional-design/rules.md), [기능 검토](../functional-design/reviews/review-02.md): 데이터/처리·금액·R-03.
+- [기능 명세](../functional-design/functional-spec.md), [규칙](../functional-design/rules.md), [이전 기능 검토](../functional-design/reviews/review-02.md), [추가 기능 검토](../functional-design/reviews/review-03.md): 데이터/처리·금액·R-03 설계 해소와 실제 검증 구분.
 - [공통 계약](../../../inception/contract-design/contract-summary.md), [컴포넌트](../../../inception/domain-design/components.md), [Unit 정의](../../../inception/units-generation/unit-of-work.md): 원본·in-process 포트와 전달 경계.
 - [첫 배포 실행 계획](../../../release-planning/first-release-delivery-plan.md): 지원 경로·후속 실증/기존 미해결.
 - [공통 보호 쓰기](../../../../../../../../packages/persistence/src/protected-write.ts), [모델 쓰기](../../../../../../../../packages/persistence/src/protected-transaction.ts), [현재 모델 등록](../../../../../../../../packages/persistence/src/model-catalog.ts): 재사용 경계와 새 U4 확장/검증의 실제 연결 지점.

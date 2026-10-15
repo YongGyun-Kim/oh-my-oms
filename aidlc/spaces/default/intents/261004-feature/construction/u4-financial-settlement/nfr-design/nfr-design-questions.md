@@ -51,4 +51,4 @@ Does this all look correct before I generate the artifact?
 - Looks correct
 - Request changes
 
-[Answer]:
+[Answer]: Looks correct

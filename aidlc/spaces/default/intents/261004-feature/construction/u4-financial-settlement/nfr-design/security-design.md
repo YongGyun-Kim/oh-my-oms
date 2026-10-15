@@ -4,7 +4,7 @@
 
 [확인한 방향](nfr-design-questions.md)의 Looks correct에 따라 [U4 NFR 요구](../nfr-requirements/security-requirements.md)와 [기술 적용](../nfr-requirements/tech-stack-decisions.md)을 구체화한다. 기존 Nest API/standalone worker·TypeORM/PostgreSQL·별도 보호 DB·Outbox/별도 큐를 재사용하는 library 설계다. 새 금융 서비스·AWS 계정·분산 잠금·파일 업로드·OCR·외부 URL 수집·금융망 실행을 추가하지 않는다.
 
-아래 SD01–SD11은 구현할 설계이며 현재 U4 코드/SQL/복구·금융 원본 검증이 존재한다는 주장이 아니다. 참고한 현행 코드와 새로 구현할 의무를 구별한다. 기능 설계 R-03은 사용자의 선택대로 미해결이며 본 문서가 그 상태표를 변경하지 않는다. [S1–S5]
+아래 SD01–SD11은 구현·검증할 설계 의무이며 문서만으로 U4 코드/SQL/복구·금융 원본 검증의 완료를 주장하지 않는다. 실제 진행 상태는 코드 생성 기록과 구분한다. 기능 설계 R-03은 보완된 WF4.7·상태표·VS4.16/17과 추가 검토에서 해소됐으며, 여기서는 그 기준을 같은 트랜잭션·보호 기록 경계에 연결한다. 환불 구현·실행 시험은 아직 미완료다. [S1–S5]
 
 ## Authentication and Authorization
 
@@ -71,6 +71,12 @@ counter 이후의 고정 잠금 순서는 canonical payment ID 오름차순 → 
 4. 관련 binding/배분/예약/확정·원래 정정 관계·집계 개정·이력·후속 사실을 하나의 primary 변경으로 반영한다. 하나라도 실패하면 그 명령 전체를 rollback한다. 다른 청구로 자동 재배분하지 않는다.
 5. 정상 확정 상태 P=A+U+RA+RU, A≥HA≥0, U≥HU≥0을 재검증한다. 이미 발생한 외부 초과/상충 사실은 숨기지 않고 DISPUTED/대조 및 관련 추가 소비 보류로 기록한다.
 
+**확정 실패분 재시도와 전체 환불 상태.** 같은 잠금·현재성·EntityManager 경계에서 확정 실패/미실행 부분의 원인 해소·현재 권한/원금/공통 승인 한도·필요 회수 근거를 재확인한다. 해당 부분에만 새 현재 시도를 연결하고 옛 실패 시도·원래 부분/작업 식별은 이력으로 보존한다. 재시도액을 목표액에 더하지 않으며 성공분·불명분을 새 실행 대상으로 삼지 않는다.
+
+같은 primary 원자 변경에서 현재 부분 결과를 집계해 RefundCase 상태·현재 시도/이력·확정액/예약액·원금/공통 승인 소비와 개정을 함께 기록한다. 기존 확정 성공액이 있고 미완료가 남으면 실패분 재예약 뒤에도 PARTIAL이다. 확정 성공액0·불명분 없음·활성 예약 없음인 FAILED의 실패분 재예약만 IN_PROGRESS가 되며, 목표 전액의 실제 성공을 확인해야 COMPLETED다. 상태를 직접 지정해 금액을 바꾸거나 별도 쓰기로 뒤늦게 맞추지 않는다. 하나라도 검증·기록에 실패하면 전체 primary 변경을 되돌리고, commit 이후의 미확정 결과는 SD07의 원래 요청 대조로 확인한다.
+
+WF4.7·VS4.16/17의 상태와 금액을 실제 저장 경로에서 함께 검증한다. P100/L100·공통 한도100의 60성공/40실패→40재예약→40성공은 PARTIAL→PARTIAL→COMPLETED이며 RA/HA/A/공통 가용액은 각각60/0/40/40→60/40/40/0→100/0/0/0이다. 성공0의 FAILED100 재예약은 RA0/HA100/A100/공통 가용0과 IN_PROGRESS를 함께 보존한다. 이 수치는 설계 예시이며 실행 성공 증거가 아니다. 같은 작업의 불명 결과 추가 확인·완료 후 높은 확인 개정의 정정은 기존 별도 경로와 소비 보호를 유지한다.
+
 서로 다른 행의 합계를 PostgreSQL CHECK 하나로 보장한다고 설명하지 않는다. 각 행의 필수값/형식과 물리 유일성, 같은 트랜잭션의 공통 잔액 재검증을 함께 사용한다. 상세 SQL·제약/migration·실제 PostgreSQL 동시 접수 검증은 구현 의무다. 적용: NFR5.1–NFR5.6, NFR4.1, NFR13.1.
 
 ### SD07
@@ -123,24 +129,26 @@ U3는 약정/조건·전체 수락, U4는 청구/입금/배분/환불·대금 �
 | 입금100에80+80 / 두 입금이 청구100에 각80 동시 배분 | 입금과 청구 양쪽 한도를 같은 트랜잭션에서 검증, 일부 기록 없음 |
 | 이미100건 넘는 배분 이력이 있는 청구/입금 | 페이지 첫100건을 전체 잔액으로 쓰지 않음, 완전한 집계와 이력 원본 대조 |
 | 같은 승인 한도의 여러 RefundCase·개정/시도 | 공통 원금/승인 root의 확정·예약을 함께 차감, case/개정마다 한도를 복제하지 않음 |
-| 환불60성공+40불명 뒤 원래40성공 / 완료 결과의 높은 확인 정정 | 새 실행 없이 확정/예약의 차이 원자 반영, 가용 현금 부활 없음. 별도의 실패40 재시도 상태는 R-03 미해결로 남음 |
+| 환불60성공+40불명 뒤 원래40성공 / 완료 결과의 높은 확인 정정 | 새 실행 없이 확정/예약의 차이 원자 반영, 가용 현금 부활 없음. 확정 실패분 새 시도 예약과 구별 |
+| 환불60성공+40확정 실패→실패한40만 재예약→그40의 실제 성공 확인 | PARTIAL→PARTIAL→COMPLETED와 RA/HA/A/공통 가용액60/0/40/40→60/40/40/0→100/0/0/0을 같은 저장 결과로 대조. 목표100·P100/L100·원래 부분·옛 실패 이력 보존 |
+| 성공0·전부 확정 실패·활성 예약0인 FAILED100→100만 재예약 | FAILED→IN_PROGRESS와 RA0/HA100/A100/공통 가용0을 함께 대조. 현재 권한/원금/공통 한도·필요 회수 근거 재확인. 성공/불명/과다 소비는 거절 |
 | 원본 commit 뒤 보호 실패/응답 유실·epoch 변경 | 원래 결과/후보를 재대조, 재등록·무근거 예약 해제 없음 |
 | migration/replay에서 식별/별칭·binding·인덱스 누락 | 준비 상태 차단, 보호 원본 재구성/제약 대조 후에만 쓰기 허용 |
 | 문자/byte/배분 한도 및 각각+1·한글/다바이트 | 각 한도 독립 검증, 전체 거절·절삭/자동 분할/부분 적용 없음 |
 | 권한 회수·직원망 실패·다른 기업의 목록/합계/이력/충돌 | 현재 접근 검증과 모든 파생 정보의 비노출 |
 
-R-03의 목표100 중60성공·40확정 실패 뒤40만 재예약할 때 전체 상태가 PARTIAL/IN_PROGRESS로 충돌하는 문제는 인계된 기능 결함이다. 본 설계의 원금/예약 보호 요구가 그 허용 전이를 해결하지 않는다. 미해결 경로를 자동 허용/완료로 표시하거나 해당 시험을 통과 처리하지 않는다. 새로운 기능 수정과 해소 근거가 생기기 전 관련 상태 일관성은 미검증이다. 사용자의 NFR 진행 선택은 배포 승인이나 다른 결함의 일괄 수용이 아니다. 적용: NFR5.4, NFR13.1–NFR13.2, NFR14.1–NFR14.2.
+R-03의 상태 집계/전이 모순은 기능 설계 보완과 추가 검토에서 해소됐다. SD06·SD07은 그 상태와 부분 시도/금액의 같은 원자 기록 및 별도 보호 확인을 설계하고, SD11은 실제 저장·접수·복구 결과의 검증 의무를 둔다. 설계 확인을 환불 코드/실행 시험 통과로 대체하지 않으며 배포 승인이나 기존 U2/U3 위험의 일괄 수용으로 해석하지 않는다. 적용: NFR5.4, NFR13.1–NFR13.2, NFR14.1–NFR14.2.
 
 ## Assumptions & Open Questions
 
 - 실제 수취/환불 source profile·원래 거래 식별/별칭 정규화·원본 접근 권위와 증빙 보관처·보존/삭제/국내 경로는 미확인이다. 실데이터/실거래 전에 확인하며 합성 UUID/자료로 확정하지 않는다.
 - 새 U4 계약·지원 모델/유일 제약·보호 payload/decoder·집계/인덱스 재구성·DB 경합/호스트 통합은 미구현이다. 현재 공통 코드의 존재는 U4 완료 증거가 아니다.
-- R-03, 기존 U2 신뢰/동일인·실제 직원망과 U3 상품 목록 위험은 원래 상태로 인계한다. 복구·용량·운영/국내 저장 달성은 별도 실제 증거가 필요하다.
+- R-03의 설계는 해소됐지만 해당 환불 재시도 구현·실행 검증은 미완료다. 기존 U2 신뢰/동일인·실제 직원망과 U3 상품 목록 위험은 원래 상태로 인계한다. 복구·용량·운영/국내 저장 달성은 별도 실제 증거가 필요하다.
 
 ## Sources
 
 - S1: [상세 설계 질문·통합 확인](nfr-design-questions.md), [NFR 요구](../nfr-requirements/security-requirements.md), [기술 적용](../nfr-requirements/tech-stack-decisions.md): 확인한 범위/수치·36개 상세 요구.
-- S2: [기능 명세](../functional-design/functional-spec.md), [규칙](../functional-design/rules.md), [기능 검토](../functional-design/reviews/review-02.md): 금액/상태·소유권·R-03.
+- S2: [기능 명세](../functional-design/functional-spec.md), [규칙](../functional-design/rules.md), [이전 기능 검토](../functional-design/reviews/review-02.md), [추가 기능 검토](../functional-design/reviews/review-03.md): 금액/상태·소유권·R-03 설계 해소와 실제 구현/실행 검증 구분.
 - S3: [공통 계약](../../../inception/contract-design/contract-summary.md), [컴포넌트](../../../inception/domain-design/components.md), [첫 배포 실행 계획](../../../release-planning/first-release-delivery-plan.md): 원본/접수·실패·기한/운영/후속 경계.
 - S4: [protected-write.ts](../../../../../../../../packages/persistence/src/protected-write.ts), [protected-transaction.ts](../../../../../../../../packages/persistence/src/protected-transaction.ts), [protected-store.ts](../../../../../../../../packages/persistence/src/protected-store.ts): 현재 보호 쓰기·버전/원본 읽기와 유한 목록. 새 U4 모델/보조 기록의 등록/보호/복구는 별도 구현 대상.
 - S5: [application.ts](../../../../../../../../apps/api/src/application.ts), [request-budget.ts](../../../../../../../../apps/api/src/request-budget.ts), [admission.ts](../../../../../../../../apps/api/src/admission.ts), [현행 Money 스키마](../../../../../../../../packages/contracts/schemas/u3-commercial-v2.json), [정수 계산](../../../../../../../../packages/contracts/src/u3-validation.ts): 현행 parser/예산/정수 표현 근거.
