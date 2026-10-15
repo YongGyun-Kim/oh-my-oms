@@ -338,7 +338,7 @@
     {
       "id": "AC8.6.3",
       "status": "OK",
-      "target": "BR4.18, BR4.19, BR4.21, BR4.24"
+      "target": "BR4.18, BR4.19, BR4.21, BR4.24; functional-spec.md WF4.7, VS4.9, VS4.16, VS4.17 및 실패분 재시도 금액 대조"
     },
     {
       "id": "AC8.6.4",
